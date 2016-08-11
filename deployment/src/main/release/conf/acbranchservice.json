@@ -1,0 +1,13 @@
+{
+    "service":{
+        "name":"acbranchservice",
+        "url":["/rest/svc/sbiadp/controller"],
+        "instance":[
+            {
+                "name":"acbranchservice-0-0",
+                "ip":"127.0.0.1",
+                "port": 9097
+            }
+        ]
+    }
+}

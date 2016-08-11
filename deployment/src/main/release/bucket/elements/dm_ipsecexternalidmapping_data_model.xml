@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<inventory xmlns="http://www.w3school.com.cn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3school.com.cn inv-datamodel-1.0.xsd">
+<datamodel name="inv_ipsecexternalidmapping">
+    <index name="idx_ipsecexternalidmapping_uniqueid" value="uuid" isunique="true"/>
+    <filter name="default" value="uuid in (:uuid) and ipSecConnectionId in (:ipSecConnectionId) and externalId in (:externalId) and seqNumber in (:seqNumber) and deviceId in (:deviceId)"/>
+</datamodel>
+</inventory>

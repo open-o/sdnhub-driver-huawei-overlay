@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:osgi="http://www.springframework.org/schema/osgi" xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+	 http://www.springframework.org/schema/beans/spring-beans.xsd
+	 http://www.springframework.org/schema/context 
+	 http://www.springframework.org/schema/context/spring-context.xsd
+     http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd">
+
+    <!-- these are included in the dependency jar -->
+    <import resource="classpath:META-INF/cxf/cxf.xml" />
+    <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+
+    <!-- jar rest server registration -->
+    <jaxrs:server id="restContainer" address="/">
+        <!-- registering beans -->
+        <jaxrs:serviceBeans>
+            <ref bean="ipSecRoaResource"></ref>
+            <ref bean="vxLanRoaResource"></ref>
+            <ref bean="wanInterfaceRoaResource"></ref>
+        </jaxrs:serviceBeans>
+        <!-- registering providers -->
+        <jaxrs:providers>
+            <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
+        </jaxrs:providers>
+    </jaxrs:server>
+
+
+    <bean id="ipSecRoaResource" class="org.openo.sdno.acbranchservice.rest.IpSecRoaResource"></bean>
+    <bean id="vxLanRoaResource" class="org.openo.sdno.acbranchservice.rest.VxLanRoaResource"></bean>
+    <bean id="wanInterfaceRoaResource" class="org.openo.sdno.acbranchservice.rest.WanInterfaceRoaResource"></bean>
+
+    <bean id="AcBranchRestModule" class="org.openo.sdno.acbranchservice.AcBranchRestModule" init-method="start"
+        destroy-method="stop">
+    </bean>
+
+    <bean class="org.openo.sdno.acbranchservice.util.config.AcBranchContextHelper" />
+
+</beans>
