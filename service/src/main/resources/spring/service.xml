@@ -27,14 +27,14 @@
     </jaxrs:server>
 
 
-    <bean id="ipSecRoaResource" class="org.openo.sdno.acbranchservice.rest.IpSecRoaResource"></bean>
-    <bean id="vxLanRoaResource" class="org.openo.sdno.acbranchservice.rest.VxLanRoaResource"></bean>
-    <bean id="wanInterfaceRoaResource" class="org.openo.sdno.acbranchservice.rest.WanInterfaceRoaResource"></bean>
+    <bean id="ipSecRoaResource" class="org.openo.sdno.overlayvpndriver.rest.IpSecRoaResource"></bean>
+    <bean id="vxLanRoaResource" class="org.openo.sdno.overlayvpndriver.rest.VxLanRoaResource"></bean>
+    <bean id="wanInterfaceRoaResource" class="org.openo.sdno.overlayvpndriver.rest.WanInterfaceRoaResource"></bean>
 
-    <bean id="AcBranchRestModule" class="org.openo.sdno.acbranchservice.AcBranchRestModule" init-method="start"
+    <bean id="OverlayVpnDriverRestModule" class="org.openo.sdno.overlayvpndriver.OverlayVpnDriverRestModule" init-method="start"
         destroy-method="stop">
     </bean>
 
-    <bean class="org.openo.sdno.acbranchservice.util.config.AcBranchContextHelper" />
+    <bean class="org.openo.sdno.overlayvpndriver.util.config.OverlayVpnDriverContextHelper" />
 
 </beans>

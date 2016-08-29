@@ -8,7 +8,7 @@
     </parent>
 
     <groupId>org.openo.sdno</groupId>
-    <artifactId>acbranchservice-root</artifactId>
+    <artifactId>overlayvpndriver-root</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 

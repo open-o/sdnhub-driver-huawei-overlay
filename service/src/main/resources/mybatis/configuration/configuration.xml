@@ -15,6 +15,6 @@
         </environment>
     </environments>
     <mappers>
-        <mapper resource="mybatis/mysql/AcbranchdbMapper.xml" />
+        <mapper resource="mybatis/mysql/OverlayVpnDriverdbMapper.xml" />
     </mappers>
 </configuration>

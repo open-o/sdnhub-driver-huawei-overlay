@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.openo.sdno</groupId>
-        <artifactId>acbranchservice-root</artifactId>
+        <artifactId>overlayvpndriver-root</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>acbranchservice-deployment</artifactId>
+    <artifactId>overlayvpndriver-deployment</artifactId>
     <packaging>jar</packaging>
 
     <properties>
@@ -32,7 +32,7 @@
                 <version>1.5</version>
                 <executions>
                     <execution>
-                        <id>AcBranchService package</id>
+                        <id>OverlayVpnDriver package</id>
                         <phase>package</phase>
                         <goals>
                             <goal>execute</goal>
@@ -41,7 +41,7 @@
                             <source>
                                 System.out.println("******** Going to make release zip ********")
                                 projectName =
-                                "org.openo.sdno.acbranchservice"
+                                "org.openo.sdno.overlayvpndriver"
                                 deployFolder =
                                 "${project.build.directory}/deployoutput"
                                 deployUnzip =

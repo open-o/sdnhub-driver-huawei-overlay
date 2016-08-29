@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.openo.aaa.access.mapper.IAccessMapper">
+    <resultMap type="org.openo.aaa.access.entity.RoleAccessGroup" id="RoleAccessGroupMap">
+        <result property="accessId" column="ACCESSID" />
+        <collection property="roleId" column="ROLEID" />
+        <collection property="groupId" column="ACCESSGROUPID" />
+    </resultMap>
+
+    <insert id="saveAccess" parameterType="org.openo.aaa.access.entity.RoleAccessGroup" useGeneratedKeys="true"
+        keyProperty="id" keyColumn="ID">
+        INSERT INTO TBL_ACCESS_ROLE
+        (ACCESSID, ROLEID, ACCESSGROUPID)
+        VALUES
+        (#{accessId},#{roleId},#{groupId})
+        <selectKey keyProperty="id" resultType="int" order="AFTER">
+            SELECT
+            LAST_INSERT_ID();
+        </selectKey>
+    </insert>
+
+    <select id="getRoleAccess" resultType="String">
+        SELECT
+        ACCESSID AS accessId
+        FROM
+        TBL_ACCESS_ROLE
+        WHERE
+        ROLEID = #{roleId}
+    </select>
+
+    <select id="getAllAccess" resultType="org.openo.aaa.access.entity.RoleAccessGroup">
+        SELECT
+        ACCESSID AS accessId,
+        ROLEID AS roleId,
+        ACCESSGROUPID AS groupId
+        FROM TBL_ACCESS_ROLE
+    </select>
+
+    <delete id="removeAccess">
+        DELETE FROM TBL_ACCESS_ROLE
+        WHERE
+        ROLEID = #{roleId}
+        and
+        ACCESSID = #{accessId}
+    </delete>
+
+    <delete id="removeRole">
+        DELETE FROM TBL_ACCESS_ROLE
+        WHERE
+        ROLEID = #{roleId}
+    </delete>
+
+
+</mapper>
