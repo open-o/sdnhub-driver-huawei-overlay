@@ -1,6 +1,22 @@
+/*
+ * Copyright (c) 2016, Huawei Technologies Co., Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.openo.sdno.acbranchservice.service.wan;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,366 +39,378 @@ import mockit.MockUp;
 
 public class WanInfSvcImplTest {
 
-	@Test
-	public void testQueryWanInterface() throws ServiceException {
+    @Test
+    public void testQueryWanInterface() throws ServiceException {
 
-		new MockUp<AcBranchProxy>() {
+        new MockUp<AcBranchProxy>() {
 
-			@Mock
-			public HTTPReturnMessage sendGetMsg(String url, String body, String ctlrUuid) {
-				HTTPReturnMessage msg = new HTTPReturnMessage();
-				msg.setStatus(200);
+            @Mock
+            public HTTPReturnMessage sendGetMsg(String url, String body, String ctlrUuid) {
+                HTTPReturnMessage msg = new HTTPReturnMessage();
+                msg.setStatus(200);
 
-				AcBranchResponse<List<NetVxLanDeviceModel>> res = new AcBranchResponse<List<NetVxLanDeviceModel>>();
-				NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
-				List<NetVxLanDeviceModel> mos = new ArrayList<>();
-				mos.add(mo);
-				res.setData(mos);
+                AcBranchResponse<List<NetVxLanDeviceModel>> res = new AcBranchResponse<List<NetVxLanDeviceModel>>();
+                NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
+                List<NetVxLanDeviceModel> mos = new ArrayList<>();
+                mos.add(mo);
+                res.setData(mos);
 
-				res.setErrcode("0");
-				msg.setBody(JsonUtil.toJson(res));
-				return msg;
-			}
+                res.setErrcode("0");
+                msg.setBody(JsonUtil.toJson(res));
+                return msg;
+            }
 
-		};
-		
-		new MockUp<WanInterface>() {
-			@Mock
-			public String getConfig(String cfgKey) throws ServiceException {
-				return "123";
-			}
-			
-		};
-		
-		new MockUp<ControllerUtil>() {
-			@Mock
-			public List checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
-				WanSubInterface mo = new WanSubInterface();
-				mo.setCeLowVlan(123);
-				List<WanSubInterface> mos = new ArrayList<>();
-				mos.add(mo);
-				
-				return mos;
-				
-			}
-		};
-		
-		new MockUp<WanInfSvcImpl>(){
-			@Mock
-			public List<NetAcDevicePort> queryPorts(List<String> interfaceNameList, String deviceId, String ctrlUuid){
-				List<NetAcDevicePort> list = new ArrayList<>();
-				NetAcDevicePort netAcDevicePort = new NetAcDevicePort();
-				netAcDevicePort.setAlias("alias");
-				list.add(netAcDevicePort);
-				return list;
-			}
-		};
-		
-		try {
-		List<WanSubInterface> result = WanInfSvcImpl.queryWanInterface("123", "123",
-				WanInterfaceUsedType.GRE.getName());
-		}catch (Exception e) {
-			assertTrue(true);
-		}
-	}
-	
-	@Test
-	public void testQueryWanInterfaceBranch() throws ServiceException {
+        };
 
-		new MockUp<AcBranchProxy>() {
+        new MockUp<WanInterface>() {
 
-			@Mock
-			public HTTPReturnMessage sendGetMsg(String url, String body, String ctlrUuid) {
-				HTTPReturnMessage msg = new HTTPReturnMessage();
-				msg.setStatus(200);
+            @Mock
+            public String getConfig(String cfgKey) throws ServiceException {
+                return "123";
+            }
 
-				AcBranchResponse<List<NetVxLanDeviceModel>> res = new AcBranchResponse<List<NetVxLanDeviceModel>>();
-				NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
-				List<NetVxLanDeviceModel> mos = new ArrayList<>();
-				mos.add(mo);
-				res.setData(mos);
+        };
 
-				res.setErrcode("0");
-				msg.setBody(JsonUtil.toJson(res));
-				return msg;
-			}
+        new MockUp<ControllerUtil>() {
 
-		};
-		
-		new MockUp<WanInterface>() {
-			@Mock
-			public String getConfig(String cfgKey) throws ServiceException {
-				return "123";
-			}
-			
-		};
-		
-		new MockUp<ControllerUtil>() {
-			@Mock
-			public List checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
-				WanSubInterface mo = new WanSubInterface();
-				mo.setCeLowVlan(123);
-				List<WanSubInterface> mos = new ArrayList<>();
-				mos.add(mo);
-				
-				return mos;
-				
-			}
-		};
-		
-		new MockUp<WanInfSvcImpl>(){
-			@Mock
-			public List<NetAcDevicePort> queryPorts(List<String> interfaceNameList, String deviceId, String ctrlUuid){
-				List<NetAcDevicePort> list = new ArrayList<>();
-				NetAcDevicePort netAcDevicePort = new NetAcDevicePort();
-				netAcDevicePort.setAlias("alias");
-				netAcDevicePort.setIpAddr("1.1.1.1");
-				list.add(netAcDevicePort);
-				return list;
-			}
-		};
-		
-		try {
-		List<WanSubInterface> result = WanInfSvcImpl.queryWanInterface("123", "123",
-				WanInterfaceUsedType.GRE.getName());
-		}catch (Exception e) {
-			assertTrue(true);
-		}
-	}
-	
-	@Test
-	public void testQueryWanInterface_All() throws ServiceException {
+            @Mock
+            public List checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
+                WanSubInterface mo = new WanSubInterface();
+                mo.setCeLowVlan(123);
+                List<WanSubInterface> mos = new ArrayList<>();
+                mos.add(mo);
 
-		new MockUp<AcBranchProxy>() {
+                return mos;
 
-			@Mock
-			public HTTPReturnMessage sendGetMsg(String url, String body, String ctlrUuid) {
-				HTTPReturnMessage msg = new HTTPReturnMessage();
-				msg.setStatus(200);
+            }
+        };
 
-				AcBranchResponse<List<NetVxLanDeviceModel>> res = new AcBranchResponse<List<NetVxLanDeviceModel>>();
-				NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
-				List<NetVxLanDeviceModel> mos = new ArrayList<>();
-				mos.add(mo);
-				res.setData(mos);
+        new MockUp<WanInfSvcImpl>() {
 
-				res.setErrcode("0");
-				msg.setBody(JsonUtil.toJson(res));
-				return msg;
-			}
+            @Mock
+            public List<NetAcDevicePort> queryPorts(List<String> interfaceNameList, String deviceId, String ctrlUuid) {
+                List<NetAcDevicePort> list = new ArrayList<>();
+                NetAcDevicePort netAcDevicePort = new NetAcDevicePort();
+                netAcDevicePort.setAlias("alias");
+                list.add(netAcDevicePort);
+                return list;
+            }
+        };
 
-		};
-		
-		new MockUp<WanInterface>() {
-			@Mock
-			public String getConfig(String cfgKey) throws ServiceException {
-				return "123";
-			}
-			
-		};
-		
-		new MockUp<ControllerUtil>() {
-			@Mock
-			public List checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
-				WanSubInterface mo = new WanSubInterface();
-				mo.setCeLowVlan(123);
-				List<WanSubInterface> mos = new ArrayList<>();
-				mos.add(mo);
-				
-				return mos;
-				
-			}
-		};
-		
-		try {
-		List<WanSubInterface> result = WanInfSvcImpl.queryWanInterface("123", "123",
-				WanInterfaceUsedType.ALL.getName());
-		}catch (Exception e) {
-			assertTrue(true);
-		}
-	}
-	
-	@Test
-	public void testQueryWanInterface_1() throws ServiceException {
-		try {
-			List<WanSubInterface> result = WanInfSvcImpl.queryWanInterface("", "123",
-					WanInterfaceUsedType.GRE.getName());
-			}catch (Exception e) {
-				assertTrue(e instanceof ServiceException);
-			}
-	}
-	
-	@Test
-	public void testQueryWanInterface_2() throws ServiceException {
-		try {
-			List<WanSubInterface> result = WanInfSvcImpl.queryWanInterface("123", "",
-					WanInterfaceUsedType.GRE.getName());
-			}catch (Exception e) {
-				assertTrue(e instanceof ServiceException);
-			}
-	}
-	
-	@Test
-	public void testQueryWanInterface_3() throws ServiceException {
-		try {
-			List<WanSubInterface> result = WanInfSvcImpl.queryWanInterface("123", "123",
-					WanInterfaceUsedType.GRE.getName());
-			}catch (Exception e) {
-				assertTrue(true);
-			}
-	}
-	
-	@Test
-	public void testQueryWanInterfaceExe() throws ServiceException {
+        try {
+            List<WanSubInterface> result =
+                    WanInfSvcImpl.queryWanInterface("123", "123", WanInterfaceUsedType.GRE.getName());
+        } catch(Exception e) {
+            assertTrue(true);
+        }
+    }
 
-		new MockUp<AcBranchProxy>() {
+    @Test
+    public void testQueryWanInterfaceBranch() throws ServiceException {
 
-			@Mock
-			public HTTPReturnMessage sendGetMsg(String url, String body, String ctlrUuid) {
-				HTTPReturnMessage msg = new HTTPReturnMessage();
-				msg.setStatus(200);
+        new MockUp<AcBranchProxy>() {
 
-				AcBranchResponse<List<NetVxLanDeviceModel>> res = new AcBranchResponse<List<NetVxLanDeviceModel>>();
-				NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
-				List<NetVxLanDeviceModel> mos = new ArrayList<>();
-				mos.add(mo);
-				res.setData(mos);
+            @Mock
+            public HTTPReturnMessage sendGetMsg(String url, String body, String ctlrUuid) {
+                HTTPReturnMessage msg = new HTTPReturnMessage();
+                msg.setStatus(200);
 
-				res.setErrcode("0");
-				msg.setBody(JsonUtil.toJson(res));
-				return msg;
-			}
+                AcBranchResponse<List<NetVxLanDeviceModel>> res = new AcBranchResponse<List<NetVxLanDeviceModel>>();
+                NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
+                List<NetVxLanDeviceModel> mos = new ArrayList<>();
+                mos.add(mo);
+                res.setData(mos);
 
-		};
-		
-		new MockUp<WanInterface>() {
-			@Mock
-			public String getConfig(String cfgKey) throws ServiceException {
-				return "123";
-			}
-			
-		};
-		
-		new MockUp<ControllerUtil>() {
-			@Mock
-			public List checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
-				
-				List<WanSubInterface> mos = new ArrayList<>();
-				
-				return mos;
-				
-			}
-		};
-		
-		try {
-		List<WanSubInterface> result = WanInfSvcImpl.queryWanInterface("123", "123",
-				WanInterfaceUsedType.GRE.getName());
-		}catch (Exception e) {
-			assertTrue(true);
-		}
-	}
-	
-	@Test
-	public void testQueryWanInterfaceExeVlanId() throws ServiceException {
+                res.setErrcode("0");
+                msg.setBody(JsonUtil.toJson(res));
+                return msg;
+            }
 
-		new MockUp<AcBranchProxy>() {
+        };
 
-			@Mock
-			public HTTPReturnMessage sendGetMsg(String url, String body, String ctlrUuid) {
-				HTTPReturnMessage msg = new HTTPReturnMessage();
-				msg.setStatus(200);
+        new MockUp<WanInterface>() {
 
-				AcBranchResponse<List<NetVxLanDeviceModel>> res = new AcBranchResponse<List<NetVxLanDeviceModel>>();
-				NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
-				List<NetVxLanDeviceModel> mos = new ArrayList<>();
-				mos.add(mo);
-				res.setData(mos);
+            @Mock
+            public String getConfig(String cfgKey) throws ServiceException {
+                return "123";
+            }
 
-				res.setErrcode("0");
-				msg.setBody(JsonUtil.toJson(res));
-				return msg;
-			}
+        };
 
-		};
-		
-		new MockUp<WanInterface>() {
-			@Mock
-			public String getConfig(String cfgKey) throws ServiceException {
-				return "";
-			}
-			
-		};
-		
-		new MockUp<ControllerUtil>() {
-			@Mock
-			public List checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
-				WanSubInterface mo = new WanSubInterface();
-				mo.setCeLowVlan(123);
-				List<WanSubInterface> mos = new ArrayList<>();
-				mos.add(mo);
-				
-				return mos;
-				
-			}
-		};
-		
-		try {
-		List<WanSubInterface> result = WanInfSvcImpl.queryWanInterface("123", "123",
-				"");
-		}catch (Exception e) {
-			assertTrue(true);
-		}
-	}
-	
-	@Test
-	public void testQueryWanInterfaceExeFor() throws ServiceException {
+        new MockUp<ControllerUtil>() {
 
-		new MockUp<AcBranchProxy>() {
+            @Mock
+            public List checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
+                WanSubInterface mo = new WanSubInterface();
+                mo.setCeLowVlan(123);
+                List<WanSubInterface> mos = new ArrayList<>();
+                mos.add(mo);
 
-			@Mock
-			public HTTPReturnMessage sendGetMsg(String url, String body, String ctlrUuid) {
-				HTTPReturnMessage msg = new HTTPReturnMessage();
-				msg.setStatus(200);
+                return mos;
 
-				AcBranchResponse<List<NetVxLanDeviceModel>> res = new AcBranchResponse<List<NetVxLanDeviceModel>>();
-				NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
-				List<NetVxLanDeviceModel> mos = new ArrayList<>();
-				mos.add(mo);
-				res.setData(mos);
+            }
+        };
 
-				res.setErrcode("0");
-				msg.setBody(JsonUtil.toJson(res));
-				return msg;
-			}
+        new MockUp<WanInfSvcImpl>() {
 
-		};
-		
-		new MockUp<WanInterface>() {
-			@Mock
-			public String getConfig(String cfgKey) throws ServiceException {
-				return "";
-			}
-			
-		};
-		
-		new MockUp<ControllerUtil>() {
-			@Mock
-			public List checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
-				WanSubInterface mo = new WanSubInterface();
-				mo.setCeLowVlan(123);
-				List<WanSubInterface> mos = new ArrayList<>();
-				mos.add(mo);
-				
-				return null;
-				
-			}
-		};
-		
-		try {
-		List<WanSubInterface> result = WanInfSvcImpl.queryWanInterface("123", "123",
-				"");
-		}catch (Exception e) {
-			assertTrue(true);
-		}
-	}
+            @Mock
+            public List<NetAcDevicePort> queryPorts(List<String> interfaceNameList, String deviceId, String ctrlUuid) {
+                List<NetAcDevicePort> list = new ArrayList<>();
+                NetAcDevicePort netAcDevicePort = new NetAcDevicePort();
+                netAcDevicePort.setAlias("alias");
+                netAcDevicePort.setIpAddr("1.1.1.1");
+                list.add(netAcDevicePort);
+                return list;
+            }
+        };
+
+        try {
+            List<WanSubInterface> result =
+                    WanInfSvcImpl.queryWanInterface("123", "123", WanInterfaceUsedType.GRE.getName());
+        } catch(Exception e) {
+            assertTrue(true);
+        }
+    }
+
+    @Test
+    public void testQueryWanInterface_All() throws ServiceException {
+
+        new MockUp<AcBranchProxy>() {
+
+            @Mock
+            public HTTPReturnMessage sendGetMsg(String url, String body, String ctlrUuid) {
+                HTTPReturnMessage msg = new HTTPReturnMessage();
+                msg.setStatus(200);
+
+                AcBranchResponse<List<NetVxLanDeviceModel>> res = new AcBranchResponse<List<NetVxLanDeviceModel>>();
+                NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
+                List<NetVxLanDeviceModel> mos = new ArrayList<>();
+                mos.add(mo);
+                res.setData(mos);
+
+                res.setErrcode("0");
+                msg.setBody(JsonUtil.toJson(res));
+                return msg;
+            }
+
+        };
+
+        new MockUp<WanInterface>() {
+
+            @Mock
+            public String getConfig(String cfgKey) throws ServiceException {
+                return "123";
+            }
+
+        };
+
+        new MockUp<ControllerUtil>() {
+
+            @Mock
+            public List checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
+                WanSubInterface mo = new WanSubInterface();
+                mo.setCeLowVlan(123);
+                List<WanSubInterface> mos = new ArrayList<>();
+                mos.add(mo);
+
+                return mos;
+
+            }
+        };
+
+        try {
+            List<WanSubInterface> result =
+                    WanInfSvcImpl.queryWanInterface("123", "123", WanInterfaceUsedType.ALL.getName());
+        } catch(Exception e) {
+            assertTrue(true);
+        }
+    }
+
+    @Test
+    public void testQueryWanInterface_1() throws ServiceException {
+        try {
+            List<WanSubInterface> result =
+                    WanInfSvcImpl.queryWanInterface("", "123", WanInterfaceUsedType.GRE.getName());
+        } catch(Exception e) {
+            assertTrue(e instanceof ServiceException);
+        }
+    }
+
+    @Test
+    public void testQueryWanInterface_2() throws ServiceException {
+        try {
+            List<WanSubInterface> result =
+                    WanInfSvcImpl.queryWanInterface("123", "", WanInterfaceUsedType.GRE.getName());
+        } catch(Exception e) {
+            assertTrue(e instanceof ServiceException);
+        }
+    }
+
+    @Test
+    public void testQueryWanInterface_3() throws ServiceException {
+        try {
+            List<WanSubInterface> result =
+                    WanInfSvcImpl.queryWanInterface("123", "123", WanInterfaceUsedType.GRE.getName());
+        } catch(Exception e) {
+            assertTrue(true);
+        }
+    }
+
+    @Test
+    public void testQueryWanInterfaceExe() throws ServiceException {
+
+        new MockUp<AcBranchProxy>() {
+
+            @Mock
+            public HTTPReturnMessage sendGetMsg(String url, String body, String ctlrUuid) {
+                HTTPReturnMessage msg = new HTTPReturnMessage();
+                msg.setStatus(200);
+
+                AcBranchResponse<List<NetVxLanDeviceModel>> res = new AcBranchResponse<List<NetVxLanDeviceModel>>();
+                NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
+                List<NetVxLanDeviceModel> mos = new ArrayList<>();
+                mos.add(mo);
+                res.setData(mos);
+
+                res.setErrcode("0");
+                msg.setBody(JsonUtil.toJson(res));
+                return msg;
+            }
+
+        };
+
+        new MockUp<WanInterface>() {
+
+            @Mock
+            public String getConfig(String cfgKey) throws ServiceException {
+                return "123";
+            }
+
+        };
+
+        new MockUp<ControllerUtil>() {
+
+            @Mock
+            public List checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
+
+                List<WanSubInterface> mos = new ArrayList<>();
+
+                return mos;
+
+            }
+        };
+
+        try {
+            List<WanSubInterface> result =
+                    WanInfSvcImpl.queryWanInterface("123", "123", WanInterfaceUsedType.GRE.getName());
+        } catch(Exception e) {
+            assertTrue(true);
+        }
+    }
+
+    @Test
+    public void testQueryWanInterfaceExeVlanId() throws ServiceException {
+
+        new MockUp<AcBranchProxy>() {
+
+            @Mock
+            public HTTPReturnMessage sendGetMsg(String url, String body, String ctlrUuid) {
+                HTTPReturnMessage msg = new HTTPReturnMessage();
+                msg.setStatus(200);
+
+                AcBranchResponse<List<NetVxLanDeviceModel>> res = new AcBranchResponse<List<NetVxLanDeviceModel>>();
+                NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
+                List<NetVxLanDeviceModel> mos = new ArrayList<>();
+                mos.add(mo);
+                res.setData(mos);
+
+                res.setErrcode("0");
+                msg.setBody(JsonUtil.toJson(res));
+                return msg;
+            }
+
+        };
+
+        new MockUp<WanInterface>() {
+
+            @Mock
+            public String getConfig(String cfgKey) throws ServiceException {
+                return "";
+            }
+
+        };
+
+        new MockUp<ControllerUtil>() {
+
+            @Mock
+            public List checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
+                WanSubInterface mo = new WanSubInterface();
+                mo.setCeLowVlan(123);
+                List<WanSubInterface> mos = new ArrayList<>();
+                mos.add(mo);
+
+                return mos;
+
+            }
+        };
+
+        try {
+            List<WanSubInterface> result = WanInfSvcImpl.queryWanInterface("123", "123", "");
+        } catch(Exception e) {
+            assertTrue(true);
+        }
+    }
+
+    @Test
+    public void testQueryWanInterfaceExeFor() throws ServiceException {
+
+        new MockUp<AcBranchProxy>() {
+
+            @Mock
+            public HTTPReturnMessage sendGetMsg(String url, String body, String ctlrUuid) {
+                HTTPReturnMessage msg = new HTTPReturnMessage();
+                msg.setStatus(200);
+
+                AcBranchResponse<List<NetVxLanDeviceModel>> res = new AcBranchResponse<List<NetVxLanDeviceModel>>();
+                NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
+                List<NetVxLanDeviceModel> mos = new ArrayList<>();
+                mos.add(mo);
+                res.setData(mos);
+
+                res.setErrcode("0");
+                msg.setBody(JsonUtil.toJson(res));
+                return msg;
+            }
+
+        };
+
+        new MockUp<WanInterface>() {
+
+            @Mock
+            public String getConfig(String cfgKey) throws ServiceException {
+                return "";
+            }
+
+        };
+
+        new MockUp<ControllerUtil>() {
+
+            @Mock
+            public List checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
+                WanSubInterface mo = new WanSubInterface();
+                mo.setCeLowVlan(123);
+                List<WanSubInterface> mos = new ArrayList<>();
+                mos.add(mo);
+
+                return null;
+
+            }
+        };
+
+        try {
+            List<WanSubInterface> result = WanInfSvcImpl.queryWanInterface("123", "123", "");
+        } catch(Exception e) {
+            assertTrue(true);
+        }
+    }
 }
