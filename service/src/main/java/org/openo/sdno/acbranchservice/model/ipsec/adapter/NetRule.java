@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2016, Huawei Technologies Co., Ltd.
+ * Copyright 2016 Huawei Technologies Co., Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,7 +17,7 @@
 package org.openo.sdno.acbranchservice.model.ipsec.adapter;
 
 /**
- * Model class for rule in adapter layer. <br/>
+ * Model class for rule in adapter layer. <br>
  * 
  * @author
  * @version SDNO 0.5 Jul 18, 2016
@@ -35,7 +35,7 @@ public class NetRule {
     private String desNetMask;
 
     /**
-     * Constructor<br/>
+     * Constructor<br>
      * 
      * @since SDNO 0.5
      */
@@ -44,7 +44,7 @@ public class NetRule {
     }
 
     /**
-     * Constructor<br/>
+     * Constructor<br>
      * 
      * @param policy The policy
      * @param srcIp The source IP

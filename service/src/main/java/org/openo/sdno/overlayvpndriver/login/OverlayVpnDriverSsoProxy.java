@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2016, Huawei Technologies Co., Ltd.
+ * Copyright 2016 Huawei Technologies Co., Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -68,7 +68,7 @@ import org.springframework.util.StringUtils;
 import net.sf.json.JSONObject;
 
 /**
- * Class for login and sending restful requests to AC Branch. <br/>
+ * Class for login and sending restful requests to AC Branch. <br>
  *
  * @author
  * @version SDNO 0.5 2016-6-22
@@ -133,7 +133,7 @@ public class OverlayVpnDriverSsoProxy {
     }
 
     /**
-     * Get instance. <br/>
+     * Get instance. <br>
      * 
      * @param acIp The IP address
      * @param acPort The port
@@ -157,7 +157,7 @@ public class OverlayVpnDriverSsoProxy {
     }
 
     /**
-     * Login AC Branch. <br/>
+     * Login AC Branch. <br>
      *
      * @param url The URL path
      * @return true is success, false is failure.
@@ -261,7 +261,7 @@ public class OverlayVpnDriverSsoProxy {
     }
 
     /**
-     * <br/>
+     * <br>
      * 
      * @param url URL for the login
      * @return
@@ -300,7 +300,7 @@ public class OverlayVpnDriverSsoProxy {
     }
 
     /**
-     * Send post restful request. <br/>
+     * Send post restful request. <br>
      *
      * @param restUrl restful URL path
      * @param body message body
@@ -323,7 +323,7 @@ public class OverlayVpnDriverSsoProxy {
     }
 
     /**
-     * Send get restful request. <br/>
+     * Send get restful request. <br>
      *
      * @param restUrl restful URL path
      * @param body message body
@@ -336,7 +336,7 @@ public class OverlayVpnDriverSsoProxy {
     }
 
     /**
-     * Send put restful request. <br/>
+     * Send put restful request. <br>
      *
      * @param restUrl restful URL path
      * @param body message body
@@ -356,7 +356,7 @@ public class OverlayVpnDriverSsoProxy {
     }
 
     /**
-     * Send delete restful request. <br/>
+     * Send delete restful request. <br>
      *
      * @param restUrl restful URL path
      * @param body message body
@@ -428,7 +428,7 @@ class HttpDeleteWithBody extends HttpEntityEnclosingRequestBase {
     private static final String METHOD_NAME = "DELETE";
 
     /**
-     * Constructor<br/>
+     * Constructor<br>
      * <p>
      * </p>
      * 
@@ -441,7 +441,7 @@ class HttpDeleteWithBody extends HttpEntityEnclosingRequestBase {
     }
 
     /**
-     * Constructor<br/>
+     * Constructor<br>
      * <p>
      * </p>
      * 
@@ -454,7 +454,7 @@ class HttpDeleteWithBody extends HttpEntityEnclosingRequestBase {
     }
 
     /**
-     * Constructor<br/>
+     * Constructor<br>
      * <p>
      * </p>
      * 

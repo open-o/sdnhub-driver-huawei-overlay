@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2016, Huawei Technologies Co., Ltd.
+ * Copyright 2016 Huawei Technologies Co., Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -33,7 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Proxy class for AC Branch, providing restful and web socket interface. <br/>
+ * Proxy class for AC Branch, providing restful and web socket interface. <br>
  * 
  * @author
  * @version SDNO 0.5 Jul 21, 2016
@@ -54,7 +54,7 @@ public class AcBranchProxy implements IAcBranchProxy{
     }
 
     /**
-     * Get synchronized instance. <br/>
+     * Get synchronized instance. <br>
      *
      * @return synchronized instance
      * @since SDNO 0.5
@@ -68,7 +68,7 @@ public class AcBranchProxy implements IAcBranchProxy{
     }
 
     /**
-     * Send get restful request.<br/>
+     * Send get restful request.<br>
      *
      * @param url The restful URL path
      * @param body The message body
@@ -97,7 +97,7 @@ public class AcBranchProxy implements IAcBranchProxy{
     }
 
     /**
-     * Send post restful request.<br/>
+     * Send post restful request.<br>
      *
      * @param url The restful URL path
      * @param body The message body
@@ -126,7 +126,7 @@ public class AcBranchProxy implements IAcBranchProxy{
     }
 
     /**
-     * Send put restful request.<br/>
+     * Send put restful request.<br>
      *
      * @param url The restful URL path
      * @param body The message body
@@ -155,7 +155,7 @@ public class AcBranchProxy implements IAcBranchProxy{
     }
 
     /**
-     * Send delete restful request.<br/>
+     * Send delete restful request.<br>
      *
      * @param url The restful URL path
      * @param body The message body

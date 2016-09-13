@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2016, Huawei Technologies Co., Ltd.
+ * Copyright 2016 Huawei Technologies Co., Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 import net.sf.json.JSONObject;
 
 /**
- * It is used to operate VxLanExternalIdMapping table. <br/>
+ * It is used to operate VxLanExternalIdMapping table. <br>
  * 
  * @author
  * @version SDNO 0.5 Jun 16, 2016
@@ -48,7 +48,7 @@ public class VxLanDbOper {
     private static final Logger LOGGER = LoggerFactory.getLogger(VxLanDbOper.class);
 
     /**
-     * Constructor<br/>
+     * Constructor<br>
      * 
      * @since SDNO 0.5
      */
@@ -57,7 +57,7 @@ public class VxLanDbOper {
     }
 
     /**
-     * It is used to insert data. <br/>
+     * It is used to insert data. <br>
      * 
      * @param vxLanExternalIdMapping VxLan external id mapping info
      * @throws ServiceException When insert failed.
@@ -69,7 +69,7 @@ public class VxLanDbOper {
     }
 
     /**
-     * It is used to query data. <br/>
+     * It is used to query data. <br>
      * 
      * @param vxLanInstanceId The VxLan instance id that passed by server
      * @return The object of VxLanExternalIdMapping
@@ -87,7 +87,7 @@ public class VxLanDbOper {
     }
 
     /**
-     * It is used to delete data. <br/>
+     * It is used to delete data. <br>
      * 
      * @param vxLanInstanceId The VxLan instance id that passed by server
      * @throws ServiceException When delete failed.

@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2016, Huawei Technologies Co., Ltd.
+ * Copyright 2016 Huawei Technologies Co., Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 /**
- * IpSec service implementation. <br/>
+ * IpSec service implementation. <br>
  * 
  * @author
  * @version SDNO 0.5 Jun 16, 2016
@@ -63,7 +63,7 @@ public class IpSecSvcImpl {
     }
 
     /**
-     * Create IPSec operation. <br/>
+     * Create IPSec operation. <br>
      * 
      * @param ctrlUuid The controller UUID
      * @param deviceId The device id
@@ -102,7 +102,7 @@ public class IpSecSvcImpl {
     }
 
     /**
-     * Delete IPSec operation. <br/>
+     * Delete IPSec operation. <br>
      * 
      * @param ctrlUuid Controller UUID
      * @param ipSecConnectionId The UUID of IPSec connection
