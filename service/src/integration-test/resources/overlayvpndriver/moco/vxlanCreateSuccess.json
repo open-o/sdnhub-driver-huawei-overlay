@@ -1,0 +1,58 @@
+{
+	"request": {
+		"uri": "/controller/cloud/v2/northbound/config/[a-zA-Z0-9\\-\\_]{1,36}/device/arvpnsvxlan",
+		"method": "put",
+		"headers": {
+			"Content-Type": "application/json;charset=UTF-8"
+		},
+		"json": {
+			"vxlanList": [
+				{
+					"vneId": 0,
+					"name": null,
+					"localAddress": "192.168.101.1/24",
+					"vniilist": [
+						{
+							"deleteMode": false,
+							"vni": 123,
+							"macLearingMode": "control",
+							"evpnRtMode": null,
+							"evpnRtExport": null,
+							"evpnRtImport": null,
+							"peerAddresslist": [
+								"192.168.101.2/24"
+							],
+							"portlist": [],
+							"vlanlist": [],
+							"portvlanlist": [],
+							"id": null
+						}
+					],
+					"id": "f257df67-9473-486e-81e1-d0439fceed2e"
+				}
+			]
+		}
+	},
+	"response": {
+		"status": 200,
+		"json": {
+			"errcode": "0",
+			"errmsg": null,
+			"pageIndex": 0,
+			"pageSize": 0,
+			"totalRecords": 0,
+			"data": [
+				{
+					"vneId": 123,
+					"name": "124",
+					"localAddress": null,
+					"vniilist": null,
+					"id": null
+				}
+			],
+			"success": null,
+			"fail": null,
+			"sucess": true
+		}
+	}
+}

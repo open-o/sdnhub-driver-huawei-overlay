@@ -1,0 +1,37 @@
+{
+	"request":
+	{
+		"uri": "/controller/cloud/v2/northbound/devices/[a-zA-Z0-9\\-\\_]{1,36}/arwansubinterface",
+		"method": "get",
+		"headers":{"Content-Type":"application/json;charset=UTF-8"},
+		"json":
+		{
+			
+		}
+	},
+	"response":
+	{
+		"status":200,
+		"json":
+		{
+		"errcode": "0",
+			"errmsg": null,
+			"pageIndex": 0,
+			"pageSize": 0,
+			"totalRecords": 0,
+			"data": [
+				{
+					"neId":"c6f420cd80d1442593b59126fe03c94a",
+					"name": "124",
+					"ipAddress": "192.168.4.220",
+					"mask": "255.255.255.255",
+					"ceHighVlan":858,
+					"ceLowVlan":857
+				}
+			],
+			"success": null,
+			"fail": null,
+			"sucess": true
+		}
+	}
+}
