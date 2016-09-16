@@ -1,0 +1,36 @@
+[
+    {
+        "cfgkey":"wanInterfaceForInternet",
+        "cfgvalue":"855",
+        "validator":"",
+        "encrypt":"false"
+    },
+    {
+        "cfgkey":"wanInterfaceForGre",
+        "cfgvalue":"856",
+        "validator":"",
+        "encrypt":"false"
+    },
+    {
+        "cfgkey":"wanInterfaceForVxlan",
+        "cfgvalue":"857",
+        "validator":"",
+        "encrypt":"false"
+    },
+    {
+        "cfgkey":"wanInterfaceForManage",
+        "cfgvalue":"858",
+        "validator":"",
+        "encrypt":"false"
+    },
+    {
+        "cfgkey":"wanInterfaceForIPSec",
+        "cfgvalue":"859",
+        "validator":"",
+        "encrypt":"false"
+    },
+    {
+		"cfgkey": "ESREnabled",
+		"cfgvalue": "true"
+	}
+]

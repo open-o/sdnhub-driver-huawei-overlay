@@ -1,0 +1,19 @@
+{
+ "driverInfo": {
+    "driverName": "sdnl3vpndriver-1",
+    "ip": "127.0.0.1",
+    "port": "8080",
+    "protocol": "http",
+    "services": [           
+               {                 
+                    "service_url":"/openoapi/sbi-l3vpn/v1",                              
+          	    "support_sys":[                   
+                                     {   "type":"Agile Controller-WAN", 
+                                         "version":"V100R002" 
+                                     }
+                             ]      
+                 } 
+              ]
+         }
+}
+

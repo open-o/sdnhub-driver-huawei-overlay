@@ -28,28 +28,29 @@ import org.openo.sdno.testframework.http.model.HttpRequest;
 import org.openo.sdno.testframework.http.model.HttpResponse;
 import org.openo.sdno.testframework.http.model.HttpRquestResponse;
 import org.openo.sdno.testframework.moco.MocoHttpServer;
+import org.openo.sdno.testframework.moco.MocoHttpsServer;
 import org.openo.sdno.testframework.moco.responsehandler.MocoResponseHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class VxlanDriverServiceFailServer extends MocoHttpServer{
-	private static final Logger LOGGER = LoggerFactory.getLogger(VxlanDriverServiceFailServer.class);
+public class VxlanDriverHttpsSuccessServer extends MocoHttpsServer{
+	private static final Logger LOGGER = LoggerFactory.getLogger(VxlanDriverHttpsSuccessServer.class);
 
-    public VxlanDriverServiceFailServer() {
+    public VxlanDriverHttpsSuccessServer() {
         super();
     }
-
+    
     @Override
     public void addRequestResponsePairs() {
 
-        this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/vxlanCreateFail.json",
+        this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/vxlanCreateSuccess.json",
                 new VxLanSuccessResponseHandler());
-        this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/vxlanDeleteFail.json",
+        this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/vxlanDeletesuccess.json",
                 new VxLanSuccessResponseHandler());
-        this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/queryVtepFail.json",
+        this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/queryVtepSuccess.json",
                 new VxLanQuerySuccessResponseHandler());
         this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/ESRGetController.json",
-                new VxLanQuerySuccessResponseHandler());
+                new MocoResponseHandler());
     }
     
     private class VxLanSuccessResponseHandler extends MocoResponseHandler {
@@ -63,7 +64,9 @@ public class VxlanDriverServiceFailServer extends MocoHttpServer{
 
             ResultRsp<OverlayVpnDriverResponse<List<NetVxLanDeviceModel>>> newResult = new ResultRsp<OverlayVpnDriverResponse<List<NetVxLanDeviceModel>>>(ErrorCode.OVERLAYVPN_SUCCESS);
 
-            httpResponse.setStatus(404);
+            httpResponse.setStatus(200);
+            newResult.setData(inputInstanceList);
+            httpResponse.setData(JsonUtil.toJson(inputInstanceList));
         }
     }
     
@@ -78,7 +81,9 @@ public class VxlanDriverServiceFailServer extends MocoHttpServer{
 
             ResultRsp<OverlayVpnDriverResponse<List<WanSubInterface>>> newResult = new ResultRsp<OverlayVpnDriverResponse<List<WanSubInterface>>>(ErrorCode.OVERLAYVPN_SUCCESS);
 
-            httpResponse.setStatus(404);
+            httpResponse.setStatus(200);
+            newResult.setData(inputInstanceList);
+            httpResponse.setData(JsonUtil.toJson(inputInstanceList));
         }
     }
 

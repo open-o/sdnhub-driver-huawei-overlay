@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package java.org.openo.sdno.overlayvpndriver.test.mocoserver;
+package org.openo.sdno.overlayvpndriver.test.mocoserver;
 
 import java.util.List;
 
@@ -42,12 +42,14 @@ public class VxlanDriverServiceSuccessServer extends MocoHttpServer{
     @Override
     public void addRequestResponsePairs() {
 
-        this.addRequestResponsePair("src/integration-test/resources/ACBranchDriver/moco/vxlanCreateSuccess.json",
+        this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/vxlanCreateSuccess.json",
                 new VxLanSuccessResponseHandler());
-        this.addRequestResponsePair("src/integration-test/resources/ACBranchDriver/moco/vxlanDeletesuccess.json",
+        this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/vxlanDeletesuccess.json",
                 new VxLanSuccessResponseHandler());
-        this.addRequestResponsePair("src/integration-test/resources/ACBranchDriver/moco/queryVtepSuccess.json",
+        this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/queryVtepSuccess.json",
                 new VxLanQuerySuccessResponseHandler());
+        this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/ESRGetController.json",
+                new MocoResponseHandler());
     }
     
     private class VxLanSuccessResponseHandler extends MocoResponseHandler {

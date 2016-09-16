@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package java.org.openo.sdno.overlayvpndriver.test;
+package org.openo.sdno.overlayvpndriver.test;
 
 import java.io.File;
-import java.org.openo.sdno.overlayvpndriver.test.mocoserver.VxlanDriverServiceFailServer;
+import org.openo.sdno.overlayvpndriver.test.mocoserver.VxlanDriverServiceFailServer;
 
 import org.junit.After;
 import org.junit.Before;

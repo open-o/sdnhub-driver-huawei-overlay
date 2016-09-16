@@ -16,18 +16,23 @@
 
 package org.openo.sdno.overlayvpndriver.login;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
+import org.openo.sdno.common.services.ESRutil;
 import org.openo.sdno.exception.HttpCode;
 import org.openo.sdno.overlayvpn.brs.invdao.CommParamDao;
 import org.openo.sdno.overlayvpn.brs.invdao.ControllerDao;
 import org.openo.sdno.overlayvpn.brs.model.AuthInfo;
 import org.openo.sdno.overlayvpn.brs.model.CommParamMO;
 import org.openo.sdno.overlayvpn.brs.model.ControllerMO;
+import org.openo.sdno.overlayvpndriver.util.config.WanInterface;
 import org.openo.sdno.util.http.HTTPReturnMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -197,13 +202,46 @@ public class OverlayVpnDriverProxy implements IOverlayVpnDriverProxy {
     }
 
     private OverlayVpnDriverSsoProxy createACSSOProxy(String ctlrUuid) {
+        
+        OverlayVpnDriverSsoProxy acSSOLogin = null;
+        
+        try {
+            if(WanInterface.getConfig("ESREnabled") == null || "false".equals(WanInterface.getConfig("ESREnabled"))) {
+                acSSOLogin = getControllerFromDB(ctlrUuid);
+            } else {
+                acSSOLogin = getControllerFromESR(ctlrUuid);
+            }
+        } catch(ServiceException e) {
+            LOGGER.warn("config.json file not found. taking default actions", e);
+            acSSOLogin = getControllerFromDB(ctlrUuid);
+        }
+
+        return acSSOLogin;
+    }
+
+    private OverlayVpnDriverSsoProxy getControllerFromESR(String ctlrUuid) throws ServiceException {
+        Map controllerDetails = ESRutil.getControllerDetails(ctlrUuid);
+        
+        URL url;
+        try {
+            url = new URL((String)controllerDetails.get("url"));
+        } catch(MalformedURLException e) {
+            LOGGER.error("Controller url is malformed", e);
+            throw new ServiceException(e);
+        }
+        
+        return OverlayVpnDriverSsoProxy.getInstance(url.getHost(), String.valueOf(url.getPort()),
+                (String)controllerDetails.get("userName"),
+                (String)controllerDetails.get("password"));
+    }
+
+    private OverlayVpnDriverSsoProxy getControllerFromDB(String ctlrUuid) {
         String controllerIp = getControllerIp(ctlrUuid);
         if(StringUtils.isEmpty(controllerIp)) {
             LOGGER.error("Controller IpAddress is null!!");
             return null;
         }
 
-        OverlayVpnDriverSsoProxy acSSOLogin = null;
         List<CommParamMO> commList = getCommparaListByUuid(ctlrUuid);
         if(CollectionUtils.isEmpty(commList)) {
             LOGGER.error("Controller comm parameters are not exist, uuid: " + ctlrUuid);
@@ -218,10 +256,8 @@ public class OverlayVpnDriverProxy implements IOverlayVpnDriverProxy {
         }
 
         authInfo.setPort(comm.getPort());
-        acSSOLogin = OverlayVpnDriverSsoProxy.getInstance(controllerIp, comm.getPort(), authInfo.getUserName(),
+        return OverlayVpnDriverSsoProxy.getInstance(controllerIp, comm.getPort(), authInfo.getUserName(),
                 authInfo.getPassword());
-
-        return acSSOLogin;
     }
 
     private String getControllerIp(String uuid) {

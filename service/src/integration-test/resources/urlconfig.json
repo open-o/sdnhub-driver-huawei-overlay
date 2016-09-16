@@ -26,5 +26,9 @@
 	{
        "url": "/controller/cloud/v2/northbound/config/123/device/arvpnsvxlan",     
        "prefix": ""
+	},
+	{
+       "url": "/openoapi/sbi-",     
+       "prefix": "/org.openo.sdno.overlayvpndriver"
 	}
 ]

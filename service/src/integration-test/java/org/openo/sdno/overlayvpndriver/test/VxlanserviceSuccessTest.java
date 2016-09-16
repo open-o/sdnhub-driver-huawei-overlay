@@ -13,10 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package java.org.openo.sdno.overlayvpndriver.test;
+package org.openo.sdno.overlayvpndriver.test;
 
 import java.io.File;
-import java.org.openo.sdno.overlayvpndriver.test.mocoserver.VxlanDriverServiceSuccessServer;
+
+import org.openo.sdno.overlayvpndriver.test.mocoserver.VxlanDriverHttpsSuccessServer;
+import org.openo.sdno.overlayvpndriver.test.mocoserver.VxlanDriverServiceSuccessServer;
 
 import org.junit.After;
 import org.junit.Before;
@@ -32,20 +34,23 @@ import org.openo.sdno.testframework.util.file.FileUtils;
 public class VxlanserviceSuccessTest extends TestManager{
 	
 	private VxlanDriverServiceSuccessServer vxlanServer = new VxlanDriverServiceSuccessServer();
+	private VxlanDriverHttpsSuccessServer vxlanHttpsServer = new VxlanDriverHttpsSuccessServer();
 	
 	@Before
 	public void setup() throws ServiceException {
 		vxlanServer.start();
+		vxlanHttpsServer.start();
 	}
 
 	@After
-	public void tearDown() {
+	public void tearDown() throws ServiceException {
 		vxlanServer.stop();
+		vxlanHttpsServer.stop();
 	}
 
 	@Test
 	public void test_create() throws ServiceException {
-		File createFile = new File("src/integration-test/resources/ACBranchDriver/create.json");
+		File createFile = new File("src/integration-test/resources/overlayvpndriver/create.json");
 	    HttpRquestResponse createHttpObject =
 	            HttpModelUtils.praseHttpRquestResponse(FileUtils.readFromJson(createFile));
 	    HttpResponse createResponse = execTestCase(createFile,
@@ -55,7 +60,7 @@ public class VxlanserviceSuccessTest extends TestManager{
 	
 	@Test
 	public void test_delete() throws ServiceException {
-		File createFile = new File("src/integration-test/resources/ACBranchDriver/delete.json");
+		File createFile = new File("src/integration-test/resources/overlayvpndriver/delete.json");
 	    HttpRquestResponse createHttpObject =
 	            HttpModelUtils.praseHttpRquestResponse(FileUtils.readFromJson(createFile));
 	    HttpResponse createResponse = execTestCase(createFile,
@@ -65,7 +70,7 @@ public class VxlanserviceSuccessTest extends TestManager{
 	
 	@Test
 	public void test_query() throws ServiceException {
-		File createFile = new File("src/integration-test/resources/ACBranchDriver/query.json");
+		File createFile = new File("src/integration-test/resources/overlayvpndriver/query.json");
 	    HttpRquestResponse createHttpObject =
 	            HttpModelUtils.praseHttpRquestResponse(FileUtils.readFromJson(createFile));
 	    HttpResponse createResponse = execTestCase(createFile,

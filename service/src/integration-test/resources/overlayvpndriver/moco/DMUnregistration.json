@@ -1,0 +1,17 @@
+{
+	"request": {
+		"uri": "/openoapi/drivermgr/v1/drivers/[a-z0-9\\-\\_]{1,36}",
+		"method": "delete",
+		"headers": {
+		},
+		"json": {
+			
+		}
+	},
+	"response": {
+		"status": 200,
+		"json": {
+			
+		}
+	}
+}
