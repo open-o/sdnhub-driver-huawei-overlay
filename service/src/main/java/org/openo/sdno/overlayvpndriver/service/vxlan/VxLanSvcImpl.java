@@ -59,21 +59,16 @@ public class VxLanSvcImpl {
      * Private constructor added to fix sonar issue
      */
     private VxLanSvcImpl() {
-
     }
 
     /**
      * Create VxLan operation. <br>
      * 
-     * @param ctrlUuid
-     *            The controller UUID
-     * @param deviceId
-     *            The device id
-     * @param netVxLanDeviceModelList
-     *            The data that want to crate
+     * @param ctrlUuid The controller UUID
+     * @param deviceId The device id
+     * @param netVxLanDeviceModelList The data that want to crate
      * @return The ResultRsp with the list of NetVxLanDeviceModel
-     * @throws ServiceException
-     *             When create failed
+     * @throws ServiceException When create failed
      * @since SDNO 0.5
      */
     public static ResultRsp<List<NetVxLanDeviceModel>> createVxLan(String ctrlUuid, String deviceId,
@@ -91,7 +86,8 @@ public class VxLanSvcImpl {
         String url = MessageFormat.format(ControllerUrlConst.CONST_CONFIG_VXLAN, deviceId);
         Map<String, List<NetVxLanDeviceModel>> ctrlInfoMap = new ConcurrentHashMap<String, List<NetVxLanDeviceModel>>();
         ctrlInfoMap.put(CommConst.VXLAN_LIST, netVxLanDeviceModelList);
-        HTTPReturnMessage httpMsg = OverlayVpnDriverProxy.getInstance().sendPutMsg(url, JsonUtil.toJson(ctrlInfoMap), ctrlUuid);
+        HTTPReturnMessage httpMsg =
+                OverlayVpnDriverProxy.getInstance().sendPutMsg(url, JsonUtil.toJson(ctrlInfoMap), ctrlUuid);
         List<NetVxLanDeviceModel> data = new ControllerUtil<NetVxLanDeviceModel>().checkRsp(httpMsg);
 
         // store to DB
@@ -105,13 +101,10 @@ public class VxLanSvcImpl {
     /**
      * Delete VxLan operation. <br>
      * 
-     * @param ctrlUuid
-     *            Controller UUID
-     * @param instanceId
-     *            The UUID of VxLan instance
+     * @param ctrlUuid Controller UUID
+     * @param instanceId The UUID of VxLan instance
      * @return The object of ResultRsp
-     * @throws ServiceException
-     *             When delete failed
+     * @throws ServiceException When delete failed
      * @since SDNO 0.5
      */
     public static ResultRsp<String> deleteVxLan(String ctrlUuid, String instanceId) throws ServiceException {

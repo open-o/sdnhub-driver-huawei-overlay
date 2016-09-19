@@ -58,8 +58,8 @@ public class WanInterfaceRoaResource {
      * @param ctrlUuid Controller UUID
      * @param deviceId The device id
      * @param type The WanInterface type that want to get
-     * @return ResultRsp list with WanSubInterface
-     * @throws ServiceException When query failed
+     * @return ResultRsp list of WanSubInterface
+     * @throws ServiceException When WanSubInterface query failed
      * @since SDNO 0.5
      */
     @GET

@@ -296,7 +296,6 @@ public class IpSecRoaResourceTest {
 		IpSecRoaResource ipSecRoa = new IpSecRoaResource();
 		NeIpSecConnection neIpSecConnection = new NeIpSecConnection();
 		ipSecRoa.createIpSec(null, "1234@@@@", null);
-
 	}
 
 	@Test
@@ -336,11 +335,10 @@ public class IpSecRoaResourceTest {
 				List<NetIpSecModel> mos = new ArrayList<>();
 				mos.add(mo);
 				return mos;
-
 			}
 		};
 		IpSecRoaResource ipSecRoa = new IpSecRoaResource();
-		ipSecRoa.deleteIpSec(null, "12345-67898", "12345");
+		ipSecRoa.deleteIpSec(null, "extSysID=12345-67898", "12345");
 	}
 
 	@Test(expected = Exception.class)

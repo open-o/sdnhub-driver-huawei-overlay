@@ -32,10 +32,10 @@
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
-    
+
     <listener>
-		<listener-class>org.openo.sdno.common.services.DriverRegistrarListener</listener-class>
-	</listener>
+        <listener-class>org.openo.sdno.common.services.DriverRegisterListener</listener-class>
+    </listener>
 
     <context-param>
         <param-name>contextConfigLocation</param-name>

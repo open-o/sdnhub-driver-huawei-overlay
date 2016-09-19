@@ -64,21 +64,16 @@ public class WanInfSvcImpl {
      * Private constructor added to fix sonar issue
      */
     private WanInfSvcImpl() {
-
     }
 
     /**
      * Query WanInterface information. <br>
      *
-     * @param ctrlUuid
-     *            Controller UUID
-     * @param deviceId
-     *            The device id
-     * @param type
-     *            The WanInterface type that want to get
+     * @param ctrlUuid Controller UUID
+     * @param deviceId The device id
+     * @param type The WanInterface type that want to get
      * @return ResultRsp list with WanSubInterface
-     * @throws ServiceException
-     *             When query failed
+     * @throws ServiceException When query failed
      * @since SDNO 0.5
      */
     public static List<WanSubInterface> queryWanInterface(String ctrlUuid, String deviceId, String type)
@@ -272,7 +267,8 @@ public class WanInfSvcImpl {
         Map<String, List<NetWanSubInterfaceIp>> updateIpMap = new HashMap<String, List<NetWanSubInterfaceIp>>();
         updateIpMap.put("interfaceIpConfigList", reqList);
 
-        HTTPReturnMessage httpMsg = OverlayVpnDriverProxy.getInstance().sendPutMsg(url, JsonUtil.toJson(updateIpMap), ctrlUuid);
+        HTTPReturnMessage httpMsg =
+                OverlayVpnDriverProxy.getInstance().sendPutMsg(url, JsonUtil.toJson(updateIpMap), ctrlUuid);
         new ControllerUtil<NetAcDevicePort>().checkRsp(httpMsg);
 
         LOGGER.info("enableDhcp cost time = " + (System.currentTimeMillis() - beginTime));

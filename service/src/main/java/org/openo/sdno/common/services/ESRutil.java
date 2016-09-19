@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.openo.sdno.common.services;
 
 import java.util.Map;
@@ -23,17 +24,30 @@ import org.openo.baseservice.roa.util.restclient.RestfulResponse;
 import org.openo.sdno.framework.container.resthelper.RestfulProxy;
 import org.openo.sdno.framework.container.util.JsonUtil;
 
+/**
+ * Util Class of External System Registration.<br>
+ * 
+ * @author
+ * @version SDNO 0.5 2016-09-19
+ */
 public class ESRutil {
-    
-    private ESRutil(){}
-    
+
+    private ESRutil() {
+    }
+
+    /**
+     * Get Controller Detail Information.<br>
+     * 
+     * @param ctrlUuid Controller UUid
+     * @return Controller Information
+     * @throws ServiceException throws when query controller failed
+     * @since SDNO 0.5
+     */
     public static Map getControllerDetails(String ctrlUuid) throws ServiceException {
         String esrurl = "/openoapi/extsys/v1/sdncontrollers/" + ctrlUuid;
         final RestfulParametes restfulParametes = new RestfulParametes();
         RestfulResponse response = RestfulProxy.get(esrurl, restfulParametes);
-
-        return (Map)JsonUtil.fromJson(response.getResponseContent(), Map.class);
-
+        return JsonUtil.fromJson(response.getResponseContent(), Map.class);
     }
 
 }
