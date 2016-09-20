@@ -13,17 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.openo.sdno.overlayvpndriver.test;
 
 import java.io.File;
-
-import org.openo.sdno.overlayvpndriver.test.mocoserver.VxlanDriverHttpsSuccessServer;
-import org.openo.sdno.overlayvpndriver.test.mocoserver.VxlanDriverServiceSuccessServer;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
+import org.openo.sdno.overlayvpndriver.test.mocoserver.VxlanDriverHttpsSuccessServer;
+import org.openo.sdno.overlayvpndriver.test.mocoserver.VxlanDriverServiceSuccessServer;
+import org.openo.sdno.testframework.checker.IChecker;
 import org.openo.sdno.testframework.checker.RegularExpChecker;
 import org.openo.sdno.testframework.http.model.HttpModelUtils;
 import org.openo.sdno.testframework.http.model.HttpResponse;
@@ -31,50 +32,59 @@ import org.openo.sdno.testframework.http.model.HttpRquestResponse;
 import org.openo.sdno.testframework.testmanager.TestManager;
 import org.openo.sdno.testframework.util.file.FileUtils;
 
-public class VxlanserviceSuccessTest extends TestManager{
-	
-	private VxlanDriverServiceSuccessServer vxlanServer = new VxlanDriverServiceSuccessServer();
-	private VxlanDriverHttpsSuccessServer vxlanHttpsServer = new VxlanDriverHttpsSuccessServer();
-	
-	@Before
-	public void setup() throws ServiceException {
-		vxlanServer.start();
-		vxlanHttpsServer.start();
-	}
+public class VxlanserviceSuccessTest extends TestManager {
 
-	@After
-	public void tearDown() throws ServiceException {
-		vxlanServer.stop();
-		vxlanHttpsServer.stop();
-	}
+    private VxlanDriverServiceSuccessServer vxlanServer = new VxlanDriverServiceSuccessServer();
 
-	@Test
-	public void test_create() throws ServiceException {
-		File createFile = new File("src/integration-test/resources/overlayvpndriver/create.json");
-	    HttpRquestResponse createHttpObject =
-	            HttpModelUtils.praseHttpRquestResponse(FileUtils.readFromJson(createFile));
-	    HttpResponse createResponse = execTestCase(createFile,
-	            new RegularExpChecker(createHttpObject.getResponse()));
-	    String response = createResponse.getData();
-	}
-	
-	@Test
-	public void test_delete() throws ServiceException {
-		File createFile = new File("src/integration-test/resources/overlayvpndriver/delete.json");
-	    HttpRquestResponse createHttpObject =
-	            HttpModelUtils.praseHttpRquestResponse(FileUtils.readFromJson(createFile));
-	    HttpResponse createResponse = execTestCase(createFile,
-	            new RegularExpChecker(createHttpObject.getResponse()));
-	    String response = createResponse.getData();
-	}
-	
-	@Test
-	public void test_query() throws ServiceException {
-		File createFile = new File("src/integration-test/resources/overlayvpndriver/query.json");
-	    HttpRquestResponse createHttpObject =
-	            HttpModelUtils.praseHttpRquestResponse(FileUtils.readFromJson(createFile));
-	    HttpResponse createResponse = execTestCase(createFile,
-	            new RegularExpChecker(createHttpObject.getResponse()));
-	    String response = createResponse.getData();
-	}
+    private VxlanDriverHttpsSuccessServer vxlanHttpsServer = new VxlanDriverHttpsSuccessServer();
+
+    @Before
+    public void setup() throws ServiceException {
+        vxlanServer.start();
+        vxlanHttpsServer.start();
+    }
+
+    @After
+    public void tearDown() throws ServiceException {
+        vxlanServer.stop();
+        vxlanHttpsServer.stop();
+    }
+
+    @Test
+    public void test_create() throws ServiceException {
+        File createFile = new File("src/integration-test/resources/overlayvpndriver/create.json");
+        HttpRquestResponse createHttpObject =
+                HttpModelUtils.praseHttpRquestResponse(FileUtils.readFromJson(createFile));
+        HttpResponse createResponse = execTestCase(createFile, new SuccessChecker());
+        String response = createResponse.getData();
+    }
+
+    @Test
+    public void test_delete() throws ServiceException {
+        File createFile = new File("src/integration-test/resources/overlayvpndriver/delete.json");
+        HttpRquestResponse createHttpObject =
+                HttpModelUtils.praseHttpRquestResponse(FileUtils.readFromJson(createFile));
+        HttpResponse createResponse = execTestCase(createFile, new RegularExpChecker(createHttpObject.getResponse()));
+        String response = createResponse.getData();
+    }
+
+    @Test
+    public void test_query() throws ServiceException {
+        File createFile = new File("src/integration-test/resources/overlayvpndriver/query.json");
+        HttpRquestResponse createHttpObject =
+                HttpModelUtils.praseHttpRquestResponse(FileUtils.readFromJson(createFile));
+        HttpResponse createResponse = execTestCase(createFile, new SuccessChecker());
+        String response = createResponse.getData();
+    }
+
+    private class SuccessChecker implements IChecker {
+
+        @Override
+        public boolean check(HttpResponse response) {
+            if(response.getStatus() >= 200 && response.getStatus() <= 204) {
+                return true;
+            }
+            return false;
+        }
+    }
 }

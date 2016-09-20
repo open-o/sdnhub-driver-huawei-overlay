@@ -1,9 +1,9 @@
 {
 	"request": {
-		"uri": "http://localhost:8080/org.openo.sdno.acbranchservice/rest/svc/sbiadp/controller/123/v1/vxlan/device/c6f420cd80d1442593b59126fe03c94a/vtep",
+		"uri": "/openoapi/sbi-vxlan/v1/vxlan/device/123/vtep",
 		"method": "get",
 		"headers": {
-			"Content-Type": "application/json;charset=UTF-8"
+			"Content-Type": "application/json;charset=UTF-8","X-Driver-Parameter": "extSysID=ctrlid1024"
 		},
 		"json": {
 			

@@ -1,9 +1,9 @@
 {
 	"request":
 	{
-		"uri": "http://localhost:8080/org.openo.sdno.acbranchservice/rest/svc/sbiadp/controller/555/v1/vxlan/instance/124",
+		"uri": "/openoapi/sbi-vxlan/v1/vxlan/instance/124",
 		"method": "delete",
-		"headers":{"Content-Type":"application/json;charset=UTF-8"},
+		"headers":{"Content-Type":"application/json;charset=UTF-8","X-Driver-Parameter": "extSysID=ctrlid1024"},
 		"json":
 		{
 			

@@ -29,6 +29,6 @@
 	},
 	{
        "url": "/openoapi/sbi-",     
-       "prefix": "/org.openo.sdno.overlayvpndriver"
+       "prefix": "/overlayvpndriver"
 	}
 ]

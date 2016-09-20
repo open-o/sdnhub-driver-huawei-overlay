@@ -13,15 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.openo.sdno.overlayvpndriver.test;
 
 import java.io.File;
-import org.openo.sdno.overlayvpndriver.test.mocoserver.VxlanDriverServiceFailServer;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
+import org.openo.sdno.overlayvpndriver.test.mocoserver.VxlanDriverServiceFailServer;
 import org.openo.sdno.testframework.checker.RegularExpChecker;
 import org.openo.sdno.testframework.http.model.HttpModelUtils;
 import org.openo.sdno.testframework.http.model.HttpResponse;
@@ -31,75 +32,70 @@ import org.openo.sdno.testframework.util.file.FileUtils;
 
 import net.sf.json.JSONObject;
 
-public class VxlanDriverServiceFail extends TestManager{
-	
-private VxlanDriverServiceFailServer vxlanServer = new VxlanDriverServiceFailServer();
-	
-	@Before
-	public void setup() throws ServiceException {
-		vxlanServer.start();
-	}
+public class VxlanDriverServiceFail extends TestManager {
 
-	@After
-	public void tearDown() {
-		vxlanServer.stop();
-	}
+    private VxlanDriverServiceFailServer vxlanServer = new VxlanDriverServiceFailServer();
 
-	@Test
-	public void test() throws ServiceException {
-		
-		File createFile = new File("src/integration-test/resources/ACBranchDriver/createFail.json");
-	    HttpRquestResponse createHttpObject =
-	            HttpModelUtils.praseHttpRquestResponse(FileUtils.readFromJson(createFile));
-	    HttpResponse createResponse = execTestCase(createFile,
-	            new RegularExpChecker2(createHttpObject.getResponse()));
-	    String response = createResponse.getData();
-	    
-	   createFile = new File("src/integration-test/resources/ACBranchDriver/deleteFail.json");
-	    createHttpObject =
-	            HttpModelUtils.praseHttpRquestResponse(FileUtils.readFromJson(createFile));
-	    createResponse = execTestCase(createFile,
-	            new RegularExpChecker2(createHttpObject.getResponse()));
-	    response = createResponse.getData();
-	    
-	    createFile = new File("src/integration-test/resources/ACBranchDriver/queryFail.json");
-	    createHttpObject =
-	            HttpModelUtils.praseHttpRquestResponse(FileUtils.readFromJson(createFile));
-	    createResponse = execTestCase(createFile,
-	            new RegularExpChecker2(createHttpObject.getResponse()));
-	    response = createResponse.getData();
-	}
-	
-	//created this class for a workaround as expectedResponse.getData() produce result "null"
-	public class RegularExpChecker2 extends RegularExpChecker {
+    @Before
+    public void setup() throws ServiceException {
+        vxlanServer.start();
+    }
 
-	    private HttpResponse expectedResponse;
+    @After
+    public void tearDown() {
+        vxlanServer.stop();
+    }
 
-	    public RegularExpChecker2(HttpResponse response) {
-	    	super(response);
-	        expectedResponse = response;
+    @Test
+    public void test() throws ServiceException {
 
-	    }
+        File createFile = new File("src/integration-test/resources/overlayvpndriver/createFail.json");
+        HttpRquestResponse createHttpObject =
+                HttpModelUtils.praseHttpRquestResponse(FileUtils.readFromJson(createFile));
+        HttpResponse createResponse = execTestCase(createFile, new RegularExpChecker2(createHttpObject.getResponse()));
+        String response = createResponse.getData();
 
-		// Regular expression checker
-	    @Override
-	    public boolean check(HttpResponse response) {
-	        if(response.getStatus() != expectedResponse.getStatus()) {
-	            return false;
-	        }
+        createFile = new File("src/integration-test/resources/overlayvpndriver/deleteFail.json");
+        createHttpObject = HttpModelUtils.praseHttpRquestResponse(FileUtils.readFromJson(createFile));
+        createResponse = execTestCase(createFile, new RegularExpChecker2(createHttpObject.getResponse()));
+        response = createResponse.getData();
 
-	        // If expected response is null -- no need to match anything, only check status
-	        if("null".equals(expectedResponse.getData())) {
-	            return true;
-	        }
+        createFile = new File("src/integration-test/resources/overlayvpndriver/queryFail.json");
+        createHttpObject = HttpModelUtils.praseHttpRquestResponse(FileUtils.readFromJson(createFile));
+        createResponse = execTestCase(createFile, new RegularExpChecker2(createHttpObject.getResponse()));
+        response = createResponse.getData();
+    }
 
-	        // Something is expected but nothing came, some problem, test case failed
-	        if(null == response.getData()) {
-	            return false;
-	        }
+    // created this class for a workaround as expectedResponse.getData() produce result "null"
+    public class RegularExpChecker2 extends RegularExpChecker {
 
-	        return new RegularExpChecker(response).
-	        		check(JSONObject.fromObject(expectedResponse.getData()), JSONObject.fromObject(response.getData()));
-	    }
-	}
+        private HttpResponse expectedResponse;
+
+        public RegularExpChecker2(HttpResponse response) {
+            super(response);
+            expectedResponse = response;
+
+        }
+
+        // Regular expression checker
+        @Override
+        public boolean check(HttpResponse response) {
+            if(response.getStatus() != expectedResponse.getStatus()) {
+                return false;
+            }
+
+            // If expected response is null -- no need to match anything, only check status
+            if("null".equals(expectedResponse.getData())) {
+                return true;
+            }
+
+            // Something is expected but nothing came, some problem, test case failed
+            if(null == response.getData()) {
+                return false;
+            }
+
+            return new RegularExpChecker(response).check(JSONObject.fromObject(expectedResponse.getData()),
+                    JSONObject.fromObject(response.getData()));
+        }
+    }
 }
