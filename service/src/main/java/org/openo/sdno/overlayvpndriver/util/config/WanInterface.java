@@ -23,10 +23,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.IOUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
-import org.openo.sdno.overlayvpn.errorcode.ErrorCode;
-import org.openo.sdno.overlayvpn.result.SvcExcptUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -82,15 +81,13 @@ public class WanInterface {
 
     private static List<Map<String, String>> getJsonFileData(String domain) throws ServiceException {
         try {
-            String path = "generalconfig/" + domain + ".json";
+            String content = IOUtils.toString(
+                    WanInterface.class.getClassLoader().getResourceAsStream("/generalconfig/config.json"));
             ObjectMapper mapper = new ObjectMapper();
-            byte[] bytes = Files.readAllBytes(Paths.get(path));
-            return mapper.readValue(bytes, List.class);
+            return mapper.readValue(content.getBytes(), List.class);
         } catch(IOException e) {
             LOGGER.warn("Get json file failed!"+e);
-            SvcExcptUtil.throwInnerErrSvcExptionWithInfo(ErrorCode.OVERLAYVPN_FAILED, "Get json file failed", null,
-                    null, null);
+            throw new ServiceException("Get config.json Filed");
         }
-        return Collections.EMPTY_LIST;
     }
 }
