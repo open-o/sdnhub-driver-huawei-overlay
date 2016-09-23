@@ -1,0 +1,45 @@
+{
+	"request": {
+		"uri": "/controller/cloud/v2/northbound/config/[a-zA-Z0-9\\-\\_]{1,36}/device/arvpnsipsec",
+		"method": "put",
+		"headers": {
+			"Content-Type": "application/json;charset=UTF-8"
+		},
+		"json": {
+			"ipsecList": [{
+				"name": "86786a9e",
+				"interfaceName": "GigabitEthernet0/0/0.1",
+				"ipsecConnection": [{
+					"seqNumber": 1,
+					"deleteMode": false,
+					"type": "false",
+					"ruleList": [{
+						"policy": "permit",
+						"srcIp": "172.24.4.230",
+						"srcNetMask": "255.255.255.255",
+						"desIp": "172.24.4.233",
+						"desNetMask": "255.255.255.255"
+					}],
+					"routeInject": null,
+					"ike": {
+						"authAlgorithm": "sha1",
+						"encryptionAlgorithm": "3des",
+						"version": "v1",
+						"localAddress": "172.24.4.230",
+						"peerAddress": "172.24.4.233",
+						"preSharedKey": "12345"
+					},
+					"ipsec": {
+						"espAuthAlgorithm": "sha1",
+						"espEncryptionAlgorithm": "3des"
+					}
+				}],
+				"id": "9dd81068-edc2-446f-9d06-6dcc0f236297"
+			}]
+		}
+	},
+	"response": {
+		"status": 404,
+		"json": {}
+	}
+}

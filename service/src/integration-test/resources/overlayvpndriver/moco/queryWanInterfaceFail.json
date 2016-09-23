@@ -1,0 +1,18 @@
+{
+	"request": {
+		"uri": "/controller/cloud/v2/northbound/devices/[a-zA-Z0-9\\-\\_]{1,36}/arwansubinterface",
+		"method": "get",
+		"headers": {
+			"Content-Type": "application/json;charset=UTF-8"
+		},
+		"json": {
+
+		}
+	},
+	"response": {
+		"status": 500,
+		"json": {
+
+		}
+	}
+}

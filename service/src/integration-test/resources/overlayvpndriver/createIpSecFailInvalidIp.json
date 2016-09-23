@@ -1,0 +1,52 @@
+{
+	"request": {
+		"uri": "/openoapi/sbi-ipsec/v1/overlay/batch-create-ipsecs",
+		"method": "post",
+		"headers": {
+			"Content-Type": "application/json",
+			"X-Driver-Parameter": "extSysID=56789"
+		},
+		"json": [
+			{
+				"id": "ca8d7ca7-1df0-4dcf-af2e-60f18b81100e",
+				"name": "ipsec connection",
+				"tenantId": "7f8e77d3-c9df-4209-aa88-0877d2e80488",
+				"adminStatus": "active",
+				"controllerId": "31f52b35-1514-453e-a317-44f7b37dca94",
+				"connectionServiceId": "b6a74453-3ce9-48fd-b6b7-e3c0504d7660",
+				"neId": "7dce73f3-d013-9871-b158-0899d2e80498",
+				"sourceIfId": "GigabitEthernet0/0/0.1",
+				"sourceAddress": "172.24.4.230/24",
+				"topoRole": "spoke",
+				"peerAddress": "172.24.4.233/24",
+				"authMode": "PSK",
+				"psk": "o+7YxRjul8WQrUkqd3vlKw==",
+				"ikePolicy": {
+					"id": "af44dfd7-cf91-4451-be57-cd4fdd96b5dc",
+					"name": "ike policy",
+					"tenantId": "7f8e77d3-c9df-4209-aa88-0877d2e80488",
+					"authAlgorithm": "sha1",
+					"encryptionAlgorithm": "3des",
+					"pfs": "group2",
+					"lifeTime": "120",
+					"ikeVersion": "v1"
+				},
+				"ipSecPolicy": {
+					"id": "1f44d897-c691-8851-be97-cc4fdd8695d1",
+					"name": "ipsec policy",
+					"tenantId": "7f8e77d3-c9df-4209-aa88-0877d2e80488",
+					"authAlgorithm": "sha1",
+					"encryptionAlgorithm": "3des",
+					"pfs": "group2",
+					"lifeTime": "120",
+					"transformProtocol": "esp",
+					"encapsulationMode": "tunnel"
+				}
+			}
+		]
+	},
+	"response": {
+		"status": 500,
+		"json": null
+	}
+}

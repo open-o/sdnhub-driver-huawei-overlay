@@ -1,0 +1,17 @@
+{
+	"request": {
+		"uri": "/openoapi/sbi-waninterface/v1/overlay/device/7dce73f3-d013-9871-b158-0899d2e80498/wan-sub-interfaces?type=wanInterfaceForIPSec",
+		"method": "get",
+		"headers": {
+			"Content-Type": "application/json;charset=UTF-8",
+			"X-Driver-Parameter": "extSysID=123"
+		},
+		"json": {
+			
+		}
+	},
+	"response": {
+		"status": 500,
+		"json": null
+	}
+}
