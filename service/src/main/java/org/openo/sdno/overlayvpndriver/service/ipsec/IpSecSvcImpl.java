@@ -24,6 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.type.TypeReference;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
 import org.openo.sdno.framework.container.util.JsonUtil;
 import org.openo.sdno.overlayvpn.consts.CommConst;
@@ -34,6 +35,7 @@ import org.openo.sdno.overlayvpndriver.login.OverlayVpnDriverProxy;
 import org.openo.sdno.overlayvpndriver.model.ipsec.adapter.NetIpSecConn;
 import org.openo.sdno.overlayvpndriver.model.ipsec.adapter.NetIpSecModel;
 import org.openo.sdno.overlayvpndriver.model.ipsec.db.IpSecExternalIdMapping;
+import org.openo.sdno.overlayvpndriver.model.vxlan.adapter.NetVxLanDeviceModel;
 import org.openo.sdno.overlayvpndriver.util.consts.ControllerUrlConst;
 import org.openo.sdno.overlayvpndriver.util.controller.ControllerUtil;
 import org.openo.sdno.overlayvpndriver.util.db.IpSecDbOper;
@@ -85,8 +87,10 @@ public class IpSecSvcImpl {
             ResultRsp<List<NetIpSecModel>> result =
                     queryIpSecFromController(ctrlUuid, deviceId, netIpSecModel.getInterfaceName(), null);
 
+            List<NetIpSecModel> refreshedList =
+                    JsonUtil.fromJson(JsonUtil.toJson(result.getData()), new TypeReference<List<NetIpSecModel>>() {});
             // generate seqNumber
-            generateIpSecSeqNumber(netIpSecModel, result.getData());
+            generateIpSecSeqNumber(netIpSecModel, refreshedList);
 
             // send to controller
             ResultRsp<NetIpSecModel> handleRsp = handleIpSecByController(ctrlUuid, deviceId, netIpSecModel, false);
@@ -261,6 +265,7 @@ public class IpSecSvcImpl {
             NetIpSecModel retNetIpSecModel = JsonUtil.fromJson(JsonUtil.toJson(data.get(0)), NetIpSecModel.class);
             netIpSecModel.setUuid(retNetIpSecModel.getUuid());
         }
+
         resultRsp.setData(netIpSecModel);
 
         LOGGER.info("handleIpSecByController cost time = " + (System.currentTimeMillis() - beginTime));
