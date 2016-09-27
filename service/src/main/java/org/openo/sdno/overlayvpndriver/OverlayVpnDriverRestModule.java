@@ -16,7 +16,6 @@
 
 package org.openo.sdno.overlayvpndriver;
 
-import org.openo.sdno.framework.container.service.IRoaModule;
 import org.openo.sdno.overlayvpn.inventory.sdk.DbOwerInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,21 +26,16 @@ import org.slf4j.LoggerFactory;
  * @author
  * @version SDNO 0.5 July 14, 2016
  */
-public class OverlayVpnDriverRestModule extends IRoaModule {
+public class OverlayVpnDriverRestModule {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OverlayVpnDriverRestModule.class);
 
-    @Override
-    protected void destroy() {
-        // unregister to Driver Manager
+    public void start() {
+        LOGGER.info("Start OverlayVpnDriverRestModule adapter roa module.");
+        DbOwerInfo.init("acBranchSvc", "acbranchdb");
     }
 
-    @Override
-    protected void init() {
-        LOGGER.info("=====start OverlayVpnDriverRestModule adapter roa module=====");
-
-        DbOwerInfo.init("acBranchSvc", "acbranchdb");
-
-        // register to Driver Manager
+    public void stop() {
+        LOGGER.info("Stop OverlayVpnDriverRestModule adapter roa module.");
     }
 }

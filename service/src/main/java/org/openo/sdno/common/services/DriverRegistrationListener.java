@@ -16,74 +16,70 @@
 
 package org.openo.sdno.common.services;
 
+import java.io.IOException;
 import java.util.Map;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import org.apache.commons.io.IOUtils;
+import org.openo.baseservice.remoteservice.exception.ServiceException;
 import org.openo.baseservice.roa.util.restclient.RestfulParametes;
 import org.openo.baseservice.roa.util.restclient.RestfulResponse;
 import org.openo.sdno.framework.container.resthelper.RestfulProxy;
 import org.openo.sdno.framework.container.util.JsonUtil;
+import org.openo.sdno.overlayvpn.consts.HttpCode;
+import org.openo.sdno.overlayvpn.consts.HttpConst;
+import org.openo.sdno.overlayvpn.drivermgr.DriverMgrConst;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class DriverRegistrationListener implements ServletContextListener {
-    
+
     private static final Logger LOGGER = LoggerFactory.getLogger(DriverRegistrationListener.class);
-    
-    private String instanceId = "sdnoverlayvpndriver-0-1"; 
 
     @Override
     public void contextDestroyed(ServletContextEvent arg0) {
 
-        String uri = "/openoapi/drivermgr/v1/drivers/"+this.instanceId;
+        String uri = DriverMgrConst.DRIVER_MANAGER_URL + "/" + DriverMgrConst.OVERLAYVPN_DRIVER_INSTANCEID;
 
         RestfulParametes restParametes = new RestfulParametes();
 
         try {
-            restParametes.putHttpContextHeader("Content-Type", "application/json;charset=UTF-8");
-
+            restParametes.putHttpContextHeader(HttpConst.CONTEXT_TYPE_HEADER, HttpConst.MEDIA_TYPE_JSON);
             RestfulResponse response = RestfulProxy.delete(uri, restParametes);
-            
-            if(response.getStatus()==200) {
-                LOGGER.info("Driver successfully unregistered from driver manager");
+            if(HttpCode.isSucess(response.getStatus())) {
+                LOGGER.info("Driver successfully un-registration with driver manager");
             } else {
-                LOGGER.warn("Driver failed unregistered from driver manager");
+                LOGGER.warn("Driver failed un-registration with driver manager");
             }
-            
-            
-        } catch(Exception e) {
-            LOGGER.warn("Driver failed unregistered from driver manager", e);
+        } catch(ServiceException e) {
+            LOGGER.warn("Driver failed un-registration with driver manager", e);
         }
-
     }
 
     @Override
     public void contextInitialized(ServletContextEvent arg0) {
-        String uri = "/openoapi/drivermgr/v1/drivers";
 
         RestfulParametes restParametes = new RestfulParametes();
-
         try {
-            restParametes.putHttpContextHeader("Content-Type", "application/json;charset=UTF-8");
+            restParametes.putHttpContextHeader(HttpConst.CONTEXT_TYPE_HEADER, HttpConst.MEDIA_TYPE_JSON);
+            @SuppressWarnings("deprecation")
             String driverDetails = IOUtils.toString(this.getClass().getResourceAsStream("/generalconfig/driver.json"));
-            Map driverDetailsMap=JsonUtil.fromJson(driverDetails, Map.class);
-            driverDetailsMap.put("instanceID", this.instanceId);
+            Map driverDetailsMap = JsonUtil.fromJson(driverDetails, Map.class);
+            @SuppressWarnings("unchecked")
+            Map<String, String> driverInfo = (Map<String, String>)driverDetailsMap.get(DriverMgrConst.DRIVER_INFO_KEY);
+            driverInfo.put(DriverMgrConst.INSTANCE_ID_KEY, DriverMgrConst.OVERLAYVPN_DRIVER_INSTANCEID);
             restParametes.setRawData(JsonUtil.toJson(driverDetailsMap));
-
-            RestfulResponse response = RestfulProxy.post(uri, restParametes);
-            if(response.getStatus()==200) {
-                LOGGER.info("Driver successfully registered with driver manager");
+            RestfulResponse response = RestfulProxy.post(DriverMgrConst.DRIVER_MANAGER_URL, restParametes);
+            if(HttpCode.isSucess(response.getStatus())) {
+                LOGGER.info("Driver successfully registration with driver manager");
             } else {
-                LOGGER.warn("Driver failed registered with driver manager");
+                LOGGER.warn("Driver failed registration with driver manager");
             }
-            
-        } catch(Exception e) {
-            LOGGER.warn("Driver failed registered with driver manager", e);
+        } catch(ServiceException | IOException e) {
+            LOGGER.warn("Driver failed registration with driver manager", e);
         }
-
     }
 
 }

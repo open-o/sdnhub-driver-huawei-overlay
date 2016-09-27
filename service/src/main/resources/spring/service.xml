@@ -42,7 +42,6 @@
         </jaxrs:providers>
     </jaxrs:server>
 
-
     <bean id="ipSecRoaResource" class="org.openo.sdno.overlayvpndriver.rest.IpSecRoaResource"></bean>
     <bean id="vxLanRoaResource" class="org.openo.sdno.overlayvpndriver.rest.VxLanRoaResource"></bean>
     <bean id="wanInterfaceRoaResource" class="org.openo.sdno.overlayvpndriver.rest.WanInterfaceRoaResource"></bean>

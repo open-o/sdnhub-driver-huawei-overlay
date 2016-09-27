@@ -7,7 +7,7 @@
     "services": [           
                {                 
                     "service_url":"/openoapi/sbi-l3vpn/v1",                              
-          	    "support_sys":[                   
+                "support_sys":[                   
                                      {   "type":"Agile Controller-WAN", 
                                          "version":"V100R002" 
                                      }
@@ -16,4 +16,3 @@
               ]
          }
 }
-

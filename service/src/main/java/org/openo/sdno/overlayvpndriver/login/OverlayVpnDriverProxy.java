@@ -18,27 +18,17 @@ package org.openo.sdno.overlayvpndriver.login;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
-import org.openo.sdno.common.services.ESRutil;
 import org.openo.sdno.exception.HttpCode;
-import org.openo.sdno.overlayvpn.brs.invdao.CommParamDao;
-import org.openo.sdno.overlayvpn.brs.invdao.ControllerDao;
-import org.openo.sdno.overlayvpn.brs.model.AuthInfo;
-import org.openo.sdno.overlayvpn.brs.model.CommParamMO;
-import org.openo.sdno.overlayvpn.brs.model.ControllerMO;
-import org.openo.sdno.overlayvpndriver.util.config.WanInterface;
+import org.openo.sdno.overlayvpn.esr.invdao.SdnControllerDao;
+import org.openo.sdno.overlayvpn.esr.model.SdnController;
 import org.openo.sdno.util.http.HTTPReturnMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Proxy class for AC Branch, providing restful and web socket interface. <br>
+ * Proxy class for AC Branch Controller, providing restful and web socket interface. <br>
  * 
  * @author
  * @version SDNO 0.5 Jul 21, 2016
@@ -68,7 +58,6 @@ public class OverlayVpnDriverProxy implements IOverlayVpnDriverProxy {
         if(null == uniqueInstance) {
             uniqueInstance = new OverlayVpnDriverProxy();
         }
-
         return uniqueInstance;
     }
 
@@ -193,7 +182,6 @@ public class OverlayVpnDriverProxy implements IOverlayVpnDriverProxy {
     }
 
     private boolean isLogoutResponse(HTTPReturnMessage httpRspMsg) {
-
         return (null != httpRspMsg.getBody()) && (httpRspMsg.getBody().indexOf(SSO_LOGOUT) > 0);
     }
 
@@ -202,103 +190,18 @@ public class OverlayVpnDriverProxy implements IOverlayVpnDriverProxy {
     }
 
     private OverlayVpnDriverSsoProxy createACSSOProxy(String ctlrUuid) {
-        
-        OverlayVpnDriverSsoProxy acSSOLogin = null;
-        
-        try {
-            if(WanInterface.getConfig("ESREnabled") == null || "false".equals(WanInterface.getConfig("ESREnabled"))) {
-                acSSOLogin = getControllerFromDB(ctlrUuid);
-            } else {
-                acSSOLogin = getControllerFromESR(ctlrUuid);
-            }
-        } catch(ServiceException e) {
-            LOGGER.warn("config.json file not found. taking default actions", e);
-            acSSOLogin = getControllerFromDB(ctlrUuid);
-        }
-
-        return acSSOLogin;
-    }
-
-    private OverlayVpnDriverSsoProxy getControllerFromESR(String ctlrUuid) throws ServiceException {
-        Map controllerDetails = ESRutil.getControllerDetails(ctlrUuid);
-        
-        URL url;
-        try {
-            url = new URL((String)controllerDetails.get("url"));
-        } catch(MalformedURLException e) {
-            LOGGER.error("Controller url is malformed", e);
-            throw new ServiceException(e);
-        }
-        
-        return OverlayVpnDriverSsoProxy.getInstance(url.getHost(), String.valueOf(url.getPort()),
-                (String)controllerDetails.get("userName"),
-                (String)controllerDetails.get("password"));
-    }
-
-    private OverlayVpnDriverSsoProxy getControllerFromDB(String ctlrUuid) {
-        String controllerIp = getControllerIp(ctlrUuid);
-        if(StringUtils.isEmpty(controllerIp)) {
-            LOGGER.error("Controller IpAddress is null!!");
-            return null;
-        }
-
-        List<CommParamMO> commList = getCommparaListByUuid(ctlrUuid);
-        if(CollectionUtils.isEmpty(commList)) {
-            LOGGER.error("Controller comm parameters are not exist, uuid: " + ctlrUuid);
-            return null;
-        }
-
-        CommParamMO comm = commList.get(0);
-        AuthInfo authInfo = comm.getAuthInfo();
-        if(null == authInfo) {
-            LOGGER.error("No auth Info found in controller: " + ctlrUuid);
-            return null;
-        }
-
-        authInfo.setPort(comm.getPort());
-        return OverlayVpnDriverSsoProxy.getInstance(controllerIp, comm.getPort(), authInfo.getUserName(),
-                authInfo.getPassword());
-    }
-
-    private String getControllerIp(String uuid) {
-        ControllerMO controller = getControlleByUUID(uuid);
-        if(null == controller) {
-            return "";
-        }
-
-        return controller.getHostName();
-    }
-
-    private List<CommParamMO> getCommparaListByUuid(String uuid) {
-        List<CommParamMO> commList = new ArrayList<CommParamMO>();
-        try {
-            CommParamDao comDao = new CommParamDao();
-            commList = comDao.getCommParam(uuid);
-
-            if(CollectionUtils.isEmpty(commList)) {
-                LOGGER.error("getCommparaListByUuid queryByRelation failed!uuid = " + uuid);
-            }
-
-        } catch(ServiceException e) {
-            LOGGER.error("getCommparaListByUuid failed! ", e);
-        }
-        return commList;
-    }
-
-    private static ControllerMO getControlleByUUID(String uuid) {
-        ControllerMO controller = null;
+        OverlayVpnDriverSsoProxy ssoProxy = null;
 
         try {
-            ControllerDao conDao = new ControllerDao();
-            controller = conDao.getController(uuid);
-            if(null == controller) {
-                LOGGER.error("getControllerIp query failed!uuid=" + uuid);
-            }
-
-        } catch(ServiceException e) {
-            LOGGER.error("getControlleByUUID failed! ", e);
+            SdnControllerDao controllerDao = new SdnControllerDao();
+            SdnController sdnController = controllerDao.querySdnControllerById(ctlrUuid);
+            URL url = new URL(sdnController.getUrl());
+            ssoProxy = OverlayVpnDriverSsoProxy.getInstance(url.getHost(), String.valueOf(url.getPort()),
+                    sdnController.getUserName(), sdnController.getPassword());
+        } catch(ServiceException | MalformedURLException e) {
+            LOGGER.error("create OverlayVpnDriverSsoProxy faied", e);
         }
 
-        return controller;
+        return ssoProxy;
     }
 }

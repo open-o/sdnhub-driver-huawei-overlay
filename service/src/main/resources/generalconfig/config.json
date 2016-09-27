@@ -30,7 +30,7 @@
         "encrypt":"false"
     },
     {
-		"cfgkey": "ESREnabled",
-		"cfgvalue": "true"
-	}
+        "cfgkey": "ESREnabled",
+        "cfgvalue": "true"
+    }
 ]
