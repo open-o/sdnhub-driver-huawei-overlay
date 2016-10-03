@@ -14,6 +14,7 @@
 # limitations under the License.
 #*******************************************************************************
 #!/bin/bash
+
 cd ..
 export CATALINA_BASE=$(cd `dirname $0`; pwd)
 catalina.sh start
