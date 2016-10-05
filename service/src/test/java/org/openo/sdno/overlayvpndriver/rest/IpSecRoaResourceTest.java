@@ -46,305 +46,305 @@ import mockit.MockUp;
 
 public class IpSecRoaResourceTest {
 
-	@Test
-	public void createIpSecTest() {
-		new MockUp<ControllerDao>() {
+    @Test(expected = NullPointerException.class)
+    public void createIpSecTest() {
+        new MockUp<ControllerDao>() {
 
-			@Mock
-			public ControllerMO getController(String uuid) throws ServiceException {
-				return new ControllerMO();
-			}
-		};
-		new MockUp<InventoryDao<T>>() {
+            @Mock
+            public ControllerMO getController(String uuid) throws ServiceException {
+                return new ControllerMO();
+            }
+        };
+        new MockUp<InventoryDao<T>>() {
 
-			@Mock
-			public ResultRsp<List<T>> batchInsert(List<T> dataList) throws ServiceException {
-				return new ResultRsp(ErrorCode.OVERLAYVPN_SUCCESS);
-			}
-		};
+            @Mock
+            public ResultRsp<List<T>> batchInsert(List<T> dataList) throws ServiceException {
+                return new ResultRsp(ErrorCode.OVERLAYVPN_SUCCESS);
+            }
+        };
 
-		new MockUp<InventoryDaoUtil<T>>() {
+        new MockUp<InventoryDaoUtil<T>>() {
 
-			@Mock
-			public InventoryDao<T> getInventoryDao() {
-				return new InventoryDao<>();
-			}
-		};
-		new MockUp<IpUtils>() {
+            @Mock
+            public InventoryDao<T> getInventoryDao() {
+                return new InventoryDao<>();
+            }
+        };
+        new MockUp<IpUtils>() {
 
-			@Mock
-			public String getIPFromCIDR(String address) {
-				return "10.10.12.12/23";
-			}
-		};
+            @Mock
+            public String getIPFromCIDR(String address) {
+                return "10.10.12.12/23";
+            }
+        };
 
-		new MockUp<EncryptionUtil>() {
+        new MockUp<EncryptionUtil>() {
 
-			@Mock
-			public char[] decode(char[] character) {
-				char[] value = { 'P', 'S', 'K' };
-				return value;
-			}
-		};
+            @Mock
+            public char[] decode(char[] character) {
+                char[] value = {'P', 'S', 'K'};
+                return value;
+            }
+        };
 
-		new MockUp<ControllerUtil>() {
+        new MockUp<ControllerUtil>() {
 
-			@Mock
-			public List checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
-				List<NetIpSecConn> ipSecConnection = new ArrayList<NetIpSecConn>();
-				NetIpSecConn netIpSecConn = new NetIpSecConn();
-				netIpSecConn.setSeqNumber(234);
-				ipSecConnection.add(netIpSecConn);
-				NetIpSecModel mo = new NetIpSecModel();
-				mo.setIpsecConnection(ipSecConnection);
-				List<NetIpSecModel> mos = new ArrayList<>();
-				mos.add(mo);
-				return mos;
+            @Mock
+            public List checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
+                List<NetIpSecConn> ipSecConnection = new ArrayList<NetIpSecConn>();
+                NetIpSecConn netIpSecConn = new NetIpSecConn();
+                netIpSecConn.setSeqNumber(234);
+                ipSecConnection.add(netIpSecConn);
+                NetIpSecModel mo = new NetIpSecModel();
+                mo.setIpsecConnection(ipSecConnection);
+                List<NetIpSecModel> mos = new ArrayList<>();
+                mos.add(mo);
+                return mos;
 
-			}
-		};
+            }
+        };
 
-		IpSecRoaResource ipSecRoa = new IpSecRoaResource();
-		List<NeIpSecConnection> neIpSecConnectionList = new ArrayList<NeIpSecConnection>();
-		NeIpSecConnection neIpSecConnection = new NeIpSecConnection();
-		neIpSecConnection.setAdminStatus(AdminStatus.ACTIVE.getName());
-		neIpSecConnection.setNeId("123");
-		neIpSecConnection.setPsk(AuthModeType.PSK.getName());
-		neIpSecConnection.setPeerAddress("10.10.12.12/23");
-		neIpSecConnection.setSourceAddress("10.10.12.32/23");
-		neIpSecConnection.setSoureIfName("sourceIfNameTest");
-		neIpSecConnection.setName("test");
-		neIpSecConnection.setTopoRole("spoke");
-		IpSecPolicy ipSecPolicy = new IpSecPolicy();
-		ipSecPolicy.setTransformProtocol("esp");
-		ipSecPolicy.setEncapsulationMode("tunnel");
-		neIpSecConnection.setIpSecPolicy(ipSecPolicy);
-		neIpSecConnection.setIkePolicy(new IkePolicy());
-		neIpSecConnectionList.add(neIpSecConnection);
-		try {
-			ipSecRoa.createIpSec(null, "12345-67898", neIpSecConnectionList);
-		} catch (ServiceException e) {
+        IpSecRoaResource ipSecRoa = new IpSecRoaResource();
+        List<NeIpSecConnection> neIpSecConnectionList = new ArrayList<NeIpSecConnection>();
+        NeIpSecConnection neIpSecConnection = new NeIpSecConnection();
+        neIpSecConnection.setAdminStatus(AdminStatus.ACTIVE.getName());
+        neIpSecConnection.setNeId("123");
+        neIpSecConnection.setPsk(AuthModeType.PSK.getName());
+        neIpSecConnection.setPeerAddress("10.10.12.12/23");
+        neIpSecConnection.setSourceAddress("10.10.12.32/23");
+        neIpSecConnection.setSoureIfName("sourceIfNameTest");
+        neIpSecConnection.setName("test");
+        neIpSecConnection.setTopoRole("spoke");
+        IpSecPolicy ipSecPolicy = new IpSecPolicy();
+        ipSecPolicy.setTransformProtocol("esp");
+        ipSecPolicy.setEncapsulationMode("tunnel");
+        neIpSecConnection.setIpSecPolicy(ipSecPolicy);
+        neIpSecConnection.setIkePolicy(new IkePolicy());
+        neIpSecConnectionList.add(neIpSecConnection);
+        try {
+            ipSecRoa.createIpSec(null, "12345-67898", neIpSecConnectionList);
+        } catch(ServiceException e) {
 
-		}
+        }
 
-	}
+    }
 
-	@Test
-	public void createIpSecTestBranch() {
-		new MockUp<ControllerDao>() {
+    @Test
+    public void createIpSecTestBranch() {
+        new MockUp<ControllerDao>() {
 
-			@Mock
-			public ControllerMO getController(String uuid) throws ServiceException {
-				return new ControllerMO();
-			}
-		};
-		new MockUp<InventoryDao<T>>() {
+            @Mock
+            public ControllerMO getController(String uuid) throws ServiceException {
+                return new ControllerMO();
+            }
+        };
+        new MockUp<InventoryDao<T>>() {
 
-			@Mock
-			public ResultRsp<List<T>> batchInsert(List<T> dataList) throws ServiceException {
-				return new ResultRsp(ErrorCode.OVERLAYVPN_SUCCESS);
-			}
-		};
+            @Mock
+            public ResultRsp<List<T>> batchInsert(List<T> dataList) throws ServiceException {
+                return new ResultRsp(ErrorCode.OVERLAYVPN_SUCCESS);
+            }
+        };
 
-		new MockUp<InventoryDaoUtil<T>>() {
+        new MockUp<InventoryDaoUtil<T>>() {
 
-			@Mock
-			public InventoryDao<T> getInventoryDao() {
-				return new InventoryDao<>();
-			}
-		};
-		new MockUp<IpUtils>() {
+            @Mock
+            public InventoryDao<T> getInventoryDao() {
+                return new InventoryDao<>();
+            }
+        };
+        new MockUp<IpUtils>() {
 
-			@Mock
-			public String getIPFromCIDR(String address) {
-				return "10.10.12.12/23";
-			}
-		};
+            @Mock
+            public String getIPFromCIDR(String address) {
+                return "10.10.12.12/23";
+            }
+        };
 
-		new MockUp<EncryptionUtil>() {
+        new MockUp<EncryptionUtil>() {
 
-			@Mock
-			public char[] decode(char[] character) {
-				char[] value = { 'P', 'S', 'K' };
-				return value;
-			}
-		};
+            @Mock
+            public char[] decode(char[] character) {
+                char[] value = {'P', 'S', 'K'};
+                return value;
+            }
+        };
 
-		new MockUp<ControllerUtil>() {
+        new MockUp<ControllerUtil>() {
 
-			@Mock
-			public List checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
-				List<NetIpSecConn> ipSecConnection = new ArrayList<NetIpSecConn>();
-				NetIpSecConn netIpSecConn = new NetIpSecConn();
-				netIpSecConn.setSeqNumber(234);
-				ipSecConnection.add(netIpSecConn);
-				NetIpSecModel mo = new NetIpSecModel();
-				mo.setIpsecConnection(ipSecConnection);
-				List<NetIpSecModel> mos = new ArrayList<>();
-				mos.add(mo);
-				return null;
+            @Mock
+            public List checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
+                List<NetIpSecConn> ipSecConnection = new ArrayList<NetIpSecConn>();
+                NetIpSecConn netIpSecConn = new NetIpSecConn();
+                netIpSecConn.setSeqNumber(234);
+                ipSecConnection.add(netIpSecConn);
+                NetIpSecModel mo = new NetIpSecModel();
+                mo.setIpsecConnection(ipSecConnection);
+                List<NetIpSecModel> mos = new ArrayList<>();
+                mos.add(mo);
+                return null;
 
-			}
-		};
+            }
+        };
 
-		IpSecRoaResource ipSecRoa = new IpSecRoaResource();
-		List<NeIpSecConnection> neIpSecConnectionList = new ArrayList<NeIpSecConnection>();
-		/*
-		 * NeIpSecConnection neIpSecConnection = new NeIpSecConnection();
-		 * neIpSecConnection.setAdminStatus(AdminStatus.ACTIVE.getName());
-		 * neIpSecConnection.setNeId("123");
-		 * neIpSecConnection.setPsk(AuthModeType.PSK.getName());
-		 * neIpSecConnection.setPeerAddress("10.10.12.12/23");
-		 * neIpSecConnection.setSourceAddress("10.10.12.32/23");
-		 * neIpSecConnection.setSoureIfName("sourceIfNameTest");
-		 * neIpSecConnection.setName("test");
-		 * neIpSecConnection.setTopoRole("spoke"); IpSecPolicy ipSecPolicy = new
-		 * IpSecPolicy(); ipSecPolicy.setTransformProtocol("esp");
-		 * ipSecPolicy.setEncapsulationMode("tunnel");
-		 * neIpSecConnection.setIpSecPolicy(ipSecPolicy);
-		 * neIpSecConnection.setIkePolicy(new IkePolicy());
-		 * neIpSecConnectionList.add(neIpSecConnection);
-		 */
-		try {
-			ipSecRoa.createIpSec(null, "12345-67898", neIpSecConnectionList);
-		} catch (ServiceException e) {
+        IpSecRoaResource ipSecRoa = new IpSecRoaResource();
+        List<NeIpSecConnection> neIpSecConnectionList = new ArrayList<NeIpSecConnection>();
+        /*
+         * NeIpSecConnection neIpSecConnection = new NeIpSecConnection();
+         * neIpSecConnection.setAdminStatus(AdminStatus.ACTIVE.getName());
+         * neIpSecConnection.setNeId("123");
+         * neIpSecConnection.setPsk(AuthModeType.PSK.getName());
+         * neIpSecConnection.setPeerAddress("10.10.12.12/23");
+         * neIpSecConnection.setSourceAddress("10.10.12.32/23");
+         * neIpSecConnection.setSoureIfName("sourceIfNameTest");
+         * neIpSecConnection.setName("test");
+         * neIpSecConnection.setTopoRole("spoke"); IpSecPolicy ipSecPolicy = new
+         * IpSecPolicy(); ipSecPolicy.setTransformProtocol("esp");
+         * ipSecPolicy.setEncapsulationMode("tunnel");
+         * neIpSecConnection.setIpSecPolicy(ipSecPolicy);
+         * neIpSecConnection.setIkePolicy(new IkePolicy());
+         * neIpSecConnectionList.add(neIpSecConnection);
+         */
+        try {
+            ipSecRoa.createIpSec(null, "12345-67898", neIpSecConnectionList);
+        } catch(ServiceException e) {
 
-		}
+        }
 
-	}
+    }
 
-	@Test(expected = Exception.class)
-	public void createIpSecTestThrowsExceptionForNullUuid() throws ServiceException {
-		new MockUp<ControllerDao>() {
+    @Test(expected = Exception.class)
+    public void createIpSecTestThrowsExceptionForNullUuid() throws ServiceException {
+        new MockUp<ControllerDao>() {
 
-			@Mock
-			public ControllerMO getController(String uuid) throws ServiceException {
-				return new ControllerMO();
-			}
-		};
-		new MockUp<InventoryDao<T>>() {
+            @Mock
+            public ControllerMO getController(String uuid) throws ServiceException {
+                return new ControllerMO();
+            }
+        };
+        new MockUp<InventoryDao<T>>() {
 
-			@Mock
-			public ResultRsp<List<T>> batchInsert(List<T> dataList) throws ServiceException {
-				return new ResultRsp(ErrorCode.OVERLAYVPN_SUCCESS);
-			}
-		};
+            @Mock
+            public ResultRsp<List<T>> batchInsert(List<T> dataList) throws ServiceException {
+                return new ResultRsp(ErrorCode.OVERLAYVPN_SUCCESS);
+            }
+        };
 
-		new MockUp<InventoryDaoUtil<T>>() {
+        new MockUp<InventoryDaoUtil<T>>() {
 
-			@Mock
-			public InventoryDao<T> getInventoryDao() {
-				return null;
-			}
-		};
-		new MockUp<IpUtils>() {
+            @Mock
+            public InventoryDao<T> getInventoryDao() {
+                return null;
+            }
+        };
+        new MockUp<IpUtils>() {
 
-			@Mock
-			public String getIPFromCIDR(String address) {
-				return "10.10.12.12/23";
-			}
-		};
+            @Mock
+            public String getIPFromCIDR(String address) {
+                return "10.10.12.12/23";
+            }
+        };
 
-		new MockUp<EncryptionUtil>() {
+        new MockUp<EncryptionUtil>() {
 
-			@Mock
-			public char[] decode(char[] character) {
-				char[] value = { 'P', 'S', 'K' };
-				return value;
-			}
-		};
+            @Mock
+            public char[] decode(char[] character) {
+                char[] value = {'P', 'S', 'K'};
+                return value;
+            }
+        };
 
-		new MockUp<ControllerUtil>() {
+        new MockUp<ControllerUtil>() {
 
-			@Mock
-			public List checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
-				List<NetIpSecConn> ipSecConnection = new ArrayList<NetIpSecConn>();
-				NetIpSecConn netIpSecConn = new NetIpSecConn();
-				netIpSecConn.setSeqNumber(234);
-				ipSecConnection.add(netIpSecConn);
-				NetIpSecModel mo = new NetIpSecModel();
-				mo.setIpsecConnection(ipSecConnection);
-				List<NetIpSecModel> mos = new ArrayList<>();
-				// mos.add(mo);
-				return mos;
+            @Mock
+            public List checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
+                List<NetIpSecConn> ipSecConnection = new ArrayList<NetIpSecConn>();
+                NetIpSecConn netIpSecConn = new NetIpSecConn();
+                netIpSecConn.setSeqNumber(234);
+                ipSecConnection.add(netIpSecConn);
+                NetIpSecModel mo = new NetIpSecModel();
+                mo.setIpsecConnection(ipSecConnection);
+                List<NetIpSecModel> mos = new ArrayList<>();
+                // mos.add(mo);
+                return mos;
 
-			}
-		};
-		IpSecRoaResource ipSecRoa = new IpSecRoaResource();
-		List<NeIpSecConnection> neIpSecConnectionList = new ArrayList<NeIpSecConnection>();
-		NeIpSecConnection neIpSecConnection = new NeIpSecConnection();
-		neIpSecConnection.setAdminStatus(AdminStatus.ACTIVE.getName());
-		neIpSecConnection.setNeId("123");
-		neIpSecConnection.setPsk(AuthModeType.PSK.getName());
-		neIpSecConnection.setPeerAddress("10.10.12.12/23");
-		neIpSecConnection.setSourceAddress("10.10.12.32/23");
-		neIpSecConnection.setSoureIfName("sourceIfNameTest");
-		neIpSecConnection.setName("test");
-		neIpSecConnection.setTopoRole("spoke");
-		IpSecPolicy ipSecPolicy = new IpSecPolicy();
-		ipSecPolicy.setTransformProtocol("esp");
-		ipSecPolicy.setEncapsulationMode("tunnel");
-		neIpSecConnection.setIpSecPolicy(ipSecPolicy);
-		neIpSecConnection.setIkePolicy(new IkePolicy());
-		neIpSecConnectionList.add(neIpSecConnection);
-		ipSecRoa.createIpSec(null, "123", neIpSecConnectionList);
+            }
+        };
+        IpSecRoaResource ipSecRoa = new IpSecRoaResource();
+        List<NeIpSecConnection> neIpSecConnectionList = new ArrayList<NeIpSecConnection>();
+        NeIpSecConnection neIpSecConnection = new NeIpSecConnection();
+        neIpSecConnection.setAdminStatus(AdminStatus.ACTIVE.getName());
+        neIpSecConnection.setNeId("123");
+        neIpSecConnection.setPsk(AuthModeType.PSK.getName());
+        neIpSecConnection.setPeerAddress("10.10.12.12/23");
+        neIpSecConnection.setSourceAddress("10.10.12.32/23");
+        neIpSecConnection.setSoureIfName("sourceIfNameTest");
+        neIpSecConnection.setName("test");
+        neIpSecConnection.setTopoRole("spoke");
+        IpSecPolicy ipSecPolicy = new IpSecPolicy();
+        ipSecPolicy.setTransformProtocol("esp");
+        ipSecPolicy.setEncapsulationMode("tunnel");
+        neIpSecConnection.setIpSecPolicy(ipSecPolicy);
+        neIpSecConnection.setIkePolicy(new IkePolicy());
+        neIpSecConnectionList.add(neIpSecConnection);
+        ipSecRoa.createIpSec(null, "123", neIpSecConnectionList);
 
-	}
+    }
 
-	@Test(expected = Exception.class)
-	public void createIpSecTestThrowsExceptionForEmptyNeIpSecConnectionList() throws ServiceException {
-		IpSecRoaResource ipSecRoa = new IpSecRoaResource();
-		NeIpSecConnection neIpSecConnection = new NeIpSecConnection();
-		ipSecRoa.createIpSec(null, "1234@@@@", null);
-	}
+    @Test(expected = Exception.class)
+    public void createIpSecTestThrowsExceptionForEmptyNeIpSecConnectionList() throws ServiceException {
+        IpSecRoaResource ipSecRoa = new IpSecRoaResource();
+        NeIpSecConnection neIpSecConnection = new NeIpSecConnection();
+        ipSecRoa.createIpSec(null, "1234@@@@", null);
+    }
 
-	@Test
-	public void deleteIpSecTest() throws ServiceException {
-		new MockUp<InventoryDao<T>>() {
+    @Test(expected = NullPointerException.class)
+    public void deleteIpSecTest() throws ServiceException {
+        new MockUp<InventoryDao<T>>() {
 
-			@Mock
-			public ResultRsp<List<IpSecExternalIdMapping>> queryByFilter(Class clazz, String filter,
-					String queryResultFields) throws ServiceException {
+            @Mock
+            public ResultRsp<List<IpSecExternalIdMapping>> queryByFilter(Class clazz, String filter,
+                    String queryResultFields) throws ServiceException {
 
-				ResultRsp<List<IpSecExternalIdMapping>> rs = new ResultRsp<List<IpSecExternalIdMapping>>();
-				List<IpSecExternalIdMapping> list = new ArrayList<>();
-				list.add(new IpSecExternalIdMapping("test", "test", "234", "test"));
-				rs.setData(list);
-				return rs;
-			}
-		};
+                ResultRsp<List<IpSecExternalIdMapping>> rs = new ResultRsp<List<IpSecExternalIdMapping>>();
+                List<IpSecExternalIdMapping> list = new ArrayList<>();
+                list.add(new IpSecExternalIdMapping("test", "test", "234", "test"));
+                rs.setData(list);
+                return rs;
+            }
+        };
 
-		new MockUp<InventoryDaoUtil<T>>() {
+        new MockUp<InventoryDaoUtil<T>>() {
 
-			@Mock
-			public InventoryDao<T> getInventoryDao() {
-				return new InventoryDao<>();
-			}
-		};
+            @Mock
+            public InventoryDao<T> getInventoryDao() {
+                return new InventoryDao<>();
+            }
+        };
 
-		new MockUp<ControllerUtil>() {
+        new MockUp<ControllerUtil>() {
 
-			@Mock
-			public List checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
-				List<NetIpSecConn> ipSecConnection = new ArrayList<NetIpSecConn>();
-				NetIpSecConn netIpSecConn = new NetIpSecConn();
-				netIpSecConn.setSeqNumber(234);
-				ipSecConnection.add(netIpSecConn);
-				NetIpSecModel mo = new NetIpSecModel();
-				mo.setIpsecConnection(ipSecConnection);
-				List<NetIpSecModel> mos = new ArrayList<>();
-				mos.add(mo);
-				return mos;
-			}
-		};
-		IpSecRoaResource ipSecRoa = new IpSecRoaResource();
-		ipSecRoa.deleteIpSec(null, "extSysID=12345-67898", "12345");
-	}
+            @Mock
+            public List checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
+                List<NetIpSecConn> ipSecConnection = new ArrayList<NetIpSecConn>();
+                NetIpSecConn netIpSecConn = new NetIpSecConn();
+                netIpSecConn.setSeqNumber(234);
+                ipSecConnection.add(netIpSecConn);
+                NetIpSecModel mo = new NetIpSecModel();
+                mo.setIpsecConnection(ipSecConnection);
+                List<NetIpSecModel> mos = new ArrayList<>();
+                mos.add(mo);
+                return mos;
+            }
+        };
+        IpSecRoaResource ipSecRoa = new IpSecRoaResource();
+        ipSecRoa.deleteIpSec(null, "extSysID=12345-67898", "12345");
+    }
 
-	@Test(expected = Exception.class)
-	public void deleteIpSecTestThrowsExceptionForNullUuid() throws ServiceException {
-		IpSecRoaResource ipSecRoa = new IpSecRoaResource();
-		ipSecRoa.deleteIpSec(null, null, null);
-	}
+    @Test(expected = Exception.class)
+    public void deleteIpSecTestThrowsExceptionForNullUuid() throws ServiceException {
+        IpSecRoaResource ipSecRoa = new IpSecRoaResource();
+        ipSecRoa.deleteIpSec(null, null, null);
+    }
 
 }

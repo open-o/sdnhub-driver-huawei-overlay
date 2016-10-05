@@ -40,6 +40,12 @@ public class IpSecDriverServiceSuccessServer extends MocoHttpServer {
                 new IpSecSuccessResponseHandler());
         this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/ESRGetController.json",
                 new MocoResponseHandler());
+        this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/brsInsert.json",
+                new MocoResponseHandler());
+        this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/brsQueryIpsec.json",
+                new MocoResponseHandler());
+        this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/brsDelete.json",
+                new MocoResponseHandler());
     }
 
     private class IpSecSuccessResponseHandler extends MocoResponseHandler {
@@ -47,7 +53,7 @@ public class IpSecDriverServiceSuccessServer extends MocoHttpServer {
         @Override
         public void processRequestandResponse(HttpRquestResponse httpObject) {
 
-            // HttpRequest httpRequest = httpObject.getRequest();
+            
             HttpResponse httpResponse = httpObject.getResponse();
 
             OverlayVpnDriverResponse<List<NetIpSecModel>> inputInstanceList = JsonUtil.fromJson(httpResponse.getData(),

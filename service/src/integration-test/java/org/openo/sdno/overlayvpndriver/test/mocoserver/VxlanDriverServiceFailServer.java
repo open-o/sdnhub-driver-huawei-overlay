@@ -50,6 +50,12 @@ public class VxlanDriverServiceFailServer extends MocoHttpServer{
                 new VxLanQuerySuccessResponseHandler());
         this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/ESRGetController.json",
                 new VxLanQuerySuccessResponseHandler());
+        this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/brsInsert.json",
+                new MocoResponseHandler());
+        this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/brsQueryvxlan.json",
+                new MocoResponseHandler());
+        this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/brsDelete.json",
+                new MocoResponseHandler());
     }
     
     private class VxLanSuccessResponseHandler extends MocoResponseHandler {

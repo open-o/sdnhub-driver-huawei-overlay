@@ -41,100 +41,102 @@ import mockit.MockUp;
 
 public class WanInterfaceRoaResourceTest {
 
-	@Test(expected = Exception.class)
-	public void testQueryWanInterface() throws ServiceException {
-		new MockUp<OverlayVpnDriverProxy>() {
+    @Test
+    public void testQueryWanInterface() throws ServiceException {
+        new MockUp<OverlayVpnDriverProxy>() {
 
-			@Mock
-			public HTTPReturnMessage sendGetMsg(String url, String body, String ctlrUuid) {
-				HTTPReturnMessage msg = new HTTPReturnMessage();
-				msg.setStatus(200);
+            @Mock
+            public HTTPReturnMessage sendGetMsg(String url, String body, String ctlrUuid) {
+                HTTPReturnMessage msg = new HTTPReturnMessage();
+                msg.setStatus(200);
 
-				OverlayVpnDriverResponse<List<NetVxLanDeviceModel>> res = new OverlayVpnDriverResponse<List<NetVxLanDeviceModel>>();
-				NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
-				List<NetVxLanDeviceModel> mos = new ArrayList<>();
-				mos.add(mo);
-				res.setData(mos);
+                OverlayVpnDriverResponse<List<NetVxLanDeviceModel>> res =
+                        new OverlayVpnDriverResponse<List<NetVxLanDeviceModel>>();
+                NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
+                List<NetVxLanDeviceModel> mos = new ArrayList<>();
+                mos.add(mo);
+                res.setData(mos);
 
-				res.setErrcode("0");
-				msg.setBody(JsonUtil.toJson(res));
-				return msg;
-			}
+                res.setErrcode("0");
+                msg.setBody(JsonUtil.toJson(res));
+                return msg;
+            }
 
-		};
+        };
 
-		new MockUp<WanInterface>() {
+        new MockUp<WanInterface>() {
 
-			@Mock
-			public String getConfig(String cfgKey) throws ServiceException {
-				return "123";
-			}
+            @Mock
+            public String getConfig(String cfgKey) throws ServiceException {
+                return "123";
+            }
 
-		};
+        };
 
-		new MockUp<ControllerUtil<WanSubInterface>>() {
+        new MockUp<ControllerUtil<WanSubInterface>>() {
 
-			@Mock
-			public List<WanSubInterface> checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
-				WanSubInterface mo = new WanSubInterface();
-				mo.setCeLowVlan(123);
-				List<WanSubInterface> mos = new ArrayList<>();
-				mos.add(mo);
+            @Mock
+            public List<WanSubInterface> checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
+                WanSubInterface mo = new WanSubInterface();
+                mo.setCeLowVlan(123);
+                List<WanSubInterface> mos = new ArrayList<>();
+                mos.add(mo);
 
-				return mos;
+                return mos;
 
-			}
-		};
+            }
+        };
 
-		new MockUp<WanInfSvcImpl>() {
+        new MockUp<WanInfSvcImpl>() {
 
-			@Mock
-			public List<NetAcDevicePort> queryPorts(List<String> interfaceNameList, String deviceId, String ctrlUuid) {
-				List<NetAcDevicePort> list = new ArrayList<>();
-				NetAcDevicePort netAcDevicePort = new NetAcDevicePort();
-				netAcDevicePort.setAlias("alias");
-				netAcDevicePort.setCeLowVlan("123");
-				netAcDevicePort.setIpAddr("1.1.1.1");
-				list.add(netAcDevicePort);
-				return list;
-			}
-		};
-		new MockUp<Integer>() {
-			@Mock
-			public Integer valueOf(String s) throws NumberFormatException {
-				return 1;
+            @Mock
+            public List<NetAcDevicePort> queryPorts(List<String> interfaceNameList, String deviceId, String ctrlUuid) {
+                List<NetAcDevicePort> list = new ArrayList<>();
+                NetAcDevicePort netAcDevicePort = new NetAcDevicePort();
+                netAcDevicePort.setAlias("alias");
+                netAcDevicePort.setCeLowVlan("123");
+                netAcDevicePort.setIpAddr("1.1.1.1");
+                list.add(netAcDevicePort);
+                return list;
+            }
+        };
+        new MockUp<Integer>() {
 
-			}
-		};
+            @Mock
+            public Integer valueOf(String s) throws NumberFormatException {
+                return 1;
 
-		WanInterfaceRoaResource roa = new WanInterfaceRoaResource();
-		ResultRsp<List<WanSubInterface>> result = roa.queryWanInterface("123", "123",
-				WanInterfaceUsedType.GRE.getName());
+            }
+        };
 
-		assertTrue(result != null);
-	}
+        WanInterfaceRoaResource roa = new WanInterfaceRoaResource();
+        ResultRsp<List<WanSubInterface>> result =
+                roa.queryWanInterface("123", "123", WanInterfaceUsedType.GRE.getName());
 
-	@Test(expected = ServiceException.class)
-	public void testQueryWanInterface_invalid() throws ServiceException {
-		WanInterfaceRoaResource roa = new WanInterfaceRoaResource();
-		ResultRsp<List<WanSubInterface>> result = roa.queryWanInterface("123@@#", "123",
-				WanInterfaceUsedType.GRE.getName());
+        assertTrue(result != null);
+    }
 
-	}
+    @Test(expected = ServiceException.class)
+    public void testQueryWanInterface_invalid() throws ServiceException {
+        WanInterfaceRoaResource roa = new WanInterfaceRoaResource();
+        ResultRsp<List<WanSubInterface>> result =
+                roa.queryWanInterface("123@@#", "123", WanInterfaceUsedType.GRE.getName());
 
-	@Test(expected = ServiceException.class)
-	public void testQueryWanInterface_invaliddevice() throws ServiceException {
-		WanInterfaceRoaResource roa = new WanInterfaceRoaResource();
-		ResultRsp<List<WanSubInterface>> result = roa.queryWanInterface("123", "123*&",
-				WanInterfaceUsedType.GRE.getName());
+    }
 
-	}
+    @Test(expected = ServiceException.class)
+    public void testQueryWanInterface_invaliddevice() throws ServiceException {
+        WanInterfaceRoaResource roa = new WanInterfaceRoaResource();
+        ResultRsp<List<WanSubInterface>> result =
+                roa.queryWanInterface("123", "123*&", WanInterfaceUsedType.GRE.getName());
 
-	@Test(expected = ServiceException.class)
-	public void testQueryWanInterface_invalidtype() throws ServiceException {
-		WanInterfaceRoaResource roa = new WanInterfaceRoaResource();
-		ResultRsp<List<WanSubInterface>> result = roa.queryWanInterface("123", "123", "");
+    }
 
-	}
+    @Test(expected = ServiceException.class)
+    public void testQueryWanInterface_invalidtype() throws ServiceException {
+        WanInterfaceRoaResource roa = new WanInterfaceRoaResource();
+        ResultRsp<List<WanSubInterface>> result = roa.queryWanInterface("123", "123", "");
+
+    }
 
 }
