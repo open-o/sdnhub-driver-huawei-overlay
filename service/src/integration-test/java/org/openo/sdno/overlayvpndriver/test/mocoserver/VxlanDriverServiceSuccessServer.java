@@ -32,13 +32,14 @@ import org.openo.sdno.testframework.moco.responsehandler.MocoResponseHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class VxlanDriverServiceSuccessServer extends MocoHttpServer{
-	private static final Logger LOGGER = LoggerFactory.getLogger(VxlanDriverServiceSuccessServer.class);
+public class VxlanDriverServiceSuccessServer extends MocoHttpServer {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(VxlanDriverServiceSuccessServer.class);
 
     public VxlanDriverServiceSuccessServer() {
         super();
     }
-    
+
     @Override
     public void addRequestResponsePairs() {
 
@@ -49,6 +50,12 @@ public class VxlanDriverServiceSuccessServer extends MocoHttpServer{
         this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/queryVtepSuccess.json",
                 new VxLanQuerySuccessResponseHandler());
         this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/ESRGetController.json",
+                new MocoResponseHandler());
+        this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/brsInsert.json",
+                new MocoResponseHandler());
+        this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/brsQueryvxlan.json",
+                new MocoResponseHandler());
+        this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/brsDelete.json",
                 new MocoResponseHandler());
     }
     
