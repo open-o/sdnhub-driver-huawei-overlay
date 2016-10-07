@@ -46,12 +46,6 @@ public class DriverRegistrationListener implements ServletContextListener {
 
     private static final int DRIVER_REGISTRATION_INITIAL_DELAY = 5;
 
-    private static final int HTTP_RESPONSE_SUCCESS_CODE = 201;
-
-    private static final String DRIVER_INFO_KEY = "driverInfo";
-
-    private static final String DRIVER_INSTANCE_ID_KEY = "instanceID";
-
     private String instanceId = "sdnoverlayvpndriver-0-1";
 
     private ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
@@ -109,7 +103,7 @@ public class DriverRegistrationListener implements ServletContextListener {
         scheduler = scheduledExecutorService.scheduleAtFixedRate(() -> {
             try {
                 RestfulResponse response = RestfulProxy.post(DriverMgrConst.DRIVER_MANAGER_URL, restParametes);
-                if(response.getStatus() == HTTP_RESPONSE_SUCCESS_CODE) {
+                if(HttpCode.isSucess(response.getStatus())) {
                     LOGGER.info("Driver successfully registered with driver manager. Now Stop the scheduler.");
                     this.scheduler.cancel(false);
                 } else {
