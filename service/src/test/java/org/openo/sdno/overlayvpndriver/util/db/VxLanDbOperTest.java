@@ -16,6 +16,8 @@
 
 package org.openo.sdno.overlayvpndriver.util.db;
 
+import static org.junit.Assert.assertTrue;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,175 +28,179 @@ import org.openo.sdno.overlayvpn.errorcode.ErrorCode;
 import org.openo.sdno.overlayvpn.inventory.sdk.util.InventoryDaoUtil;
 import org.openo.sdno.overlayvpn.result.ResultRsp;
 import org.openo.sdno.overlayvpndriver.model.vxlan.db.VxLanExternalIdMapping;
-import org.openo.sdno.overlayvpndriver.util.db.VxLanDbOper;
 
 import mockit.Mock;
 import mockit.MockUp;
 
 public class VxLanDbOperTest {
 
-	@Test
-	public <T> void testInsert() throws ServiceException {
-		new MockUp<InventoryDao<T>>() {
+    @Test
+    public <T> void testInsert() throws ServiceException {
+        new MockUp<InventoryDao<T>>() {
 
-			@Mock
-			public ResultRsp<List<T>> batchInsert(List<T> dataList) throws ServiceException {
-				return new ResultRsp(ErrorCode.OVERLAYVPN_SUCCESS);
-			}
-		};
+            @Mock
+            public ResultRsp<List<T>> batchInsert(List<T> dataList) throws ServiceException {
+                return new ResultRsp(ErrorCode.OVERLAYVPN_SUCCESS);
+            }
+        };
 
-		new MockUp<InventoryDaoUtil<T>>() {
+        new MockUp<InventoryDaoUtil<T>>() {
 
-			@Mock
-			public InventoryDao<T> getInventoryDao() {
-				return new InventoryDao<>();
-			}
-		};
+            @Mock
+            public InventoryDao<T> getInventoryDao() {
+                return new InventoryDao<>();
+            }
+        };
 
-		VxLanDbOper.insert(new VxLanExternalIdMapping("123", "123", "123"));
-	}
+        VxLanDbOper.insert(new VxLanExternalIdMapping("123", "123", "123"));
+        assertTrue(true);
+    }
 
-	@Test
-	public <T> void testQuery() throws ServiceException {
+    @Test
+    public <T> void testQuery() throws ServiceException {
 
-		new MockUp<InventoryDao<T>>() {
+        new MockUp<InventoryDao<T>>() {
 
-			@Mock
-			public ResultRsp<List<T>> queryByFilter(Class clazz, String filter, String queryResultFields)
-					throws ServiceException {
-				return new ResultRsp<List<VxLanExternalIdMapping>>().SUCCESS;
-			}
-		};
+            @Mock
+            public ResultRsp<List<T>> queryByFilter(Class clazz, String filter, String queryResultFields)
+                    throws ServiceException {
+                return new ResultRsp<List<VxLanExternalIdMapping>>().SUCCESS;
+            }
+        };
 
-		new MockUp<InventoryDaoUtil<T>>() {
+        new MockUp<InventoryDaoUtil<T>>() {
 
-			@Mock
-			public InventoryDao<T> getInventoryDao() {
-				return new InventoryDao<>();
-			}
-		};
+            @Mock
+            public InventoryDao<T> getInventoryDao() {
+                return new InventoryDao<>();
+            }
+        };
 
-		VxLanDbOper.query("123");
-	}
+        VxLanExternalIdMapping result = VxLanDbOper.query("123");
+    }
 
-	@Test
-	public <T> void testQuery_1() throws ServiceException {
+    @Test
+    public <T> void testQuery_1() throws ServiceException {
 
-		new MockUp<InventoryDao<T>>() {
+        new MockUp<InventoryDao<T>>() {
 
-			@Mock
-			public ResultRsp<List<T>> queryByFilter(Class clazz, String filter, String queryResultFields)
-					throws ServiceException {
-				VxLanExternalIdMapping mo = new VxLanExternalIdMapping("123", "123", "123");
-				List<VxLanExternalIdMapping> mos = new ArrayList<>();
-				mos.add(mo);
-				ResultRsp rs = new ResultRsp<List<VxLanExternalIdMapping>>().SUCCESS;
-				rs.setData(mos);
-				return rs;
-			}
-		};
+            @Mock
+            public ResultRsp<List<T>> queryByFilter(Class clazz, String filter, String queryResultFields)
+                    throws ServiceException {
+                VxLanExternalIdMapping mo = new VxLanExternalIdMapping("123", "123", "123");
+                List<VxLanExternalIdMapping> mos = new ArrayList<>();
+                mos.add(mo);
+                ResultRsp rs = new ResultRsp<List<VxLanExternalIdMapping>>().SUCCESS;
+                rs.setData(mos);
+                return rs;
+            }
+        };
 
-		new MockUp<InventoryDaoUtil<T>>() {
+        new MockUp<InventoryDaoUtil<T>>() {
 
-			@Mock
-			public InventoryDao<T> getInventoryDao() {
-				return new InventoryDao<>();
-			}
-		};
+            @Mock
+            public InventoryDao<T> getInventoryDao() {
+                return new InventoryDao<>();
+            }
+        };
 
-		VxLanDbOper.query("123");
-	}
+        VxLanExternalIdMapping result = VxLanDbOper.query("123");
+        assertTrue(result != null);
+    }
 
-	@Test
-	public <T> void testQuery_2() throws ServiceException {
+    @Test
+    public <T> void testQuery_2() throws ServiceException {
 
-		new MockUp<InventoryDao<T>>() {
+        new MockUp<InventoryDao<T>>() {
 
-			@Mock
-			public ResultRsp<List<T>> queryByFilter(Class clazz, String filter, String queryResultFields)
-					throws ServiceException {
-				VxLanExternalIdMapping mo = new VxLanExternalIdMapping("123", "123", "123");
-				List<VxLanExternalIdMapping> mos = new ArrayList<>();
-				mos.add(mo);
-				ResultRsp rs = new ResultRsp<List<VxLanExternalIdMapping>>().SUCCESS;
-				rs.setData(mos);
-				return rs;
-			}
-		};
+            @Mock
+            public ResultRsp<List<T>> queryByFilter(Class clazz, String filter, String queryResultFields)
+                    throws ServiceException {
+                VxLanExternalIdMapping mo = new VxLanExternalIdMapping("123", "123", "123");
+                List<VxLanExternalIdMapping> mos = new ArrayList<>();
+                mos.add(mo);
+                ResultRsp rs = new ResultRsp<List<VxLanExternalIdMapping>>().SUCCESS;
+                rs.setData(mos);
+                return rs;
+            }
+        };
 
-		new MockUp<InventoryDaoUtil<T>>() {
+        new MockUp<InventoryDaoUtil<T>>() {
 
-			@Mock
-			public InventoryDao<T> getInventoryDao() {
-				return new InventoryDao<>();
-			}
-		};
+            @Mock
+            public InventoryDao<T> getInventoryDao() {
+                return new InventoryDao<>();
+            }
+        };
 
-		VxLanDbOper.query("");
-	}
+        VxLanExternalIdMapping result = VxLanDbOper.query("");
+        assertTrue(result != null);
+    }
 
-	@Test
-	public <T> void testDelete() throws ServiceException {
-		new MockUp<InventoryDao<T>>() {
+    @Test
+    public <T> void testDelete() throws ServiceException {
+        new MockUp<InventoryDao<T>>() {
 
-			@Mock
-			public ResultRsp<List<T>> queryByFilter(Class clazz, String filter, String queryResultFields)
-					throws ServiceException {
-				List<VxLanExternalIdMapping> mos = new ArrayList<>();
-				VxLanExternalIdMapping mo = new VxLanExternalIdMapping("123", "123", "123");
-				mos.add(mo);
+            @Mock
+            public ResultRsp<List<T>> queryByFilter(Class clazz, String filter, String queryResultFields)
+                    throws ServiceException {
+                List<VxLanExternalIdMapping> mos = new ArrayList<>();
+                VxLanExternalIdMapping mo = new VxLanExternalIdMapping("123", "123", "123");
+                mos.add(mo);
 
-				ResultRsp rs = new ResultRsp<List<VxLanExternalIdMapping>>().SUCCESS;
-				rs.setData(mos);
-				return rs;
-			}
+                ResultRsp rs = new ResultRsp<List<VxLanExternalIdMapping>>().SUCCESS;
+                rs.setData(mos);
+                return rs;
+            }
 
-			@Mock
-			public ResultRsp<String> delete(Class clazz, String uuid) throws ServiceException {
-				return new ResultRsp<List<VxLanExternalIdMapping>>().SUCCESS;
-			}
-		};
+            @Mock
+            public ResultRsp<String> delete(Class clazz, String uuid) throws ServiceException {
+                return new ResultRsp<List<VxLanExternalIdMapping>>().SUCCESS;
+            }
+        };
 
-		new MockUp<InventoryDaoUtil<T>>() {
+        new MockUp<InventoryDaoUtil<T>>() {
 
-			@Mock
-			public InventoryDao<T> getInventoryDao() {
-				return new InventoryDao<>();
-			}
-		};
+            @Mock
+            public InventoryDao<T> getInventoryDao() {
+                return new InventoryDao<>();
+            }
+        };
 
-		VxLanDbOper.delete("123");
-	}
+        VxLanDbOper.delete("123");
+        assertTrue(true);
+    }
 
-	@Test
-	public <T> void testDelete_2() throws ServiceException {
-		new MockUp<InventoryDao<T>>() {
+    @Test
+    public <T> void testDelete_2() throws ServiceException {
+        new MockUp<InventoryDao<T>>() {
 
-			@Mock
-			public ResultRsp<List<T>> queryByFilter(Class clazz, String filter, String queryResultFields)
-					throws ServiceException {
-				List<VxLanExternalIdMapping> mos = new ArrayList<>();
-				VxLanExternalIdMapping mo = new VxLanExternalIdMapping("123", "123", "123");
-				mos.add(mo);
+            @Mock
+            public ResultRsp<List<T>> queryByFilter(Class clazz, String filter, String queryResultFields)
+                    throws ServiceException {
+                List<VxLanExternalIdMapping> mos = new ArrayList<>();
+                VxLanExternalIdMapping mo = new VxLanExternalIdMapping("123", "123", "123");
+                mos.add(mo);
 
-				return new ResultRsp<List<VxLanExternalIdMapping>>().SUCCESS;
-			}
+                return new ResultRsp<List<VxLanExternalIdMapping>>().SUCCESS;
+            }
 
-			@Mock
-			public ResultRsp<String> delete(Class clazz, String uuid) throws ServiceException {
-				return new ResultRsp<List<VxLanExternalIdMapping>>().SUCCESS;
-			}
-		};
+            @Mock
+            public ResultRsp<String> delete(Class clazz, String uuid) throws ServiceException {
+                return new ResultRsp<List<VxLanExternalIdMapping>>().SUCCESS;
+            }
+        };
 
-		new MockUp<InventoryDaoUtil<T>>() {
+        new MockUp<InventoryDaoUtil<T>>() {
 
-			@Mock
-			public InventoryDao<T> getInventoryDao() {
-				return new InventoryDao<>();
-			}
-		};
+            @Mock
+            public InventoryDao<T> getInventoryDao() {
+                return new InventoryDao<>();
+            }
+        };
 
-		VxLanDbOper.delete("123");
-	}
+        VxLanDbOper.delete("123");
+        assertTrue(true);
+    }
 
 }

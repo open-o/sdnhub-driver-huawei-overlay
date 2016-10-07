@@ -21,6 +21,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.codehaus.jackson.type.TypeReference;
 import org.junit.Test;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
 import org.openo.sdno.framework.container.util.JsonUtil;
@@ -41,7 +42,7 @@ import mockit.MockUp;
 
 public class WanInterfaceRoaResourceTest {
 
-    @Test
+    @Test(expected = Exception.class)
     public void testQueryWanInterface() throws ServiceException {
         new MockUp<OverlayVpnDriverProxy>() {
 
@@ -86,11 +87,24 @@ public class WanInterfaceRoaResourceTest {
 
             }
         };
+        new MockUp<JsonUtil>() {
+
+            @Mock
+            public <T> List<WanSubInterface> fromJson(String jsonStr, TypeReference<T> typeRef) {
+                WanSubInterface mo = new WanSubInterface();
+                mo.setCeLowVlan(123);
+                List<WanSubInterface> mos = new ArrayList<>();
+                mos.add(mo);
+
+                return mos;
+            }
+        };
 
         new MockUp<WanInfSvcImpl>() {
 
             @Mock
             public List<NetAcDevicePort> queryPorts(List<String> interfaceNameList, String deviceId, String ctrlUuid) {
+                System.out.println(interfaceNameList.toString());
                 List<NetAcDevicePort> list = new ArrayList<>();
                 NetAcDevicePort netAcDevicePort = new NetAcDevicePort();
                 netAcDevicePort.setAlias("alias");

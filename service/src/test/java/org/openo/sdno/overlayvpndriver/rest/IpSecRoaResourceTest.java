@@ -16,12 +16,16 @@
 
 package org.openo.sdno.overlayvpndriver.rest;
 
+import static org.junit.Assert.assertTrue;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.poi.ss.formula.functions.T;
+import org.codehaus.jackson.type.TypeReference;
 import org.junit.Test;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
+import org.openo.sdno.framework.container.util.JsonUtil;
 import org.openo.sdno.overlayvpn.brs.invdao.ControllerDao;
 import org.openo.sdno.overlayvpn.brs.model.ControllerMO;
 import org.openo.sdno.overlayvpn.dao.common.InventoryDao;
@@ -46,7 +50,7 @@ import mockit.MockUp;
 
 public class IpSecRoaResourceTest {
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void createIpSecTest() {
         new MockUp<ControllerDao>() {
 
@@ -103,7 +107,22 @@ public class IpSecRoaResourceTest {
 
             }
         };
+        new MockUp<JsonUtil>() {
 
+            @Mock
+            public <T> List<NetIpSecModel> fromJson(String jsonStr, TypeReference<T> typeRef) {
+                List<NetIpSecConn> ipSecConnection = new ArrayList<NetIpSecConn>();
+                NetIpSecConn netIpSecConn = new NetIpSecConn();
+                netIpSecConn.setSeqNumber(234);
+                ipSecConnection.add(netIpSecConn);
+                NetIpSecModel mo = new NetIpSecModel();
+                mo.setIpsecConnection(ipSecConnection);
+                List<NetIpSecModel> mos = new ArrayList<>();
+                mos.add(mo);
+                return mos;
+
+            }
+        };
         IpSecRoaResource ipSecRoa = new IpSecRoaResource();
         List<NeIpSecConnection> neIpSecConnectionList = new ArrayList<NeIpSecConnection>();
         NeIpSecConnection neIpSecConnection = new NeIpSecConnection();
@@ -122,7 +141,9 @@ public class IpSecRoaResourceTest {
         neIpSecConnection.setIkePolicy(new IkePolicy());
         neIpSecConnectionList.add(neIpSecConnection);
         try {
-            ipSecRoa.createIpSec(null, "12345-67898", neIpSecConnectionList);
+            ResultRsp<List<NeIpSecConnection>> result =
+                    ipSecRoa.createIpSec(null, "12345-67898", neIpSecConnectionList);
+            assertTrue(result != null);
         } catch(ServiceException e) {
 
         }
@@ -189,24 +210,10 @@ public class IpSecRoaResourceTest {
 
         IpSecRoaResource ipSecRoa = new IpSecRoaResource();
         List<NeIpSecConnection> neIpSecConnectionList = new ArrayList<NeIpSecConnection>();
-        /*
-         * NeIpSecConnection neIpSecConnection = new NeIpSecConnection();
-         * neIpSecConnection.setAdminStatus(AdminStatus.ACTIVE.getName());
-         * neIpSecConnection.setNeId("123");
-         * neIpSecConnection.setPsk(AuthModeType.PSK.getName());
-         * neIpSecConnection.setPeerAddress("10.10.12.12/23");
-         * neIpSecConnection.setSourceAddress("10.10.12.32/23");
-         * neIpSecConnection.setSoureIfName("sourceIfNameTest");
-         * neIpSecConnection.setName("test");
-         * neIpSecConnection.setTopoRole("spoke"); IpSecPolicy ipSecPolicy = new
-         * IpSecPolicy(); ipSecPolicy.setTransformProtocol("esp");
-         * ipSecPolicy.setEncapsulationMode("tunnel");
-         * neIpSecConnection.setIpSecPolicy(ipSecPolicy);
-         * neIpSecConnection.setIkePolicy(new IkePolicy());
-         * neIpSecConnectionList.add(neIpSecConnection);
-         */
         try {
-            ipSecRoa.createIpSec(null, "12345-67898", neIpSecConnectionList);
+            ResultRsp<List<NeIpSecConnection>> result =
+                    ipSecRoa.createIpSec(null, "12345-67898", neIpSecConnectionList);
+            assertTrue(result != null);
         } catch(ServiceException e) {
 
         }
@@ -265,7 +272,6 @@ public class IpSecRoaResourceTest {
                 NetIpSecModel mo = new NetIpSecModel();
                 mo.setIpsecConnection(ipSecConnection);
                 List<NetIpSecModel> mos = new ArrayList<>();
-                // mos.add(mo);
                 return mos;
 
             }
@@ -288,7 +294,6 @@ public class IpSecRoaResourceTest {
         neIpSecConnection.setIkePolicy(new IkePolicy());
         neIpSecConnectionList.add(neIpSecConnection);
         ipSecRoa.createIpSec(null, "123", neIpSecConnectionList);
-
     }
 
     @Test(expected = Exception.class)
@@ -298,7 +303,7 @@ public class IpSecRoaResourceTest {
         ipSecRoa.createIpSec(null, "1234@@@@", null);
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void deleteIpSecTest() throws ServiceException {
         new MockUp<InventoryDao<T>>() {
 
@@ -337,8 +342,23 @@ public class IpSecRoaResourceTest {
                 return mos;
             }
         };
+        new MockUp<JsonUtil>() {
+
+            @Mock
+            public <T> NetIpSecModel fromJson(String jsonStr, TypeReference<T> typeRef) {
+                List<NetIpSecConn> ipSecConnection = new ArrayList<NetIpSecConn>();
+                NetIpSecConn netIpSecConn = new NetIpSecConn();
+                netIpSecConn.setSeqNumber(234);
+                ipSecConnection.add(netIpSecConn);
+                NetIpSecModel mo = new NetIpSecModel();
+                mo.setIpsecConnection(ipSecConnection);
+                return mo;
+
+            }
+        };
         IpSecRoaResource ipSecRoa = new IpSecRoaResource();
-        ipSecRoa.deleteIpSec(null, "extSysID=12345-67898", "12345");
+        ResultRsp<String> result = ipSecRoa.deleteIpSec(null, "extSysID=12345-67898", "12345");
+        assertTrue(result.getHttpCode() == 200);
     }
 
     @Test(expected = Exception.class)

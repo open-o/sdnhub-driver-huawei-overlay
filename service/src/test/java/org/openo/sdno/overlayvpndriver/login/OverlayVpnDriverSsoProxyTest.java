@@ -16,6 +16,7 @@
 
 package org.openo.sdno.overlayvpndriver.login;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -33,252 +34,259 @@ import mockit.MockUp;
 import net.sf.json.JSONObject;
 
 public class OverlayVpnDriverSsoProxyTest {
-	@Test
-	public void testlogin() {
-		new MockUp<CloseableHttpClient>() {
 
-			@Mock
-			public CloseableHttpResponse execute(final HttpUriRequest request) throws Exception {
-				return new MockedHttpResponse();
-			}
+    @Test
+    public void testlogin() {
+        new MockUp<CloseableHttpClient>() {
 
-		};
-		new MockUp<EncryptionUtil>() {
+            @Mock
+            public CloseableHttpResponse execute(final HttpUriRequest request) throws Exception {
+                return new MockedHttpResponse();
+            }
 
-			@Mock
-			public char[] decode(char[] cars) {
-				char[] ch = { 'a' };
-				return ch;
-			}
+        };
+        new MockUp<EncryptionUtil>() {
 
-		};
-		new MockUp<JSONObject>() {
+            @Mock
+            public char[] decode(char[] cars) {
+                char[] ch = {'a'};
+                return ch;
+            }
 
-			@Mock
-			public int getInt(String str) {
-				return 0;
-			}
-		};
-		new MockUp<EntityUtils>() {
+        };
+        new MockUp<JSONObject>() {
 
-			@Mock
-			public String toString(HttpEntity entity, String str) {
-				return "{\"name\":\"test\"}";
-			}
-		};
-		OverlayVpnDriverSsoProxy acBranch = OverlayVpnDriverSsoProxy.getInstance("10.10.10.10", "80", "test",
-				"password");
-		boolean isLogin = acBranch.login("1.1.1.1");
-		assertTrue(isLogin);
-	}
+            @Mock
+            public int getInt(String str) {
+                return 0;
+            }
+        };
+        new MockUp<EntityUtils>() {
 
-	@Test(expected = Exception.class)
-	public void testlogin2() {
-		new MockUp<CloseableHttpClient>() {
+            @Mock
+            public String toString(HttpEntity entity, String str) {
+                return "{\"name\":\"test\"}";
+            }
+        };
+        OverlayVpnDriverSsoProxy acBranch =
+                OverlayVpnDriverSsoProxy.getInstance("10.10.10.10", "80", "test", "password");
+        boolean isLogin = acBranch.login("1.1.1.1");
+        assertTrue(isLogin);
+    }
 
-			@Mock
-			public CloseableHttpResponse execute(final HttpUriRequest request) throws Exception {
-				return new MockedHttpResponse();
-			}
+    @Test(expected = Exception.class)
+    public void testlogin2() {
+        new MockUp<CloseableHttpClient>() {
 
-		};
-		new MockUp<EncryptionUtil>() {
+            @Mock
+            public CloseableHttpResponse execute(final HttpUriRequest request) throws Exception {
+                return new MockedHttpResponse();
+            }
 
-			@Mock
-			public char[] decode(char[] cars) {
-				char[] ch = { 'a' };
-				return ch;
-			}
+        };
+        new MockUp<EncryptionUtil>() {
 
-		};
-		new MockUp<JSONObject>() {
+            @Mock
+            public char[] decode(char[] cars) {
+                char[] ch = {'a'};
+                return ch;
+            }
 
-			@Mock
-			public int getInt(String str) {
-				return 1;
-			}
-		};
-		new MockUp<EntityUtils>() {
+        };
+        new MockUp<JSONObject>() {
 
-			@Mock
-			public String toString(HttpEntity entity, String str) {
-				return "{}";
-			}
-		};
-		OverlayVpnDriverSsoProxy acBranch = OverlayVpnDriverSsoProxy.getInstance("10.10.10.10", "80", "test",
-				"password");
-		boolean isLogin = acBranch.login("1.1.1.1");
-	}
+            @Mock
+            public int getInt(String str) {
+                return 1;
+            }
+        };
+        new MockUp<EntityUtils>() {
 
-	@Test
-	public void testlogin3() {
-		new MockUp<CloseableHttpClient>() {
+            @Mock
+            public String toString(HttpEntity entity, String str) {
+                return "{}";
+            }
+        };
+        OverlayVpnDriverSsoProxy acBranch =
+                OverlayVpnDriverSsoProxy.getInstance("10.10.10.10", "80", "test", "password");
+        acBranch.login("1.1.1.1");
+    }
 
-			@Mock
-			public CloseableHttpResponse execute(final HttpUriRequest request) throws Exception {
-				return new MockedHttpResponse();
-			}
+    @Test
+    public void testlogin3() {
+        new MockUp<CloseableHttpClient>() {
 
-		};
-		new MockUp<EncryptionUtil>() {
+            @Mock
+            public CloseableHttpResponse execute(final HttpUriRequest request) throws Exception {
+                return new MockedHttpResponse();
+            }
 
-			@Mock
-			public char[] decode(char[] cars) {
-				char[] ch = { 'a' };
-				return ch;
-			}
+        };
+        new MockUp<EncryptionUtil>() {
 
-		};
-		new MockUp<JSONObject>() {
+            @Mock
+            public char[] decode(char[] cars) {
+                char[] ch = {'a'};
+                return ch;
+            }
 
-			@Mock
-			public int getInt(String str) {
-				return 1;
-			}
-		};
-		new MockUp<EntityUtils>() {
+        };
+        new MockUp<JSONObject>() {
 
-			@Mock
-			public String toString(HttpEntity entity, String str) {
-				return "{}";
-			}
-		};
-		OverlayVpnDriverSsoProxy acBranch = OverlayVpnDriverSsoProxy.getInstance(null, "80", "test", "password");
-		boolean isLogin = acBranch.login("1.1.1.1");
-		assertFalse(isLogin);
-	}
+            @Mock
+            public int getInt(String str) {
+                return 1;
+            }
+        };
+        new MockUp<EntityUtils>() {
 
-	@Test
-	public void testlogin4() {
-		new MockUp<CloseableHttpClient>() {
+            @Mock
+            public String toString(HttpEntity entity, String str) {
+                return "{}";
+            }
+        };
+        OverlayVpnDriverSsoProxy acBranch = OverlayVpnDriverSsoProxy.getInstance(null, "80", "test", "password");
+        boolean isLogin = acBranch.login("1.1.1.1");
+        assertFalse(isLogin);
+    }
 
-			@Mock
-			public CloseableHttpResponse execute(final HttpUriRequest request) throws Exception {
-				return new MockedHttpResponse();
-			}
+    @Test
+    public void testlogin4() {
+        new MockUp<CloseableHttpClient>() {
 
-		};
-		new MockUp<EncryptionUtil>() {
+            @Mock
+            public CloseableHttpResponse execute(final HttpUriRequest request) throws Exception {
+                return new MockedHttpResponse();
+            }
 
-			@Mock
-			public char[] decode(char[] cars) {
-				char[] ch = { 'a' };
-				return ch;
-			}
+        };
+        new MockUp<EncryptionUtil>() {
 
-		};
-		new MockUp<JSONObject>() {
+            @Mock
+            public char[] decode(char[] cars) {
+                char[] ch = {'a'};
+                return ch;
+            }
 
-			@Mock
-			public int getInt(String str) {
-				return 0;
-			}
-		};
-		new MockUp<EntityUtils>() {
+        };
+        new MockUp<JSONObject>() {
 
-			@Mock
-			public String toString(HttpEntity entity, String str) {
-				return "{}";
-			}
-		};
-		new MockUp<MockedStatusLine>() {
+            @Mock
+            public int getInt(String str) {
+                return 0;
+            }
+        };
+        new MockUp<EntityUtils>() {
 
-			@Mock
-			public int getStatusCode() {
-				return 500;
-			}
-		};
-		OverlayVpnDriverSsoProxy acBranch = OverlayVpnDriverSsoProxy.getInstance("10.10.10.10", "80", "test",
-				"password");
-		boolean isLogin = acBranch.login("1.1.1.1");
-		assertFalse(isLogin);
-	}
+            @Mock
+            public String toString(HttpEntity entity, String str) {
+                return "{}";
+            }
+        };
+        new MockUp<MockedStatusLine>() {
 
-	@Test
-	public void testlogin5() {
-		new MockUp<CloseableHttpClient>() {
+            @Mock
+            public int getStatusCode() {
+                return 500;
+            }
+        };
+        OverlayVpnDriverSsoProxy acBranch =
+                OverlayVpnDriverSsoProxy.getInstance("10.10.10.10", "80", "test", "password");
+        boolean isLogin = acBranch.login("1.1.1.1");
+        assertFalse(isLogin);
+    }
 
-			@Mock
-			public CloseableHttpResponse execute(final HttpUriRequest request) throws Exception {
-				return new MockedHttpResponse();
-			}
+    @Test
+    public void testlogin5() {
+        new MockUp<CloseableHttpClient>() {
 
-		};
-		new MockUp<EncryptionUtil>() {
+            @Mock
+            public CloseableHttpResponse execute(final HttpUriRequest request) throws Exception {
+                return new MockedHttpResponse();
+            }
 
-			@Mock
-			public char[] decode(char[] cars) {
-				char[] ch = { 'a' };
-				return ch;
-			}
+        };
+        new MockUp<EncryptionUtil>() {
 
-		};
-		new MockUp<JSONObject>() {
+            @Mock
+            public char[] decode(char[] cars) {
+                char[] ch = {'a'};
+                return ch;
+            }
 
-			@Mock
-			public int getInt(String str) {
-				return 0;
-			}
-		};
-		new MockUp<EntityUtils>() {
+        };
+        new MockUp<JSONObject>() {
 
-			@Mock
-			public String toString(HttpEntity entity, String str) {
-				return "{\"name\":\"test\"}";
-			}
-		};
-		new MockUp<MockedStatusLine>() {
+            @Mock
+            public int getInt(String str) {
+                return 0;
+            }
+        };
+        new MockUp<EntityUtils>() {
 
-			@Mock
-			public int getStatusCode() {
-				return 200;
-			}
-		};
-		OverlayVpnDriverSsoProxy acBranch = OverlayVpnDriverSsoProxy.getInstance("10.10.10.10", "80", "test",
-				"password");
-		boolean isLogin = acBranch.login("1.1.1.1");
-		assertTrue(isLogin);
-	}
+            @Mock
+            public String toString(HttpEntity entity, String str) {
+                return "{\"name\":\"test\"}";
+            }
+        };
+        new MockUp<MockedStatusLine>() {
 
-	@Test
-	public void testPost() {
-		OverlayVpnDriverSsoProxy acBranch = OverlayVpnDriverSsoProxy.getInstance("10.10.10.10", "80", "test",
-				"password");
-		HTTPReturnMessage message = acBranch.post("test.com", "test");
-	}
+            @Mock
+            public int getStatusCode() {
+                return 200;
+            }
+        };
+        OverlayVpnDriverSsoProxy acBranch =
+                OverlayVpnDriverSsoProxy.getInstance("10.10.10.10", "80", "test", "password");
+        boolean isLogin = acBranch.login("1.1.1.1");
+        assertTrue(isLogin);
+    }
 
-	@Test
-	public void testPost2() {
-		OverlayVpnDriverSsoProxy acBranch = OverlayVpnDriverSsoProxy.getInstance("10.10.10.10", "80", "test",
-				"password");
-		HTTPReturnMessage message = acBranch.post("test.com", "");
-	}
+    @Test
+    public void testPost() {
+        OverlayVpnDriverSsoProxy acBranch =
+                OverlayVpnDriverSsoProxy.getInstance("10.10.10.10", "80", "test", "password");
+        HTTPReturnMessage message = acBranch.post("test.com", "test");
+        assertEquals(message.getStatus(), 200);
+    }
 
-	@Test
-	public void testPut() {
-		OverlayVpnDriverSsoProxy acBranch = OverlayVpnDriverSsoProxy.getInstance("10.10.10.10", "80", "test",
-				"password");
-		HTTPReturnMessage message = acBranch.put("test.com", "test");
-	}
+    @Test
+    public void testPost2() {
+        OverlayVpnDriverSsoProxy acBranch =
+                OverlayVpnDriverSsoProxy.getInstance("10.10.10.10", "80", "test", "password");
+        HTTPReturnMessage message = acBranch.post("test.com", "");
+        assertEquals(message.getStatus(), 200);
+    }
 
-	@Test
-	public void testPut2() {
-		OverlayVpnDriverSsoProxy acBranch = OverlayVpnDriverSsoProxy.getInstance("10.10.10.10", "80", "test",
-				"password");
-		HTTPReturnMessage message = acBranch.put("test.com", "");
-	}
+    @Test
+    public void testPut() {
+        OverlayVpnDriverSsoProxy acBranch =
+                OverlayVpnDriverSsoProxy.getInstance("10.10.10.10", "80", "test", "password");
+        HTTPReturnMessage message = acBranch.put("test.com", "test");
+        assertEquals(message.getStatus(), 200);
+    }
 
-	@Test
-	public void testDelete() {
-		OverlayVpnDriverSsoProxy acBranch = OverlayVpnDriverSsoProxy.getInstance("10.10.10.10", "80", "test",
-				"password");
-		HTTPReturnMessage message = acBranch.delete("test.com", "test");
-	}
+    @Test
+    public void testPut2() {
+        OverlayVpnDriverSsoProxy acBranch =
+                OverlayVpnDriverSsoProxy.getInstance("10.10.10.10", "80", "test", "password");
+        HTTPReturnMessage message = acBranch.put("test.com", "");
+        assertEquals(message.getStatus(), 200);
+    }
 
-	@Test
-	public void testDelete2() {
-		OverlayVpnDriverSsoProxy acBranch = OverlayVpnDriverSsoProxy.getInstance("10.10.10.10", "80", "test",
-				"password");
-		HTTPReturnMessage message = acBranch.delete("test.com", "");
-	}
+    @Test
+    public void testDelete() {
+        OverlayVpnDriverSsoProxy acBranch =
+                OverlayVpnDriverSsoProxy.getInstance("10.10.10.10", "80", "test", "password");
+        HTTPReturnMessage message = acBranch.delete("test.com", "test");
+        assertEquals(message.getStatus(), 200);
+    }
+
+    @Test
+    public void testDelete2() {
+        OverlayVpnDriverSsoProxy acBranch =
+                OverlayVpnDriverSsoProxy.getInstance("10.10.10.10", "80", "test", "password");
+        HTTPReturnMessage message = acBranch.delete("test.com", "");
+        assertEquals(message.getStatus(), 200);
+    }
 }

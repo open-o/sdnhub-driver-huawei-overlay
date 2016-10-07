@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.poi.ss.formula.functions.T;
+import org.codehaus.jackson.type.TypeReference;
 import org.junit.Test;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
 import org.openo.sdno.framework.container.util.JsonUtil;
@@ -33,8 +34,6 @@ import org.openo.sdno.overlayvpn.result.ResultRsp;
 import org.openo.sdno.overlayvpndriver.login.OverlayVpnDriverProxy;
 import org.openo.sdno.overlayvpndriver.login.OverlayVpnDriverResponse;
 import org.openo.sdno.overlayvpndriver.model.vxlan.adapter.NetVxLanDeviceModel;
-import org.openo.sdno.overlayvpndriver.model.vxlan.db.VxLanExternalIdMapping;
-import org.openo.sdno.overlayvpndriver.service.vxlan.VxLanSvcImpl;
 import org.openo.sdno.overlayvpndriver.util.controller.ControllerUtil;
 import org.openo.sdno.util.http.HTTPReturnMessage;
 
@@ -43,89 +42,101 @@ import mockit.MockUp;
 
 public class VxLanSvcImplTest {
 
-	@Test
-	public void testCreateVxLan() throws ServiceException {
-		new MockUp<OverlayVpnDriverProxy>() {
+    @Test
+    public void testCreateVxLan() throws ServiceException {
+        new MockUp<OverlayVpnDriverProxy>() {
 
-			@Mock
-			public HTTPReturnMessage sendPutMsg(String url, String body, String ctlrUuid) throws IOException {
-				HTTPReturnMessage msg = new HTTPReturnMessage();
-				msg.setStatus(200);
+            @Mock
+            public HTTPReturnMessage sendPutMsg(String url, String body, String ctlrUuid) throws IOException {
+                HTTPReturnMessage msg = new HTTPReturnMessage();
+                msg.setStatus(200);
 
-				OverlayVpnDriverResponse<List<NetVxLanDeviceModel>> res = new OverlayVpnDriverResponse<List<NetVxLanDeviceModel>>();
-				NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
-				List<NetVxLanDeviceModel> mos = new ArrayList<>();
-				mos.add(mo);
-				res.setData(mos);
+                OverlayVpnDriverResponse<List<NetVxLanDeviceModel>> res =
+                        new OverlayVpnDriverResponse<List<NetVxLanDeviceModel>>();
+                NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
+                List<NetVxLanDeviceModel> mos = new ArrayList<>();
+                mos.add(mo);
+                res.setData(mos);
 
-				res.setErrcode("0");
-				msg.setBody(JsonUtil.toJson(res));
-				return msg;
-			}
+                res.setErrcode("0");
+                msg.setBody(JsonUtil.toJson(res));
+                return msg;
+            }
 
-		};
+        };
 
-		new MockUp<InventoryDao<T>>() {
+        new MockUp<InventoryDao<T>>() {
 
-			@Mock
-			public ResultRsp<List<T>> batchInsert(List<T> dataList) throws ServiceException {
-				return new ResultRsp(ErrorCode.OVERLAYVPN_SUCCESS);
-			}
-		};
+            @Mock
+            public ResultRsp<List<T>> batchInsert(List<T> dataList) throws ServiceException {
+                return new ResultRsp(ErrorCode.OVERLAYVPN_SUCCESS);
+            }
+        };
 
-		new MockUp<InventoryDaoUtil<T>>() {
+        new MockUp<InventoryDaoUtil<T>>() {
 
-			@Mock
-			public InventoryDao<T> getInventoryDao() {
-				return new InventoryDao<>();
-			}
-		};
+            @Mock
+            public InventoryDao<T> getInventoryDao() {
+                return new InventoryDao<>();
+            }
+        };
 
-		new MockUp<ControllerUtil>() {
+        new MockUp<ControllerUtil>() {
 
-			@Mock
-			public List checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
-				NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
-				List<NetVxLanDeviceModel> mos = new ArrayList<>();
-				mos.add(mo);
+            @Mock
+            public List checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
+                NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
+                List<NetVxLanDeviceModel> mos = new ArrayList<>();
+                mos.add(mo);
 
-				return mos;
+                return mos;
 
-			}
-		};
-		NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
-		List<NetVxLanDeviceModel> mos = new ArrayList<>();
-		mos.add(mo);
-		ResultRsp<List<NetVxLanDeviceModel>> result = VxLanSvcImpl.createVxLan("123", "123", mos);
+            }
+        };
+        new MockUp<JsonUtil>() {
 
-		assertTrue(result.isSuccess());
-	}
+            @Mock
+            public <T> List<NetVxLanDeviceModel> fromJson(String jsonStr, TypeReference<T> typeRef) {
+                NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
+                List<NetVxLanDeviceModel> mos = new ArrayList<>();
+                mos.add(mo);
 
-	@Test
-	public void testCreateVxLan_noUUId() throws ServiceException {
-		NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
-		List<NetVxLanDeviceModel> mos = new ArrayList<>();
-		mos.add(mo);
+                return mos;
+            }
+        };
+        NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
+        List<NetVxLanDeviceModel> mos = new ArrayList<>();
+        mos.add(mo);
+        ResultRsp<List<NetVxLanDeviceModel>> result = VxLanSvcImpl.createVxLan("123", "123", mos);
 
-		try {
-			ResultRsp<List<NetVxLanDeviceModel>> result = VxLanSvcImpl.createVxLan("", "", mos);
-		} catch (Exception e) {
-			assertTrue(e instanceof ServiceException);
-		}
+        assertTrue(result.isSuccess());
+    }
 
-	}
+    @Test
+    public void testCreateVxLan_noUUId() throws ServiceException {
+        NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
+        List<NetVxLanDeviceModel> mos = new ArrayList<>();
+        mos.add(mo);
 
-	@Test
-	public void testCreateVxLan_noDeviceId() throws ServiceException {
-		NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
-		List<NetVxLanDeviceModel> mos = new ArrayList<>();
-		mos.add(mo);
-		try {
-			ResultRsp<List<NetVxLanDeviceModel>> result = VxLanSvcImpl.createVxLan("123", "", mos);
-		} catch (Exception e) {
-			assertTrue(e instanceof ServiceException);
-		}
+        try {
+            ResultRsp<List<NetVxLanDeviceModel>> result = VxLanSvcImpl.createVxLan("", "", mos);
+        } catch(Exception e) {
+            assertTrue(e instanceof ServiceException);
+        }
 
-	}
+    }
+
+    @Test
+    public void testCreateVxLan_noDeviceId() throws ServiceException {
+        NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
+        List<NetVxLanDeviceModel> mos = new ArrayList<>();
+        mos.add(mo);
+        try {
+            ResultRsp<List<NetVxLanDeviceModel>> result = VxLanSvcImpl.createVxLan("123", "", mos);
+        } catch(Exception e) {
+            assertTrue(e instanceof ServiceException);
+        }
+
+    }
 
 }

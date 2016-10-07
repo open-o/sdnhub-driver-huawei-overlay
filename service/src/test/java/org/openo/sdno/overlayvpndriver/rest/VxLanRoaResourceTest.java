@@ -31,6 +31,7 @@ import org.apache.poi.ss.formula.functions.T;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 import org.junit.Test;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
 import org.openo.sdno.framework.container.util.JsonUtil;
@@ -58,796 +59,834 @@ import mockit.MockUp;
 
 public class VxLanRoaResourceTest {
 
-	@Test(expected = Exception.class)
-	public void testQueryVtep() throws ServiceException {
-
-		new MockUp<ControllerUtil>() {
-
-			@Mock
-			public List checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
-				WanSubInterface mo = new WanSubInterface();
-				mo.setCeLowVlan(123);
-				List<WanSubInterface> mos = new ArrayList<>();
-				mos.add(mo);
-
-				return mos;
-
-			}
-		};
-
-		new MockUp<WanInfSvcImpl>() {
-
-			@Mock
-			public List<NetAcDevicePort> queryPorts(List<String> interfaceNameList, String deviceId, String ctrlUuid) {
-				List<NetAcDevicePort> list = new ArrayList<>();
-				NetAcDevicePort netAcDevicePort = new NetAcDevicePort();
-				netAcDevicePort.setAlias("alias");
-				netAcDevicePort.setIpAddr("1.1.1.1");
-				list.add(netAcDevicePort);
-				return list;
-			}
-		};
-
-		new MockUp<Files>() {
-			@Mock
-			public byte[] readAllBytes(Path path) throws IOException {
-				byte[] b = "json data".getBytes();
-				return b;
-
-			}
-		};
-		new MockUp<ObjectMapper>() {
-			@Mock
-			public <T> List<Map<String, String>> readValue(byte[] src, Class<T> valueType)
-					throws IOException, JsonParseException, JsonMappingException {
-				List<Map<String, String>> list = new ArrayList<>();
-				Map<String, String> map = new HashMap<>();
-				map.put("cfgkey", "wanInterfaceForVxlan");
-				map.put("cfgvalue", "123");
-				list.add(map);
-				return list;
-			}
-		};
-		new MockUp<Integer>() {
-			@Mock
-			public Integer valueOf(String s) throws NumberFormatException {
-				return 1;
-
-			}
-		};
-
-		VxLanRoaResource resource = new VxLanRoaResource();
-		ResultRsp<NeVtep> result = resource.queryVtep("123", "123");
-
-	}
-
-	@Test(expected = Exception.class)
-	public void testQueryVtep_invalid() throws ServiceException {
-
-		VxLanRoaResource resource = new VxLanRoaResource();
-		ResultRsp<NeVtep> result = resource.queryVtep("123++_", "123");
-
-	}
-
-	@Test(expected = Exception.class)
-	public void testQueryVtep_case2() throws ServiceException {
-
-		new MockUp<ControllerUtil<T>>() {
-
-			@Mock
-			public List checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
-				WanSubInterface mo = new WanSubInterface();
-				mo.setCeLowVlan(123);
-				List<WanSubInterface> mos = new ArrayList<>();
-				mos.add(mo);
-
-				return mos;
-
-			}
-		};
-
-		new MockUp<Files>() {
-			@Mock
-			public byte[] readAllBytes(Path path) throws IOException {
-				byte[] b = "json data".getBytes();
-				return b;
-
-			}
-		};
-		new MockUp<ObjectMapper>() {
-			@Mock
-			public <T> List<Map<String, String>> readValue(byte[] src, Class<T> valueType)
-					throws IOException, JsonParseException, JsonMappingException {
-				List<Map<String, String>> list = new ArrayList<>();
-				Map<String, String> map = new HashMap<>();
-				map.put("cfgkey", "wanInterfaceForVxlan");
-				map.put("cfgvalue", "123");
-				list.add(map);
-				return list;
-			}
-		};
-
-		VxLanRoaResource resource = new VxLanRoaResource();
-		ResultRsp<NeVtep> result = resource.queryVtep("123", "123");
-
-	}
-
-	@Test(expected = Exception.class)
-	public void testQueryVtep_noresult() throws ServiceException {
-
-		new MockUp<ControllerUtil>() {
-
-			@Mock
-			public List checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
-				WanSubInterface mo = new WanSubInterface();
-				mo.setCeLowVlan(123);
-				List<WanSubInterface> mos = new ArrayList<>();
-				mos.add(mo);
-
-				return mos;
-
-			}
-		};
-		new MockUp<Files>() {
-			@Mock
-			public byte[] readAllBytes(Path path) throws IOException {
-				byte[] b = "json data".getBytes();
-				return b;
-
-			}
-		};
-		new MockUp<ObjectMapper>() {
-			@Mock
-			public <T> List<Map<String, String>> readValue(byte[] src, Class<T> valueType)
-					throws IOException, JsonParseException, JsonMappingException {
-				List<Map<String, String>> list = new ArrayList<>();
-				Map<String, String> map = new HashMap<>();
-				map.put("cfgkey", "wanInterfaceForVxlan");
-				map.put("cfgvalue", "123");
-				list.add(map);
-				return list;
-			}
-		};
-		VxLanRoaResource resource = new VxLanRoaResource();
-		ResultRsp<NeVtep> result = resource.queryVtep("123", "123");
-
-	}
-
-	@Test
-	public void testCreateVxlan() throws ServiceException {
-
-		new MockUp<OverlayVpnDriverProxy>() {
-
-			@Mock
-			public HTTPReturnMessage sendPutMsg(String url, String body, String ctlrUuid) throws IOException {
-				HTTPReturnMessage msg = new HTTPReturnMessage();
-				msg.setStatus(200);
-
-				OverlayVpnDriverResponse<List<NetVxLanDeviceModel>> res = new OverlayVpnDriverResponse<List<NetVxLanDeviceModel>>();
-				NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
-				List<NetVxLanDeviceModel> mos = new ArrayList<>();
-				mos.add(mo);
-				res.setData(mos);
-
-				res.setErrcode("0");
-				msg.setBody(JsonUtil.toJson(res));
-				return msg;
-			}
-
-		};
-
-		new MockUp<VxLanDbOper>() {
-
-			@Mock
-			public void insert(VxLanExternalIdMapping vxLanExternalIdMapping) throws ServiceException {
-
-			}
-
-		};
-
-		new MockUp<ControllerUtil>() {
-
-			@Mock
-			public List checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
-				NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
-				List<NetVxLanDeviceModel> mos = new ArrayList<>();
-				mos.add(mo);
-
-				return mos;
-
-			}
-		};
-
-		VxLanRoaResource resource = new VxLanRoaResource();
-		List<NeVxlanInstance> vxlanInstances = new ArrayList<NeVxlanInstance>();
-
-		NeVxlanInstance vxlan = new NeVxlanInstance();
-		vxlan.setVni("123");
-		vxlan.setNeId("123-43");
-		vxlan.setName("123");
-
-		List<NeVxlanInterface> vxlani = new ArrayList<NeVxlanInterface>();
-		NeVxlanInterface vxlaninterface = new NeVxlanInterface();
-		vxlaninterface.setVxlanInstanceId("1223");
-		vxlaninterface.setAccessType("port");
-		vxlaninterface.setPortId("8080");
-		vxlani.add(vxlaninterface);
-		vxlan.setVxlanInterfaceList(vxlani);
-
-		List<NeVxlanTunnel> vxlant = new ArrayList<NeVxlanTunnel>();
-		NeVxlanTunnel vxtunnel = new NeVxlanTunnel();
-		vxtunnel.setVxlanInstanceId("123");
-		vxtunnel.setVni("123");
-		vxtunnel.setSourceAddress("10.20.30.40");
-		vxtunnel.setDestAddress("10.20.30.40");
-		vxtunnel.setNeId("123");
-		vxtunnel.setPeerNeId("123");
-		vxlant.add(vxtunnel);
-		vxlan.setVxlanTunnelList(vxlant);
-
-		vxlanInstances.add(vxlan);
-		ResultRsp<List<NeVxlanInstance>> result = resource.createVxlan(null, "123", vxlanInstances);
-
-		assertTrue(result.isSuccess());
-	}
+    @Test(expected = Exception.class)
+    public void testQueryVtep() throws ServiceException {
 
-	@Test
-	public void testCreateVxlan_invaliduuid() throws ServiceException {
-		new MockUp<OverlayVpnDriverProxy>() {
+        new MockUp<ControllerUtil>() {
 
-			@Mock
-			public HTTPReturnMessage sendPutMsg(String url, String body, String ctlrUuid) throws IOException {
-				HTTPReturnMessage msg = new HTTPReturnMessage();
-				msg.setStatus(200);
+            @Mock
+            public List checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
+                WanSubInterface mo = new WanSubInterface();
+                mo.setCeLowVlan(123);
+                List<WanSubInterface> mos = new ArrayList<>();
+                mos.add(mo);
+
+                return mos;
+
+            }
+        };
+
+        new MockUp<WanInfSvcImpl>() {
+
+            @Mock
+            public List<NetAcDevicePort> queryPorts(List<String> interfaceNameList, String deviceId, String ctrlUuid) {
+                List<NetAcDevicePort> list = new ArrayList<>();
+                NetAcDevicePort netAcDevicePort = new NetAcDevicePort();
+                netAcDevicePort.setAlias("alias");
+                netAcDevicePort.setIpAddr("1.1.1.1");
+                list.add(netAcDevicePort);
+                return list;
+            }
+        };
+
+        new MockUp<Files>() {
+
+            @Mock
+            public byte[] readAllBytes(Path path) throws IOException {
+                byte[] b = "json data".getBytes();
+                return b;
+
+            }
+        };
+        new MockUp<ObjectMapper>() {
+
+            @Mock
+            public <T> List<Map<String, String>> readValue(byte[] src, Class<T> valueType)
+                    throws IOException, JsonParseException, JsonMappingException {
+                List<Map<String, String>> list = new ArrayList<>();
+                Map<String, String> map = new HashMap<>();
+                map.put("cfgkey", "wanInterfaceForVxlan");
+                map.put("cfgvalue", "123");
+                list.add(map);
+                return list;
+            }
+        };
+        new MockUp<Integer>() {
+
+            @Mock
+            public Integer valueOf(String s) throws NumberFormatException {
+                return 1;
+
+            }
+        };
+
+        VxLanRoaResource resource = new VxLanRoaResource();
+        ResultRsp<NeVtep> result = resource.queryVtep("123", "123");
+
+    }
+
+    @Test(expected = Exception.class)
+    public void testQueryVtep_invalid() throws ServiceException {
+
+        VxLanRoaResource resource = new VxLanRoaResource();
+        ResultRsp<NeVtep> result = resource.queryVtep("123++_", "123");
+
+    }
+
+    @Test(expected = Exception.class)
+    public void testQueryVtep_case2() throws ServiceException {
+
+        new MockUp<ControllerUtil<T>>() {
+
+            @Mock
+            public List checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
+                WanSubInterface mo = new WanSubInterface();
+                mo.setCeLowVlan(123);
+                List<WanSubInterface> mos = new ArrayList<>();
+                mos.add(mo);
+
+                return mos;
+
+            }
+        };
+
+        new MockUp<Files>() {
+
+            @Mock
+            public byte[] readAllBytes(Path path) throws IOException {
+                byte[] b = "json data".getBytes();
+                return b;
+
+            }
+        };
+        new MockUp<ObjectMapper>() {
+
+            @Mock
+            public <T> List<Map<String, String>> readValue(byte[] src, Class<T> valueType)
+                    throws IOException, JsonParseException, JsonMappingException {
+                List<Map<String, String>> list = new ArrayList<>();
+                Map<String, String> map = new HashMap<>();
+                map.put("cfgkey", "wanInterfaceForVxlan");
+                map.put("cfgvalue", "123");
+                list.add(map);
+                return list;
+            }
+        };
+
+        VxLanRoaResource resource = new VxLanRoaResource();
+        ResultRsp<NeVtep> result = resource.queryVtep("123", "123");
+
+    }
+
+    @Test(expected = Exception.class)
+    public void testQueryVtep_noresult() throws ServiceException {
+
+        new MockUp<ControllerUtil>() {
+
+            @Mock
+            public List checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
+                WanSubInterface mo = new WanSubInterface();
+                mo.setCeLowVlan(123);
+                List<WanSubInterface> mos = new ArrayList<>();
+                mos.add(mo);
+
+                return mos;
+
+            }
+        };
+        new MockUp<Files>() {
+
+            @Mock
+            public byte[] readAllBytes(Path path) throws IOException {
+                byte[] b = "json data".getBytes();
+                return b;
+
+            }
+        };
+        new MockUp<ObjectMapper>() {
+
+            @Mock
+            public <T> List<Map<String, String>> readValue(byte[] src, Class<T> valueType)
+                    throws IOException, JsonParseException, JsonMappingException {
+                List<Map<String, String>> list = new ArrayList<>();
+                Map<String, String> map = new HashMap<>();
+                map.put("cfgkey", "wanInterfaceForVxlan");
+                map.put("cfgvalue", "123");
+                list.add(map);
+                return list;
+            }
+        };
+        VxLanRoaResource resource = new VxLanRoaResource();
+        ResultRsp<NeVtep> result = resource.queryVtep("123", "123");
+
+    }
+
+    @Test
+    public void testCreateVxlan() throws ServiceException {
+
+        new MockUp<OverlayVpnDriverProxy>() {
+
+            @Mock
+            public HTTPReturnMessage sendPutMsg(String url, String body, String ctlrUuid) throws IOException {
+                HTTPReturnMessage msg = new HTTPReturnMessage();
+                msg.setStatus(200);
+
+                OverlayVpnDriverResponse<List<NetVxLanDeviceModel>> res =
+                        new OverlayVpnDriverResponse<List<NetVxLanDeviceModel>>();
+                NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
+                List<NetVxLanDeviceModel> mos = new ArrayList<>();
+                mos.add(mo);
+                res.setData(mos);
+
+                res.setErrcode("0");
+                msg.setBody(JsonUtil.toJson(res));
+                return msg;
+            }
+
+        };
+
+        new MockUp<VxLanDbOper>() {
+
+            @Mock
+            public void insert(VxLanExternalIdMapping vxLanExternalIdMapping) throws ServiceException {
+
+            }
+
+        };
+
+        new MockUp<ControllerUtil>() {
+
+            @Mock
+            public List checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
+                NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
+                List<NetVxLanDeviceModel> mos = new ArrayList<>();
+                mos.add(mo);
+
+                return mos;
+
+            }
+        };
+        new MockUp<JsonUtil>() {
+
+            @Mock
+            public <T> List<NetVxLanDeviceModel> fromJson(String jsonStr, TypeReference<T> typeRef) {
+                NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
+                List<NetVxLanDeviceModel> mos = new ArrayList<>();
+                mos.add(mo);
+
+                return mos;
+            }
+        };
+
+        VxLanRoaResource resource = new VxLanRoaResource();
+        List<NeVxlanInstance> vxlanInstances = new ArrayList<NeVxlanInstance>();
+
+        NeVxlanInstance vxlan = new NeVxlanInstance();
+        vxlan.setVni("123");
+        vxlan.setNeId("123-43");
+        vxlan.setName("123");
+
+        List<NeVxlanInterface> vxlani = new ArrayList<NeVxlanInterface>();
+        NeVxlanInterface vxlaninterface = new NeVxlanInterface();
+        vxlaninterface.setVxlanInstanceId("1223");
+        vxlaninterface.setAccessType("port");
+        vxlaninterface.setPortId("8080");
+        vxlani.add(vxlaninterface);
+        vxlan.setVxlanInterfaceList(vxlani);
+
+        List<NeVxlanTunnel> vxlant = new ArrayList<NeVxlanTunnel>();
+        NeVxlanTunnel vxtunnel = new NeVxlanTunnel();
+        vxtunnel.setVxlanInstanceId("123");
+        vxtunnel.setVni("123");
+        vxtunnel.setSourceAddress("10.20.30.40");
+        vxtunnel.setDestAddress("10.20.30.40");
+        vxtunnel.setNeId("123");
+        vxtunnel.setPeerNeId("123");
+        vxlant.add(vxtunnel);
+        vxlan.setVxlanTunnelList(vxlant);
+
+        vxlanInstances.add(vxlan);
+        ResultRsp<List<NeVxlanInstance>> result = resource.createVxlan(null, "123", vxlanInstances);
+
+        assertTrue(result.isSuccess());
+    }
+
+    @Test
+    public void testCreateVxlan_invaliduuid() throws ServiceException {
+        new MockUp<OverlayVpnDriverProxy>() {
+
+            @Mock
+            public HTTPReturnMessage sendPutMsg(String url, String body, String ctlrUuid) throws IOException {
+                HTTPReturnMessage msg = new HTTPReturnMessage();
+                msg.setStatus(200);
 
-				OverlayVpnDriverResponse<List<NetVxLanDeviceModel>> res = new OverlayVpnDriverResponse<List<NetVxLanDeviceModel>>();
-				NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
-				List<NetVxLanDeviceModel> mos = new ArrayList<>();
-				mos.add(mo);
-				res.setData(mos);
+                OverlayVpnDriverResponse<List<NetVxLanDeviceModel>> res =
+                        new OverlayVpnDriverResponse<List<NetVxLanDeviceModel>>();
+                NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
+                List<NetVxLanDeviceModel> mos = new ArrayList<>();
+                mos.add(mo);
+                res.setData(mos);
 
-				res.setErrcode("0");
-				msg.setBody(JsonUtil.toJson(res));
-				return msg;
-			}
+                res.setErrcode("0");
+                msg.setBody(JsonUtil.toJson(res));
+                return msg;
+            }
 
-		};
+        };
 
-		new MockUp<VxLanDbOper>() {
+        new MockUp<VxLanDbOper>() {
 
-			@Mock
-			public void insert(VxLanExternalIdMapping vxLanExternalIdMapping) throws ServiceException {
+            @Mock
+            public void insert(VxLanExternalIdMapping vxLanExternalIdMapping) throws ServiceException {
 
-			}
+            }
+
+        };
 
-		};
+        new MockUp<ControllerUtil>() {
+
+            @Mock
+            public List checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
+                NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
+                List<NetVxLanDeviceModel> mos = new ArrayList<>();
+                mos.add(mo);
+
+                return mos;
+
+            }
+        };
+        try {
+            VxLanRoaResource resource = new VxLanRoaResource();
+            ResultRsp<List<NeVxlanInstance>> result = resource.createVxlan(null, "123_+_+", null);
+            assertTrue(result.isSuccess());
+        } catch(Exception e) {
+            assertTrue(e instanceof ServiceException);
+        }
 
-		new MockUp<ControllerUtil>() {
-
-			@Mock
-			public List checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
-				NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
-				List<NetVxLanDeviceModel> mos = new ArrayList<>();
-				mos.add(mo);
+    }
 
-				return mos;
+    @Test(expected = ServiceException.class)
+    public void testCreateVxlan_emptyvxlans() throws ServiceException {
+        new MockUp<OverlayVpnDriverProxy>() {
 
-			}
-		};
-		try {
-			VxLanRoaResource resource = new VxLanRoaResource();
-			ResultRsp<List<NeVxlanInstance>> result = resource.createVxlan(null, "123_+_+", null);
-		} catch (Exception e) {
-			assertTrue(e instanceof ServiceException);
-		}
+            @Mock
+            public HTTPReturnMessage sendPutMsg(String url, String body, String ctlrUuid) throws IOException {
+                HTTPReturnMessage msg = new HTTPReturnMessage();
+                msg.setStatus(200);
 
-	}
+                OverlayVpnDriverResponse<List<NetVxLanDeviceModel>> res =
+                        new OverlayVpnDriverResponse<List<NetVxLanDeviceModel>>();
+                NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
+                List<NetVxLanDeviceModel> mos = new ArrayList<>();
+                mos.add(mo);
+                res.setData(mos);
 
-	@Test(expected = ServiceException.class)
-	public void testCreateVxlan_emptyvxlans() throws ServiceException {
-		new MockUp<OverlayVpnDriverProxy>() {
+                res.setErrcode("0");
+                msg.setBody(JsonUtil.toJson(res));
+                return msg;
+            }
 
-			@Mock
-			public HTTPReturnMessage sendPutMsg(String url, String body, String ctlrUuid) throws IOException {
-				HTTPReturnMessage msg = new HTTPReturnMessage();
-				msg.setStatus(200);
+        };
 
-				OverlayVpnDriverResponse<List<NetVxLanDeviceModel>> res = new OverlayVpnDriverResponse<List<NetVxLanDeviceModel>>();
-				NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
-				List<NetVxLanDeviceModel> mos = new ArrayList<>();
-				mos.add(mo);
-				res.setData(mos);
+        new MockUp<VxLanDbOper>() {
 
-				res.setErrcode("0");
-				msg.setBody(JsonUtil.toJson(res));
-				return msg;
-			}
+            @Mock
+            public void insert(VxLanExternalIdMapping vxLanExternalIdMapping) throws ServiceException {
 
-		};
+            }
 
-		new MockUp<VxLanDbOper>() {
+        };
 
-			@Mock
-			public void insert(VxLanExternalIdMapping vxLanExternalIdMapping) throws ServiceException {
+        new MockUp<ControllerUtil>() {
 
-			}
+            @Mock
+            public List checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
+                NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
+                List<NetVxLanDeviceModel> mos = new ArrayList<>();
+                mos.add(mo);
 
-		};
+                return mos;
 
-		new MockUp<ControllerUtil>() {
+            }
+        };
 
-			@Mock
-			public List checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
-				NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
-				List<NetVxLanDeviceModel> mos = new ArrayList<>();
-				mos.add(mo);
+        new MockUp<Files>() {
 
-				return mos;
+            @Mock
+            public byte[] readAllBytes(Path path) throws IOException {
 
-			}
-		};
+                return "[{\"cfgkey\":\"123\",\"cfgvalue\":\"yes\"}]".getBytes();
 
-		new MockUp<Files>() {
+            }
+        };
 
-			@Mock
-			public byte[] readAllBytes(Path path) throws IOException {
+        new MockUp<Paths>() {
 
-				return "[{\"cfgkey\":\"123\",\"cfgvalue\":\"yes\"}]".getBytes();
+            @Mock
+            public Path get(String first, String... more) {
+                return null;
+            }
+        };
+        VxLanRoaResource resource = new VxLanRoaResource();
+        ResultRsp<List<NeVxlanInstance>> result = resource.createVxlan(null, "123", new ArrayList<NeVxlanInstance>());
 
-			}
-		};
+    }
 
-		new MockUp<Paths>() {
+    @Test(expected = ServiceException.class)
+    public void testCreateVxlan_invalidInputs() throws ServiceException {
+        new MockUp<OverlayVpnDriverProxy>() {
 
-			@Mock
-			public Path get(String first, String... more) {
-				return null;
-			}
-		};
-		VxLanRoaResource resource = new VxLanRoaResource();
-		ResultRsp<List<NeVxlanInstance>> result = resource.createVxlan(null, "123", new ArrayList<NeVxlanInstance>());
+            @Mock
+            public HTTPReturnMessage sendPutMsg(String url, String body, String ctlrUuid) throws IOException {
+                HTTPReturnMessage msg = new HTTPReturnMessage();
+                msg.setStatus(200);
 
-	}
+                OverlayVpnDriverResponse<List<NetVxLanDeviceModel>> res =
+                        new OverlayVpnDriverResponse<List<NetVxLanDeviceModel>>();
+                NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
+                List<NetVxLanDeviceModel> mos = new ArrayList<>();
+                mos.add(mo);
+                res.setData(mos);
 
-	@Test(expected = ServiceException.class)
-	public void testCreateVxlan_invalidInputs() throws ServiceException {
-		new MockUp<OverlayVpnDriverProxy>() {
+                res.setErrcode("0");
+                msg.setBody(JsonUtil.toJson(res));
+                return msg;
+            }
 
-			@Mock
-			public HTTPReturnMessage sendPutMsg(String url, String body, String ctlrUuid) throws IOException {
-				HTTPReturnMessage msg = new HTTPReturnMessage();
-				msg.setStatus(200);
+        };
 
-				OverlayVpnDriverResponse<List<NetVxLanDeviceModel>> res = new OverlayVpnDriverResponse<List<NetVxLanDeviceModel>>();
-				NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
-				List<NetVxLanDeviceModel> mos = new ArrayList<>();
-				mos.add(mo);
-				res.setData(mos);
+        new MockUp<VxLanDbOper>() {
 
-				res.setErrcode("0");
-				msg.setBody(JsonUtil.toJson(res));
-				return msg;
-			}
+            @Mock
+            public void insert(VxLanExternalIdMapping vxLanExternalIdMapping) throws ServiceException {
 
-		};
+            }
 
-		new MockUp<VxLanDbOper>() {
+        };
 
-			@Mock
-			public void insert(VxLanExternalIdMapping vxLanExternalIdMapping) throws ServiceException {
+        new MockUp<ControllerUtil>() {
 
-			}
+            @Mock
+            public List checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
+                NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
+                List<NetVxLanDeviceModel> mos = new ArrayList<>();
+                mos.add(mo);
 
-		};
+                return mos;
 
-		new MockUp<ControllerUtil>() {
+            }
+        };
 
-			@Mock
-			public List checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
-				NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
-				List<NetVxLanDeviceModel> mos = new ArrayList<>();
-				mos.add(mo);
+        new MockUp<Files>() {
 
-				return mos;
+            @Mock
+            public byte[] readAllBytes(Path path) throws IOException {
 
-			}
-		};
+                return "[{\"cfgkey\":\"123\",\"cfgvalue\":\"yes\"}]".getBytes();
 
-		new MockUp<Files>() {
+            }
+        };
 
-			@Mock
-			public byte[] readAllBytes(Path path) throws IOException {
+        new MockUp<Paths>() {
 
-				return "[{\"cfgkey\":\"123\",\"cfgvalue\":\"yes\"}]".getBytes();
+            @Mock
+            public Path get(String first, String... more) {
+                return null;
+            }
+        };
+        VxLanRoaResource resource = new VxLanRoaResource();
+        List<NeVxlanInstance> vxlanInstances = new ArrayList<NeVxlanInstance>();
 
-			}
-		};
+        NeVxlanInstance vxlan = new NeVxlanInstance();
+        vxlan.setVni("123");
+        vxlan.setNeId("123-43");
+        vxlan.setName("123");
 
-		new MockUp<Paths>() {
+        vxlanInstances.add(vxlan);
+        ResultRsp<List<NeVxlanInstance>> result = resource.createVxlan(null, "123", vxlanInstances);
 
-			@Mock
-			public Path get(String first, String... more) {
-				return null;
-			}
-		};
-		VxLanRoaResource resource = new VxLanRoaResource();
-		List<NeVxlanInstance> vxlanInstances = new ArrayList<NeVxlanInstance>();
+        assertTrue(result.isSuccess());
+    }
 
-		NeVxlanInstance vxlan = new NeVxlanInstance();
-		vxlan.setVni("123");
-		vxlan.setNeId("123-43");
-		vxlan.setName("123");
+    @Test(expected = ServiceException.class)
+    public void testCreateVxlan_invalidInputs2() throws ServiceException {
+        new MockUp<OverlayVpnDriverProxy>() {
 
-		vxlanInstances.add(vxlan);
-		ResultRsp<List<NeVxlanInstance>> result = resource.createVxlan(null, "123", vxlanInstances);
+            @Mock
+            public HTTPReturnMessage sendPutMsg(String url, String body, String ctlrUuid) throws IOException {
+                HTTPReturnMessage msg = new HTTPReturnMessage();
+                msg.setStatus(200);
 
-		assertTrue(result.isSuccess());
-	}
+                OverlayVpnDriverResponse<List<NetVxLanDeviceModel>> res =
+                        new OverlayVpnDriverResponse<List<NetVxLanDeviceModel>>();
+                NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
+                List<NetVxLanDeviceModel> mos = new ArrayList<>();
+                mos.add(mo);
+                res.setData(mos);
 
-	@Test(expected = ServiceException.class)
-	public void testCreateVxlan_invalidInputs2() throws ServiceException {
-		new MockUp<OverlayVpnDriverProxy>() {
+                res.setErrcode("0");
+                msg.setBody(JsonUtil.toJson(res));
+                return msg;
+            }
 
-			@Mock
-			public HTTPReturnMessage sendPutMsg(String url, String body, String ctlrUuid) throws IOException {
-				HTTPReturnMessage msg = new HTTPReturnMessage();
-				msg.setStatus(200);
+        };
 
-				OverlayVpnDriverResponse<List<NetVxLanDeviceModel>> res = new OverlayVpnDriverResponse<List<NetVxLanDeviceModel>>();
-				NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
-				List<NetVxLanDeviceModel> mos = new ArrayList<>();
-				mos.add(mo);
-				res.setData(mos);
+        new MockUp<VxLanDbOper>() {
 
-				res.setErrcode("0");
-				msg.setBody(JsonUtil.toJson(res));
-				return msg;
-			}
+            @Mock
+            public void insert(VxLanExternalIdMapping vxLanExternalIdMapping) throws ServiceException {
 
-		};
+            }
 
-		new MockUp<VxLanDbOper>() {
+        };
 
-			@Mock
-			public void insert(VxLanExternalIdMapping vxLanExternalIdMapping) throws ServiceException {
+        new MockUp<ControllerUtil>() {
 
-			}
+            @Mock
+            public List checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
+                NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
+                List<NetVxLanDeviceModel> mos = new ArrayList<>();
+                mos.add(mo);
 
-		};
+                return mos;
 
-		new MockUp<ControllerUtil>() {
+            }
+        };
+        new MockUp<Files>() {
 
-			@Mock
-			public List checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
-				NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
-				List<NetVxLanDeviceModel> mos = new ArrayList<>();
-				mos.add(mo);
+            @Mock
+            public byte[] readAllBytes(Path path) throws IOException {
 
-				return mos;
+                return "[{\"cfgkey\":\"123\",\"cfgvalue\":\"yes\"}]".getBytes();
 
-			}
-		};
-		new MockUp<Files>() {
+            }
+        };
 
-			@Mock
-			public byte[] readAllBytes(Path path) throws IOException {
+        new MockUp<Paths>() {
 
-				return "[{\"cfgkey\":\"123\",\"cfgvalue\":\"yes\"}]".getBytes();
+            @Mock
+            public Path get(String first, String... more) {
+                return null;
+            }
+        };
+        VxLanRoaResource resource = new VxLanRoaResource();
+        List<NeVxlanInstance> vxlanInstances = new ArrayList<NeVxlanInstance>();
 
-			}
-		};
+        NeVxlanInstance vxlan = new NeVxlanInstance();
+        vxlan.setVni("123");
+        vxlan.setNeId("123-43");
+        vxlan.setName("123");
 
-		new MockUp<Paths>() {
+        List<NeVxlanInterface> vxlani = new ArrayList<NeVxlanInterface>();
+        NeVxlanInterface vxlaninterface = new NeVxlanInterface();
+        vxlaninterface.setVxlanInstanceId("1223");
+        vxlaninterface.setAccessType("port");
+        vxlaninterface.setPortId("8080");
+        vxlani.add(vxlaninterface);
+        vxlan.setVxlanInterfaceList(vxlani);
 
-			@Mock
-			public Path get(String first, String... more) {
-				return null;
-			}
-		};
-		VxLanRoaResource resource = new VxLanRoaResource();
-		List<NeVxlanInstance> vxlanInstances = new ArrayList<NeVxlanInstance>();
+        vxlanInstances.add(vxlan);
+        ResultRsp<List<NeVxlanInstance>> result = resource.createVxlan(null, "123", vxlanInstances);
 
-		NeVxlanInstance vxlan = new NeVxlanInstance();
-		vxlan.setVni("123");
-		vxlan.setNeId("123-43");
-		vxlan.setName("123");
+        assertTrue(result.isSuccess());
+    }
 
-		List<NeVxlanInterface> vxlani = new ArrayList<NeVxlanInterface>();
-		NeVxlanInterface vxlaninterface = new NeVxlanInterface();
-		vxlaninterface.setVxlanInstanceId("1223");
-		vxlaninterface.setAccessType("port");
-		vxlaninterface.setPortId("8080");
-		vxlani.add(vxlaninterface);
-		vxlan.setVxlanInterfaceList(vxlani);
+    @Test
+    public void testCreateVxlan_fail() throws ServiceException {
 
-		vxlanInstances.add(vxlan);
-		ResultRsp<List<NeVxlanInstance>> result = resource.createVxlan(null, "123", vxlanInstances);
+        new MockUp<OverlayVpnDriverProxy>() {
 
-		assertTrue(result.isSuccess());
-	}
+            @Mock
+            public HTTPReturnMessage sendPutMsg(String url, String body, String ctlrUuid) throws IOException {
+                HTTPReturnMessage msg = new HTTPReturnMessage();
+                msg.setStatus(200);
 
-	@Test
-	public void testCreateVxlan_fail() throws ServiceException {
+                OverlayVpnDriverResponse<List<NetVxLanDeviceModel>> res =
+                        new OverlayVpnDriverResponse<List<NetVxLanDeviceModel>>();
+                NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
+                List<NetVxLanDeviceModel> mos = new ArrayList<>();
+                mos.add(mo);
+                res.setData(mos);
 
-		new MockUp<OverlayVpnDriverProxy>() {
+                res.setErrcode("0");
+                msg.setBody(JsonUtil.toJson(res));
+                return msg;
+            }
 
-			@Mock
-			public HTTPReturnMessage sendPutMsg(String url, String body, String ctlrUuid) throws IOException {
-				HTTPReturnMessage msg = new HTTPReturnMessage();
-				msg.setStatus(200);
+        };
 
-				OverlayVpnDriverResponse<List<NetVxLanDeviceModel>> res = new OverlayVpnDriverResponse<List<NetVxLanDeviceModel>>();
-				NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
-				List<NetVxLanDeviceModel> mos = new ArrayList<>();
-				mos.add(mo);
-				res.setData(mos);
+        new MockUp<VxLanDbOper>() {
 
-				res.setErrcode("0");
-				msg.setBody(JsonUtil.toJson(res));
-				return msg;
-			}
+            @Mock
+            public void insert(VxLanExternalIdMapping vxLanExternalIdMapping) throws ServiceException {
 
-		};
+            }
 
-		new MockUp<VxLanDbOper>() {
+        };
 
-			@Mock
-			public void insert(VxLanExternalIdMapping vxLanExternalIdMapping) throws ServiceException {
+        new MockUp<ControllerUtil>() {
 
-			}
+            @Mock
+            public List checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
+                NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
+                List<NetVxLanDeviceModel> mos = new ArrayList<>();
+                mos.add(mo);
 
-		};
+                return mos;
 
-		new MockUp<ControllerUtil>() {
+            }
+        };
+        new MockUp<JsonUtil>() {
 
-			@Mock
-			public List checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
-				NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
-				List<NetVxLanDeviceModel> mos = new ArrayList<>();
-				mos.add(mo);
+            @Mock
+            public <T> List<NetVxLanDeviceModel> fromJson(String jsonStr, TypeReference<T> typeRef) {
+                NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
+                List<NetVxLanDeviceModel> mos = new ArrayList<>();
+                mos.add(mo);
 
-				return mos;
+                return mos;
+            }
+        };
 
-			}
-		};
+        new MockUp<Files>() {
 
-		new MockUp<Files>() {
+            @Mock
+            public byte[] readAllBytes(Path path) throws IOException {
 
-			@Mock
-			public byte[] readAllBytes(Path path) throws IOException {
+                return "[{\"cfgkey\":\"123\",\"cfgvalue\":\"yes\"}]".getBytes();
 
-				return "[{\"cfgkey\":\"123\",\"cfgvalue\":\"yes\"}]".getBytes();
+            }
+        };
 
-			}
-		};
+        new MockUp<Paths>() {
 
-		new MockUp<Paths>() {
+            @Mock
+            public Path get(String first, String... more) {
+                return null;
+            }
+        };
 
-			@Mock
-			public Path get(String first, String... more) {
-				return null;
-			}
-		};
+        VxLanRoaResource resource = new VxLanRoaResource();
+        List<NeVxlanInstance> vxlanInstances = new ArrayList<NeVxlanInstance>();
 
-		VxLanRoaResource resource = new VxLanRoaResource();
-		List<NeVxlanInstance> vxlanInstances = new ArrayList<NeVxlanInstance>();
+        NeVxlanInstance vxlan = new NeVxlanInstance();
+        vxlan.setVni("123");
+        vxlan.setNeId("123-43");
+        vxlan.setName("123");
 
-		NeVxlanInstance vxlan = new NeVxlanInstance();
-		vxlan.setVni("123");
-		vxlan.setNeId("123-43");
-		vxlan.setName("123");
+        List<NeVxlanInterface> vxlani = new ArrayList<NeVxlanInterface>();
+        NeVxlanInterface vxlaninterface = new NeVxlanInterface();
+        vxlaninterface.setVxlanInstanceId("1223");
+        vxlaninterface.setAccessType("port");
+        vxlaninterface.setPortId("8080");
+        vxlani.add(vxlaninterface);
+        vxlan.setVxlanInterfaceList(vxlani);
 
-		List<NeVxlanInterface> vxlani = new ArrayList<NeVxlanInterface>();
-		NeVxlanInterface vxlaninterface = new NeVxlanInterface();
-		vxlaninterface.setVxlanInstanceId("1223");
-		vxlaninterface.setAccessType("port");
-		vxlaninterface.setPortId("8080");
-		vxlani.add(vxlaninterface);
-		vxlan.setVxlanInterfaceList(vxlani);
+        List<NeVxlanTunnel> vxlant = new ArrayList<NeVxlanTunnel>();
+        NeVxlanTunnel vxtunnel = new NeVxlanTunnel();
+        vxtunnel.setVxlanInstanceId("123");
+        vxtunnel.setVni("123");
+        vxtunnel.setSourceAddress("10.20.30.40");
+        vxtunnel.setDestAddress("10.20.30.40");
+        vxtunnel.setNeId("123");
+        vxtunnel.setPeerNeId("123");
+        vxlant.add(vxtunnel);
+        vxlan.setVxlanTunnelList(vxlant);
 
-		List<NeVxlanTunnel> vxlant = new ArrayList<NeVxlanTunnel>();
-		NeVxlanTunnel vxtunnel = new NeVxlanTunnel();
-		vxtunnel.setVxlanInstanceId("123");
-		vxtunnel.setVni("123");
-		vxtunnel.setSourceAddress("10.20.30.40");
-		vxtunnel.setDestAddress("10.20.30.40");
-		vxtunnel.setNeId("123");
-		vxtunnel.setPeerNeId("123");
-		vxlant.add(vxtunnel);
-		vxlan.setVxlanTunnelList(vxlant);
+        vxlanInstances.add(vxlan);
+        ResultRsp<List<NeVxlanInstance>> result = resource.createVxlan(null, "123", vxlanInstances);
+        assertTrue(result.getHttpCode() == 200);
+    }
 
-		vxlanInstances.add(vxlan);
-		ResultRsp<List<NeVxlanInstance>> result = resource.createVxlan(null, "123", vxlanInstances);
+    @Test
+    public void testDeleteVxLan() throws ServiceException {
+        new MockUp<InventoryDao<T>>() {
 
-		// assertTrue(!result.isSuccess());
-	}
+            @Mock
+            public ResultRsp<List<T>> batchInsert(List<T> dataList) throws ServiceException {
+                return new ResultRsp(ErrorCode.OVERLAYVPN_SUCCESS);
+            }
+        };
 
-	@Test
-	public void testDeleteVxLan() throws ServiceException {
-		new MockUp<InventoryDao<T>>() {
+        new MockUp<InventoryDaoUtil<T>>() {
 
-			@Mock
-			public ResultRsp<List<T>> batchInsert(List<T> dataList) throws ServiceException {
-				return new ResultRsp(ErrorCode.OVERLAYVPN_SUCCESS);
-			}
-		};
+            @Mock
+            public InventoryDao<VxLanExternalIdMapping> getInventoryDao() {
+                return new InventoryDao<VxLanExternalIdMapping>();
+            }
+        };
 
-		new MockUp<InventoryDaoUtil<T>>() {
+        new MockUp<InventoryDao<T>>() {
 
-			@Mock
-			public InventoryDao<VxLanExternalIdMapping> getInventoryDao() {
-				return new InventoryDao<VxLanExternalIdMapping>();
-			}
-		};
+            @Mock
+            public ResultRsp<List<VxLanExternalIdMapping>> queryByFilter(Class clazz, String filter,
+                    String queryResultFields) throws ServiceException {
+                List<VxLanExternalIdMapping> mos = new ArrayList<>();
+                VxLanExternalIdMapping mo = new VxLanExternalIdMapping("123", "123", "123");
+                mos.add(mo);
 
-		new MockUp<InventoryDao<T>>() {
+                ResultRsp<List<VxLanExternalIdMapping>> rs = new ResultRsp<List<VxLanExternalIdMapping>>().SUCCESS;
+                rs.setData(mos);
+                return rs;
+            }
 
-			@Mock
-			public ResultRsp<List<VxLanExternalIdMapping>> queryByFilter(Class clazz, String filter,
-					String queryResultFields) throws ServiceException {
-				List<VxLanExternalIdMapping> mos = new ArrayList<>();
-				VxLanExternalIdMapping mo = new VxLanExternalIdMapping("123", "123", "123");
-				mos.add(mo);
+            @Mock
+            public ResultRsp<String> delete(Class clazz, String uuid) throws ServiceException {
+                return new ResultRsp<List<VxLanExternalIdMapping>>().SUCCESS;
+            }
+        };
 
-				ResultRsp<List<VxLanExternalIdMapping>> rs = new ResultRsp<List<VxLanExternalIdMapping>>().SUCCESS;
-				rs.setData(mos);
-				return rs;
-			}
+        new MockUp<ControllerUtil<T>>() {
 
-			@Mock
-			public ResultRsp<String> delete(Class clazz, String uuid) throws ServiceException {
-				return new ResultRsp<List<VxLanExternalIdMapping>>().SUCCESS;
-			}
-		};
+            @Mock
+            public List<NetVxLanDeviceModel> checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
+                List<NetVxLanDeviceModel> ipSecConnection = new ArrayList<>();
 
-		new MockUp<ControllerUtil<T>>() {
+                return ipSecConnection;
 
-			@Mock
-			public List<NetVxLanDeviceModel> checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
-				List<NetVxLanDeviceModel> ipSecConnection = new ArrayList<>();
+            }
+        };
+        new MockUp<ResultRsp<T>>() {
 
-				return ipSecConnection;
+            @Mock
+            public List<VxLanExternalIdMapping> getData() {
+                List<VxLanExternalIdMapping> mos = new ArrayList<>();
+                VxLanExternalIdMapping mo = new VxLanExternalIdMapping("123", "123", "123");
+                mos.add(mo);
+                return mos;
+            }
+        };
+
+        VxLanRoaResource resource = new VxLanRoaResource();
+        ResultRsp<String> result = resource.deleteVxLan(null, "123", "123");
 
-			}
-		};
-		new MockUp<ResultRsp<T>>() {
-			@Mock
-			public List<VxLanExternalIdMapping> getData() {
-				List<VxLanExternalIdMapping> mos = new ArrayList<>();
-				VxLanExternalIdMapping mo = new VxLanExternalIdMapping("123", "123", "123");
-				mos.add(mo);
-				return mos;
-			}
-		};
+        assertTrue(result.isSuccess());
+    }
+
+    @Test
+    public void testDeleteVxLan_uuidinvalid() throws ServiceException {
+        new MockUp<InventoryDao<T>>() {
 
-		VxLanRoaResource resource = new VxLanRoaResource();
-		ResultRsp<String> result = resource.deleteVxLan(null, "123", "123");
-
-		assertTrue(result.isSuccess());
-	}
-
-	@Test
-	public void testDeleteVxLan_uuidinvalid() throws ServiceException {
-		new MockUp<InventoryDao<T>>() {
-
-			@Mock
-			public ResultRsp<List<T>> batchInsert(List<T> dataList) throws ServiceException {
-				return new ResultRsp(ErrorCode.OVERLAYVPN_SUCCESS);
-			}
-		};
-
-		new MockUp<InventoryDaoUtil<T>>() {
-
-			@Mock
-			public InventoryDao<T> getInventoryDao() {
-				return new InventoryDao<>();
-			}
-		};
-
-		new MockUp<InventoryDao<T>>() {
-
-			@Mock
-			public ResultRsp<List<T>> queryByFilter(Class clazz, String filter, String queryResultFields)
-					throws ServiceException {
-				List<VxLanExternalIdMapping> mos = new ArrayList<>();
-				VxLanExternalIdMapping mo = new VxLanExternalIdMapping("123", "123", "123");
-				mos.add(mo);
-
-				ResultRsp rs = new ResultRsp<List<VxLanExternalIdMapping>>().SUCCESS;
-				rs.setData(mos);
-				return rs;
-			}
-
-			@Mock
-			public ResultRsp<String> delete(Class clazz, String uuid) throws ServiceException {
-				return new ResultRsp<List<VxLanExternalIdMapping>>().SUCCESS;
-			}
-		};
-
-		new MockUp<OverlayVpnDriverProxy>() {
-
-			@Mock
-			public HTTPReturnMessage sendDeleteMsg(String url, String body, String ctlrUuid) throws IOException {
-				HTTPReturnMessage msg = new HTTPReturnMessage();
-				msg.setStatus(200);
-				OverlayVpnDriverResponse<List<String>> res = new OverlayVpnDriverResponse<List<String>>();
-				res.setData(new ArrayList<String>());
-				res.setErrcode("0");
-				msg.setBody(JsonUtil.toJson(res));
-				return msg;
-			}
-
-		};
-
-		try {
-			VxLanRoaResource resource = new VxLanRoaResource();
-			ResultRsp<String> result = resource.deleteVxLan(null, "@$$", "123");
-		} catch (Exception e) {
-			assertTrue(e instanceof ServiceException);
-		}
-
-	}
-
-	@Test
-	public void testDeleteVxLan_nodeviceId() throws ServiceException {
-		new MockUp<InventoryDao<T>>() {
-
-			@Mock
-			public ResultRsp<List<T>> batchInsert(List<T> dataList) throws ServiceException {
-				return new ResultRsp(ErrorCode.OVERLAYVPN_SUCCESS);
-			}
-		};
-
-		new MockUp<InventoryDaoUtil<T>>() {
-
-			@Mock
-			public InventoryDao<T> getInventoryDao() {
-				return new InventoryDao<>();
-			}
-		};
-
-		new MockUp<InventoryDao<T>>() {
-
-			@Mock
-			public ResultRsp<List<T>> queryByFilter(Class clazz, String filter, String queryResultFields)
-					throws ServiceException {
-				List<VxLanExternalIdMapping> mos = new ArrayList<>();
-				VxLanExternalIdMapping mo = new VxLanExternalIdMapping("123", "123", "123");
-				mos.add(mo);
-
-				ResultRsp rs = new ResultRsp<List<VxLanExternalIdMapping>>().SUCCESS;
-				rs.setData(mos);
-				return rs;
-			}
-
-			@Mock
-			public ResultRsp<String> delete(Class clazz, String uuid) throws ServiceException {
-				return new ResultRsp<List<VxLanExternalIdMapping>>().SUCCESS;
-			}
-		};
-
-		new MockUp<OverlayVpnDriverProxy>() {
-
-			@Mock
-			public HTTPReturnMessage sendDeleteMsg(String url, String body, String ctlrUuid) throws IOException {
-				HTTPReturnMessage msg = new HTTPReturnMessage();
-				msg.setStatus(200);
-				OverlayVpnDriverResponse<List<String>> res = new OverlayVpnDriverResponse<List<String>>();
-				res.setData(new ArrayList<String>());
-				res.setErrcode("0");
-				msg.setBody(JsonUtil.toJson(res));
-				return msg;
-			}
-
-		};
-
-		try {
-			VxLanRoaResource resource = new VxLanRoaResource();
-			ResultRsp<String> result = resource.deleteVxLan(null, "123", "");
-		} catch (Exception e) {
-			assertTrue(e instanceof ServiceException);
-		}
-
-	}
+            @Mock
+            public ResultRsp<List<T>> batchInsert(List<T> dataList) throws ServiceException {
+                return new ResultRsp(ErrorCode.OVERLAYVPN_SUCCESS);
+            }
+        };
+
+        new MockUp<InventoryDaoUtil<T>>() {
+
+            @Mock
+            public InventoryDao<T> getInventoryDao() {
+                return new InventoryDao<>();
+            }
+        };
+
+        new MockUp<InventoryDao<T>>() {
+
+            @Mock
+            public ResultRsp<List<T>> queryByFilter(Class clazz, String filter, String queryResultFields)
+                    throws ServiceException {
+                List<VxLanExternalIdMapping> mos = new ArrayList<>();
+                VxLanExternalIdMapping mo = new VxLanExternalIdMapping("123", "123", "123");
+                mos.add(mo);
+
+                ResultRsp rs = new ResultRsp<List<VxLanExternalIdMapping>>().SUCCESS;
+                rs.setData(mos);
+                return rs;
+            }
+
+            @Mock
+            public ResultRsp<String> delete(Class clazz, String uuid) throws ServiceException {
+                return new ResultRsp<List<VxLanExternalIdMapping>>().SUCCESS;
+            }
+        };
+
+        new MockUp<OverlayVpnDriverProxy>() {
+
+            @Mock
+            public HTTPReturnMessage sendDeleteMsg(String url, String body, String ctlrUuid) throws IOException {
+                HTTPReturnMessage msg = new HTTPReturnMessage();
+                msg.setStatus(200);
+                OverlayVpnDriverResponse<List<String>> res = new OverlayVpnDriverResponse<List<String>>();
+                res.setData(new ArrayList<String>());
+                res.setErrcode("0");
+                msg.setBody(JsonUtil.toJson(res));
+                return msg;
+            }
+
+        };
+
+        try {
+            VxLanRoaResource resource = new VxLanRoaResource();
+            ResultRsp<String> result = resource.deleteVxLan(null, "@$$", "123");
+            assertTrue(result.isSuccess());
+        } catch(Exception e) {
+            assertTrue(e instanceof ServiceException);
+        }
+
+    }
+
+    @Test
+    public void testDeleteVxLan_nodeviceId() throws ServiceException {
+        new MockUp<InventoryDao<T>>() {
+
+            @Mock
+            public ResultRsp<List<T>> batchInsert(List<T> dataList) throws ServiceException {
+                return new ResultRsp(ErrorCode.OVERLAYVPN_SUCCESS);
+            }
+        };
+
+        new MockUp<InventoryDaoUtil<T>>() {
+
+            @Mock
+            public InventoryDao<T> getInventoryDao() {
+                return new InventoryDao<>();
+            }
+        };
+
+        new MockUp<InventoryDao<T>>() {
+
+            @Mock
+            public ResultRsp<List<T>> queryByFilter(Class clazz, String filter, String queryResultFields)
+                    throws ServiceException {
+                List<VxLanExternalIdMapping> mos = new ArrayList<>();
+                VxLanExternalIdMapping mo = new VxLanExternalIdMapping("123", "123", "123");
+                mos.add(mo);
+
+                ResultRsp rs = new ResultRsp<List<VxLanExternalIdMapping>>().SUCCESS;
+                rs.setData(mos);
+                return rs;
+            }
+
+            @Mock
+            public ResultRsp<String> delete(Class clazz, String uuid) throws ServiceException {
+                return new ResultRsp<List<VxLanExternalIdMapping>>().SUCCESS;
+            }
+        };
+
+        new MockUp<OverlayVpnDriverProxy>() {
+
+            @Mock
+            public HTTPReturnMessage sendDeleteMsg(String url, String body, String ctlrUuid) throws IOException {
+                HTTPReturnMessage msg = new HTTPReturnMessage();
+                msg.setStatus(200);
+                OverlayVpnDriverResponse<List<String>> res = new OverlayVpnDriverResponse<List<String>>();
+                res.setData(new ArrayList<String>());
+                res.setErrcode("0");
+                msg.setBody(JsonUtil.toJson(res));
+                return msg;
+            }
+
+        };
+
+        try {
+            VxLanRoaResource resource = new VxLanRoaResource();
+            ResultRsp<String> result = resource.deleteVxLan(null, "123", "");
+            assertTrue(result.isSuccess());
+        } catch(Exception e) {
+            assertTrue(e instanceof ServiceException);
+        }
+
+    }
 
 }

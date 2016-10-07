@@ -23,80 +23,79 @@ import java.nio.file.Paths;
 
 import org.junit.Test;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
-import org.openo.sdno.overlayvpndriver.util.config.WanInterface;
 
 import mockit.Mock;
 import mockit.MockUp;
 
 public class WanInterfaceTest {
 
-	@Test
-	public void testGetConfig() throws ServiceException {
-		new MockUp<Files>() {
+    @Test
+    public void testGetConfig() throws ServiceException {
+        new MockUp<Files>() {
 
-			@Mock
-			public byte[] readAllBytes(Path path) throws IOException {
+            @Mock
+            public byte[] readAllBytes(Path path) throws IOException {
 
-				return "[{\"cfgkey\":\"123\",\"cfgvalue\":\"yes\"}]".getBytes();
+                return "[{\"cfgkey\":\"123\",\"cfgvalue\":\"yes\"}]".getBytes();
 
-			}
-		};
+            }
+        };
 
-		new MockUp<Paths>() {
+        new MockUp<Paths>() {
 
-			@Mock
-			public Path get(String first, String... more) {
-				return null;
-			}
-		};
-		String result = WanInterface.getConfig("123");
-		// assertEquals("yes", result);
-	}
+            @Mock
+            public Path get(String first, String... more) {
+                return null;
+            }
+        };
+        String result = WanInterface.getConfig("123");
+        // assertEquals("yes", result);
+    }
 
-	@Test
-	public void testGetConfigException() throws ServiceException {
-		new MockUp<Files>() {
+    @Test
+    public void testGetConfigException() throws ServiceException {
+        new MockUp<Files>() {
 
-			@Mock
-			public byte[] readAllBytes(Path path) throws IOException {
+            @Mock
+            public byte[] readAllBytes(Path path) throws IOException {
 
-				return "[{}]".getBytes();
+                return "[{}]".getBytes();
 
-			}
-		};
+            }
+        };
 
-		new MockUp<Paths>() {
+        new MockUp<Paths>() {
 
-			@Mock
-			public Path get(String first, String... more) {
-				return null;
-			}
-		};
-		String result = WanInterface.getConfig("123");
-		// assertEquals("yes", result);
-	}
+            @Mock
+            public Path get(String first, String... more) {
+                return null;
+            }
+        };
+        String result = WanInterface.getConfig("123");
+        // assertEquals("yes", result);
+    }
 
-	@Test
-	public void testGetConfigBranch() throws ServiceException {
-		new MockUp<Files>() {
+    @Test
+    public void testGetConfigBranch() throws ServiceException {
+        new MockUp<Files>() {
 
-			@Mock
-			public byte[] readAllBytes(Path path) throws IOException {
+            @Mock
+            public byte[] readAllBytes(Path path) throws IOException {
 
-				return "[{\"cfgkey\":\"123\",\"cfgvalue\":\"yes\"}]".getBytes();
+                return "[{\"cfgkey\":\"123\",\"cfgvalue\":\"yes\"}]".getBytes();
 
-			}
-		};
+            }
+        };
 
-		new MockUp<Paths>() {
+        new MockUp<Paths>() {
 
-			@Mock
-			public Path get(String first, String... more) {
-				return null;
-			}
-		};
-		String result = WanInterface.getConfig("1233");
-		// assertEquals("yes", result);
-	}
+            @Mock
+            public Path get(String first, String... more) {
+                return null;
+            }
+        };
+        String result = WanInterface.getConfig("1233");
+        // assertEquals("yes", result);
+    }
 
 }

@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.openo.sdno.overlayvpndriver.login;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -28,221 +30,230 @@ import org.openo.sdno.overlayvpn.brs.model.AuthInfo;
 import org.openo.sdno.overlayvpn.brs.model.CommParamMO;
 import org.openo.sdno.overlayvpn.brs.model.ControllerMO;
 import org.openo.sdno.ssl.EncryptionUtil;
+import org.openo.sdno.util.http.HTTPReturnMessage;
 
 import mockit.Mock;
 import mockit.MockUp;
 
 public class OverlayVpnDriverProxyTest {
-	@Test
-	public void testSendGetMsg() throws ServiceException {
-		new MockUp<ControllerDao>() {
 
-			@Mock
-			public ControllerMO getController(String uuid) throws ServiceException {
-				ControllerMO mo = new ControllerMO();
-				mo.setName("123");
-				mo.setHostName("12.2.21.1");
-				return mo;
-			}
+    @Test
+    public void testSendGetMsg() throws ServiceException {
+        new MockUp<ControllerDao>() {
 
-		};
+            @Mock
+            public ControllerMO getController(String uuid) throws ServiceException {
+                ControllerMO mo = new ControllerMO();
+                mo.setName("123");
+                mo.setHostName("12.2.21.1");
+                return mo;
+            }
 
-		new MockUp<CommParamDao>() {
+        };
 
-			@Mock
-			public List<CommParamMO> getCommParam(String controllerID) throws ServiceException {
-				List<CommParamMO> mos = new ArrayList<>();
-				CommParamMO mo = new CommParamMO();
-				mo.setHostName("10.0.0.1");
-				mo.setCommParams("{\"param1\":\"one\"},{\"password\":\"pwd\"}");
-				mos.add(mo);
-				return mos;
-			}
-		};
+        new MockUp<CommParamDao>() {
 
-		new MockUp<EncryptionUtil>() {
+            @Mock
+            public List<CommParamMO> getCommParam(String controllerID) throws ServiceException {
+                List<CommParamMO> mos = new ArrayList<>();
+                CommParamMO mo = new CommParamMO();
+                mo.setHostName("10.0.0.1");
+                mo.setCommParams("{\"param1\":\"one\"},{\"password\":\"pwd\"}");
+                mos.add(mo);
+                return mos;
+            }
+        };
 
-			@Mock
-			public char[] decode(char[] plain) {
-				return "{\"user\":\"root\"}".toCharArray();
-			}
+        new MockUp<EncryptionUtil>() {
 
-			@Mock
-			public char[] encode(char[] plain) {
-				return "{\"password\":\"pwd\"}".toCharArray();
-			}
-		};
+            @Mock
+            public char[] decode(char[] plain) {
+                return "{\"user\":\"root\"}".toCharArray();
+            }
 
-		OverlayVpnDriverProxy.getInstance().sendGetMsg("../", "", "123");
-	}
+            @Mock
+            public char[] encode(char[] plain) {
+                return "{\"password\":\"pwd\"}".toCharArray();
+            }
+        };
 
-	@Test
-	public void testSendGetMsg1() throws ServiceException {
-		new MockUp<ControllerDao>() {
+        HTTPReturnMessage response = OverlayVpnDriverProxy.getInstance().sendGetMsg("../", "", "123");
+        assertEquals(response.getStatus(), 0);
+    }
 
-			@Mock
-			public ControllerMO getController(String uuid) throws ServiceException {
-				return null;
-			}
+    @Test
+    public void testSendGetMsg1() throws ServiceException {
+        new MockUp<ControllerDao>() {
 
-		};
+            @Mock
+            public ControllerMO getController(String uuid) throws ServiceException {
+                return null;
+            }
 
-		OverlayVpnDriverProxy.getInstance().sendGetMsg("../", "", "123");
-	}
+        };
 
-	@Test
-	public void testSendPostMsg() throws ServiceException {
+        HTTPReturnMessage response = OverlayVpnDriverProxy.getInstance().sendGetMsg("../", "", "123");
+        assertEquals(response.getStatus(), 0);
+    }
 
-		new MockUp<ControllerDao>() {
+    @Test
+    public void testSendPostMsg() throws ServiceException {
 
-			@Mock
-			ControllerMO getController(String uuid) {
-				ControllerMO controller = new ControllerMO();
-				controller.setHostName("hostname");
-				return controller;
-			}
-		};
+        new MockUp<ControllerDao>() {
 
-		new MockUp<CommParamDao>() {
+            @Mock
+            ControllerMO getController(String uuid) {
+                ControllerMO controller = new ControllerMO();
+                controller.setHostName("hostname");
+                return controller;
+            }
+        };
 
-			@Mock
-			List<CommParamMO> getCommParam(String suuid) {
-				List<CommParamMO> commList = new ArrayList<CommParamMO>();
-				CommParamMO commonParam = new CommParamMO();
-				commList.add(commonParam);
-				return commList;
-			}
-		};
+        new MockUp<CommParamDao>() {
 
-		new MockUp<CommParamMO>() {
+            @Mock
+            List<CommParamMO> getCommParam(String suuid) {
+                List<CommParamMO> commList = new ArrayList<CommParamMO>();
+                CommParamMO commonParam = new CommParamMO();
+                commList.add(commonParam);
+                return commList;
+            }
+        };
 
-			@Mock
-			AuthInfo getAuthInfo() {
-				AuthInfo authInfo = new AuthInfo();
-				return authInfo;
-			}
-		};
+        new MockUp<CommParamMO>() {
 
-		OverlayVpnDriverProxy acBranchProxy = OverlayVpnDriverProxy.getInstance();
-		acBranchProxy.sendPostMsg("../", "", "123");
-	}
+            @Mock
+            AuthInfo getAuthInfo() {
+                AuthInfo authInfo = new AuthInfo();
+                return authInfo;
+            }
+        };
 
-	@Test
-	public void testSendPutMsg() {
+        OverlayVpnDriverProxy acBranchProxy = OverlayVpnDriverProxy.getInstance();
+        HTTPReturnMessage response = acBranchProxy.sendPostMsg("../", "", "123");
+        assertEquals(response.getStatus(), 0);
+    }
 
-		new MockUp<ControllerDao>() {
+    @Test
+    public void testSendPutMsg() {
 
-			@Mock
-			ControllerMO getController(String uuid) {
-				ControllerMO controller = new ControllerMO();
-				controller.setHostName("hostname");
-				return controller;
-			}
-		};
+        new MockUp<ControllerDao>() {
 
-		new MockUp<CommParamDao>() {
+            @Mock
+            ControllerMO getController(String uuid) {
+                ControllerMO controller = new ControllerMO();
+                controller.setHostName("hostname");
+                return controller;
+            }
+        };
 
-			@Mock
-			List<CommParamMO> getCommParam(String suuid) {
-				List<CommParamMO> commList = new ArrayList<CommParamMO>();
-				CommParamMO commonParam = new CommParamMO();
-				commList.add(commonParam);
-				return commList;
-			}
-		};
+        new MockUp<CommParamDao>() {
 
-		new MockUp<CommParamMO>() {
+            @Mock
+            List<CommParamMO> getCommParam(String suuid) {
+                List<CommParamMO> commList = new ArrayList<CommParamMO>();
+                CommParamMO commonParam = new CommParamMO();
+                commList.add(commonParam);
+                return commList;
+            }
+        };
 
-			@Mock
-			AuthInfo getAuthInfo() {
-				AuthInfo authInfo = new AuthInfo();
-				return authInfo;
-			}
-		};
+        new MockUp<CommParamMO>() {
 
-		OverlayVpnDriverProxy acBranchProxy = OverlayVpnDriverProxy.getInstance();
-		try {
-			acBranchProxy.sendPutMsg("../", "123", "123");
-		} catch (Exception se) {
-			assertTrue(true);
-		}
-	}
+            @Mock
+            AuthInfo getAuthInfo() {
+                AuthInfo authInfo = new AuthInfo();
+                return authInfo;
+            }
+        };
 
-	@Test
-	public void testSendPutMsgExceptionAuthNull() {
+        OverlayVpnDriverProxy acBranchProxy = OverlayVpnDriverProxy.getInstance();
+        try {
+            HTTPReturnMessage response = acBranchProxy.sendPutMsg("../", "123", "123");
+            assertEquals(response.getStatus(), 0);
+        } catch(Exception se) {
+            assertTrue(true);
+        }
+    }
 
-		new MockUp<ControllerDao>() {
+    @Test
+    public void testSendPutMsgExceptionAuthNull() {
 
-			@Mock
-			ControllerMO getController(String uuid) {
-				ControllerMO controller = new ControllerMO();
-				controller.setHostName("hostname");
-				return controller;
-			}
-		};
+        new MockUp<ControllerDao>() {
 
-		new MockUp<CommParamDao>() {
+            @Mock
+            ControllerMO getController(String uuid) {
+                ControllerMO controller = new ControllerMO();
+                controller.setHostName("hostname");
+                return controller;
+            }
+        };
 
-			@Mock
-			List<CommParamMO> getCommParam(String suuid) {
-				List<CommParamMO> commList = new ArrayList<CommParamMO>();
-				CommParamMO commonParam = new CommParamMO();
-				commList.add(commonParam);
-				return commList;
-			}
-		};
+        new MockUp<CommParamDao>() {
 
-		new MockUp<CommParamMO>() {
+            @Mock
+            List<CommParamMO> getCommParam(String suuid) {
+                List<CommParamMO> commList = new ArrayList<CommParamMO>();
+                CommParamMO commonParam = new CommParamMO();
+                commList.add(commonParam);
+                return commList;
+            }
+        };
 
-			@Mock
-			AuthInfo getAuthInfo() {
-				AuthInfo authInfo = null;
-				return authInfo;
-			}
-		};
+        new MockUp<CommParamMO>() {
 
-		OverlayVpnDriverProxy acBranchProxy = OverlayVpnDriverProxy.getInstance();
-		try {
-			acBranchProxy.sendPutMsg("../", "123", "123");
-		} catch (Exception se) {
-			assertTrue(true);
-		}
-	}
+            @Mock
+            AuthInfo getAuthInfo() {
+                AuthInfo authInfo = null;
+                return authInfo;
+            }
+        };
 
-	@Test
-	public void testSendPutMsgThrowsException() {
+        OverlayVpnDriverProxy acBranchProxy = OverlayVpnDriverProxy.getInstance();
+        try {
+            HTTPReturnMessage response = acBranchProxy.sendPutMsg("../", "123", "123");
+            assertEquals(response.getStatus(), 0);
+        } catch(Exception se) {
+            assertTrue(true);
+        }
+    }
 
-		new MockUp<ControllerDao>() {
+    @Test
+    public void testSendPutMsgThrowsException() {
 
-			@Mock
-			ControllerMO getController(String uuid) {
-				ControllerMO controller = new ControllerMO();
-				controller.setHostName("hostname");
-				return controller;
-			}
-		};
+        new MockUp<ControllerDao>() {
 
-		new MockUp<CommParamDao>() {
+            @Mock
+            ControllerMO getController(String uuid) {
+                ControllerMO controller = new ControllerMO();
+                controller.setHostName("hostname");
+                return controller;
+            }
+        };
 
-			@Mock
-			List<CommParamMO> getCommParam(String suuid) {
-				List<CommParamMO> commList = new ArrayList<CommParamMO>();
-				return commList;
-			}
-		};
+        new MockUp<CommParamDao>() {
 
-		OverlayVpnDriverProxy acBranchProxy = OverlayVpnDriverProxy.getInstance();
-		try {
-			acBranchProxy.sendPutMsg("../", "123", "123");
-		} catch (Exception se) {
-			assertTrue(true);
-		}
-	}
+            @Mock
+            List<CommParamMO> getCommParam(String suuid) {
+                List<CommParamMO> commList = new ArrayList<CommParamMO>();
+                return commList;
+            }
+        };
 
-	@Test
-	public void testSendDeleteMsg() throws ServiceException {
-		OverlayVpnDriverProxy acBranchProxy = OverlayVpnDriverProxy.getInstance();
-		acBranchProxy.sendDeleteMsg("../", "", "123");
+        OverlayVpnDriverProxy acBranchProxy = OverlayVpnDriverProxy.getInstance();
+        try {
+            HTTPReturnMessage response = acBranchProxy.sendPutMsg("../", "123", "123");
+            assertEquals(response.getStatus(), 0);
+        } catch(Exception se) {
+            assertTrue(true);
+        }
+    }
 
-	}
+    @Test
+    public void testSendDeleteMsg() throws ServiceException {
+        OverlayVpnDriverProxy acBranchProxy = OverlayVpnDriverProxy.getInstance();
+        HTTPReturnMessage response = acBranchProxy.sendDeleteMsg("../", "", "123");
+        assertEquals(response.getStatus(), 0);
+
+    }
 }
