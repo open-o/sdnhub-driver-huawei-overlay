@@ -16,8 +16,8 @@
 
 package org.openo.sdno.overlayvpndriver.service.ipsec;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -27,25 +27,25 @@ import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.type.TypeReference;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
 import org.openo.sdno.framework.container.util.JsonUtil;
-import org.openo.sdno.overlayvpn.consts.CommConst;
 import org.openo.sdno.overlayvpn.errorcode.ErrorCode;
 import org.openo.sdno.overlayvpn.result.ResultRsp;
 import org.openo.sdno.overlayvpn.result.SvcExcptUtil;
-import org.openo.sdno.overlayvpndriver.login.OverlayVpnDriverProxy;
 import org.openo.sdno.overlayvpndriver.model.ipsec.adapter.NetIpSecConn;
 import org.openo.sdno.overlayvpndriver.model.ipsec.adapter.NetIpSecModel;
 import org.openo.sdno.overlayvpndriver.model.ipsec.db.IpSecExternalIdMapping;
-import org.openo.sdno.overlayvpndriver.model.vxlan.adapter.NetVxLanDeviceModel;
-import org.openo.sdno.overlayvpndriver.util.consts.ControllerUrlConst;
-import org.openo.sdno.overlayvpndriver.util.controller.ControllerUtil;
+import org.openo.sdno.overlayvpndriver.sbi.ipsec.IpSecCliSbi;
+import org.openo.sdno.overlayvpndriver.sbi.ipsec.IpSecRestfulSbi;
+import org.openo.sdno.overlayvpndriver.util.config.DeviceCommParamReader;
+import org.openo.sdno.overlayvpndriver.util.config.DeviceParam;
+import org.openo.sdno.overlayvpndriver.util.config.DeviceType;
 import org.openo.sdno.overlayvpndriver.util.db.IpSecDbOper;
-import org.openo.sdno.util.http.HTTPReturnMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * IpSec service implementation. <br>
+ * IpSec service implementation.<br>
  * 
  * @author
  * @version SDNO 0.5 Jun 16, 2016
@@ -57,11 +57,18 @@ public class IpSecSvcImpl {
 
     private static final int MAX_SEQ_NUMBER = 10000;
 
-    /**
-     * Private constructor added to fix sonar issue
-     */
-    private IpSecSvcImpl() {
+    @Autowired
+    private IpSecCliSbi ipSecCliSbi;
 
+    @Autowired
+    private IpSecRestfulSbi ipSecRestfulSbi;
+
+    public void setIpSecCliSbi(IpSecCliSbi ipSecCliSbi) {
+        this.ipSecCliSbi = ipSecCliSbi;
+    }
+
+    public void setIpSecRestfulSbi(IpSecRestfulSbi ipSecRestfulSbi) {
+        this.ipSecRestfulSbi = ipSecRestfulSbi;
     }
 
     /**
@@ -74,7 +81,7 @@ public class IpSecSvcImpl {
      * @throws ServiceException When create failed
      * @since SDNO 0.5
      */
-    public static ResultRsp<List<NetIpSecModel>> createIpSec(String ctrlUuid, String deviceId,
+    public ResultRsp<List<NetIpSecModel>> createIpSec(String ctrlUuid, String deviceId,
             List<NetIpSecModel> netIpSecModelList) throws ServiceException {
 
         if(StringUtils.isEmpty(ctrlUuid) || StringUtils.isEmpty(deviceId)) {
@@ -82,15 +89,25 @@ public class IpSecSvcImpl {
             SvcExcptUtil.throwBadRequestException("createIpSec: parameter error.");
         }
 
-        for(NetIpSecModel netIpSecModel : netIpSecModelList) {
-            // query from controller
-            ResultRsp<List<NetIpSecModel>> result =
-                    queryIpSecFromController(ctrlUuid, deviceId, netIpSecModel.getInterfaceName(), null);
+        DeviceParam deviceParam = DeviceCommParamReader.getDeviceCommParam(deviceId);
+        if(null == deviceParam) {
+            LOGGER.error("Current device does not exist");
+            throw new ServiceException("Current device does not exist");
+        }
 
-            List<NetIpSecModel> refreshedList =
-                    JsonUtil.fromJson(JsonUtil.toJson(result.getData()), new TypeReference<List<NetIpSecModel>>() {});
-            // generate seqNumber
-            generateIpSecSeqNumber(netIpSecModel, refreshedList);
+        for(NetIpSecModel netIpSecModel : netIpSecModelList) {
+
+            // Only need to process in ThinCPE mode
+            if(DeviceType.THINCPE.getName().equals(deviceParam.getDeviceType())) {
+                // query from controller
+                ResultRsp<List<NetIpSecModel>> result =
+                        queryIpSecFromController(ctrlUuid, deviceId, netIpSecModel.getInterfaceName(), null);
+
+                List<NetIpSecModel> refreshedList = JsonUtil.fromJson(JsonUtil.toJson(result.getData()),
+                        new TypeReference<List<NetIpSecModel>>() {});
+                // generate seqNumber
+                generateIpSecSeqNumber(netIpSecModel, refreshedList);
+            }
 
             // send to controller
             ResultRsp<NetIpSecModel> handleRsp = handleIpSecByController(ctrlUuid, deviceId, netIpSecModel, false);
@@ -114,7 +131,7 @@ public class IpSecSvcImpl {
      * @throws ServiceException When delete failed
      * @since SDNO 0.5
      */
-    public static ResultRsp<String> deleteIpSec(String ctrlUuid, String ipSecConnectionId) throws ServiceException {
+    public ResultRsp<String> deleteIpSec(String ctrlUuid, String ipSecConnectionId) throws ServiceException {
 
         // query from DB
         IpSecExternalIdMapping ipSecExternalIdMapping = IpSecDbOper.query(ipSecConnectionId);
@@ -128,32 +145,48 @@ public class IpSecSvcImpl {
         String seqNumber = ipSecExternalIdMapping.getSeqNumber();
 
         // query from controller
-        ResultRsp<List<NetIpSecModel>> result = queryIpSecFromController(ctrlUuid, deviceId, null, ipSecId);
+        NetIpSecModel netIpSecModel = new NetIpSecModel();
 
-        if(CollectionUtils.isEmpty(result.getData())) {
-            LOGGER.warn("This Ipsec data not exist in database!!");
-            // delete DB
-            IpSecDbOper.delete(ipSecConnectionId);
-            return new ResultRsp<String>(ErrorCode.OVERLAYVPN_SUCCESS);
+        DeviceParam deviceParam = DeviceCommParamReader.getDeviceCommParam(deviceId);
+        if(null == deviceParam) {
+            LOGGER.error("Current device does not exist");
+            throw new ServiceException("Current device does not exist");
         }
 
-        List<NetIpSecConn> netIpSecConnList = new ArrayList<NetIpSecConn>();
-        NetIpSecModel netIpSecModel = JsonUtil.fromJson(JsonUtil.toJson(result.getData().get(0)), NetIpSecModel.class);
-        for(NetIpSecConn netIpSecConn : netIpSecModel.getIpsecConnection()) {
-            if(seqNumber.equals(String.valueOf(netIpSecConn.getSeqNumber()))) {
-                netIpSecConnList.add(netIpSecConn);
-                break;
+        // Only need to process in ThinCPE mode
+        if(DeviceType.THINCPE.getName().equals(deviceParam.getDeviceType())) {
+            ResultRsp<List<NetIpSecModel>> result = queryIpSecFromController(ctrlUuid, deviceId, null, ipSecId);
+
+            if(CollectionUtils.isEmpty(result.getData())) {
+                LOGGER.warn("This Ipsec data not exist in database!!");
+                // delete DB
+                IpSecDbOper.delete(ipSecConnectionId);
+                return new ResultRsp<String>(ErrorCode.OVERLAYVPN_SUCCESS);
             }
-        }
 
-        if(CollectionUtils.isEmpty(netIpSecConnList)) {
-            LOGGER.warn("This Ipsec data not exist in controller!!");
-            // delete DB
-            IpSecDbOper.delete(ipSecConnectionId);
-            return new ResultRsp<String>(ErrorCode.OVERLAYVPN_SUCCESS);
-        }
+            List<NetIpSecConn> netIpSecConnList = new ArrayList<NetIpSecConn>();
+            netIpSecModel = JsonUtil.fromJson(JsonUtil.toJson(result.getData().get(0)), NetIpSecModel.class);
+            for(NetIpSecConn netIpSecConn : netIpSecModel.getIpsecConnection()) {
+                if(seqNumber.equals(String.valueOf(netIpSecConn.getSeqNumber()))) {
+                    netIpSecConnList.add(netIpSecConn);
+                    break;
+                }
+            }
 
-        netIpSecModel.setIpsecConnection(netIpSecConnList);
+            if(CollectionUtils.isEmpty(netIpSecConnList)) {
+                LOGGER.warn("This Ipsec data not exist in controller!!");
+                // delete DB
+                IpSecDbOper.delete(ipSecConnectionId);
+                return new ResultRsp<String>(ErrorCode.OVERLAYVPN_SUCCESS);
+            }
+
+            netIpSecModel.setIpsecConnection(netIpSecConnList);
+        } else if(DeviceType.VCPE.getName().equals(deviceParam.getDeviceType())) {
+            netIpSecModel.setUuid(ipSecId);
+            netIpSecModel.setIpsecConnection(Arrays.asList(new NetIpSecConn()));
+        } else {
+            LOGGER.error("UnKnown Device Type");
+        }
 
         // send to controller
         ResultRsp<NetIpSecModel> handleRsp = handleIpSecByController(ctrlUuid, deviceId, netIpSecModel, true);
@@ -167,36 +200,12 @@ public class IpSecSvcImpl {
         return new ResultRsp<String>(ErrorCode.OVERLAYVPN_SUCCESS);
     }
 
-    private static ResultRsp<List<NetIpSecModel>> queryIpSecFromController(String ctrlUuid, String deviceId,
+    private ResultRsp<List<NetIpSecModel>> queryIpSecFromController(String ctrlUuid, String deviceId,
             String interfaceName, String ipSecId) throws ServiceException {
 
         long beginTime = System.currentTimeMillis();
 
-        String queryUrl = MessageFormat.format(ControllerUrlConst.CONST_CONFIG_IPSEC, deviceId);
-        if(StringUtils.isNotEmpty(interfaceName)) {
-            StringBuilder strBuidler = new StringBuilder();
-            /*
-             * To fix Sonar Isssue,Avoid concatenating nonliterals in a StringBuffer/StringBuilder
-             * constructor or append().
-             */
-            String queryUrlStr = queryUrl + "?interfaceName=" + interfaceName;
-            strBuidler.append(queryUrlStr);
-            queryUrl = strBuidler.toString();
-        }
-
-        if(StringUtils.isNotEmpty(ipSecId)) {
-            StringBuilder strBuidler = new StringBuilder();
-            /*
-             * To fix Sonar Isssue,Avoid concatenating nonliterals in a StringBuffer/StringBuilder
-             * constructor or append().
-             */
-            String queryUrlStr = queryUrl + "?ipsecId=" + ipSecId;
-            strBuidler.append(queryUrlStr);
-            queryUrl = strBuidler.toString();
-        }
-
-        HTTPReturnMessage httpMsg = OverlayVpnDriverProxy.getInstance().sendGetMsg(queryUrl, null, ctrlUuid);
-        List<NetIpSecModel> data = new ControllerUtil<NetIpSecModel>().checkRsp(httpMsg);
+        List<NetIpSecModel> data = ipSecRestfulSbi.query(ctrlUuid, deviceId, interfaceName, ipSecId);
 
         ResultRsp<List<NetIpSecModel>> resultRsp = new ResultRsp<List<NetIpSecModel>>(ErrorCode.OVERLAYVPN_SUCCESS);
         resultRsp.setData(data);
@@ -206,7 +215,7 @@ public class IpSecSvcImpl {
         return resultRsp;
     }
 
-    private static void generateIpSecSeqNumber(NetIpSecModel ipsecModel, List<NetIpSecModel> acExistedNetIpSecModels)
+    private void generateIpSecSeqNumber(NetIpSecModel ipsecModel, List<NetIpSecModel> acExistedNetIpSecModels)
             throws ServiceException {
         if(CollectionUtils.isEmpty(acExistedNetIpSecModels)) {
             int index = 1;
@@ -234,7 +243,7 @@ public class IpSecSvcImpl {
         }
     }
 
-    private static ResultRsp<NetIpSecModel> handleIpSecByController(String ctrlUuid, String deviceId,
+    private ResultRsp<NetIpSecModel> handleIpSecByController(String ctrlUuid, String deviceId,
             NetIpSecModel netIpSecModel, boolean deleteMode) throws ServiceException {
 
         long beginTime = System.currentTimeMillis();
@@ -250,16 +259,23 @@ public class IpSecSvcImpl {
             }
         }
 
-        List<NetIpSecModel> ipsecModelList = new ArrayList<NetIpSecModel>(1);
-        ipsecModelList.add(netIpSecModel);
-        String ipSecUrl = MessageFormat.format(ControllerUrlConst.CONST_CONFIG_IPSEC, deviceId);
+        List<NetIpSecModel> data = null;
 
-        Map<String, List<NetIpSecModel>> ctrlInfoMap = new ConcurrentHashMap<String, List<NetIpSecModel>>();
-        ctrlInfoMap.put(CommConst.IP_SEC_LIST, ipsecModelList);
+        DeviceParam deviceParam = DeviceCommParamReader.getDeviceCommParam(deviceId);
+        if(null == deviceParam) {
+            LOGGER.error("Current device does not exist");
+            throw new ServiceException("Current device does not exist");
+        }
 
-        HTTPReturnMessage httpMsg =
-                OverlayVpnDriverProxy.getInstance().sendPutMsg(ipSecUrl, JsonUtil.toJson(ctrlInfoMap), ctrlUuid);
-        List<NetIpSecModel> data = new ControllerUtil<NetIpSecModel>().checkRsp(httpMsg);
+        if(DeviceType.THINCPE.getName().equals(deviceParam.getDeviceType())) {
+            data = ipSecRestfulSbi.update(ctrlUuid, deviceId, netIpSecModel);
+        } else if(DeviceType.VCPE.getName().equals(deviceParam.getDeviceType())) {
+            data = ipSecCliSbi.update(ctrlUuid, deviceId, netIpSecModel);
+        } else {
+            LOGGER.error("UnKnown Device Type");
+            throw new ServiceException("UnKnown Device Type");
+        }
+
         ResultRsp<NetIpSecModel> resultRsp = new ResultRsp<NetIpSecModel>(ErrorCode.OVERLAYVPN_SUCCESS);
         if(CollectionUtils.isNotEmpty(data)) {
             NetIpSecModel retNetIpSecModel = JsonUtil.fromJson(JsonUtil.toJson(data.get(0)), NetIpSecModel.class);
@@ -273,7 +289,7 @@ public class IpSecSvcImpl {
         return resultRsp;
     }
 
-    private static void insertData(String deviceId, List<NetIpSecModel> netIpSecModelList) throws ServiceException {
+    private void insertData(String deviceId, List<NetIpSecModel> netIpSecModelList) throws ServiceException {
         for(NetIpSecModel netIpSecModel : netIpSecModelList) {
             String externalId = netIpSecModel.getUuid();
 

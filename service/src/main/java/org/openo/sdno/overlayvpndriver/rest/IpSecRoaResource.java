@@ -43,10 +43,11 @@ import org.openo.sdno.overlayvpndriver.service.ipsec.IpSecSvcImpl;
 import org.openo.sdno.overlayvpndriver.util.convertmodel.IpSecModelConvert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * Restful interface class for IpSec. <br>
+ * Restful interface class for IpSec.<br>
  *
  * @author
  * @version SDNO 0.5 Jul 14, 2016
@@ -56,6 +57,13 @@ import org.springframework.stereotype.Service;
 public class IpSecRoaResource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IpSecRoaResource.class);
+
+    @Autowired
+    private IpSecSvcImpl ipSecSvc;
+
+    public void setIpSecSvc(IpSecSvcImpl ipSecSvc) {
+        this.ipSecSvc = ipSecSvc;
+    }
 
     /**
      * Create IPSec connection. <br>
@@ -97,8 +105,7 @@ public class IpSecRoaResource {
 
         // call the service method to perform create operation
         for(Map.Entry<String, List<NetIpSecModel>> entry : neIdToNetIpSecModelMap.entrySet()) {
-            ResultRsp<List<NetIpSecModel>> resultRsp =
-                    IpSecSvcImpl.createIpSec(ctrlUuid, entry.getKey(), entry.getValue());
+            ResultRsp<List<NetIpSecModel>> resultRsp = ipSecSvc.createIpSec(ctrlUuid, entry.getKey(), entry.getValue());
             if(!resultRsp.isSuccess()) {
                 LOGGER.error("createIpSec failed in service");
                 return new ResultRsp<List<NeIpSecConnection>>(resultRsp, neIpSecConnectionList);
@@ -137,7 +144,7 @@ public class IpSecRoaResource {
         }
 
         // call the service method to perform delete operation
-        ResultRsp<String> resultRsp = IpSecSvcImpl.deleteIpSec(ctrlUuid, ipSecConnectionId);
+        ResultRsp<String> resultRsp = ipSecSvc.deleteIpSec(ctrlUuid, ipSecConnectionId);
 
         LOGGER.info("deleteIpSec cost time = " + (System.currentTimeMillis() - beginTime));
 

@@ -39,8 +39,12 @@ import org.openo.sdno.util.http.HTTPReturnMessage;
 
 import mockit.Mock;
 import mockit.MockUp;
+import mockit.Mocked;
 
 public class VxLanSvcImplTest {
+
+    @Mocked
+    private VxLanSvcImpl vxLanSvc;
 
     @Test
     public void testCreateVxLan() throws ServiceException {
@@ -107,7 +111,7 @@ public class VxLanSvcImplTest {
         NetVxLanDeviceModel mo = new NetVxLanDeviceModel();
         List<NetVxLanDeviceModel> mos = new ArrayList<>();
         mos.add(mo);
-        ResultRsp<List<NetVxLanDeviceModel>> result = VxLanSvcImpl.createVxLan("123", "123", mos);
+        ResultRsp<List<NetVxLanDeviceModel>> result = vxLanSvc.createVxLan("123", "123", mos);
 
         assertTrue(result.isSuccess());
     }
@@ -119,7 +123,7 @@ public class VxLanSvcImplTest {
         mos.add(mo);
 
         try {
-            ResultRsp<List<NetVxLanDeviceModel>> result = VxLanSvcImpl.createVxLan("", "", mos);
+            ResultRsp<List<NetVxLanDeviceModel>> result = vxLanSvc.createVxLan("", "", mos);
         } catch(Exception e) {
             assertTrue(e instanceof ServiceException);
         }
@@ -132,7 +136,7 @@ public class VxLanSvcImplTest {
         List<NetVxLanDeviceModel> mos = new ArrayList<>();
         mos.add(mo);
         try {
-            ResultRsp<List<NetVxLanDeviceModel>> result = VxLanSvcImpl.createVxLan("123", "", mos);
+            ResultRsp<List<NetVxLanDeviceModel>> result = vxLanSvc.createVxLan("123", "", mos);
         } catch(Exception e) {
             assertTrue(e instanceof ServiceException);
         }

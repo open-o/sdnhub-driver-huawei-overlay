@@ -33,8 +33,12 @@ import org.openo.sdno.util.http.HTTPReturnMessage;
 
 import mockit.Mock;
 import mockit.MockUp;
+import mockit.Mocked;
 
 public class IpSecSvcImplTest {
+
+    @Mocked
+    private IpSecSvcImpl ipsecSvc;
 
     @Test
     public void testCreateIpSec() {
@@ -44,7 +48,6 @@ public class IpSecSvcImplTest {
             @Mock
             public IpSecExternalIdMapping query(String ipSecConnectionId) {
                 IpSecExternalIdMapping ipSecExtIdMapping = new IpSecExternalIdMapping("123", "1234", "234", "123");
-
                 return ipSecExtIdMapping;
             }
         };
@@ -62,7 +65,6 @@ public class IpSecSvcImplTest {
                 List<NetIpSecModel> mos = new ArrayList<>();
                 mos.add(mo);
                 return mos;
-
             }
         };
 
@@ -73,7 +75,7 @@ public class IpSecSvcImplTest {
                     new org.openo.sdno.overlayvpndriver.model.ipsec.adapter.NetIpSecModel();
             ipSecModel.setInterfaceName("interfaceName");
             netIpSecModelList.add(ipSecModel);
-            ResultRsp<List<NetIpSecModel>> result = IpSecSvcImpl.createIpSec("123", "1234", netIpSecModelList);
+            ResultRsp<List<NetIpSecModel>> result = ipsecSvc.createIpSec("123", "1234", netIpSecModelList);
             assertTrue(result.isSuccess());
         } catch(Exception e) {
         }
@@ -89,7 +91,7 @@ public class IpSecSvcImplTest {
             org.openo.sdno.overlayvpndriver.model.ipsec.adapter.NetIpSecModel ipSecModel =
                     new org.openo.sdno.overlayvpndriver.model.ipsec.adapter.NetIpSecModel();
             netIpSecModelList.add(ipSecModel);
-            IpSecSvcImpl.createIpSec("123", null, netIpSecModelList);
+            ipsecSvc.createIpSec("123", null, netIpSecModelList);
         } catch(ServiceException e) {
             assertTrue(true);
         }
@@ -104,7 +106,6 @@ public class IpSecSvcImplTest {
             @Mock
             public IpSecExternalIdMapping query(String ipSecConnectionId) {
                 IpSecExternalIdMapping ipSecExtIdMapping = new IpSecExternalIdMapping("123", "1234", "234", "123");
-
                 return ipSecExtIdMapping;
             }
         };
@@ -113,7 +114,6 @@ public class IpSecSvcImplTest {
 
             @Mock
             public List checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
-
                 List<NetIpSecConn> ipSecConnection = new ArrayList<NetIpSecConn>();
                 ipSecConnection.add(new NetIpSecConn());
                 NetIpSecModel mo = new NetIpSecModel();
@@ -125,10 +125,9 @@ public class IpSecSvcImplTest {
         };
 
         try {
-            ResultRsp<String> result = IpSecSvcImpl.deleteIpSec("123", "12345");
+            ResultRsp<String> result = ipsecSvc.deleteIpSec("123", "12345");
             assertTrue(result.isSuccess());
         } catch(Exception e) {
-
         }
 
     }
@@ -141,7 +140,6 @@ public class IpSecSvcImplTest {
             @Mock
             public IpSecExternalIdMapping query(String ipSecConnectionId) {
                 IpSecExternalIdMapping ipSecExtIdMapping = new IpSecExternalIdMapping("123", "1234", "234", "123");
-
                 return ipSecExtIdMapping;
             }
         };
@@ -150,19 +148,15 @@ public class IpSecSvcImplTest {
 
             @Mock
             public List checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
-
                 List<NetIpSecModel> mos = null;
-
                 return mos;
-
             }
         };
 
         try {
-            ResultRsp<String> result = IpSecSvcImpl.deleteIpSec("123", "12345");
+            ResultRsp<String> result = ipsecSvc.deleteIpSec("123", "12345");
             assertTrue(result.isSuccess());
         } catch(Exception e) {
-
         }
 
     }
@@ -175,13 +169,12 @@ public class IpSecSvcImplTest {
             @Mock
             public IpSecExternalIdMapping query(String ipSecConnectionId) {
                 IpSecExternalIdMapping ipSecExtIdMapping = null;
-
                 return ipSecExtIdMapping;
             }
         };
 
         try {
-            IpSecSvcImpl.deleteIpSec("123", "12345");
+            ipsecSvc.deleteIpSec("123", "12345");
         } catch(ServiceException e) {
             assertTrue(true);
         }

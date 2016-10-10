@@ -38,10 +38,11 @@ import org.openo.sdno.overlayvpn.util.check.UuidUtil;
 import org.openo.sdno.overlayvpndriver.service.wan.WanInfSvcImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * Restful interface class for WanInterface. <br>
+ * Restful interface class for WanInterface.<br>
  *
  * @author
  * @version SDNO 0.5 Jul 21, 2016
@@ -51,6 +52,13 @@ import org.springframework.stereotype.Service;
 public class WanInterfaceRoaResource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WanInterfaceRoaResource.class);
+
+    @Autowired
+    private WanInfSvcImpl wanInfSvc;
+
+    public void setWanInfSvc(WanInfSvcImpl wanInfSvc) {
+        this.wanInfSvc = wanInfSvc;
+    }
 
     /**
      * Query WanInterface information. <br>
@@ -86,7 +94,7 @@ public class WanInterfaceRoaResource {
         }
 
         // call the service method to perform query operation
-        List<WanSubInterface> wanSubInterfaceList = WanInfSvcImpl.queryWanInterface(ctrlUuid, deviceId, type);
+        List<WanSubInterface> wanSubInterfaceList = wanInfSvc.queryWanInterface(ctrlUuid, deviceId, type);
 
         LOGGER.info("queryWanInterface cost time = " + (System.currentTimeMillis() - beginTime));
 

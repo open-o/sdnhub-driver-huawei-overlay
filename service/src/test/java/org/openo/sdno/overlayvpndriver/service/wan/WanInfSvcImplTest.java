@@ -36,8 +36,12 @@ import org.openo.sdno.util.http.HTTPReturnMessage;
 
 import mockit.Mock;
 import mockit.MockUp;
+import mockit.Mocked;
 
 public class WanInfSvcImplTest {
+
+    @Mocked
+    private WanInfSvcImpl wanInfSvc;
 
     @Test
     public void testQueryWanInterface() throws ServiceException {
@@ -100,7 +104,7 @@ public class WanInfSvcImplTest {
 
         try {
             List<WanSubInterface> result =
-                    WanInfSvcImpl.queryWanInterface("123", "123", WanInterfaceUsedType.GRE.getName());
+                    wanInfSvc.queryWanInterface("123", "123", WanInterfaceUsedType.GRE.getName());
             assertTrue(result != null);
         } catch(Exception e) {
             assertTrue(true);
@@ -148,9 +152,7 @@ public class WanInfSvcImplTest {
                 mo.setCeLowVlan(123);
                 List<WanSubInterface> mos = new ArrayList<>();
                 mos.add(mo);
-
                 return mos;
-
             }
         };
 
@@ -169,7 +171,7 @@ public class WanInfSvcImplTest {
 
         try {
             List<WanSubInterface> result =
-                    WanInfSvcImpl.queryWanInterface("123", "123", WanInterfaceUsedType.GRE.getName());
+                    wanInfSvc.queryWanInterface("123", "123", WanInterfaceUsedType.GRE.getName());
             assertTrue(result != null);
         } catch(Exception e) {
             assertTrue(true);
@@ -225,7 +227,7 @@ public class WanInfSvcImplTest {
 
         try {
             List<WanSubInterface> result =
-                    WanInfSvcImpl.queryWanInterface("123", "123", WanInterfaceUsedType.ALL.getName());
+                    wanInfSvc.queryWanInterface("123", "123", WanInterfaceUsedType.ALL.getName());
             assertTrue(result != null);
         } catch(Exception e) {
             assertTrue(true);
@@ -235,8 +237,7 @@ public class WanInfSvcImplTest {
     @Test
     public void testQueryWanInterface_1() throws ServiceException {
         try {
-            List<WanSubInterface> result =
-                    WanInfSvcImpl.queryWanInterface("", "123", WanInterfaceUsedType.GRE.getName());
+            List<WanSubInterface> result = wanInfSvc.queryWanInterface("", "123", WanInterfaceUsedType.GRE.getName());
             assertTrue(result != null);
         } catch(Exception e) {
             assertTrue(e instanceof ServiceException);
@@ -246,8 +247,7 @@ public class WanInfSvcImplTest {
     @Test
     public void testQueryWanInterface_2() throws ServiceException {
         try {
-            List<WanSubInterface> result =
-                    WanInfSvcImpl.queryWanInterface("123", "", WanInterfaceUsedType.GRE.getName());
+            List<WanSubInterface> result = wanInfSvc.queryWanInterface("123", "", WanInterfaceUsedType.GRE.getName());
             assertTrue(result != null);
         } catch(Exception e) {
             assertTrue(e instanceof ServiceException);
@@ -258,7 +258,7 @@ public class WanInfSvcImplTest {
     public void testQueryWanInterface_3() throws ServiceException {
         try {
             List<WanSubInterface> result =
-                    WanInfSvcImpl.queryWanInterface("123", "123", WanInterfaceUsedType.GRE.getName());
+                    wanInfSvc.queryWanInterface("123", "123", WanInterfaceUsedType.GRE.getName());
             assertTrue(result != null);
         } catch(Exception e) {
             assertTrue(true);
@@ -302,17 +302,14 @@ public class WanInfSvcImplTest {
 
             @Mock
             public List checkRsp(HTTPReturnMessage httpMsg) throws ServiceException {
-
                 List<WanSubInterface> mos = new ArrayList<>();
-
                 return mos;
-
             }
         };
 
         try {
             List<WanSubInterface> result =
-                    WanInfSvcImpl.queryWanInterface("123", "123", WanInterfaceUsedType.GRE.getName());
+                    wanInfSvc.queryWanInterface("123", "123", WanInterfaceUsedType.GRE.getName());
             assertTrue(result != null);
         } catch(Exception e) {
             assertTrue(true);
@@ -360,14 +357,12 @@ public class WanInfSvcImplTest {
                 mo.setCeLowVlan(123);
                 List<WanSubInterface> mos = new ArrayList<>();
                 mos.add(mo);
-
                 return mos;
-
             }
         };
 
         try {
-            List<WanSubInterface> result = WanInfSvcImpl.queryWanInterface("123", "123", "");
+            List<WanSubInterface> result = wanInfSvc.queryWanInterface("123", "123", "");
             assertTrue(result != null);
         } catch(Exception e) {
             assertTrue(true);
@@ -415,14 +410,12 @@ public class WanInfSvcImplTest {
                 mo.setCeLowVlan(123);
                 List<WanSubInterface> mos = new ArrayList<>();
                 mos.add(mo);
-
                 return null;
-
             }
         };
 
         try {
-            List<WanSubInterface> result = WanInfSvcImpl.queryWanInterface("123", "123", "");
+            List<WanSubInterface> result = wanInfSvc.queryWanInterface("123", "123", "");
             assertTrue(result != null);
         } catch(Exception e) {
             assertTrue(true);

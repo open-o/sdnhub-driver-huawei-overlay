@@ -37,12 +37,14 @@ import org.openo.sdno.overlayvpn.result.SvcExcptUtil;
 import org.openo.sdno.overlayvpndriver.login.OverlayVpnDriverProxy;
 import org.openo.sdno.overlayvpndriver.model.port.NetAcDevicePort;
 import org.openo.sdno.overlayvpndriver.model.wan.NetWanSubInterfaceIp;
+import org.openo.sdno.overlayvpndriver.sbi.wan.WanSubInfSbi;
 import org.openo.sdno.overlayvpndriver.util.config.WanInterface;
 import org.openo.sdno.overlayvpndriver.util.consts.ControllerUrlConst;
 import org.openo.sdno.overlayvpndriver.util.controller.ControllerUtil;
 import org.openo.sdno.util.http.HTTPReturnMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -60,10 +62,11 @@ public class WanInfSvcImpl {
 
     private static final int QUERY_TIME = 10;
 
-    /**
-     * Private constructor added to fix sonar issue
-     */
-    private WanInfSvcImpl() {
+    @Autowired
+    private WanSubInfSbi wanSubInfSbi;
+
+    public void setWanSubInfSbi(WanSubInfSbi wanSubInfSbi) {
+        this.wanSubInfSbi = wanSubInfSbi;
     }
 
     /**
@@ -76,7 +79,7 @@ public class WanInfSvcImpl {
      * @throws ServiceException When query failed
      * @since SDNO 0.5
      */
-    public static List<WanSubInterface> queryWanInterface(String ctrlUuid, String deviceId, String type)
+    public List<WanSubInterface> queryWanInterface(String ctrlUuid, String deviceId, String type)
             throws ServiceException {
 
         // check parameters
@@ -153,22 +156,19 @@ public class WanInfSvcImpl {
         return wanSubInterfaceList;
     }
 
-    private static ResultRsp<List<WanSubInterface>> queryWanSubIf(String ctrlUuid, String deviceId)
-            throws ServiceException {
+    private ResultRsp<List<WanSubInterface>> queryWanSubIf(String ctrlUuid, String deviceId) throws ServiceException {
 
         long beginTime = System.currentTimeMillis();
 
-        String url = MessageFormat.format(ControllerUrlConst.QUERY_WAN_SUBINTERFACE, deviceId);
-        HTTPReturnMessage httpMsg = OverlayVpnDriverProxy.getInstance().sendGetMsg(url, null, ctrlUuid);
-        List<WanSubInterface> data = new ControllerUtil<WanSubInterface>().checkRsp(httpMsg);
+        List<WanSubInterface> data = wanSubInfSbi.query(ctrlUuid, deviceId);
 
         LOGGER.info("queryWanSubIf cost time = " + (System.currentTimeMillis() - beginTime));
 
         return new ResultRsp<List<WanSubInterface>>(ErrorCode.OVERLAYVPN_SUCCESS, data);
     }
 
-    private static ResultRsp<WanSubInterface> getWanSubInterfaceByEnableDhcp(String ctrlUuid, String deviceId,
-            String type) throws ServiceException {
+    private ResultRsp<WanSubInterface> getWanSubInterfaceByEnableDhcp(String ctrlUuid, String deviceId, String type)
+            throws ServiceException {
 
         long beginTime = System.currentTimeMillis();
 
@@ -209,7 +209,7 @@ public class WanInfSvcImpl {
         return convertPortToWanSub(queryPort);
     }
 
-    private static List<NetAcDevicePort> queryPorts(List<String> interfaceNameList, String deviceId, String ctrlUuid)
+    private List<NetAcDevicePort> queryPorts(List<String> interfaceNameList, String deviceId, String ctrlUuid)
             throws ServiceException {
 
         long beginTime = System.currentTimeMillis();
@@ -237,8 +237,7 @@ public class WanInfSvcImpl {
         return data;
     }
 
-    private static ResultRsp<WanSubInterface> convertPortToWanSub(NetAcDevicePort netAcDevicePort)
-            throws ServiceException {
+    private ResultRsp<WanSubInterface> convertPortToWanSub(NetAcDevicePort netAcDevicePort) throws ServiceException {
 
         WanSubInterface wanSubInterface = new WanSubInterface();
         wanSubInterface.setName(netAcDevicePort.getName());
@@ -252,7 +251,7 @@ public class WanInfSvcImpl {
         return new ResultRsp<WanSubInterface>(ErrorCode.OVERLAYVPN_SUCCESS, wanSubInterface);
     }
 
-    private static void enableDhcp(String ctrlUuid, String deviceId, String type) throws ServiceException {
+    private void enableDhcp(String ctrlUuid, String deviceId, String type) throws ServiceException {
 
         long beginTime = System.currentTimeMillis();
 
@@ -274,7 +273,7 @@ public class WanInfSvcImpl {
         LOGGER.info("enableDhcp cost time = " + (System.currentTimeMillis() - beginTime));
     }
 
-    private static void sleep(long time) throws ServiceException {
+    private void sleep(long time) throws ServiceException {
         try {
             Thread.sleep(time);
         } catch(InterruptedException e) {

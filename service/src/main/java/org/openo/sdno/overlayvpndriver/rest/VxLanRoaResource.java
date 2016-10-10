@@ -50,10 +50,11 @@ import org.openo.sdno.overlayvpndriver.service.wan.WanInfSvcImpl;
 import org.openo.sdno.overlayvpndriver.util.convertmodel.VxLanModelConvert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * Restful interface class for VxLan. <br>
+ * Restful interface class for VxLan.<br>
  *
  * @author
  * @version SDNO 0.5 Jul 19, 2016
@@ -64,8 +65,22 @@ public class VxLanRoaResource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(VxLanRoaResource.class);
 
+    @Autowired
+    private WanInfSvcImpl wanInfSvc;
+
+    @Autowired
+    private VxLanSvcImpl vxLanSvc;
+
+    public void setWanInfSvc(WanInfSvcImpl wanInfSvc) {
+        this.wanInfSvc = wanInfSvc;
+    }
+
+    public void setVxLanSvc(VxLanSvcImpl vxLanSvc) {
+        this.vxLanSvc = vxLanSvc;
+    }
+
     /**
-     * Query vtep information. <br>
+     * Query Vtep information. <br>
      *
      * @param ctrlUuid Controller UUID
      * @param deviceId The device id
@@ -83,7 +98,7 @@ public class VxLanRoaResource {
         long beginTime = System.currentTimeMillis();
         String ctrlUuid = ctrlUuidParam.substring(ctrlUuidParam.indexOf('=') + 1);
 
-        // check ctrlUuid
+        // check controller uuid
         if(!UuidUtil.validate(ctrlUuid)) {
             LOGGER.error("queryVtep failed, ctrlUuid is invalid.");
             SvcExcptUtil.throwBadRequestException("queryVtep failed, ctrlUuid is invalid");
@@ -94,7 +109,7 @@ public class VxLanRoaResource {
 
         // get WanSubInterface
         List<WanSubInterface> wanSubInterfaceList =
-                WanInfSvcImpl.queryWanInterface(ctrlUuid, deviceId, WanInterfaceUsedType.VXLAN.getName());
+                wanInfSvc.queryWanInterface(ctrlUuid, deviceId, WanInterfaceUsedType.VXLAN.getName());
         if(CollectionUtils.isEmpty(wanSubInterfaceList)
                 || StringUtils.isEmpty(wanSubInterfaceList.get(0).getIpAddress())) {
             return new ResultRsp<NeVtep>(ErrorCode.OVERLAYVPN_FAILED, "queryVtep failed, can't get WanSubInterface",
@@ -109,7 +124,7 @@ public class VxLanRoaResource {
     }
 
     /**
-     * Create VxLan instance. <br>
+     * Create VxLan instance.<br>
      *
      * @param request HTTP request
      * @param ctrlUuid Controller UUID
@@ -158,7 +173,7 @@ public class VxLanRoaResource {
         // call the service method to perform create operation
         for(Map.Entry<String, List<NetVxLanDeviceModel>> entry : vxlanDeviceModelMap.entrySet()) {
             ResultRsp<List<NetVxLanDeviceModel>> resultRsp =
-                    VxLanSvcImpl.createVxLan(ctrlUuid, entry.getKey(), entry.getValue());
+                    vxLanSvc.createVxLan(ctrlUuid, entry.getKey(), entry.getValue());
             if(!resultRsp.isSuccess()) {
                 LOGGER.error("createVxlan failed in service");
                 return new ResultRsp<List<NeVxlanInstance>>(resultRsp, vxLanInstanceList);
@@ -171,7 +186,7 @@ public class VxLanRoaResource {
     }
 
     /**
-     * Delete VxLan instance. <br>
+     * Delete VxLan instance.<br>
      * 
      * @param request HTTP request
      * @param ctrlUuid Controller UUID
@@ -197,7 +212,7 @@ public class VxLanRoaResource {
         }
 
         // call the service method to perform delete operation
-        ResultRsp<String> resultRsp = VxLanSvcImpl.deleteVxLan(ctrlUuid, instanceId);
+        ResultRsp<String> resultRsp = vxLanSvc.deleteVxLan(ctrlUuid, instanceId);
 
         LOGGER.info("deleteVxLan cost time = " + (System.currentTimeMillis() - beginTime));
 

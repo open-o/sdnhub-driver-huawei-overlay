@@ -16,34 +16,30 @@
 
 package org.openo.sdno.overlayvpndriver.service.vxlan;
 
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.type.TypeReference;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
 import org.openo.sdno.framework.container.util.JsonUtil;
-import org.openo.sdno.overlayvpn.consts.CommConst;
 import org.openo.sdno.overlayvpn.errorcode.ErrorCode;
 import org.openo.sdno.overlayvpn.result.ResultRsp;
 import org.openo.sdno.overlayvpn.result.SvcExcptUtil;
-import org.openo.sdno.overlayvpndriver.login.OverlayVpnDriverProxy;
 import org.openo.sdno.overlayvpndriver.model.vxlan.adapter.NetVxLanDeviceModel;
 import org.openo.sdno.overlayvpndriver.model.vxlan.db.VxLanExternalIdMapping;
-import org.openo.sdno.overlayvpndriver.util.consts.ControllerUrlConst;
-import org.openo.sdno.overlayvpndriver.util.controller.ControllerUtil;
+import org.openo.sdno.overlayvpndriver.sbi.vxlan.VxLANCliSbi;
+import org.openo.sdno.overlayvpndriver.sbi.vxlan.VxLANRestfulSbi;
+import org.openo.sdno.overlayvpndriver.util.config.DeviceCommParamReader;
+import org.openo.sdno.overlayvpndriver.util.config.DeviceParam;
+import org.openo.sdno.overlayvpndriver.util.config.DeviceType;
 import org.openo.sdno.overlayvpndriver.util.db.VxLanDbOper;
-import org.openo.sdno.util.http.HTTPReturnMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * VxLan service implementation. <br>
+ * VxLan service implementation.<br>
  * 
  * @author
  * @version SDNO 0.5 Jun 16, 2016
@@ -53,12 +49,18 @@ public class VxLanSvcImpl {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(VxLanSvcImpl.class);
 
-    private static final String DELETE_VXLAN_PARAMETER = "ids";
+    @Autowired
+    private VxLANRestfulSbi vxLanRestfulSbi;
 
-    /**
-     * Private constructor added to fix sonar issue
-     */
-    private VxLanSvcImpl() {
+    @Autowired
+    private VxLANCliSbi vxLanCliSbi;
+
+    public void setVxLanRestfulSbi(VxLANRestfulSbi vxLanRestfulSbi) {
+        this.vxLanRestfulSbi = vxLanRestfulSbi;
+    }
+
+    public void setVxLanCliSbi(VxLANCliSbi vxLanCliSbi) {
+        this.vxLanCliSbi = vxLanCliSbi;
     }
 
     /**
@@ -71,7 +73,7 @@ public class VxLanSvcImpl {
      * @throws ServiceException When create failed
      * @since SDNO 0.5
      */
-    public static ResultRsp<List<NetVxLanDeviceModel>> createVxLan(String ctrlUuid, String deviceId,
+    public ResultRsp<List<NetVxLanDeviceModel>> createVxLan(String ctrlUuid, String deviceId,
             List<NetVxLanDeviceModel> netVxLanDeviceModelList) throws ServiceException {
 
         long beginTime = System.currentTimeMillis();
@@ -83,17 +85,27 @@ public class VxLanSvcImpl {
         }
 
         // send to controller
-        String url = MessageFormat.format(ControllerUrlConst.CONST_CONFIG_VXLAN, deviceId);
-        Map<String, List<NetVxLanDeviceModel>> ctrlInfoMap = new ConcurrentHashMap<String, List<NetVxLanDeviceModel>>();
-        ctrlInfoMap.put(CommConst.VXLAN_LIST, netVxLanDeviceModelList);
-        HTTPReturnMessage httpMsg =
-                OverlayVpnDriverProxy.getInstance().sendPutMsg(url, JsonUtil.toJson(ctrlInfoMap), ctrlUuid);
-        List<NetVxLanDeviceModel> data = new ControllerUtil<NetVxLanDeviceModel>().checkRsp(httpMsg);
+        List<NetVxLanDeviceModel> data = null;
+
+        DeviceParam deviceParam = DeviceCommParamReader.getDeviceCommParam(deviceId);
+        if(null == deviceParam) {
+            LOGGER.error("Current device does not exist");
+            throw new ServiceException("Current device does not exist");
+        }
+
+        if(DeviceType.THINCPE.getName().equals(deviceParam.getDeviceType())) {
+            data = vxLanRestfulSbi.create(ctrlUuid, deviceId, netVxLanDeviceModelList);
+        } else if(DeviceType.VCPE.getName().equals(deviceParam.getDeviceType())) {
+            data = vxLanCliSbi.create(ctrlUuid, deviceId, netVxLanDeviceModelList);
+        } else {
+            LOGGER.error("UnKnown Device Type");
+            throw new ServiceException("UnKnown Device Type");
+        }
 
         // store to DB
         insertData(deviceId, data);
 
-        LOGGER.info("createVxLan cost time = " + (System.currentTimeMillis() - beginTime));
+        LOGGER.info("Create VxLan cost time = " + (System.currentTimeMillis() - beginTime));
 
         return new ResultRsp<List<NetVxLanDeviceModel>>(ErrorCode.OVERLAYVPN_SUCCESS, netVxLanDeviceModelList);
     }
@@ -107,7 +119,7 @@ public class VxLanSvcImpl {
      * @throws ServiceException When delete failed
      * @since SDNO 0.5
      */
-    public static ResultRsp<String> deleteVxLan(String ctrlUuid, String instanceId) throws ServiceException {
+    public ResultRsp<String> deleteVxLan(String ctrlUuid, String instanceId) throws ServiceException {
 
         long beginTime = System.currentTimeMillis();
 
@@ -117,19 +129,25 @@ public class VxLanSvcImpl {
             return new ResultRsp<String>(ErrorCode.OVERLAYVPN_SUCCESS);
         }
 
-        // send to controller
         String deviceId = vxLanExternalIdMapping.getDeviceId();
         String vxLanId = vxLanExternalIdMapping.getExternalId();
 
-        List<String> idList = new ArrayList<>();
-        idList.add(vxLanId);
+        // send to controller
 
-        String url = MessageFormat.format(ControllerUrlConst.CONST_CONFIG_VXLAN, deviceId);
-        Map<String, List<String>> crtInfoMap = new HashMap<>();
-        crtInfoMap.put(DELETE_VXLAN_PARAMETER, idList);
-        HTTPReturnMessage httpMsg =
-                OverlayVpnDriverProxy.getInstance().sendDeleteMsg(url, JsonUtil.toJson(crtInfoMap), ctrlUuid);
-        new ControllerUtil<NetVxLanDeviceModel>().checkRsp(httpMsg);
+        DeviceParam deviceParam = DeviceCommParamReader.getDeviceCommParam(deviceId);
+        if(null == deviceParam) {
+            LOGGER.error("Current device does not exist");
+            throw new ServiceException("Current device does not exist");
+        }
+
+        if(DeviceType.THINCPE.getName().equals(deviceParam.getDeviceType())) {
+            vxLanRestfulSbi.delete(ctrlUuid, deviceId, vxLanId);
+        } else if(DeviceType.VCPE.getName().equals(deviceParam.getDeviceType())) {
+            vxLanCliSbi.delete(ctrlUuid, deviceId, vxLanId);
+        } else {
+            LOGGER.error("UnKnown Device Type");
+            throw new ServiceException("UnKnown Device Type");
+        }
 
         // delete DB
         VxLanDbOper.delete(instanceId);
@@ -139,14 +157,13 @@ public class VxLanSvcImpl {
         return new ResultRsp<String>(ErrorCode.OVERLAYVPN_SUCCESS);
     }
 
-    private static void insertData(String deviceId, List<NetVxLanDeviceModel> netVxLanDeviceModelList)
+    private void insertData(String deviceId, List<NetVxLanDeviceModel> netVxLanDeviceModelList)
             throws ServiceException {
         List<NetVxLanDeviceModel> refreshedList = JsonUtil.fromJson(JsonUtil.toJson(netVxLanDeviceModelList),
                 new TypeReference<List<NetVxLanDeviceModel>>() {});
         for(NetVxLanDeviceModel netVxLanDeviceModel : refreshedList) {
             String externalId = netVxLanDeviceModel.getUuid();
             String vxLanInstanceId = netVxLanDeviceModel.getName();
-
             VxLanExternalIdMapping vxLanExternalIdMapping =
                     new VxLanExternalIdMapping(vxLanInstanceId, externalId, deviceId);
             vxLanExternalIdMapping.allocateUuid();

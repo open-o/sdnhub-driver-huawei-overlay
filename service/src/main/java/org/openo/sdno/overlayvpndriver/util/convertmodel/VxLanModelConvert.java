@@ -82,7 +82,6 @@ public class VxLanModelConvert {
 
     private static NetVxLanDeviceModel convertToVxlanDeviceModel(NeVxlanInstance vxLanInstance) {
         NetVxLanDeviceModel netVxLanDeviceModel = new NetVxLanDeviceModel();
-
         UuidAllocUtil.allocUuid(netVxLanDeviceModel);
         netVxLanDeviceModel.setName(vxLanInstance.getUuid());
         netVxLanDeviceModel.setLocalAddress(vxLanInstance.getVxlanTunnelList().get(0).getSourceAddress());

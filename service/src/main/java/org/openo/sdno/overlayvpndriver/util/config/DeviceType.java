@@ -14,54 +14,43 @@
  * limitations under the License.
  */
 
-package org.openo.sdno.overlayvpndriver.model.vxlan.adapter;
+package org.openo.sdno.overlayvpndriver.util.config;
 
 /**
- * Model class for port vlan in adapter layer. <br>
+ * Class of Device Type.<br>
  * 
  * @author
- * @version SDNO 0.5 Jul 20, 2016
+ * @version SDNO 0.5 2016-10-11
  */
-public class NetPortVlan {
+public enum DeviceType {
+    THINCPE(0), VCPE(1);
 
-    private String port;
-
-    private int vlan;
+    private int value;
 
     /**
      * Constructor<br>
      * 
      * @since SDNO 0.5
+     * @param value device type
      */
-    public NetPortVlan() {
-        // Empty Constructor
+    DeviceType(int value) {
+        this.value = value;
     }
 
     /**
-     * Constructor<br>
+     * Get name of device type.<br>
      * 
-     * @param port port number
-     * @param vlan VLAN Id
+     * @return name of device type
      * @since SDNO 0.5
      */
-    public NetPortVlan(String port, int vlan) {
-        this.port = port;
-        this.vlan = vlan;
-    }
-
-    public String getPort() {
-        return port;
-    }
-
-    public void setPort(String port) {
-        this.port = port;
-    }
-
-    public int getVlan() {
-        return vlan;
-    }
-
-    public void setVlan(int vlan) {
-        this.vlan = vlan;
+    public String getName() {
+        switch(value) {
+            case 0:
+                return "ThinCPE";
+            case 1:
+                return "vCPE";
+            default:
+                return "";
+        }
     }
 }
