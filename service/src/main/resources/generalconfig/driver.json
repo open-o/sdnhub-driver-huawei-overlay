@@ -1,18 +1,43 @@
 {
- "driverInfo": {
-    "driverName": "sdnl3vpndriver-1",
-    "ip": "127.0.0.1",
-    "port": "8080",
-    "protocol": "http",
-    "services": [           
-               {                 
-                    "service_url":"/openoapi/sbi-l3vpn/v1",                              
-                "support_sys":[                   
-                                     {   "type":"Agile Controller-WAN", 
-                                         "version":"V100R002" 
-                                     }
-                             ]      
-                 } 
-              ]
-         }
+    "driverInfo":
+    {
+        "driverName": "sdnoverlayvpndriver-0-1",
+        "instanceID": "sdnoverlayvpndriver-0-1",
+        "ip": "127.0.0.1",
+        "port": "8536",
+        "protocol": "http",
+        "services":
+        [
+            {
+                "service_url": "/openoapi/sbi-vxlan/v1",
+                "support_sys":
+                [
+                    {
+                        "type": "Agile Controller",
+                        "version": "V200R002C00"
+                     }
+                ]
+            },
+            {
+                "service_url": "/openoapi/sbi-ipsec/v1",
+                "support_sys":
+                [
+                    {
+                        "type": "Agile Controller",
+                        "version": "V200R002C00"
+                    }
+                ]
+            },
+            {
+                "service_url": "/openoapi/sbi-waninterface/v1",
+                "support_sys":
+                [
+                    {
+                        "type": "Agile Controller",
+                        "version": "V200R002C00"
+                    }
+                ]
+            }
+        ]
+    }
 }

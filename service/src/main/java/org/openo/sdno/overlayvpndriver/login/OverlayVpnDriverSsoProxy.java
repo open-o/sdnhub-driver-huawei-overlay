@@ -59,7 +59,6 @@ import org.apache.http.util.EntityUtils;
 import org.openo.sdno.exception.ErrorCode;
 import org.openo.sdno.framework.container.util.JsonUtil;
 import org.openo.sdno.overlayvpndriver.util.consts.ControllerUrlConst;
-import org.openo.sdno.ssl.EncryptionUtil;
 import org.openo.sdno.util.http.HTTPReturnMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,9 +92,11 @@ public class OverlayVpnDriverSsoProxy {
 
     private String acLoginPassword = null;
 
-    private static Map<String, OverlayVpnDriverSsoProxy> instanceCache = new HashMap<String, OverlayVpnDriverSsoProxy>();
+    private static Map<String, OverlayVpnDriverSsoProxy> instanceCache =
+            new HashMap<String, OverlayVpnDriverSsoProxy>();
 
-    private OverlayVpnDriverSsoProxy(final String acIp, final String acPort, final String acLoginName, String acLoginPassword) {
+    private OverlayVpnDriverSsoProxy(final String acIp, final String acPort, final String acLoginName,
+            String acLoginPassword) {
         this.acIp = acIp;
         this.acPort = acPort;
         this.acLoginName = acLoginName;
@@ -149,7 +150,8 @@ public class OverlayVpnDriverSsoProxy {
             if(instanceCache.get(acSsoProxyUniqueId) != null) {
                 return instanceCache.get(acSsoProxyUniqueId);
             } else {
-                OverlayVpnDriverSsoProxy proxy = new OverlayVpnDriverSsoProxy(acIp, acPort, acLoginName, acLoginPassword);
+                OverlayVpnDriverSsoProxy proxy =
+                        new OverlayVpnDriverSsoProxy(acIp, acPort, acLoginName, acLoginPassword);
                 instanceCache.put(acSsoProxyUniqueId, proxy);
                 return proxy;
             }
@@ -190,10 +192,7 @@ public class OverlayVpnDriverSsoProxy {
             loginPost.addHeader("Accept", APPLICATION_JSON);
             List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
             urlParameters.add(new BasicNameValuePair("username", acLoginName));
-
-            char[] passwd = EncryptionUtil.decode(acLoginPassword.toCharArray());
-            urlParameters.add(new BasicNameValuePair("password", new String(passwd)));
-            EncryptionUtil.clear(passwd);
+            urlParameters.add(new BasicNameValuePair("password", acLoginPassword));
 
             if(ErrorCode.SUCCESS != json.getInt("errCode")) {
                 JSONObject data = json.getJSONObject("data");
@@ -261,10 +260,10 @@ public class OverlayVpnDriverSsoProxy {
     }
 
     /**
-     * <br>
+     * Check whether client login to controller.<br>
      * 
      * @param url URL for the login
-     * @return
+     * @return true if client login to controller
      * @since SDNO 0.5
      */
     @SuppressWarnings("deprecation")
@@ -283,7 +282,6 @@ public class OverlayVpnDriverSsoProxy {
             String respContent = null;
             if(resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
                 respContent = EntityUtils.toString(resp.getEntity(), HTTP.UTF_8);
-
                 LOGGER.info("IsLogin Response: " + respContent);
                 this.release(resp);
                 return true;
