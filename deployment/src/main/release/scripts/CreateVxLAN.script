@@ -1,0 +1,20 @@
+
+## Create VxLAN Connection
+
+## Enter System View
+system-view
+
+## Create bridge domain
+bridge-domain  ${Bd_Id}
+vxlan vni ${Vni}
+l2 binding vlan ${Vlan}
+quit
+
+## Config Nve Interface
+interface Nve 1
+source ${LocalAddress}
+vni ${Vni} head-end peer-list ${PeerAddress}
+quit
+
+## Exit System View
+quit

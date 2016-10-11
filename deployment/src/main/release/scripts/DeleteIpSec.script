@@ -1,0 +1,25 @@
+
+## Delete  IpSec Connection
+
+## Enter System View
+system-view
+
+## DeApply IpSec to Interface
+interface GigabitEthernet0/0/2
+undo ipsec policy Policy_${IpSecName}
+quit
+
+## Delete IpSec Policy
+undo ipsec policy Policy_${IpSecName}
+
+## Delete IpSec Proposal
+undo ipsec proposal Proposal_${IpSecName}
+
+## Delete Ike Peer
+undo ike peer Ike_Peer_${IpSecName}
+
+## Delete Acl Rule
+undo acl ${Acl_Number}
+
+## Exit System View
+quit

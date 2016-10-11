@@ -1,0 +1,38 @@
+
+## Create  IpSec Connection
+
+## Enter System View
+system-view
+
+## Create Acl Rule
+acl number ${Acl_Number}
+rule ${Acl_Number} permit ip source any
+quit
+
+## Create IpSec Proposal
+ipsec proposal Proposal_${IpSecName}
+esp authentication-algorithm ${Auth_Algorithm}
+esp encryption-algorithm ${Encrypt_Algorithm}
+quit
+
+## Create Ike Peer
+ike peer Ike_Peer_${IpSecName}
+pre-shared-key cipher huawei
+remote-address ${PeerAddress}
+quit
+
+## Create IpSec Policy
+ipsec policy Policy_${IpSecName}  1 isakmp
+security acl ${Acl_Number}
+proposal Proposal_${IpSecName}
+ike-peer Ike_Peer_${IpSecName}
+quit
+
+## Apply IpSec to Interface
+interface GigabitEthernet0/0/2
+undo ipsec policy
+ipsec policy Policy_${IpSecName}
+quit
+
+## Exit System View
+quit

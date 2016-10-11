@@ -1,0 +1,16 @@
+[
+    {
+        "devicetype": "ThinCPE",
+        "ip": "172.19.37.223",
+        "port": "22",
+        "username": "admin",
+        "password": "User@123"
+    },
+    {
+        "devicetype": "vCPE",
+        "ip": "172.19.46.4",
+        "port": "22",
+        "username": "admin",
+        "password": "User@123"
+    }
+]

@@ -1,0 +1,16 @@
+
+## Delete VxLAN Connection
+
+## Enter System View
+system-view
+
+## Delete bridge domain
+undo bridge-domain  ${Bd_Id}
+
+## DeConfig Nve Interface
+interface Nve 1
+undo vni ${Vni}
+quit
+
+## Exit System View
+quit
