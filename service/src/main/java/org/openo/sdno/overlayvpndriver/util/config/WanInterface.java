@@ -19,11 +19,9 @@ package org.openo.sdno.overlayvpndriver.util.config;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.IOUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
 import org.slf4j.Logger;
@@ -81,12 +79,11 @@ public class WanInterface {
 
     private static List<Map<String, String>> getJsonFileData(String domain) throws ServiceException {
         try {
-            String content = IOUtils.toString(
-                    WanInterface.class.getClassLoader().getResourceAsStream("/generalconfig/config.json"));
             ObjectMapper mapper = new ObjectMapper();
-            return mapper.readValue(content.getBytes(), List.class);
+            byte[] bytes = Files.readAllBytes(Paths.get("generalconfig/config.json"));
+            return mapper.readValue(bytes, List.class);
         } catch(IOException e) {
-            LOGGER.warn("Get json file failed!"+e);
+            LOGGER.warn("Get json file failed!" + e);
             throw new ServiceException("Get config.json Filed");
         }
     }

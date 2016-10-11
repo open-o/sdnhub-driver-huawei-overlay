@@ -1,40 +1,35 @@
 {
-    "driverInfo":
-    {
+    "driverInfo": {
         "driverName": "sdnoverlayvpndriver-0-1",
         "instanceID": "sdnoverlayvpndriver-0-1",
-        "ip": "127.0.0.1",
+        "ip": "",
         "port": "8536",
         "protocol": "http",
-        "services":
-        [
+        "services": [
             {
                 "service_url": "/openoapi/sbi-vxlan/v1",
-                "support_sys":
-                [
+                "support_sys": [
                     {
-                        "type": "Agile Controller",
-                        "version": "V200R002C00"
-                     }
+                        "type": "Agile Controller-BRANCH",
+                        "version": "V200R002"
+                    }
                 ]
             },
             {
                 "service_url": "/openoapi/sbi-ipsec/v1",
-                "support_sys":
-                [
+                "support_sys": [
                     {
-                        "type": "Agile Controller",
-                        "version": "V200R002C00"
+                        "type": "Agile Controller-BRANCH",
+                        "version": "V200R002"
                     }
                 ]
             },
             {
                 "service_url": "/openoapi/sbi-waninterface/v1",
-                "support_sys":
-                [
+                "support_sys": [
                     {
-                        "type": "Agile Controller",
-                        "version": "V200R002C00"
+                        "type": "Agile Controller-BRANCH",
+                        "version": "V200R002"
                     }
                 ]
             }

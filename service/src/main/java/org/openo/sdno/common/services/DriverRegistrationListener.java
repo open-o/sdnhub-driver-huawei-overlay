@@ -16,7 +16,12 @@
 
 package org.openo.sdno.common.services;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -26,7 +31,8 @@ import java.util.concurrent.TimeUnit;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
 import org.openo.baseservice.roa.util.restclient.RestfulParametes;
 import org.openo.baseservice.roa.util.restclient.RestfulResponse;
@@ -42,11 +48,23 @@ public class DriverRegistrationListener implements ServletContextListener {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DriverRegistrationListener.class);
 
-    private static final int DRIVER_REGISTRATION_DELAY = 60;
+    private static final String DRIVER_MANAGER_URL = "/openoapi/drivermgr/v1/drivers";
 
-    private static final int DRIVER_REGISTRATION_INITIAL_DELAY = 5;
+    private static final String DM_REGISTION_FILE = "generalconfig/driver.json";
+
+    private static final String DRIVER_INFO_KEY = "driverInfo";
+
+    private static final String INSTANCE_ID_KEY = "instanceID";
+
+    private static final String IP_KEY = "ip";
 
     private String instanceId = "sdnoverlayvpndriver-0-1";
+
+    private boolean bRegistionSuccess = false;
+
+    private static final int DRIVER_REGISTRATION_DELAY = 30;
+
+    private static final int DRIVER_REGISTRATION_INITIAL_DELAY = 5;
 
     private ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
 
@@ -54,22 +72,28 @@ public class DriverRegistrationListener implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent arg0) {
+        if(!bRegistionSuccess) {
+            LOGGER.info("Stop unregister as has not registered success");
+            return;
+        }
 
-        String uri = DriverMgrConst.DRIVER_MANAGER_URL + "/" + DriverMgrConst.OVERLAYVPN_DRIVER_INSTANCEID;
+        bRegistionSuccess = false;
+
+        String url = DriverMgrConst.DRIVER_MANAGER_URL + "/" + instanceId;
+
+        LOGGER.info("Start unregister to driver manager, url: " + url);
 
         RestfulParametes restParametes = new RestfulParametes();
 
         try {
             restParametes.putHttpContextHeader(HttpConst.CONTEXT_TYPE_HEADER, HttpConst.MEDIA_TYPE_JSON);
-            RestfulResponse response = RestfulProxy.delete(uri, restParametes);
+            RestfulResponse response = RestfulProxy.delete(url, restParametes);
 
             if(HttpCode.isSucess(response.getStatus())) {
                 LOGGER.info("Driver successfully un-registration with driver manager");
-
             } else {
                 LOGGER.warn("Driver failed un-registration with driver manager");
             }
-
         } catch(Exception e) {
             LOGGER.warn("Driver failed unregistered from driver manager", e);
         }
@@ -79,32 +103,44 @@ public class DriverRegistrationListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent arg0) {
-
-        String driverDetails = null;
-
-        RestfulParametes restParametes = new RestfulParametes();
-        restParametes.putHttpContextHeader("Content-Type", "application/json;charset=UTF-8");
-
-        try {
-            driverDetails = IOUtils.toString(this.getClass().getResourceAsStream("/generalconfig/driver.json"));
-        } catch(IOException e) {
-            LOGGER.info("Driver registration failed with driver manager : {0}", e.toString());
+        File file = new File(DM_REGISTION_FILE);
+        if(!file.exists()) {
+            LOGGER.info("Stop registering as can't find driver manager registion file");
             return;
         }
 
-        Map driverDetailsMap = JsonUtil.fromJson(driverDetails, Map.class);
-        Map<String, String> driverInfo = (Map)driverDetailsMap.get(DriverMgrConst.DRIVER_INFO_KEY);
-        driverInfo.put(DriverMgrConst.INSTANCE_ID_KEY, this.instanceId);
+        Map<?, ?> dmRegistionBodyMap = null;
 
-        restParametes.setRawData(JsonUtil.toJson(driverDetailsMap));
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            byte[] bytes = Files.readAllBytes(Paths.get(DM_REGISTION_FILE));
+            dmRegistionBodyMap = mapper.readValue(bytes, Map.class);
+        } catch(IOException e) {
+            LOGGER.error("Failed to get driver manager registration body, " + e);
+            return;
+        }
+
+        @SuppressWarnings("unchecked")
+        Map<String, String> driverInfoMap = (Map<String, String>)dmRegistionBodyMap.get(DRIVER_INFO_KEY);
+
+        instanceId = driverInfoMap.get(INSTANCE_ID_KEY);
+        replaceLocalIp(driverInfoMap);
+
+        RestfulParametes restParametes = new RestfulParametes();
+        restParametes.putHttpContextHeader("Content-Type", "application/json;charset=UTF-8");
+        restParametes.setRawData(JsonUtil.toJson(dmRegistionBodyMap));
+
+        LOGGER.error("Registering body: " + JsonUtil.toJson(dmRegistionBodyMap));
 
         // If the registration is unsuccessful re-attempt the driver registration.
         // If the registration is successful then finish the task by cancelling it.
         scheduler = scheduledExecutorService.scheduleAtFixedRate(() -> {
             try {
-                RestfulResponse response = RestfulProxy.post(DriverMgrConst.DRIVER_MANAGER_URL, restParametes);
+                LOGGER.info("Start registering to driver manager");
+                RestfulResponse response = RestfulProxy.post(DRIVER_MANAGER_URL, restParametes);
                 if(HttpCode.isSucess(response.getStatus())) {
                     LOGGER.info("Driver successfully registered with driver manager. Now Stop the scheduler.");
+                    bRegistionSuccess = true;
                     this.scheduler.cancel(false);
                 } else {
                     LOGGER.warn("Driver failed registered with driver manager will reattempt the connection after "
@@ -115,5 +151,21 @@ public class DriverRegistrationListener implements ServletContextListener {
                         + DRIVER_REGISTRATION_DELAY + "seconds : " + e.toString());
             }
         }, DRIVER_REGISTRATION_INITIAL_DELAY, DRIVER_REGISTRATION_DELAY, TimeUnit.SECONDS);
+    }
+
+    private void replaceLocalIp(Map<String, String> driverInfoMap) {
+        if(StringUtils.isNotEmpty(driverInfoMap.get(IP_KEY))) {
+            return;
+        }
+
+        try {
+            InetAddress addr = InetAddress.getLocalHost();
+            String ipAddress = addr.getHostAddress();
+            driverInfoMap.put(IP_KEY, ipAddress);
+
+            LOGGER.info("Local ip: " + ipAddress);
+        } catch(UnknownHostException e) {
+            LOGGER.error("Unable to get IP address, " + e);
+        }
     }
 }
