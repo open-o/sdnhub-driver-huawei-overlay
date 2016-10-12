@@ -61,10 +61,6 @@ public class IpSecRoaResource {
     @Autowired
     private IpSecSvcImpl ipSecSvc;
 
-    public void setIpSecSvc(IpSecSvcImpl ipSecSvc) {
-        this.ipSecSvc = ipSecSvc;
-    }
-
     /**
      * Create IPSec connection. <br>
      *
