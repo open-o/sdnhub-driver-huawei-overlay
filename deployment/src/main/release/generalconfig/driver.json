@@ -1,7 +1,7 @@
 {
     "driverInfo": {
-        "driverName": "sdnoverlayvpndriver-0-1",
-        "instanceID": "sdnoverlayvpndriver-0-1",
+        "driverName": "sdnooverlaydriver-0-1",
+        "instanceID": "sdnooverlaydriver-0-1",
         "ip": "",
         "port": "8536",
         "protocol": "http",
@@ -11,16 +11,16 @@
                 "support_sys": [
                     {
                         "type": "Agile Controller-BRANCH",
-                        "version": "V200R002"
+                        "version": "V200R002C00"
                     }
                 ]
             },
             {
-                "service_url": "/openoapi/sbi-ipsec/v1",
+                "service_url": "/openoapi/sbi-ipsec/v1/overlay",
                 "support_sys": [
                     {
                         "type": "Agile Controller-BRANCH",
-                        "version": "V200R002"
+                        "version": "V200R002C00"
                     }
                 ]
             },
@@ -29,7 +29,7 @@
                 "support_sys": [
                     {
                         "type": "Agile Controller-BRANCH",
-                        "version": "V200R002"
+                        "version": "V200R002C00"
                     }
                 ]
             }
