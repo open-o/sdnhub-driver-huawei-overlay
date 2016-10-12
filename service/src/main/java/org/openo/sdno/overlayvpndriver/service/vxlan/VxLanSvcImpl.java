@@ -55,14 +55,6 @@ public class VxLanSvcImpl {
     @Autowired
     private VxLANCliSbi vxLanCliSbi;
 
-    public void setVxLanRestfulSbi(VxLANRestfulSbi vxLanRestfulSbi) {
-        this.vxLanRestfulSbi = vxLanRestfulSbi;
-    }
-
-    public void setVxLanCliSbi(VxLANCliSbi vxLanCliSbi) {
-        this.vxLanCliSbi = vxLanCliSbi;
-    }
-
     /**
      * Create VxLan operation. <br>
      * 
