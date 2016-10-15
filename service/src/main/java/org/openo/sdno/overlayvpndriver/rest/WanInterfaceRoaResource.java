@@ -25,6 +25,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 
 import org.openo.baseservice.remoteservice.exception.ServiceException;
@@ -63,7 +64,7 @@ public class WanInterfaceRoaResource {
      * @param deviceId The device id
      * @param type The WanInterface type that want to get
      * @return ResultRsp list of WanSubInterface
-     * @throws ServiceException When WanSubInterface query failed
+     * @throws WebApplicationException When WanSubInterface query failed
      * @since SDNO 0.5
      */
     @GET
@@ -71,29 +72,33 @@ public class WanInterfaceRoaResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ResultRsp<List<WanSubInterface>> queryWanInterface(@HeaderParam("X-Driver-Parameter") String ctrlUuidParam,
-            @PathParam("deviceid") String deviceId, @QueryParam("type") String type) throws ServiceException {
+            @PathParam("deviceid") String deviceId, @QueryParam("type") String type) throws WebApplicationException {
 
         long beginTime = System.currentTimeMillis();
         String ctrlUuid = ctrlUuidParam.substring(ctrlUuidParam.indexOf('=') + 1);
 
-        // check parameters
-        if(!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error("queryWanInterface failed, ctrlUuid is invalid");
-            SvcExcptUtil.throwBadRequestException("queryWanInterface failed, ctrlUuid is invalid");
+        try {
+            // check parameters
+            if(!UuidUtil.validate(ctrlUuid)) {
+                LOGGER.error("queryWanInterface failed, ctrlUuid is invalid");
+                SvcExcptUtil.throwBadRequestException("queryWanInterface failed, ctrlUuid is invalid");
+            }
+
+            CheckStrUtil.checkUuidStr(deviceId);
+
+            if(!WanInterfaceUsedType.isValid(type)) {
+                LOGGER.error("queryWanInterface failed, query parameter type is error");
+                SvcExcptUtil.throwBadRequestException("queryWanInterface failed, query parameter type is error");
+            }
+
+            // call the service method to perform query operation
+            List<WanSubInterface> wanSubInterfaceList = wanInfSvc.queryWanInterface(ctrlUuid, deviceId, type);
+
+            LOGGER.info("queryWanInterface cost time = " + (System.currentTimeMillis() - beginTime));
+
+            return new ResultRsp<List<WanSubInterface>>(ErrorCode.OVERLAYVPN_SUCCESS, wanSubInterfaceList);
+        } catch(ServiceException e) {
+            throw new WebApplicationException(e.getId(), e.getHttpCode());
         }
-
-        CheckStrUtil.checkUuidStr(deviceId);
-
-        if(!WanInterfaceUsedType.isValid(type)) {
-            LOGGER.error("queryWanInterface failed, query parameter type is error");
-            SvcExcptUtil.throwBadRequestException("queryWanInterface failed, query parameter type is error");
-        }
-
-        // call the service method to perform query operation
-        List<WanSubInterface> wanSubInterfaceList = wanInfSvc.queryWanInterface(ctrlUuid, deviceId, type);
-
-        LOGGER.info("queryWanInterface cost time = " + (System.currentTimeMillis() - beginTime));
-
-        return new ResultRsp<List<WanSubInterface>>(ErrorCode.OVERLAYVPN_SUCCESS, wanSubInterfaceList);
     }
 }
