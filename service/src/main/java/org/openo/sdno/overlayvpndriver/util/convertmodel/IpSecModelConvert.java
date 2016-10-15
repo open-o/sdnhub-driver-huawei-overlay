@@ -109,7 +109,7 @@ public class IpSecModelConvert {
             NetIpSecConn netIpSecConn = new NetIpSecConn();
 
             NetRule rule = buildNetRule(ipSecNeConnection);
-            NetIke ike = buildNetIke(ipSecNeConnection, IpUtils.getIPFromCIDR(ipSecNeConnection.getPeerAddress()));
+            NetIke ike = buildNetIke(ipSecNeConnection, ipSecNeConnection.getPeerAddress());
             NetIpSec ipSec = buildNetIpSec(ipSecNeConnection);
 
             netIpSecConn.setIpSecConnectionId(ipSecNeConnection.getUuid());
@@ -129,7 +129,7 @@ public class IpSecModelConvert {
         String srcIp = IpUtils.getIPFromCIDR(ipSecNeConnection.getSourceAddress());
         String srcIpMask = IpUtils.prefixToMask(CONST_MASK_32);
 
-        String destIp = IpUtils.getIPFromCIDR(ipSecNeConnection.getPeerAddress());
+        String destIp = ipSecNeConnection.getPeerAddress();
         String destIpMask = IpUtils.prefixToMask(CONST_MASK_32);
 
         return new NetRule("permit", srcIp, srcIpMask, destIp, destIpMask);
