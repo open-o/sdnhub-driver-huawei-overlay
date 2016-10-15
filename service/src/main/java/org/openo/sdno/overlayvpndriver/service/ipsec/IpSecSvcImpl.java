@@ -94,7 +94,6 @@ public class IpSecSvcImpl {
                 // query from controller
                 ResultRsp<List<NetIpSecModel>> result =
                         queryIpSecFromController(ctrlUuid, deviceId, netIpSecModel.getInterfaceName(), null);
-
                 List<NetIpSecModel> refreshedList = JsonUtil.fromJson(JsonUtil.toJson(result.getData()),
                         new TypeReference<List<NetIpSecModel>>() {});
                 // generate seqNumber
