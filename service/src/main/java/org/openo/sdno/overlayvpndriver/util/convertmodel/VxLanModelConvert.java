@@ -49,7 +49,6 @@ public class VxLanModelConvert {
      * @since SDNO 0.5
      */
     private VxLanModelConvert() {
-
     }
 
     /**
