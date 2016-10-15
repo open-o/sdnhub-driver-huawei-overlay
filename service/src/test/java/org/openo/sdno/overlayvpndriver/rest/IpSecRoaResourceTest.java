@@ -21,6 +21,8 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.WebApplicationException;
+
 import org.apache.poi.ss.formula.functions.T;
 import org.codehaus.jackson.type.TypeReference;
 import org.junit.Test;
@@ -144,7 +146,7 @@ public class IpSecRoaResourceTest {
             ResultRsp<List<NeIpSecConnection>> result =
                     ipSecRoa.createIpSec(null, "12345-67898", neIpSecConnectionList);
             assertTrue(result != null);
-        } catch(ServiceException e) {
+        } catch(WebApplicationException e) {
 
         }
 
@@ -214,7 +216,7 @@ public class IpSecRoaResourceTest {
             ResultRsp<List<NeIpSecConnection>> result =
                     ipSecRoa.createIpSec(null, "12345-67898", neIpSecConnectionList);
             assertTrue(result != null);
-        } catch(ServiceException e) {
+        } catch(WebApplicationException e) {
 
         }
 

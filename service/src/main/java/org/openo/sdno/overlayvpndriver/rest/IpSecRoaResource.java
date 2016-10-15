@@ -27,6 +27,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
@@ -72,7 +73,7 @@ public class IpSecRoaResource {
      * @param ctrlUuid Controller UUID
      * @param neIpSecConnectionList Collection list of IpSec
      * @return ResultRsp object with IpSec connection list data
-     * @throws ServiceException When create failed
+     * @throws WebApplicationException When create failed
      * @since SDNO 0.5
      */
     @POST
@@ -81,40 +82,46 @@ public class IpSecRoaResource {
     @Produces(MediaType.APPLICATION_JSON)
     public ResultRsp<List<NeIpSecConnection>> createIpSec(@Context HttpServletRequest request,
             @HeaderParam("X-Driver-Parameter") String ctrlUuidParam, List<NeIpSecConnection> neIpSecConnectionList)
-            throws ServiceException {
+            throws WebApplicationException {
         long beginTime = System.currentTimeMillis();
         String ctrlUuid = ctrlUuidParam.substring(ctrlUuidParam.indexOf('=') + 1);
 
-        // check parameters
-        if(!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error("createIpSec failed, ctrlUuid is invalid.");
-            SvcExcptUtil.throwBadRequestException("createIpSec failed, ctrlUuid is invalid");
-        }
-
-        if(CollectionUtils.isEmpty(neIpSecConnectionList)) {
-            LOGGER.error("createIpSec failed, neIpSecConnectionList is null");
-            SvcExcptUtil.throwBadRequestException("createIpSec failed, neIpSecConnectionList is null");
-        }
-
-        for(NeIpSecConnection neIpSecConnection : neIpSecConnectionList) {
-            ValidationUtil.validateModel(neIpSecConnection);
-        }
-
-        // convert model from IpSecService to adapter
-        Map<String, List<NetIpSecModel>> neIdToNetIpSecModelMap = IpSecModelConvert.convertModel(neIpSecConnectionList);
-
-        // call the service method to perform create operation
-        for(Map.Entry<String, List<NetIpSecModel>> entry : neIdToNetIpSecModelMap.entrySet()) {
-            ResultRsp<List<NetIpSecModel>> resultRsp = ipSecSvc.createIpSec(ctrlUuid, entry.getKey(), entry.getValue());
-            if(!resultRsp.isSuccess()) {
-                LOGGER.error("createIpSec failed in service");
-                return new ResultRsp<List<NeIpSecConnection>>(resultRsp, neIpSecConnectionList);
+        try {
+            // check parameters
+            if(!UuidUtil.validate(ctrlUuid)) {
+                LOGGER.error("createIpSec failed, ctrlUuid is invalid.");
+                SvcExcptUtil.throwBadRequestException("createIpSec failed, ctrlUuid is invalid");
             }
+
+            if(CollectionUtils.isEmpty(neIpSecConnectionList)) {
+                LOGGER.error("createIpSec failed, neIpSecConnectionList is null");
+                SvcExcptUtil.throwBadRequestException("createIpSec failed, neIpSecConnectionList is null");
+            }
+
+            for(NeIpSecConnection neIpSecConnection : neIpSecConnectionList) {
+                ValidationUtil.validateModel(neIpSecConnection);
+            }
+
+            // convert model from IpSecService to adapter
+            Map<String, List<NetIpSecModel>> neIdToNetIpSecModelMap =
+                    IpSecModelConvert.convertModel(neIpSecConnectionList);
+
+            // call the service method to perform create operation
+            for(Map.Entry<String, List<NetIpSecModel>> entry : neIdToNetIpSecModelMap.entrySet()) {
+                ResultRsp<List<NetIpSecModel>> resultRsp =
+                        ipSecSvc.createIpSec(ctrlUuid, entry.getKey(), entry.getValue());
+                if(!resultRsp.isSuccess()) {
+                    LOGGER.error("createIpSec failed in service");
+                    return new ResultRsp<List<NeIpSecConnection>>(resultRsp, neIpSecConnectionList);
+                }
+            }
+
+            LOGGER.info("createIpSec cost time = " + (System.currentTimeMillis() - beginTime));
+
+            return new ResultRsp<List<NeIpSecConnection>>(ErrorCode.OVERLAYVPN_SUCCESS, neIpSecConnectionList);
+        } catch(ServiceException e) {
+            throw new WebApplicationException(e.getId(), e.getHttpCode());
         }
-
-        LOGGER.info("createIpSec cost time = " + (System.currentTimeMillis() - beginTime));
-
-        return new ResultRsp<List<NeIpSecConnection>>(ErrorCode.OVERLAYVPN_SUCCESS, neIpSecConnectionList);
     }
 
     /**
@@ -124,7 +131,7 @@ public class IpSecRoaResource {
      * @param ctrlUuid Controller UUID
      * @param ipSecConnectionId The UUID of IPSec connection
      * @return The object of ResultRsp
-     * @throws ServiceException When delete failed
+     * @throws WebApplicationException When delete failed
      * @since SDNO 0.5
      */
     @DELETE
@@ -133,21 +140,25 @@ public class IpSecRoaResource {
     @Produces(MediaType.APPLICATION_JSON)
     public ResultRsp<String> deleteIpSec(@Context HttpServletRequest request,
             @HeaderParam("X-Driver-Parameter") String ctrlUuidParam,
-            @PathParam("ipsecconnectionid") String ipSecConnectionId) throws ServiceException {
+            @PathParam("ipsecconnectionid") String ipSecConnectionId) throws WebApplicationException {
         long beginTime = System.currentTimeMillis();
         String ctrlUuid = ctrlUuidParam.substring(ctrlUuidParam.indexOf('=') + 1);
 
-        // check parameters
-        if(!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error("deleteIpSec falied, ctrlUuid is invalid.");
-            SvcExcptUtil.throwBadRequestException("deleteIpSec falied, ctrlUuid is invalid");
+        try {
+            // check parameters
+            if(!UuidUtil.validate(ctrlUuid)) {
+                LOGGER.error("deleteIpSec falied, ctrlUuid is invalid.");
+                SvcExcptUtil.throwBadRequestException("deleteIpSec falied, ctrlUuid is invalid");
+            }
+
+            // call the service method to perform delete operation
+            ResultRsp<String> resultRsp = ipSecSvc.deleteIpSec(ctrlUuid, ipSecConnectionId);
+
+            LOGGER.info("deleteIpSec cost time = " + (System.currentTimeMillis() - beginTime));
+
+            return resultRsp;
+        } catch(ServiceException e) {
+            throw new WebApplicationException(e.getId(), e.getHttpCode());
         }
-
-        // call the service method to perform delete operation
-        ResultRsp<String> resultRsp = ipSecSvc.deleteIpSec(ctrlUuid, ipSecConnectionId);
-
-        LOGGER.info("deleteIpSec cost time = " + (System.currentTimeMillis() - beginTime));
-
-        return resultRsp;
     }
 }
