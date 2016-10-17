@@ -63,14 +63,6 @@ public class IpSecSvcImpl {
     @Autowired
     private IpSecRestfulSbi ipSecRestfulSbi;
 
-    public void setIpSecCliSbi(IpSecCliSbi ipSecCliSbi) {
-        this.ipSecCliSbi = ipSecCliSbi;
-    }
-
-    public void setIpSecRestfulSbi(IpSecRestfulSbi ipSecRestfulSbi) {
-        this.ipSecRestfulSbi = ipSecRestfulSbi;
-    }
-
     /**
      * Create IPSec operation. <br>
      * 

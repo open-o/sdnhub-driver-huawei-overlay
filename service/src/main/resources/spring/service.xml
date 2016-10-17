@@ -19,9 +19,9 @@
     xmlns:osgi="http://www.springframework.org/schema/osgi" xmlns:context="http://www.springframework.org/schema/context"
     xmlns:jaxrs="http://cxf.apache.org/jaxrs"
     xsi:schemaLocation="http://www.springframework.org/schema/beans
-	 http://www.springframework.org/schema/beans/spring-beans.xsd
-	 http://www.springframework.org/schema/context 
-	 http://www.springframework.org/schema/context/spring-context.xsd
+     http://www.springframework.org/schema/beans/spring-beans.xsd
+     http://www.springframework.org/schema/context
+     http://www.springframework.org/schema/context/spring-context.xsd
      http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd">
 
     <!-- these are included in the dependency jar -->
@@ -49,6 +49,30 @@
     </bean>
 
     <bean id="wanInterfaceRoaResource" class="org.openo.sdno.overlayvpndriver.rest.WanInterfaceRoaResource">
+    </bean>
+
+    <bean id="ipSecSvc" class="org.openo.sdno.overlayvpndriver.service.ipsec.IpSecSvcImpl">
+    </bean>
+
+    <bean id="wanInfSvc" class="org.openo.sdno.overlayvpndriver.service.wan.WanInfSvcImpl">
+    </bean>
+
+    <bean id="vxLanSvc" class="org.openo.sdno.overlayvpndriver.service.vxlan.VxLanSvcImpl">
+    </bean>
+
+    <bean id="ipSecCliSbi" class="org.openo.sdno.overlayvpndriver.sbi.ipsec.IpSecCliSbi">
+    </bean>
+
+    <bean id="ipSecRestfulSbi" class="org.openo.sdno.overlayvpndriver.sbi.ipsec.IpSecRestfulSbi">
+    </bean>
+
+    <bean id="vxLanRestfulSbi" class="org.openo.sdno.overlayvpndriver.sbi.vxlan.VxLANRestfulSbi">
+    </bean>
+
+    <bean id="vxLanCliSbi" class="org.openo.sdno.overlayvpndriver.sbi.vxlan.VxLANCliSbi">
+    </bean>
+
+    <bean id="WanSubInfSbi" class="org.openo.sdno.overlayvpndriver.sbi.wan.WanSubInfSbi">
     </bean>
 
     <bean id="OverlayVpnDriverRestModule" class="org.openo.sdno.overlayvpndriver.OverlayVpnDriverRestModule"

@@ -57,10 +57,6 @@ public class WanInterfaceRoaResource {
     @Autowired
     private WanInfSvcImpl wanInfSvc;
 
-    public void setWanInfSvc(WanInfSvcImpl wanInfSvc) {
-        this.wanInfSvc = wanInfSvc;
-    }
-
     /**
      * Query WanInterface information. <br>
      *

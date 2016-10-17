@@ -65,10 +65,6 @@ public class WanInfSvcImpl {
     @Autowired
     private WanSubInfSbi wanSubInfSbi;
 
-    public void setWanSubInfSbi(WanSubInfSbi wanSubInfSbi) {
-        this.wanSubInfSbi = wanSubInfSbi;
-    }
-
     /**
      * Query WanInterface information. <br>
      *

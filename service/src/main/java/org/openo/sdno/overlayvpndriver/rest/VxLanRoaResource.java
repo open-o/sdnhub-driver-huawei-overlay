@@ -72,14 +72,6 @@ public class VxLanRoaResource {
     @Autowired
     private VxLanSvcImpl vxLanSvc;
 
-    public void setWanInfSvc(WanInfSvcImpl wanInfSvc) {
-        this.wanInfSvc = wanInfSvc;
-    }
-
-    public void setVxLanSvc(VxLanSvcImpl vxLanSvc) {
-        this.vxLanSvc = vxLanSvc;
-    }
-
     /**
      * Query Vtep information. <br>
      *
