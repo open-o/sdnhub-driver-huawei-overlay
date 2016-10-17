@@ -28,6 +28,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
@@ -85,7 +86,7 @@ public class VxLanRoaResource {
      * @param ctrlUuid Controller UUID
      * @param deviceId The device id
      * @return ResultRsp object with NeVtep
-     * @throws ServiceException When query failed
+     * @throws WebApplicationException When query failed
      * @since SDNO 0.5
      */
     @GET
@@ -93,34 +94,38 @@ public class VxLanRoaResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ResultRsp<NeVtep> queryVtep(@HeaderParam("X-Driver-Parameter") String ctrlUuidParam,
-            @PathParam("deviceid") String deviceId) throws ServiceException {
+            @PathParam("deviceid") String deviceId) throws WebApplicationException {
 
         long beginTime = System.currentTimeMillis();
         String ctrlUuid = ctrlUuidParam.substring(ctrlUuidParam.indexOf('=') + 1);
 
-        // check controller uuid
-        if(!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error("queryVtep failed, ctrlUuid is invalid.");
-            SvcExcptUtil.throwBadRequestException("queryVtep failed, ctrlUuid is invalid");
+        try {
+            // check controller uuid
+            if(!UuidUtil.validate(ctrlUuid)) {
+                LOGGER.error("queryVtep failed, ctrlUuid is invalid.");
+                SvcExcptUtil.throwBadRequestException("queryVtep failed, ctrlUuid is invalid");
+            }
+
+            // check deviceId
+            CheckStrUtil.checkUuidStr(deviceId);
+
+            // get WanSubInterface
+            List<WanSubInterface> wanSubInterfaceList =
+                    wanInfSvc.queryWanInterface(ctrlUuid, deviceId, WanInterfaceUsedType.VXLAN.getName());
+            if(CollectionUtils.isEmpty(wanSubInterfaceList)
+                    || StringUtils.isEmpty(wanSubInterfaceList.get(0).getIpAddress())) {
+                return new ResultRsp<NeVtep>(ErrorCode.OVERLAYVPN_FAILED, "queryVtep failed, can't get WanSubInterface",
+                        null, null, null);
+            }
+
+            WanSubInterface wanSubif = wanSubInterfaceList.get(0);
+
+            LOGGER.info("queryVtep cost time = " + (System.currentTimeMillis() - beginTime));
+
+            return new ResultRsp<NeVtep>(ErrorCode.OVERLAYVPN_SUCCESS, new NeVtep(deviceId, wanSubif.getIpAddress()));
+        } catch(ServiceException e) {
+            throw new WebApplicationException(e.getId(), e.getHttpCode());
         }
-
-        // check deviceId
-        CheckStrUtil.checkUuidStr(deviceId);
-
-        // get WanSubInterface
-        List<WanSubInterface> wanSubInterfaceList =
-                wanInfSvc.queryWanInterface(ctrlUuid, deviceId, WanInterfaceUsedType.VXLAN.getName());
-        if(CollectionUtils.isEmpty(wanSubInterfaceList)
-                || StringUtils.isEmpty(wanSubInterfaceList.get(0).getIpAddress())) {
-            return new ResultRsp<NeVtep>(ErrorCode.OVERLAYVPN_FAILED, "queryVtep failed, can't get WanSubInterface",
-                    null, null, null);
-        }
-
-        WanSubInterface wanSubif = wanSubInterfaceList.get(0);
-
-        LOGGER.info("queryVtep cost time = " + (System.currentTimeMillis() - beginTime));
-
-        return new ResultRsp<NeVtep>(ErrorCode.OVERLAYVPN_SUCCESS, new NeVtep(deviceId, wanSubif.getIpAddress()));
     }
 
     /**
@@ -130,7 +135,7 @@ public class VxLanRoaResource {
      * @param ctrlUuid Controller UUID
      * @param vxLanInstanceList Collection list of VxLan
      * @return ResultRsp object with VxLan list data
-     * @throws ServiceException When create failed
+     * @throws WebApplicationException When create failed
      * @since SDNO 0.5
      */
     @POST
@@ -139,50 +144,55 @@ public class VxLanRoaResource {
     @Produces(MediaType.APPLICATION_JSON)
     public ResultRsp<List<NeVxlanInstance>> createVxlan(@Context HttpServletRequest request,
             @HeaderParam("X-Driver-Parameter") String ctrlUuidParam, List<NeVxlanInstance> vxLanInstanceList)
-            throws ServiceException {
+            throws WebApplicationException {
         long beginTime = System.currentTimeMillis();
         String ctrlUuid = ctrlUuidParam.substring(ctrlUuidParam.indexOf('=') + 1);
 
-        // check parameters
-        if(!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error("createVxlan failed, ctrlUuid is invalid.");
-            SvcExcptUtil.throwBadRequestException("createVxlan failed, ctrlUuid is invalid");
-        }
-
-        if(CollectionUtils.isEmpty(vxLanInstanceList)) {
-            LOGGER.error("createVxlan failed, vxLanInstanceList is null");
-            SvcExcptUtil.throwBadRequestException("createVxlan failed, vxlanInstanceList is null");
-        }
-
-        for(NeVxlanInstance tempVxlan : vxLanInstanceList) {
-            ValidationUtil.validateModel(tempVxlan);
-            if(CollectionUtils.isEmpty(tempVxlan.getVxlanInterfaceList())) {
-                LOGGER.error("createVxlan failed, vxlanInterfaceList is null");
-                SvcExcptUtil.throwBadRequestException("createVxlan failed, vxlanInterfaceList is null");
+        try {
+            // check parameters
+            if(!UuidUtil.validate(ctrlUuid)) {
+                LOGGER.error("createVxlan failed, ctrlUuid is invalid.");
+                SvcExcptUtil.throwBadRequestException("createVxlan failed, ctrlUuid is invalid");
             }
 
-            if(CollectionUtils.isEmpty(tempVxlan.getVxlanTunnelList())) {
-                LOGGER.error("createVxlan failed, vxlanTunnelList is null");
-                SvcExcptUtil.throwBadRequestException("createVxlan failed, vxlanTunnelList is null");
+            if(CollectionUtils.isEmpty(vxLanInstanceList)) {
+                LOGGER.error("createVxlan failed, vxLanInstanceList is null");
+                SvcExcptUtil.throwBadRequestException("createVxlan failed, vxlanInstanceList is null");
             }
-        }
 
-        // convert model from IpSecService to adapter
-        Map<String, List<NetVxLanDeviceModel>> vxlanDeviceModelMap = VxLanModelConvert.convertModel(vxLanInstanceList);
+            for(NeVxlanInstance tempVxlan : vxLanInstanceList) {
+                ValidationUtil.validateModel(tempVxlan);
+                if(CollectionUtils.isEmpty(tempVxlan.getVxlanInterfaceList())) {
+                    LOGGER.error("createVxlan failed, vxlanInterfaceList is null");
+                    SvcExcptUtil.throwBadRequestException("createVxlan failed, vxlanInterfaceList is null");
+                }
 
-        // call the service method to perform create operation
-        for(Map.Entry<String, List<NetVxLanDeviceModel>> entry : vxlanDeviceModelMap.entrySet()) {
-            ResultRsp<List<NetVxLanDeviceModel>> resultRsp =
-                    vxLanSvc.createVxLan(ctrlUuid, entry.getKey(), entry.getValue());
-            if(!resultRsp.isSuccess()) {
-                LOGGER.error("createVxlan failed in service");
-                return new ResultRsp<List<NeVxlanInstance>>(resultRsp, vxLanInstanceList);
+                if(CollectionUtils.isEmpty(tempVxlan.getVxlanTunnelList())) {
+                    LOGGER.error("createVxlan failed, vxlanTunnelList is null");
+                    SvcExcptUtil.throwBadRequestException("createVxlan failed, vxlanTunnelList is null");
+                }
             }
+
+            // convert model from IpSecService to adapter
+            Map<String, List<NetVxLanDeviceModel>> vxlanDeviceModelMap =
+                    VxLanModelConvert.convertModel(vxLanInstanceList);
+
+            // call the service method to perform create operation
+            for(Map.Entry<String, List<NetVxLanDeviceModel>> entry : vxlanDeviceModelMap.entrySet()) {
+                ResultRsp<List<NetVxLanDeviceModel>> resultRsp =
+                        vxLanSvc.createVxLan(ctrlUuid, entry.getKey(), entry.getValue());
+                if(!resultRsp.isSuccess()) {
+                    LOGGER.error("createVxlan failed in service");
+                    return new ResultRsp<List<NeVxlanInstance>>(resultRsp, vxLanInstanceList);
+                }
+            }
+
+            LOGGER.info("createVxlan cost time = " + (System.currentTimeMillis() - beginTime));
+
+            return new ResultRsp<List<NeVxlanInstance>>(ErrorCode.OVERLAYVPN_SUCCESS, vxLanInstanceList);
+        } catch(ServiceException e) {
+            throw new WebApplicationException(e.getId(), e.getHttpCode());
         }
-
-        LOGGER.info("createVxlan cost time = " + (System.currentTimeMillis() - beginTime));
-
-        return new ResultRsp<List<NeVxlanInstance>>(ErrorCode.OVERLAYVPN_SUCCESS, vxLanInstanceList);
     }
 
     /**
@@ -192,7 +202,7 @@ public class VxLanRoaResource {
      * @param ctrlUuid Controller UUID
      * @param instanceId The UUID of VxLan instance
      * @return The object of ResultRsp
-     * @throws ServiceException When delete failed
+     * @throws WebApplicationException When delete failed
      * @since SDNO 0.5
      */
     @DELETE
@@ -201,21 +211,25 @@ public class VxLanRoaResource {
     @Produces(MediaType.APPLICATION_JSON)
     public ResultRsp<String> deleteVxLan(@Context HttpServletRequest request,
             @HeaderParam("X-Driver-Parameter") String ctrlUuidParam, @PathParam("instanceid") String instanceId)
-            throws ServiceException {
+            throws WebApplicationException {
         long beginTime = System.currentTimeMillis();
         String ctrlUuid = ctrlUuidParam.substring(ctrlUuidParam.indexOf('=') + 1);
 
-        // check parameters
-        if(!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error("deleteVxLan falied, ctrlUuid is invalid.");
-            SvcExcptUtil.throwBadRequestException("deleteVxLan falied, ctrlUuid is invalid");
+        try {
+            // check parameters
+            if(!UuidUtil.validate(ctrlUuid)) {
+                LOGGER.error("deleteVxLan falied, ctrlUuid is invalid.");
+                SvcExcptUtil.throwBadRequestException("deleteVxLan falied, ctrlUuid is invalid");
+            }
+
+            // call the service method to perform delete operation
+            ResultRsp<String> resultRsp = vxLanSvc.deleteVxLan(ctrlUuid, instanceId);
+
+            LOGGER.info("deleteVxLan cost time = " + (System.currentTimeMillis() - beginTime));
+
+            return resultRsp;
+        } catch(ServiceException e) {
+            throw new WebApplicationException(e.getId(), e.getHttpCode());
         }
-
-        // call the service method to perform delete operation
-        ResultRsp<String> resultRsp = vxLanSvc.deleteVxLan(ctrlUuid, instanceId);
-
-        LOGGER.info("deleteVxLan cost time = " + (System.currentTimeMillis() - beginTime));
-
-        return resultRsp;
     }
 }
