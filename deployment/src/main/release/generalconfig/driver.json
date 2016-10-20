@@ -16,7 +16,7 @@
                 ]
             },
             {
-                "service_url": "/openoapi/sbi-ipsec/v1/overlay",
+                "service_url": "/openoapi/sbi-ipsec/v1",
                 "support_sys": [
                     {
                         "type": "Agile Controller-BRANCH",
