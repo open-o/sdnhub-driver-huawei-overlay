@@ -4,13 +4,14 @@
 ## Enter System View
 system-view
 
-## Delete bridge domain
-undo bridge-domain  ${Bd_Id}
+## Delete Vbd Interface
+undo interface Vbdif${Bd_Id}
 
-## DeConfig Nve Interface
-interface Nve 1
-undo vni ${Vni}
-quit
+## Delete bridge domain
+undo bridge-domain ${Bd_Id}
+
+## Delete Nve Interface
+undo interface Nve 1
 
 ## Exit System View
 quit
