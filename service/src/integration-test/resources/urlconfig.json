@@ -1,11 +1,11 @@
 [
 	{
 		"url": "/svc/mss/v2",
-		"prefix": "/org.openo.sdno.mss.service"
+		"prefix": ""
 	},
 	{
 		"url": "/brs/v1",
-		"prefix": "/org.openo.sdno.brs"
+		"prefix": ""
 	},
 	{
 		"url": "/svc/l3vpn/v1/l3vpns",

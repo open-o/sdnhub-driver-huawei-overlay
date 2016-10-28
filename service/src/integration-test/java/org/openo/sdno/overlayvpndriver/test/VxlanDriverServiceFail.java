@@ -64,6 +64,12 @@ public class VxlanDriverServiceFail extends TestManager {
         createHttpObject = HttpModelUtils.praseHttpRquestResponse(FileUtils.readFromJson(createFile));
         createResponse = execTestCase(createFile, new RegularExpChecker2(createHttpObject.getResponse()));
         response = createResponse.getData();
+        
+        createFile = new File("src/integration-test/resources/overlayvpndriver/createFailInvalidIp.json");
+        createHttpObject =
+                HttpModelUtils.praseHttpRquestResponse(FileUtils.readFromJson(createFile));
+        createResponse = execTestCase(createFile, new RegularExpChecker2(createHttpObject.getResponse()));
+        response = createResponse.getData();
     }
 
     // created this class for a workaround as expectedResponse.getData() produce result "null"

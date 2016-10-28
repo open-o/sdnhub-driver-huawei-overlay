@@ -10,18 +10,20 @@
 	"response": {
 		"status": 200,
 		"json": {
-		"managedElements" : [{
-                    "version": "1",
+                    "name": "name",
+                    "version": "s",
                     "logicID": "s",
                     "phyNeID": "s",
                     "productName": "s",
                     "isVirtual": "s",
-                    "ipAddress": "172.19.37.223",
+                    "ipAddress": "1.1.1.1",
                     "source": "s",
                     "owner": "s",
-                    "adminState": "active",
-                    "nativeID": "c6f420cd80d1442593b59126fe03c94a"
-                }]
+                    "adminState": "s",
+                    "nativeID": "c6f420cd80d1442593b59126fe03c94a",
+                    "uuid": "s2",
+                    "createtime": null,
+                    "updatetime": null
                 }
                 
 	}

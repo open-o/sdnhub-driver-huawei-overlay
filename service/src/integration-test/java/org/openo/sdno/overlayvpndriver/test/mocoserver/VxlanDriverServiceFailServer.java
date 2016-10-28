@@ -56,6 +56,8 @@ public class VxlanDriverServiceFailServer extends MocoHttpServer{
                 new MocoResponseHandler());
         this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/brsDelete.json",
                 new MocoResponseHandler());
+        this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/manageElementUnknownIP.json",
+                new MocoResponseHandler());
     }
     
     private class VxLanSuccessResponseHandler extends MocoResponseHandler {
