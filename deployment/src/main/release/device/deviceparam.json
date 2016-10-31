@@ -1,14 +1,14 @@
 [
     {
         "devicetype": "ThinCPE",
-        "ip": "172.19.37.223",
+        "ip": "192.168.233.155",
         "port": "22",
-        "username": "admin",
-        "password": "User@123"
+        "username": "root",
+        "password": "Huawei12#$"
     },
     {
         "devicetype": "vCPE",
-        "ip": "172.19.46.4",
+        "ip": "192.168.237.168",
         "port": "22",
         "username": "admin",
         "password": "User@123"
