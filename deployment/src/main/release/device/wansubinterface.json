@@ -1,7 +1,7 @@
 [
     {
         "devicetype":"ThinCPE",
-        "ip":"172.19.37.223",
+        "ip":"192.168.233.155",
         "wansubinf":
         [
             {
@@ -15,14 +15,14 @@
                 "name":"GigabitEthernet0/0/4.2",
                 "ceLowVlan":859,
                 "ceHighVlan":859,
-                "ipAddress":"10.10.20.1",
+                "ipAddress":"10.10.30.1",
                 "mask":"255.255.255.0"
             }
         ]
     },
     {
         "devicetype":"vCPE",
-        "ip":"172.19.46.4",
+        "ip":"192.168.237.168",
         "wansubinf":
         [
             {
