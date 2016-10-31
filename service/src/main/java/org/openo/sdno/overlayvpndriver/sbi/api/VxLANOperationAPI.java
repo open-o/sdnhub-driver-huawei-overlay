@@ -43,7 +43,7 @@ public class VxLANOperationAPI extends OperationAPI {
         String localAddress = deviceModel.getLocalAddress();
         NetVni netVni = deviceModel.getVniilist().get(0);
         String peerAddress = netVni.getPeerAddresslist().get(0);
-        int vlan = netVni.getPortvlanlist().get(0).getVlan();
+        int vlan = netVni.getVlanlist().get(0);
 
         Map<String, String> replaceParamMap = new HashMap<String, String>();
         replaceParamMap.put("Bd_Id", String.valueOf(netVni.getVni()));
