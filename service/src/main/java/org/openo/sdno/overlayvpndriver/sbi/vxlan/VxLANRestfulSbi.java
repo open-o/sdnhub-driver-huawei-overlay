@@ -54,13 +54,11 @@ public class VxLANRestfulSbi {
      */
     public List<NetVxLanDeviceModel> create(String ctrlUuid, String deviceId,
             List<NetVxLanDeviceModel> netVxLanDeviceModelList) throws ServiceException {
-
         String url = MessageFormat.format(ControllerUrlConst.CONST_CONFIG_VXLAN, deviceId);
         Map<String, List<NetVxLanDeviceModel>> ctrlInfoMap = new ConcurrentHashMap<String, List<NetVxLanDeviceModel>>();
         ctrlInfoMap.put(CommConst.VXLAN_LIST, netVxLanDeviceModelList);
         HTTPReturnMessage httpMsg =
                 OverlayVpnDriverProxy.getInstance().sendPutMsg(url, JsonUtil.toJson(ctrlInfoMap), ctrlUuid);
-
         return new ControllerUtil<NetVxLanDeviceModel>().checkRsp(httpMsg);
     }
 
@@ -74,13 +72,11 @@ public class VxLANRestfulSbi {
      * @since SDNO 0.5
      */
     public void delete(String ctrlUuid, String deviceId, String vxLanId) throws ServiceException {
-
         String url = MessageFormat.format(ControllerUrlConst.CONST_CONFIG_VXLAN, deviceId);
         Map<String, List<String>> crtInfoMap = new HashMap<>();
         crtInfoMap.put(DELETE_VXLAN_PARAMETER, Arrays.asList(vxLanId));
         HTTPReturnMessage httpMsg =
                 OverlayVpnDriverProxy.getInstance().sendDeleteMsg(url, JsonUtil.toJson(crtInfoMap), ctrlUuid);
-
         new ControllerUtil<NetVxLanDeviceModel>().checkRsp(httpMsg);
     }
 }
