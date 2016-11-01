@@ -8,7 +8,7 @@
                 "name":"GigabitEthernet0/0/4.1",
                 "ceLowVlan":857,
                 "ceHighVlan":857,
-                "ipAddress":"10.10.20.1",
+                "ipAddress":"172.16.8.201",
                 "mask":"255.255.255.0"
             },
             {
@@ -29,14 +29,14 @@
                 "name":"GigabitEthernet0/0/1.1",
                 "ceLowVlan":857,
                 "ceHighVlan":857,
-                "ipAddress":"10.10.10.1",
+                "ipAddress":"172.16.8.7",
                 "mask":"255.255.255.0"
             },
             {
                 "name":"GigabitEthernet0/0/2.1",
                 "ceLowVlan":859,
                 "ceHighVlan":859,
-                "ipAddress":"10.10.40.1",
+                "ipAddress":"172.19.20.4",
                 "mask":"255.255.255.0"
             }
         ]
