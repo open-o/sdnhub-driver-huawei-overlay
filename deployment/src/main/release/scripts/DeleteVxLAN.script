@@ -11,7 +11,9 @@ undo interface Vbdif${Bd_Id}
 undo bridge-domain ${Bd_Id}
 
 ## Delete Nve Interface
-undo interface Nve 1
+interface Nve 1
+undo vni ${Vni}
+quit
 
 ## Exit System View
 quit
