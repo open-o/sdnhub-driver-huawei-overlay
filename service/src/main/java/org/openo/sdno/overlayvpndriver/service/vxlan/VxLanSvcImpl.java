@@ -125,7 +125,6 @@ public class VxLanSvcImpl {
         String vxLanId = vxLanExternalIdMapping.getExternalId();
 
         // send to controller
-
         DeviceParam deviceParam = DeviceCommParamReader.getDeviceCommParam(deviceId);
         if(null == deviceParam) {
             LOGGER.error("Current device does not exist");
