@@ -11,7 +11,7 @@ quit
 
 ## Create Vbd Interface
 interface Vbdif${Bd_Id}
-ip address 10.10.10.1 255.255.255.0
+ip address 10.100.100.1 255.255.255.0
 quit
 
 ## Config Nve Interface
