@@ -15,9 +15,16 @@ esp authentication-algorithm ${Auth_Algorithm}
 esp encryption-algorithm ${Encrypt_Algorithm}
 quit
 
+## Create Ike Policy
+ike proposal 2
+authentication-algorithm ${Auth_Algorithm}
+encryption-algorithm ${Encrypt_Algorithm}
+quit
+
 ## Create Ike Peer
 ike peer Ike_Peer_${IpSecName}
-pre-shared-key cipher huawei
+ike-proposal 2
+pre-shared-key cipher openotest
 remote-address ${PeerAddress}
 quit
 
