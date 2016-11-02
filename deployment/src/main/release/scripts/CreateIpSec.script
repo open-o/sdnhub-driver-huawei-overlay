@@ -20,7 +20,7 @@ ike proposal 2
 encryption-algorithm ${Encrypt_Algorithm}
 dh group5
 authentication-algorithm sha2-256
-authentication-methond pre-share
+authentication-method pre-share
 integrity-algorithm hmac-sha1-96
 prf hmac-sha1
 quit
