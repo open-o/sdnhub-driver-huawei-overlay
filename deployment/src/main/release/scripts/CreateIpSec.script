@@ -1,12 +1,12 @@
 
-## Create  IpSec Connection
+## Create IpSec Connection
 
 ## Enter System View
 system-view
 
 ## Create Acl Rule
 acl number ${Acl_Number}
-rule ${Acl_Number} permit ip source any
+rule ${Acl_Number} permit ip source 10.100.100.0 0.0.0.255 destination 10.21.3.0 0.0.0.255
 quit
 
 ## Create IpSec Proposal
@@ -17,12 +17,17 @@ quit
 
 ## Create Ike Policy
 ike proposal 2
-authentication-algorithm ${Auth_Algorithm}
 encryption-algorithm ${Encrypt_Algorithm}
+dh group5
+authentication-algorithm sha2-256
+authentication-methond pre-share
+integrity-algorithm hmac-sha1-96
+prf hmac-sha1
 quit
 
 ## Create Ike Peer
 ike peer Ike_Peer_${IpSecName}
+undo version 1
 ike-proposal 2
 pre-shared-key cipher openotest
 remote-address ${PeerAddress}
@@ -31,6 +36,7 @@ quit
 ## Create IpSec Policy
 ipsec policy Policy_${IpSecName}  1 isakmp
 security acl ${Acl_Number}
+pfs dh-group5
 proposal Proposal_${IpSecName}
 ike-peer Ike_Peer_${IpSecName}
 quit

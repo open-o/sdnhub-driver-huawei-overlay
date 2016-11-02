@@ -6,7 +6,7 @@ system-view
 
 ## DeApply IpSec to Interface
 interface GigabitEthernet0/0/2
-undo ipsec policy Policy_${IpSecName}
+undo ipsec policy
 quit
 
 ## Delete IpSec Policy
