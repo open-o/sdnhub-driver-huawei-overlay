@@ -19,7 +19,7 @@ undo ipsec proposal Proposal_${IpSecName}
 undo ike peer Ike_Peer_${IpSecName}
 
 ## Delete Ike Policy
-undo ike policy 2
+undo ike proposal 2
 
 ## Delete Acl Rule
 undo acl ${Acl_Number}
