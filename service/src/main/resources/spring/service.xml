@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-    Copyright 2016 Huawei Technologies Co., Ltd.
+    Copyright 2016-2017 Huawei Technologies Co., Ltd.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -42,43 +42,43 @@
         </jaxrs:providers>
     </jaxrs:server>
 
-    <bean id="ipSecRoaResource" class="org.openo.sdno.overlayvpndriver.rest.IpSecRoaResource">
+    <bean id="ipSecRoaResource" class="org.openo.sdnhub.overlayvpndriver.rest.IpSecRoaResource">
     </bean>
 
-    <bean id="vxLanRoaResource" class="org.openo.sdno.overlayvpndriver.rest.VxLanRoaResource">
+    <bean id="vxLanRoaResource" class="org.openo.sdnhub.overlayvpndriver.rest.VxLanRoaResource">
     </bean>
 
-    <bean id="wanInterfaceRoaResource" class="org.openo.sdno.overlayvpndriver.rest.WanInterfaceRoaResource">
+    <bean id="wanInterfaceRoaResource" class="org.openo.sdnhub.overlayvpndriver.rest.WanInterfaceRoaResource">
     </bean>
 
-    <bean id="ipSecSvc" class="org.openo.sdno.overlayvpndriver.service.ipsec.IpSecSvcImpl">
+    <bean id="ipSecSvc" class="org.openo.sdnhub.overlayvpndriver.service.ipsec.IpSecSvcImpl">
     </bean>
 
-    <bean id="wanInfSvc" class="org.openo.sdno.overlayvpndriver.service.wan.WanInfSvcImpl">
+    <bean id="wanInfSvc" class="org.openo.sdnhub.overlayvpndriver.service.wan.WanInfSvcImpl">
     </bean>
 
-    <bean id="vxLanSvc" class="org.openo.sdno.overlayvpndriver.service.vxlan.VxLanSvcImpl">
+    <bean id="vxLanSvc" class="org.openo.sdnhub.overlayvpndriver.service.vxlan.VxLanSvcImpl">
     </bean>
 
-    <bean id="ipSecCliSbi" class="org.openo.sdno.overlayvpndriver.sbi.ipsec.IpSecCliSbi">
+    <bean id="ipSecCliSbi" class="org.openo.sdnhub.overlayvpndriver.sbi.ipsec.IpSecCliSbi">
     </bean>
 
-    <bean id="ipSecRestfulSbi" class="org.openo.sdno.overlayvpndriver.sbi.ipsec.IpSecRestfulSbi">
+    <bean id="ipSecRestfulSbi" class="org.openo.sdnhub.overlayvpndriver.sbi.ipsec.IpSecRestfulSbi">
     </bean>
 
-    <bean id="vxLanRestfulSbi" class="org.openo.sdno.overlayvpndriver.sbi.vxlan.VxLANRestfulSbi">
+    <bean id="vxLanRestfulSbi" class="org.openo.sdnhub.overlayvpndriver.sbi.vxlan.VxLANRestfulSbi">
     </bean>
 
-    <bean id="vxLanCliSbi" class="org.openo.sdno.overlayvpndriver.sbi.vxlan.VxLANCliSbi">
+    <bean id="vxLanCliSbi" class="org.openo.sdnhub.overlayvpndriver.sbi.vxlan.VxLANCliSbi">
     </bean>
 
-    <bean id="WanSubInfSbi" class="org.openo.sdno.overlayvpndriver.sbi.wan.WanSubInfSbi">
+    <bean id="WanSubInfSbi" class="org.openo.sdnhub.overlayvpndriver.sbi.wan.WanSubInfSbi">
     </bean>
 
-    <bean id="OverlayVpnDriverRestModule" class="org.openo.sdno.overlayvpndriver.OverlayVpnDriverRestModule"
+    <bean id="OverlayVpnDriverRestModule" class="org.openo.sdnhub.overlayvpndriver.OverlayVpnDriverRestModule"
         init-method="start" destroy-method="stop">
     </bean>
 
-    <bean class="org.openo.sdno.overlayvpndriver.util.config.OverlayVpnDriverContextHelper" />
+    <bean class="org.openo.sdnhub.overlayvpndriver.util.config.OverlayVpnDriverContextHelper" />
 
 </beans>
