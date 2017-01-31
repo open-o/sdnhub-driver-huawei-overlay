@@ -24,7 +24,7 @@
 
     <artifactId>overlayvpndriver-deployment</artifactId>
     <packaging>pom</packaging>
-    <name>sdno-driver-huawei-overlay/deployment</name>
+    <name>sdnhub-driver-huawei-overlay/deployment</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
