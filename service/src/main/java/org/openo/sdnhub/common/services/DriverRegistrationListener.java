@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 Huawei Technologies Co., Ltd.
+ * Copyright 2017 Huawei Technologies Co., Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,7 +46,7 @@ import org.slf4j.LoggerFactory;
  * The driver registrar listener class.<br>
  *
  * @author
- * @version SDNHUB 0.5 2016-9-27
+ * @version SDNHUB Driver 0.5 2017-01-07
  */
 public class DriverRegistrationListener implements ServletContextListener {
 
@@ -62,7 +62,7 @@ public class DriverRegistrationListener implements ServletContextListener {
 
     private static final String IP_KEY = "ip";
 
-    private String instanceId = "sdnooverlaydriver-0-1";
+    private String instanceId = "sdnhuboverlaydriver-0-1";
 
     private static final int DRIVER_REGISTRATION_DELAY = 30;
 
@@ -72,6 +72,13 @@ public class DriverRegistrationListener implements ServletContextListener {
 
     private ScheduledFuture<?> scheduler;
 
+    /**
+     * 
+     * <br/>
+     * 
+     * @param arg0
+     * @since   SDNHUB 0.5
+     */
     @Override
     public void contextDestroyed(ServletContextEvent arg0) {
         String url = DRIVER_MANAGER_URL + "/" + instanceId;
@@ -96,6 +103,13 @@ public class DriverRegistrationListener implements ServletContextListener {
         scheduledExecutorService.shutdown();
     }
 
+    /**
+     * 
+     * <br/>
+     * 
+     * @param arg0
+     * @since   SDNHUB 0.5
+     */
     @Override
     public void contextInitialized(ServletContextEvent arg0) {
         File file = new File(DM_REGISTRATION_FILE);
@@ -147,6 +161,13 @@ public class DriverRegistrationListener implements ServletContextListener {
         }, DRIVER_REGISTRATION_INITIAL_DELAY, DRIVER_REGISTRATION_DELAY, TimeUnit.SECONDS);
     }
 
+    /**
+     * 
+     * <br/>
+     * 
+     * @param driverInfoMap
+     * @since  SDNHUB 0.5
+     */
     private void replaceLocalIp(Map<String, String> driverInfoMap) {
         if(StringUtils.isNotEmpty(driverInfoMap.get(IP_KEY))) {
             return;

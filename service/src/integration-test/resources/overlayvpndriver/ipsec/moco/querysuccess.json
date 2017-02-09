@@ -1,0 +1,52 @@
+{
+	"request": {
+		"uri": "/controller/cloud/v2/northbound/config/[a-zA-Z0-9\\-\\_]{1,36}/device/vpnsipsec",
+		"method": "get",
+		"headers": {
+			"Content-Type": "application/json;charset=UTF-8"
+		},
+		"json": null
+	},
+	"response": {
+		"status": 200,
+		"json": {
+			"errcode": "0",
+			"errmsg": "",
+			"data": [{
+				"id": "1",
+				"name": "ipseconn",
+				"interfaceName": "GigabitEthernet0/0/1",
+				"ipsecConnection": [{
+					"seqNumber": 1,
+					"deleteMode": false,
+					"type": false,
+					"routeInject": null,
+					"ipsec": {
+						"name": "proposal2",
+						"espAuthAlgorithm": "md5",
+						"espEncryptionAlgorithm": "3des"
+					},
+					"ike": {
+						"id": 2,
+						"authAlgorithm": "sha1",
+						"encryptionAlgorithm": "des",
+						"version": "v2",
+						"localAddress": null,
+						"peerAddress": "33.33.33.33",
+						"preSharedKey": "huawei"
+					},
+					"aclNumber": 3000,
+					"aclId": "bfd2e7ab23be41fbb9955d4baf3686bc",
+					"ruleList": [{
+						"id": 0,
+						"policy": "permit",
+						"srcIp": "1.1.1.1",
+						"srcNetMask": "255.255.255.0",
+						"desIp": "2.2.2.2",
+						"desNetMask": "255.255.255.0"
+					}]
+				}]
+			}]
+		}
+	}
+}

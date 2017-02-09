@@ -1,0 +1,25 @@
+{
+	"request": {
+		"uri": "/controller/cloud/v2/northbound/config/[a-zA-Z0-9\\-\\_]{1,36}/device/nqa",
+		"method": "delete",
+		"headers": {
+			"Content-Type": "application/json;charset=UTF-8"
+		},
+		"json": null
+
+	},
+	"response": {
+		"status": 200,
+		"json": {
+				"errcode": "0",
+				"errmsg": "",
+				"success": [{
+					"id": "c555c0dcbb334ccf820587443fbedec9",
+					"name": null,
+					"description": null
+				}]
+			}
+
+
+	}
+}

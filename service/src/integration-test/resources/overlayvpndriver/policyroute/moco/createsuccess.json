@@ -1,0 +1,108 @@
+{
+	"request": {
+		"uri": "/controller/cloud/v2/northbound/config/[a-zA-Z0-9\\-\\_]{1,36}/device/qosmqc",
+		"method": "put",
+		"headers": {
+			"Content-Type": "application/json;charset=UTF-8"
+		},
+		"json": {
+			"trafficPolicyList": [{
+				"trafficpolicyName": "test1",
+				"filterActionList": [{
+					"filter": {
+						"vlanId": 1,
+						"vlanPriority": 0,
+						"dscp": 20,
+						"inboundInterface": "GE0",
+						"aclPolicy": [{
+							"policy": "permit",
+							"protocol": 4,
+							"srcIp": "123.34.34.12",
+							"srcNetMask": "255.255.0.0",
+							"srcPort": 8080,
+							"desIp": "123.34.34.12",
+							"desNetMask": "255.255.255.0",
+							"desPort": 63
+						}],
+						"preClassify": {
+							"ipSecIdList": ["db12e63b259444eda12c96a42fe47e56", "db12e63b259444eda12c96a42fe47e56"],
+							"tunnelNameList": ["Tunnel0/0/0", " Tunnel0/0/1"],
+							"vniList": [300, 301],
+							"natInterfaceList": ["GigabitEthernet0/0/1", " GigabitEthernet0/0/3"]
+						}
+					},
+					"action": {
+						"desPort": 2,
+						"car": {
+							"cir": 100000,
+							"pir": 8888
+						},
+						"queue": {
+							"queueType": "af",
+							"bandwidth": 100,
+							"pct": 50,
+							"queueNumber": 16
+						}
+					}
+				}],
+				"interfaceList": [{
+					"interfaceName": "GigabitEthernet0/0/0",
+					"direction": "outbound"
+				}]
+			}]
+		}
+
+	},
+	"response": {
+		"status": 200,
+		"json": {
+			"errcode": "0",
+			"errmsg": "",
+			"data": {
+				"trafficPolicyList": [{
+					"id": "1",
+					"trafficpolicyName": "test1",
+					"filterActionList": [{
+						"filter": {
+							"vlanId": 1,
+							"vlanPriority": 0,
+							"dscp": 20,
+							"inboundInterface": "GE0",
+							"aclPolicy": [{
+								"policy": "permit",
+								"protocol": 4,
+								"srcIp": "123.34.34.12",
+								"srcNetMask": "255.255.0.0",
+								"srcPort": 8080,
+								"desIp": "123.34.34.12",
+								"desNetMask": "255.255.255.0",
+								"desPort": 63
+							}]
+						},
+						"action": {
+							"remark8021p": 0,
+							"remarkDscp": 0,
+							"car": {
+								"cir": 100000,
+								"pir": 8888
+							},
+							"queue": {
+								"queueType": "af",
+								"bandwidth": 100,
+								"remaining": false,
+								"pct": 50,
+								"queueNumber": 16
+							}
+						}
+					}],
+					"interfaceList": [{
+						"interfaceName": "GigabitEthernet0/0/0",
+						"direction": "outbound"
+					}]
+				}]
+			}
+		}
+
+
+	}
+}

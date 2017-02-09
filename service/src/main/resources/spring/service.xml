@@ -1,84 +1,132 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-    Copyright 2016-2017 Huawei Technologies Co., Ltd.
+<!-- Copyright 2017 Huawei Technologies Co., Ltd. Licensed under the Apache 
+	License, Version 2.0 (the "License"); you may not use this file except in 
+	compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+	Unless required by applicable law or agreed to in writing, software distributed 
+	under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
+	OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
+	the specific language governing permissions and limitations under the License. -->
 
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
- -->
-
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:osgi="http://www.springframework.org/schema/osgi" xmlns:context="http://www.springframework.org/schema/context"
-    xmlns:jaxrs="http://cxf.apache.org/jaxrs"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:osgi="http://www.springframework.org/schema/osgi"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
      http://www.springframework.org/schema/beans/spring-beans.xsd
      http://www.springframework.org/schema/context
      http://www.springframework.org/schema/context/spring-context.xsd
      http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd">
 
-    <!-- these are included in the dependency jar -->
-    <import resource="classpath:META-INF/cxf/cxf.xml" />
-    <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+	<!-- these are included in the dependency jar -->
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
 
-    <!-- jar rest server registration -->
-    <jaxrs:server id="restContainer" address="/">
-        <!-- registering beans -->
-        <jaxrs:serviceBeans>
-            <ref bean="ipSecRoaResource"></ref>
-            <ref bean="vxLanRoaResource"></ref>
-            <ref bean="wanInterfaceRoaResource"></ref>
-        </jaxrs:serviceBeans>
-        <!-- registering providers -->
-        <jaxrs:providers>
-            <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
-        </jaxrs:providers>
-    </jaxrs:server>
+	<!-- jar rest server registration -->
+	<jaxrs:server id="restContainer" address="/">
+		<!-- registering beans -->
+		<jaxrs:serviceBeans>
+			<!-- <ref bean="ipSecRoaResource"></ref> -->
+			<!-- <ref bean="ipSecConnecStatusROAResource"></ref> -->
+			<ref bean="vxLanRoaResource"></ref>
+			<!-- <ref bean="portROAResource"></ref> 
+			<ref bean="nqaROAResource"></ref>
+			<ref bean="staticRouteROAResource"></ref>
+			<ref bean="subnetROAResource"></ref>
+			<ref bean="deviceROAResource"></ref>
+			<ref bean="subnetBDIfROAResource"></ref>
+			<ref bean="localSiteSNatROAResource"></ref>
+			<ref bean="vlanROAResource"></ref>
+			<ref bean="interfaceIpROAResource"></ref>
+			<ref bean="policyRouteROAResource"></ref> -->
+		</jaxrs:serviceBeans>
+		<!-- registering providers -->
+		<jaxrs:providers>
+			<bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
+		</jaxrs:providers>
+	</jaxrs:server>
 
-    <bean id="ipSecRoaResource" class="org.openo.sdnhub.overlayvpndriver.rest.IpSecRoaResource">
-    </bean>
+	<!-- <bean id="ipSecRoaResource" class="org.openo.sdnhub.overlayvpndriver.rest.IpSecRoaResource">
+	</bean> -->
+	
+	<!-- <bean id="ipSecConnecStatusROAResource" class="org.openo.sdnhub.overlayvpndriver.rest.IpSecConnecStatusROAResource">
+	</bean> -->
 
-    <bean id="vxLanRoaResource" class="org.openo.sdnhub.overlayvpndriver.rest.VxLanRoaResource">
-    </bean>
+	<bean id="vxLanRoaResource" class="org.openo.sdnhub.overlayvpndriver.rest.VxLanRoaResource">
+	</bean>
 
-    <bean id="wanInterfaceRoaResource" class="org.openo.sdnhub.overlayvpndriver.rest.WanInterfaceRoaResource">
-    </bean>
+	<!-- <bean id="portROAResource" class="org.openo.sdnhub.overlayvpndriver.rest.PortROAResource">
+	</bean>
 
-    <bean id="ipSecSvc" class="org.openo.sdnhub.overlayvpndriver.service.ipsec.IpSecSvcImpl">
-    </bean>
+	<bean id="nqaROAResource" class="org.openo.sdnhub.overlayvpndriver.rest.NqaROAResource">
+	</bean>
+	<bean id="staticRouteROAResource"
+		class="org.openo.sdnhub.overlayvpndriver.rest.StaticRouteROAResource">
+	</bean>
 
-    <bean id="wanInfSvc" class="org.openo.sdnhub.overlayvpndriver.service.wan.WanInfSvcImpl">
-    </bean>
+	<bean id="subnetROAResource"
+		class="org.openo.sdnhub.overlayvpndriver.rest.SubnetROAResource">
+	</bean>
+	<bean id="deviceROAResource"
+		class="org.openo.sdnhub.overlayvpndriver.rest.DeviceROAResource">
+	</bean>
 
-    <bean id="vxLanSvc" class="org.openo.sdnhub.overlayvpndriver.service.vxlan.VxLanSvcImpl">
-    </bean>
+	<bean id="subnetBDIfROAResource"
+		class="org.openo.sdnhub.overlayvpndriver.rest.SubnetBDIfROAResource">
+	</bean>
+	<bean id="localSiteSNatROAResource"
+		class="org.openo.sdnhub.overlayvpndriver.rest.LocalSiteSNatROAResource">
+	</bean>
+	<bean id="vlanROAResource" class="org.openo.sdnhub.overlayvpndriver.rest.VlanROAResource">
+	</bean>
 
-    <bean id="ipSecCliSbi" class="org.openo.sdnhub.overlayvpndriver.sbi.ipsec.IpSecCliSbi">
-    </bean>
+	<bean id="interfaceIpROAResource"
+		class="org.openo.sdnhub.overlayvpndriver.rest.InterfaceIpROAResource">
+	</bean>
+	
+	<bean id="policyRouteROAResource"
+		class="org.openo.sdnhub.overlayvpndriver.rest.PolicyRouteROAResource">
+	</bean> -->
 
-    <bean id="ipSecRestfulSbi" class="org.openo.sdnhub.overlayvpndriver.sbi.ipsec.IpSecRestfulSbi">
-    </bean>
+	<!-- auto wired beans -->
+	<!-- <bean id="subnetService"
+		class="org.openo.sdnhub.overlayvpndriver.sbi.impl.SubnetServiceImpl">
+	</bean>
+	<bean id="staticRouteService"
+		class="org.openo.sdnhub.overlayvpndriver.sbi.impl.StaticRouteImpl" />
+		
+	<bean id="deviceService"
+		class="org.openo.sdnhub.overlayvpndriver.sbi.impl.DeviceServiceImpl" /> -->
+	<bean id="vxlanService"
+		class="org.openo.sdnhub.overlayvpndriver.sbi.impl.VxLanSvcImpl" />
+	
 
-    <bean id="vxLanRestfulSbi" class="org.openo.sdnhub.overlayvpndriver.sbi.vxlan.VxLANRestfulSbi">
-    </bean>
+	
+	<!-- <bean id="localSiteSNatService"
+		class="org.openo.sdnhub.overlayvpndriver.sbi.impl.LocalSiteSNatServiceImpl" />
 
-    <bean id="vxLanCliSbi" class="org.openo.sdnhub.overlayvpndriver.sbi.vxlan.VxLANCliSbi">
-    </bean>
+	<bean id="aclServiceImpl"
+		class="org.openo.sdnhub.overlayvpndriver.sbi.impl.AclServiceImpl" />
 
-    <bean id="WanSubInfSbi" class="org.openo.sdnhub.overlayvpndriver.sbi.wan.WanSubInfSbi">
-    </bean>
+	<bean id="vlanService"
+		class="org.openo.sdnhub.overlayvpndriver.sbi.impl.VlanServiceImpl">
+	</bean>
+	<bean id="subnetBDIf"
+		class="org.openo.sdnhub.overlayvpndriver.sbi.impl.SubnetBDIfImpl">
+	</bean>
 
-    <bean id="OverlayVpnDriverRestModule" class="org.openo.sdnhub.overlayvpndriver.OverlayVpnDriverRestModule"
-        init-method="start" destroy-method="stop">
-    </bean>
-
-    <bean class="org.openo.sdnhub.overlayvpndriver.util.config.OverlayVpnDriverContextHelper" />
+	<bean id="interfaceIpService"
+		class="org.openo.sdnhub.overlayvpndriver.sbi.impl.InterfaceIpServiceImpl" /> -->
+		
+	<!-- <bean id="ipSecConnStatusService"
+		class="org.openo.sdnhub.overlayvpndriver.sbi.impl.IpSecConnecStatusImpl" />
+		
+	<bean id="ipsecService"
+		class="org.openo.sdnhub.overlayvpndriver.sbi.impl.IpsecImpl" /> -->
+		
+	<!-- <bean id="nqaConfigService"
+		class="org.openo.sdnhub.overlayvpndriver.sbi.impl.NqaConfigImpl" />
+		
+	<bean id="policyRouteService"
+		class="org.openo.sdnhub.overlayvpndriver.sbi.impl.PolicyRouteImpl" /> -->
 
 </beans>

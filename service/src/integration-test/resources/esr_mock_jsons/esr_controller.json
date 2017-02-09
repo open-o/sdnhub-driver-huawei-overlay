@@ -1,0 +1,29 @@
+{
+	"request": {
+		"uri": "/openoapi/extsys/v1/sdncontrollers/[a-z0-9\\-\\_]{1,36}",
+		"method": "get",
+		"headers": {
+			"Content-Type": "application/xml"
+		},
+		"json": {
+			
+		}
+	},
+	"response": {
+		"status": 200,
+		"json": {
+			"sdnControllerId": "81244ad0-b4ea-41ed-969e-d5588b32fd4c",
+			"name": "sdn",
+			"url": "https://127.0.0.1:12306",
+			"userName": "admin",
+			"password": "admin",
+			"version": "v1.0",
+			"vendor": "ZTE",
+			"description": "",
+			"protocol": "netconf",
+			"productName": "",
+			"type": "ODL",
+			"createTime": "2016-07-18 12:22:53"
+		}
+	}
+}

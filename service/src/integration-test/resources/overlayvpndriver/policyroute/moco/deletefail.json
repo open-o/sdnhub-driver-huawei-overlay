@@ -1,0 +1,21 @@
+{
+	"request": {
+		"uri": "/controller/cloud/v2/northbound/config/[a-zA-Z0-9\\-\\_]{1,36}/device/qosmqc",
+		"method": "delete",
+		"headers": {
+			"Content-Type": "application/json;charset=UTF-8"
+		},
+		"json": null
+
+	},
+	"response": {
+		"status": 500,
+		"json": {
+			"errcode": "0",
+			"errmsg": "",
+			"data": {}
+		}
+
+
+	}
+}

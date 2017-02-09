@@ -23,7 +23,9 @@
 			"protocol": "netconf",
 			"productName": "",
 			"type": "ODL",
-			"createTime": "2016-07-18 12:22:53"
+			"createTime": "2016-07-18 12:22:53",
+			"hostName" :"127.0.0.1",
+			"port":"12307"
 		}
 	}
 }

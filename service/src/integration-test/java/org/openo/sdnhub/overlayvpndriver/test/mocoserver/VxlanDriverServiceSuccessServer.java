@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 Huawei Technologies Co., Ltd.
+ * Copyright 2017 Huawei Technologies Co., Ltd.
  *   
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,11 @@ package org.openo.sdnhub.overlayvpndriver.test.mocoserver;
 import java.util.List;
 
 import org.codehaus.jackson.type.TypeReference;
+import org.openo.sdnhub.overlayvpndriver.controller.model.VxLanDeviceModel;
+import org.openo.sdnhub.overlayvpndriver.result.OverlayVpnDriverResponse;
 import org.openo.sdno.framework.container.util.JsonUtil;
 import org.openo.sdno.overlayvpn.errorcode.ErrorCode;
-import org.openo.sdno.overlayvpn.model.port.WanSubInterface;
 import org.openo.sdno.overlayvpn.result.ResultRsp;
-import org.openo.sdnhub.overlayvpndriver.login.OverlayVpnDriverResponse;
-import org.openo.sdnhub.overlayvpndriver.model.vxlan.adapter.NetVxLanDeviceModel;
 import org.openo.sdno.testframework.http.model.HttpRequest;
 import org.openo.sdno.testframework.http.model.HttpResponse;
 import org.openo.sdno.testframework.http.model.HttpRquestResponse;
@@ -47,17 +46,9 @@ public class VxlanDriverServiceSuccessServer extends MocoHttpServer {
                 new VxLanSuccessResponseHandler());
         this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/vxlanDeletesuccess.json",
                 new VxLanSuccessResponseHandler());
-        this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/queryVtepSuccess.json",
-                new VxLanQuerySuccessResponseHandler());
         this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/ESRGetController.json",
                 new MocoResponseHandler());
-        this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/brsInsert.json",
-                new MocoResponseHandler());
-        this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/brsQueryvxlan.json",
-                new MocoResponseHandler());
-        this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/brsDelete.json",
-                new MocoResponseHandler());
-        this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/manageElement.json",
+        this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/getCommParams.json",
                 new MocoResponseHandler());
     }
     
@@ -68,9 +59,9 @@ public class VxlanDriverServiceSuccessServer extends MocoHttpServer {
 
             HttpRequest httpRequest = httpObject.getRequest();
             HttpResponse httpResponse = httpObject.getResponse();
-            OverlayVpnDriverResponse<List<NetVxLanDeviceModel>> inputInstanceList = JsonUtil.fromJson(httpResponse.getData(), new TypeReference<OverlayVpnDriverResponse<List<NetVxLanDeviceModel>>>() {});
+            OverlayVpnDriverResponse<List<VxLanDeviceModel>> inputInstanceList = JsonUtil.fromJson(httpResponse.getData(), new TypeReference<OverlayVpnDriverResponse<List<VxLanDeviceModel>>>() {});
 
-            ResultRsp<OverlayVpnDriverResponse<List<NetVxLanDeviceModel>>> newResult = new ResultRsp<OverlayVpnDriverResponse<List<NetVxLanDeviceModel>>>(ErrorCode.OVERLAYVPN_SUCCESS);
+            ResultRsp<OverlayVpnDriverResponse<List<VxLanDeviceModel>>> newResult = new ResultRsp<OverlayVpnDriverResponse<List<VxLanDeviceModel>>>(ErrorCode.OVERLAYVPN_SUCCESS);
 
             httpResponse.setStatus(200);
             newResult.setData(inputInstanceList);
@@ -78,21 +69,4 @@ public class VxlanDriverServiceSuccessServer extends MocoHttpServer {
         }
     }
     
-    private class VxLanQuerySuccessResponseHandler extends MocoResponseHandler {
-
-        @Override
-        public void processRequestandResponse(HttpRquestResponse httpObject) {
-
-            HttpRequest httpRequest = httpObject.getRequest();
-            HttpResponse httpResponse = httpObject.getResponse();
-            OverlayVpnDriverResponse<List<WanSubInterface>> inputInstanceList = JsonUtil.fromJson(httpResponse.getData(), new TypeReference<OverlayVpnDriverResponse<List<WanSubInterface>>>() {});
-
-            ResultRsp<OverlayVpnDriverResponse<List<WanSubInterface>>> newResult = new ResultRsp<OverlayVpnDriverResponse<List<WanSubInterface>>>(ErrorCode.OVERLAYVPN_SUCCESS);
-
-            httpResponse.setStatus(200);
-            newResult.setData(inputInstanceList);
-            httpResponse.setData(JsonUtil.toJson(inputInstanceList));
-        }
-    }
-
 }

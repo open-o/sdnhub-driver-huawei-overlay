@@ -1,0 +1,15 @@
+{
+	"request": {
+		"uri": "http://localhost:8080/overlayvpndriverservice/openoapi/sbi-vxlan/v1/device/111/tunnel/status",
+		"method": "post",
+		"headers": {
+			"Content-Type": "application/json;charset=UTF-8",
+			"X-Driver-Parameter": "extSysID=ctrlid1024"
+		},
+		"json": {"deviceId":"123","localIp":"127.0.0.1","peerIp":"127.0.0.1"}
+	},
+	"response": {
+		"status": 200,
+		"json": [{"deviceId":"123","localIp":"127.0.0.1","peerIp":null}]
+	}
+}

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-    Copyright 2016-2017 Huawei Technologies Co., Ltd.
+    Copyright 2017 Huawei Technologies Co., Ltd.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@
         <version>1.1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>org.openo.sdnhub.overlayvpndriverservice</artifactId>
+    <artifactId>org.openo.sdnhub.overlayvpndriver</artifactId>
     <packaging>war</packaging>
     <name>sdnhub-driver-huawei-overlay/service</name>
 
@@ -146,12 +146,6 @@
             <version>3.1.0.RELEASE</version>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.jmockit</groupId>
             <artifactId>jmockit</artifactId>
             <version>1.19</version>
@@ -163,6 +157,13 @@
             <version>1.19</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8.2</version>
+            <scope>test</scope>
+        </dependency>
+        
         <dependency>
             <groupId>org.openo.integration</groupId>
             <artifactId>org.openo.sdno.testframework</artifactId>
