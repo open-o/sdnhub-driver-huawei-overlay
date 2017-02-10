@@ -1,0 +1,61 @@
+{
+    "request":
+    {
+        "uri": "/controller/cloud/v2/northbound/config/[a-zA-Z0-9\\-\\_]{1,36}/device/nqa",
+        "method": "put",
+        "headers":{"Content-Type":"application/json"},
+        "json":{
+                "nqaList": [{
+                        "testType": "ping",
+                        "srcPort": null,
+                        "sequency": null,
+                        "frequency": null,
+                        "ttl": null,
+                        "id": null,
+                        "tos": null,
+                        "srcIp6": null,
+                        "dstIp6": null,
+                        "probeCount": null,
+                        "srcIp": null,
+                        "timeout": null,
+                        "dstIp": "192.168.1.2",
+                        "neId": "123",
+                        "neRole": null,
+                        "srcPortName": null,
+                        "dstPortName": null,
+                        "interval": null
+                    }]
+           }
+    },
+    "response":
+    {
+        "status":200,
+        "json":
+        {
+        "errcode": "0",
+            "errmsg": null,
+            "pageIndex": 0,
+            "pageSize": 0,
+            "totalRecords": 0,
+            "data": [
+                {
+                    "id": "c555c0dcbb334ccf820587443fbedec9",
+                    "sequency": 1,
+                    "testType": "ping",
+                    "dstIp": "12.13.14.15",
+                    "srcIp": null,
+                    "dstIp6": null,
+                    "srcIp6": null,
+                    "frequency": 6,
+                    "probeCount": 3,
+                    "timeout": 2,
+                    "ttl": 50,
+                    "tos": 10
+                }
+            ],
+            "success": null,
+            "fail": null,
+            "sucess": true
+        }
+    }
+}
