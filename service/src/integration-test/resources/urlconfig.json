@@ -1,34 +1,34 @@
 [
-	{
-		"url": "/svc/mss/v2",
-		"prefix": ""
-	},
-	{
-		"url": "/brs/v1",
-		"prefix": ""
-	},
-	{
-		"url": "/svc/l3vpn/v1/l3vpns",
-		"prefix": "/org.openo.sdno.l3vpnservice"
-	},
-	{		 	 
-       "url": "/rest/api/overlayvpn",     
+    {
+        "url": "/svc/mss/v2",
+        "prefix": ""
+    },
+    {
+        "url": "/brs/v1",
+        "prefix": ""
+    },
+    {
+        "url": "/svc/l3vpn/v1/l3vpns",
+        "prefix": "/org.openo.sdno.l3vpnservice"
+    },
+    {
+       "url": "/rest/api/overlayvpn",
        "prefix": "/org.openo.sdno.overlayvpnservice"
-	},
-	{
-       "url": "/rest/svc/vxlan/v1/vxlanservice",     
+    },
+    {
+       "url": "/rest/svc/vxlan/v1/vxlanservice",
        "prefix": ""
-	},
-	{
-       "url": "/rest/svc/ipsec/v1/ipsecs",     
+    },
+    {
+       "url": "/rest/svc/ipsec/v1/ipsecs",
        "prefix": ""
-	},
-	{
-       "url": "/controller/cloud/v2/northbound/config/123/device/arvpnsvxlan",     
+    },
+    {
+       "url": "/controller/cloud/v2/northbound/config/123/device/arvpnsvxlan",
        "prefix": ""
-	},
-	{
-       "url": "/openoapi/sbi-",     
+    },
+    {
+       "url": "/openoapi/sbi-",
        "prefix": "/overlayvpndriverservice"
-	}
+    }
 ]

@@ -1,0 +1,44 @@
+{
+  "request" : {
+    "uri" : "/controller/cloud/v2/northbound/devices",
+    "method" : "post",
+    "headers" : {
+        "X-Auth-Token": "junk"
+    },
+    "json" : {"deviceList":[{"name":"deviceOne","esn":"esn","orgnizationName":"huawei","description":"create test device"}]}
+  },
+  "response" : {
+    "status" : "200",
+    "json" : {
+         "errcode": "0",
+         "errmsg": "",
+         "data": [
+                 {
+                "name":"deviceOne",
+                "esn":"esn",
+                "orgnizationName":"huawei",
+                "description":"create test device",
+                "id":"81244ad0-b4ea-41ed-969e-d5588b32fd41",
+                "showTenant":null,
+                "serviceIp":null,
+                "neType":null,
+                "version":null,
+                "status":null,
+                "gisLon":null,
+                "gisLat":null,
+                "vendor":null,
+                "tenantId":null,
+                "tenantName":null,
+                "orgnizationId":null,
+                "creator":null,
+                "createTime":null,
+                "registerTime":null,
+                "modifier":null,
+                "modifyTime":null
+            }
+
+        ]
+      }
+
+  }
+}

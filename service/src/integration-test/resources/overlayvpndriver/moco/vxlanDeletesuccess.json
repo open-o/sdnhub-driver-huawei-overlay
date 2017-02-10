@@ -1,33 +1,33 @@
 {
-	"request": {
-		"uri": "/controller/cloud/v2/northbound/config/[a-zA-Z0-9\\-\\_]{1,36}/device/vpnsvxlan",
-		"method": "delete",
-		"headers": {
-			"Content-Type": "application/json;charset=UTF-8"
-		},
-		"json": {
-		}
-	},
-	"response": {
-		"status": 200,
-		"json": {
-			"errcode": "0",
-			"errmsg": null,
-			"pageIndex": 0,
-			"pageSize": 0,
-			"totalRecords": 0,
-			"data": [
-				{
-					"vneId": 123,
-					"name": "124",
-					"localAddress": null,
-					"vniilist": null,
-					"id": null
-				}
-			],
-			"success": null,
-			"fail": null,
-			"sucess": true
-		}
-	}
+    "request": {
+        "uri": "/controller/cloud/v2/northbound/config/[a-zA-Z0-9\\-\\_]{1,36}/device/vpnsvxlan",
+        "method": "delete",
+        "headers": {
+            "Content-Type": "application/json;charset=UTF-8"
+        },
+        "json": {
+        }
+    },
+    "response": {
+        "status": 200,
+        "json": {
+            "errcode": "0",
+            "errmsg": null,
+            "pageIndex": 0,
+            "pageSize": 0,
+            "totalRecords": 0,
+            "data": [
+                {
+                    "vneId": 123,
+                    "name": "124",
+                    "localAddress": null,
+                    "vniilist": null,
+                    "id": null
+                }
+            ],
+            "success": null,
+            "fail": null,
+            "sucess": true
+        }
+    }
 }

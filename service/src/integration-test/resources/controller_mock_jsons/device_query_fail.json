@@ -1,0 +1,19 @@
+{
+  "request" : {
+    "uri" : "/controller/cloud/v2/northbound/devices/list",
+    "method" : "post",
+    "headers" : {
+        "X-Auth-Token": "junk"
+    },
+    "json" : null
+  },
+  "response" : {
+    "status" : "400",
+    "json" : {
+         "errcode": "316",
+         "errmsg": "Invalid parameters",
+         "data": null
+      }
+    
+  }
+}

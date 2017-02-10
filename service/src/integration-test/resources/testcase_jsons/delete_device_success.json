@@ -1,0 +1,49 @@
+{
+    "request": {
+        "uri": "/openoapi/sbi-localsite/v1/devices?deviceIds=[81244ad0-b4ea-41ed-969e-d5588b32fd41]",
+        "method": "delete",
+        "headers": {
+            "Content-Type": "application/json;charset=UTF-8",
+            "X-Driver-Parameter": "extSysID=81244ad0-b4ea-41ed-969e-d5588b32fd4c"
+        },
+        "json": null
+    },
+    "response": {
+        "status": 200,
+        "json": {
+            "errorCode": "overlayvpn.operation.success",
+            "data": {
+                "name":"deviceOne",
+                "esn":"esn-abcdef-123456780",
+                "orgnizationName":"huawei",
+                "description":"create test device",
+                "id":"81244ad0-b4ea-41ed-969e-d5588b32fd41",
+                "showTenant":null,
+                "serviceIp":null,
+                "neType":null,
+                "version":null,
+                "status":null,
+                "gisLon":null,
+                "gisLat":null,
+                "vendor":null,
+                "tenantId":null,
+                "tenantName":null,
+                "orgnizationId":null,
+                "creator":null,
+                "createTime":null,
+                "registerTime":null,
+                "modifier":null,
+                "modifyTime":null
+            },
+            "descArg": "",
+            "reasonArg": "",
+            "detailArg": "",
+            "adviceArg": "",
+            "httpCode": 200,
+            "message": "",
+            "smallErrorCodeList": null,
+            "successed": null,
+            "fail": null
+        }
+    }
+}

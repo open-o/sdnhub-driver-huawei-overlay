@@ -1,21 +1,21 @@
 {
-	"request": {
-		"uri": "/controller/cloud/v2/northbound/config/[a-zA-Z0-9\\-\\_]{1,36}/device/vpnsipsec",
-		"method": "put",
-		"headers": {
-			"Content-Type": "application/json;charset=UTF-8"
-		},
-		"json": [{"id":"1","interfaceName":"name","name":null,"ipsecConnection":null}]
+    "request": {
+        "uri": "/controller/cloud/v2/northbound/config/[a-zA-Z0-9\\-\\_]{1,36}/device/vpnsipsec",
+        "method": "put",
+        "headers": {
+            "Content-Type": "application/json;charset=UTF-8"
+        },
+        "json": [{"id":"1","interfaceName":"name","name":null,"ipsecConnection":null}]
 
-	},
-	"response": {
-		"status": 200,
-		"json": {
-			"errcode": "0",
-			"errmsg": "",
-			"data": [{"id":"1","interfaceName":"name","name":null,"ipsecConnection":null}]
-		}
+    },
+    "response": {
+        "status": 200,
+        "json": {
+            "errcode": "0",
+            "errmsg": "",
+            "data": [{"id":"1","interfaceName":"name","name":null,"ipsecConnection":null}]
+        }
 
 
-	}
+    }
 }
