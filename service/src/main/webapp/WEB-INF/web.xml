@@ -33,7 +33,9 @@
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
-   
+   <listener>
+        <listener-class>org.openo.sdnhub.common.services.DriverRegistrationListener</listener-class>
+    </listener>
 
     <context-param>
         <param-name>contextConfigLocation</param-name>
