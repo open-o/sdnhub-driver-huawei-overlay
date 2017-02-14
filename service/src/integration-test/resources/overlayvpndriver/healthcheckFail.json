@@ -1,0 +1,16 @@
+{
+    "request": {
+        "uri": "http://localhost:8088/overlayvpndriverservice/openoapi/healthcheck",
+        "method": "get",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "json": {
+
+        }
+    },
+    "response": {
+        "status": 200,
+        "json": {"MSB":"DOWN"}
+    }
+}
