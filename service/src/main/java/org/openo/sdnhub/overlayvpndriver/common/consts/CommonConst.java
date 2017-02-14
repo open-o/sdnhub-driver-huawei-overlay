@@ -17,10 +17,8 @@
 package org.openo.sdnhub.overlayvpndriver.common.consts;
 
 /**
- * <br/>
- * <p>
- * </p>
- * 
+ * SDNHUB Overlay VPN driver common constant definitions.<br/>
+ *
  * @author
  * @version SDNHUB 0.5 02-Feb-2017
  */
@@ -48,7 +46,13 @@ public class CommonConst {
 
     // Device Restful interface URL Path Constants
     public static final String DEVICE_RESTFUL_PATH = "/sbi-localsite/v1";
-
     public static final String DEVICE_RESTFUL_OPERATION_PATH = "/devices";
     public static final String DEVICE_RESTFUL_UPDATE_OPERATION_PATH = "/deviceid/{deviceuuid}";
+
+    // VxLan Restful interface URL Path constants
+    public static final String VXLAN_RESTFUL_PATH = "/sbi-vxlan/v1";
+    public static final String VXLAN_BATCH_CREATE_OPERATION_PATH = "/batch-create-vxlan";
+    public static final String VXLAN_BATCH_DELETE_OPERATION_PATH = "/device/{deviceid}/batch-delete-vxlan";
+    public static final String VXLAN_BATCH_QUERY_OPERATION_PATH = "/batch-query-vxlan";
+    public static final String VXLAN_BATCH_UPDATE_OPERATION_PATH = "/batch-update-vxlan";
 }

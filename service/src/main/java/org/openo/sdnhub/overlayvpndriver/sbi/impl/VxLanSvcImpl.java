@@ -17,6 +17,7 @@
 package org.openo.sdnhub.overlayvpndriver.sbi.impl;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.codehaus.jackson.type.TypeReference;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
 import org.openo.sdnhub.overlayvpndriver.controller.consts.ControllerUrlConst;
+import org.openo.sdnhub.overlayvpndriver.controller.model.Vni;
 import org.openo.sdnhub.overlayvpndriver.controller.model.VxLanDeviceModel;
 import org.openo.sdnhub.overlayvpndriver.http.OverlayVpnDriverProxy;
 import org.openo.sdnhub.overlayvpndriver.result.ACDelResponse;
@@ -32,8 +34,9 @@ import org.openo.sdnhub.overlayvpndriver.result.OverlayVpnDriverResponse;
 import org.openo.sdno.framework.container.util.JsonUtil;
 import org.openo.sdno.overlayvpn.consts.CommConst;
 import org.openo.sdno.overlayvpn.errorcode.ErrorCode;
+import org.openo.sdno.overlayvpn.model.v2.vxlan.SbiNeVxlanInstance;
+import org.openo.sdno.overlayvpn.result.FailData;
 import org.openo.sdno.overlayvpn.result.ResultRsp;
-import org.openo.sdno.overlayvpn.result.SvcExcptUtil;
 import org.openo.sdno.util.http.HTTPReturnMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,9 +44,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import javax.ws.rs.WebApplicationException;
+
 /**
  * VxLan service implementation.<br>
- * 
+ *
  * @author
  * @version SDNHUB 0.5 Jan 16, 2017
  */
@@ -55,20 +60,16 @@ public class VxLanSvcImpl {
     private static final String DELETE_VXLN_PARAMETER = "ids";
 
     /**
-     * Create VxLan operation. <br>
-     * 
-     * @param ctrlUuid
-     *            The controller UUID
-     * @param deviceId
-     *            The device id
-     * @param netVxLanDeviceModelList
-     *            The data that want to crate
-     * @return The ResultRsp with the list of NetVxLanDeviceModel
-     * @throws ServiceException
-     *             When create failed
+     * Adds new Vxlan configuration using a specific Controller.<br>
+     *
+     * @param ctrlUuid Controller UUID
+     * @param deviceId device id
+     * @param netVxLanDeviceModelList collection of controller vxlan device model structure
+     * @return ResultRsp object with collection of VxLan added configuration status data
+     * @throws ServiceException when input validation fails
      * @since SDNHUB 0.5
      */
-    public ResultRsp<List<VxLanDeviceModel>> createVxLanByDevice(String ctrlUuid, String deviceId,
+    public static ResultRsp<List<VxLanDeviceModel>> createVxLanByDevice(String ctrlUuid, String deviceId,
             List<VxLanDeviceModel> netVxLanDeviceModelList) throws ServiceException {
 
         ResultRsp<List<VxLanDeviceModel>> resultRsp =
@@ -98,7 +99,53 @@ public class VxLanSvcImpl {
         }
     }
 
-    public ResultRsp<ACDelResponse> deleteVxlanByDevice(String ctrlUuid, String deviceId, List<String> idList)
+    /**
+     * Queries device for Vxlan configuration using a specific Controller.<br>
+     *
+     * @param ctrlUuid Controller UUID
+     * @param deviceId device id
+     * @return ResultRsp object with collection of VxLan queried configuration status data
+     * @throws ServiceException when input validation fails
+     * @since SDNHUB 0.5
+     */
+    public static ResultRsp<List<VxLanDeviceModel>> queryVxlanByDevice(String ctrlUuid, String deviceId)
+            throws ServiceException {
+        ResultRsp<List<VxLanDeviceModel>> resultRsp =
+                new ResultRsp<List<VxLanDeviceModel>>(ErrorCode.OVERLAYVPN_SUCCESS);
+
+        String queryUrl = MessageFormat.format(ControllerUrlConst.CONST_CONFIG_VXLAN, deviceId);
+        HTTPReturnMessage httpMsg = OverlayVpnDriverProxy.getInstance().sendGetMsg(queryUrl, null, ctrlUuid);
+        String body = httpMsg.getBody();
+        LOGGER.debug("queryVxlanByDevice return body: " + body);
+        if((!httpMsg.isSuccess()) || (!StringUtils.hasLength(body))) {
+            LOGGER.error("queryVxlanByDevice: httpMsg return error.");
+            throw new ServiceException(ErrorCode.ADAPTER_CONNECTOR_RESPONSE_FAIL,
+                    "queryVxlanByDevice: httpMsg return error.");
+        }
+
+        OverlayVpnDriverResponse<List<VxLanDeviceModel>> acresponse =
+                JsonUtil.fromJson(body, new TypeReference<OverlayVpnDriverResponse<List<VxLanDeviceModel>>>() {});
+
+        if(!acresponse.isSucess()) {
+            LOGGER.error("createTunnelByDevice: acresponse return error, errMsg: " + acresponse.getErrmsg());
+            throw new ServiceException(ErrorCode.ADAPTER_CONNECTOR_RESPONSE_FAIL, acresponse.getErrmsg());
+        }
+
+        resultRsp.setData(acresponse.getData());
+        return resultRsp;
+    }
+
+    /**
+     * Deletes Vxlan configuration using a specific Controller.<br>
+     *
+     * @param ctrlUuid Controller UUID
+     * @param deviceId device id
+     * @param idList collection of vxlan id
+     * @return ResultRsp object with VxLan deleted configuration status data
+     * @throws ServiceException when input validation fails
+     * @since SDNHUB 0.5
+     */
+    public static ResultRsp<ACDelResponse> deleteVxlanByDevice(String ctrlUuid, String deviceId, List<String> idList)
             throws ServiceException {
 
         ResultRsp<ACDelResponse> resultRsp = new ResultRsp<ACDelResponse>(ErrorCode.OVERLAYVPN_SUCCESS);
@@ -137,35 +184,78 @@ public class VxLanSvcImpl {
         return resultRsp;
     }
 
-    public ResultRsp<List<VxLanDeviceModel>> updateVxlanByDevice(String ctrlUuid, String deviceId,
+    /**
+     * Updates Vxlan configuration using a specific Controller.<br>
+     *
+     * @param ctrlUuid Controller UUID
+     * @param deviceId device id
+     * @param vxlanDeviceModelList collection of controller vxlan device model structure
+     * @return ResultRsp object with collection of VxLan updated configuration status data
+     * @throws ServiceException when input validation fails
+     * @since SDNHUB 0.5
+     */
+    public static ResultRsp<List<VxLanDeviceModel>> updateVxlanByDevice(String ctrlUuid, String deviceId,
             List<VxLanDeviceModel> vxlanDeviceModelList) throws ServiceException {
         return createVxLanByDevice(ctrlUuid, deviceId, vxlanDeviceModelList);
     }
 
-    public ResultRsp<List<VxLanDeviceModel>> queryVxlanByDevice(String ctrlUuid, String deviceId)
-            throws ServiceException {
-        ResultRsp<List<VxLanDeviceModel>> resultRsp =
-                new ResultRsp<List<VxLanDeviceModel>>(ErrorCode.OVERLAYVPN_SUCCESS);
-
-        String queryUrl = MessageFormat.format(ControllerUrlConst.CONST_CONFIG_VXLAN, deviceId);
-        HTTPReturnMessage httpMsg = OverlayVpnDriverProxy.getInstance().sendGetMsg(queryUrl, null, ctrlUuid);
-        String body = httpMsg.getBody();
-        LOGGER.debug("queryVxlanByDevice return body: " + body);
-        if((!httpMsg.isSuccess()) || (!StringUtils.hasLength(body))) {
-            LOGGER.error("queryVxlanByDevice: httpMsg return error.");
-            throw new ServiceException(ErrorCode.ADAPTER_CONNECTOR_RESPONSE_FAIL,
-                    "queryVxlanByDevice: httpMsg return error.");
+    /**
+     * Searches succeeded and failed result in controller response and fill those information
+     * in response to service SBI.
+     *
+     * @param totalResult result response to service SBI
+     * @param vxlanInstanceElement request element map from service SBI
+     * @param acExistVxlanModels result response collection from controoler
+     * @since SDNHUB 0.5
+     */
+    public static void findData(ResultRsp<SbiNeVxlanInstance> totalResult,
+                          Map.Entry<String, List<SbiNeVxlanInstance>> vxlanInstanceElement,
+                          List<VxLanDeviceModel> acExistVxlanModels) {
+        for(SbiNeVxlanInstance sbiNeVxlanInstance : vxlanInstanceElement.getValue()) {
+            boolean isFind = false;
+            for(VxLanDeviceModel vxlanDeviceModel : acExistVxlanModels) {
+                if(vxlanDeviceModel.getUuid().equals(sbiNeVxlanInstance.getExternalId())) {
+                    for(Vni vni : vxlanDeviceModel.getVniList()) {
+                        if(sbiNeVxlanInstance.getVni().equals(String.valueOf(vni.getVni()))) {
+                            if(totalResult.getSuccessed() == null) {
+                                totalResult.setSuccessed(new ArrayList<>());
+                            }
+                            totalResult.getSuccessed().add(sbiNeVxlanInstance);
+                            isFind = true;
+                            break;
+                        }
+                    }
+                }
+                if(isFind) {
+                    break;
+                }
+            }
+            if(!isFind) {
+                FailData<SbiNeVxlanInstance> failData = new FailData<SbiNeVxlanInstance>(ErrorCode.OVERLAYVPN_FAILED,
+                        ErrorCode.COMMON_CONFIG_NOT_EXIST, sbiNeVxlanInstance);
+                if(totalResult.getFail() == null) {
+                    totalResult.setFail(new ArrayList<>());
+                }
+                totalResult.getFail().add(failData);
+            }
         }
+    }
 
-        OverlayVpnDriverResponse<List<VxLanDeviceModel>> acresponse =
-                JsonUtil.fromJson(body, new TypeReference<OverlayVpnDriverResponse<List<VxLanDeviceModel>>>() {});
-
-        if(!acresponse.isSucess()) {
-            LOGGER.error("createTunnelByDevice: acresponse return error, errMsg: " + acresponse.getErrmsg());
-            throw new ServiceException(ErrorCode.ADAPTER_CONNECTOR_RESPONSE_FAIL, acresponse.getErrmsg());
+    /**
+     * Groups service SBI NeVxlanInstance based on device id.
+     *
+     * @param vxlanInstanceList service SBI request with collection of Ne Vxlan instance
+     * @return grouped service SBI NeVxlanInstance based on device id
+     * @since SDNHUB 0.5
+     */
+    public static Map<String, List<SbiNeVxlanInstance>> groupByDeviceId(List<SbiNeVxlanInstance> vxlanInstanceList) {
+        Map<String, List<SbiNeVxlanInstance>> map = new HashMap<String, List<SbiNeVxlanInstance>>();
+        for(SbiNeVxlanInstance sbiNeVxlanInstance : vxlanInstanceList) {
+            if(null == map.get(sbiNeVxlanInstance.getDeviceId())) {
+                map.put(sbiNeVxlanInstance.getDeviceId(), new ArrayList<SbiNeVxlanInstance>());
+            }
+            map.get(sbiNeVxlanInstance.getDeviceId()).add(sbiNeVxlanInstance);
         }
-
-        resultRsp.setData(acresponse.getData());
-        return resultRsp;
+        return map;
     }
 }
