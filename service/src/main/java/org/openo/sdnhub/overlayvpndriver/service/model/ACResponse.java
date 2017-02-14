@@ -52,13 +52,13 @@ public class ACResponse<T> {
     @JsonProperty
     private T data;
 
-    @JsonIgnore
+    @JsonProperty
     private List<T> success = null;
 
-    @JsonIgnore
+    @JsonProperty
     private List<FailData<T>> fail = null;
 
-    public boolean isSuccess() {
+    public boolean isSucceed() {
         return DriverErrorCode.SUCCESS.equalsIgnoreCase(errcode);
     }
 
@@ -109,12 +109,10 @@ public class ACResponse<T> {
     public void setData(T data) {
         this.data = data;
     }
-
-    /*
-     * public List<T> getSuccess() {
-     * return success;
-     * }
-     */
+    
+    public List<T> getSuccess() {
+       return success;
+    }
 
     public void setSuccess(List<T> success) {
         this.success = success;
@@ -127,5 +125,4 @@ public class ACResponse<T> {
     public void setFail(List<FailData<T>> fail) {
         this.fail = fail;
     }
-
 }

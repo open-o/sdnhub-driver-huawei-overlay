@@ -1,16 +1,16 @@
 {
-	"request": {
-		"uri": "/openoapi/sdnobrs/v1/commparammgmt/access-objects/[a-z0-9\\-\\_]{1,36}/commparams",
-		"method": "get",
-		"headers": {
-			"Content-Type": "application/json"
-		},
-		"json": {
-			
-		}
-	},
-	"response": {
-		"status": 200,
-		"json": [{"id":null,"name":null,"description":null,"objectId":null,"protocol":null,"hostName":null,"port":null,"commParams":"CzJVbwbYkHjQSw1cDoQHo9lmVoMSEVxpfBLOU1f9t8MfAQlE3B8n9Z+trGFXgeg9h7lyRmtjm4y/tAselxFqdaJvqgvmOamiGrqmt5m2LIjP55EXlsQqYjYwtZlo9huh"}]
-	}
+    "request": {
+        "uri": "/openoapi/sdnobrs/v1/commparammgmt/access-objects/[a-z0-9\\-\\_]{1,36}/commparams",
+        "method": "get",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "json": {
+
+        }
+    },
+    "response": {
+        "status": 200,
+        "json": [{"id":null,"name":null,"description":null,"objectId":null,"protocol":null,"hostName":null,"port":null,"commParams":"CzJVbwbYkHjQSw1cDoQHo9lmVoMSEVxpfBLOU1f9t8MfAQlE3B8n9Z+trGFXgeg9h7lyRmtjm4y/tAselxFqdaJvqgvmOamiGrqmt5m2LIjP55EXlsQqYjYwtZlo9huh"}]
+    }
 }

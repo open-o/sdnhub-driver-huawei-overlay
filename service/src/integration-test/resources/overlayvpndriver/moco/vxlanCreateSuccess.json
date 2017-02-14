@@ -1,69 +1,69 @@
 {
-	"request": {
-		"uri": "/controller/cloud/v2/northbound/config/[a-zA-Z0-9\\-\\_]{1,36}/device/vpnsvxlan",
-		"method": "get",
-		"headers": {
-			"Content-Type": "application/json;charset=UTF-8"
-		},
-		"json": {}
+    "request": {
+        "uri": "/controller/cloud/v2/northbound/config/[a-zA-Z0-9\\-\\_]{1,36}/device/vpnsvxlan",
+        "method": "get",
+        "headers": {
+            "Content-Type": "application/json;charset=UTF-8"
+        },
+        "json": {}
 
-	},
-	"response": {
-		"status": 200,
-		"json": {
-			"errcode": "0",
-			"errmsg": "",
-			"data": [{
-				"id": "9fd84ebf189b457486a521ac187aa733",
-				"vneId": 1,
-				"name": "VXLAN",
-				"localAddress": "12.12.12.12",
-				"vniilist": [{
-					"id": "1b2cc6724a35412d9fa2725f40e37304",
-					"deleteMode": false,
-					"vni": 300,
-					"macLearingMode": null,
-					"evpnRtMode": null,
-					"evpnRtExport": null,
-					"evpnRtImport": null,
-					"peerAddresslist": [
-						"15.15.12.13",
-						"22.22.22.22"
-					],
-					"defaultlist": null,
-					"portlist": null,
-					"vlanlist": [
-						1, 2
-					],
-					"portvlanlist": null
-				}]
-			}, {
-				"id": "a89a892984694367bca7826f56632b5b",
-				"vneId": 2,
-				"name": "VXLAN1",
-				"localAddress": "12.12.12.121",
-				"vniilist": [{
-					"id": "6c942895f1134b939dc7b78c15824382",
-					"deleteMode": false,
-					"vni": 3000,
-					"macLearingMode": null,
-					"evpnRtMode": null,
-					"evpnRtExport": null,
-					"evpnRtImport": null,
-					"peerAddresslist": [
-						"15.15.112.13",
-						"22.22.122.22"
-					],
-					"defaultlist": null,
-					"portlist": [
-						"GigabitEthernet0/0/0",
-						"GigabitEthernet0/0/2"
-					],
-					"vlanlist": null,
-					"portvlanlist": null
-				}]
-			}]
-		}
+    },
+    "response": {
+        "status": 200,
+        "json": {
+            "errcode": "0",
+            "errmsg": "",
+            "data": [{
+                "id": "9fd84ebf189b457486a521ac187aa733",
+                "vneId": 1,
+                "name": "VXLAN",
+                "localAddress": "12.12.12.12",
+                "vniilist": [{
+                    "id": "1b2cc6724a35412d9fa2725f40e37304",
+                    "deleteMode": false,
+                    "vni": 300,
+                    "macLearingMode": null,
+                    "evpnRtMode": null,
+                    "evpnRtExport": null,
+                    "evpnRtImport": null,
+                    "peerAddresslist": [
+                        "15.15.12.13",
+                        "22.22.22.22"
+                    ],
+                    "defaultlist": null,
+                    "portlist": null,
+                    "vlanlist": [
+                        1, 2
+                    ],
+                    "portvlanlist": null
+                }]
+            }, {
+                "id": "a89a892984694367bca7826f56632b5b",
+                "vneId": 2,
+                "name": "VXLAN1",
+                "localAddress": "12.12.12.121",
+                "vniilist": [{
+                    "id": "6c942895f1134b939dc7b78c15824382",
+                    "deleteMode": false,
+                    "vni": 3000,
+                    "macLearingMode": null,
+                    "evpnRtMode": null,
+                    "evpnRtExport": null,
+                    "evpnRtImport": null,
+                    "peerAddresslist": [
+                        "15.15.112.13",
+                        "22.22.122.22"
+                    ],
+                    "defaultlist": null,
+                    "portlist": [
+                        "GigabitEthernet0/0/0",
+                        "GigabitEthernet0/0/2"
+                    ],
+                    "vlanlist": null,
+                    "portvlanlist": null
+                }]
+            }]
+        }
 
-	}
+    }
 }
