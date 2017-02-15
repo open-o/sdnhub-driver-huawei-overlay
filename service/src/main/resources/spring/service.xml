@@ -56,47 +56,50 @@
     </bean>
 
     <!-- <bean id="portROAResource" class="org.openo.sdnhub.overlayvpndriver.rest.PortROAResource">
+    </bean-->
+
+    <bean id="nqaROAResource"
+          class="org.openo.sdnhub.overlayvpndriver.rest.NqaROAResource">
     </bean>
 
-    <bean id="nqaROAResource" class="org.openo.sdnhub.overlayvpndriver.rest.NqaROAResource">
-    </bean>
     <bean id="staticRouteROAResource"
         class="org.openo.sdnhub.overlayvpndriver.rest.StaticRouteROAResource">
     </bean>
 
-    <bean id="subnetROAResource"
-        class="org.openo.sdnhub.overlayvpndriver.rest.SubnetROAResource">
-    </bean>
+    <!--<bean id="subnetROAResource" -->
+          <!--class="org.openo.sdnhub.overlayvpndriver.rest.SubnetROAResource">-->
+    <!--</bean>-->
+
     <bean id="deviceROAResource"
         class="org.openo.sdnhub.overlayvpndriver.rest.DeviceROAResource">
     </bean>
 
-    <bean id="subnetBDIfROAResource"
-        class="org.openo.sdnhub.overlayvpndriver.rest.SubnetBDIfROAResource">
-    </bean>
-    <bean id="localSiteSNatROAResource"
-        class="org.openo.sdnhub.overlayvpndriver.rest.LocalSiteSNatROAResource">
-    </bean>
-    <bean id="vlanROAResource" class="org.openo.sdnhub.overlayvpndriver.rest.VlanROAResource">
-    </bean>
+    <!--<bean id="subnetBDIfROAResource"-->
+        <!--class="org.openo.sdnhub.overlayvpndriver.rest.SubnetBDIfROAResource">-->
+    <!--</bean>-->
+    <!--<bean id="localSiteSNatROAResource"-->
+        <!--class="org.openo.sdnhub.overlayvpndriver.rest.LocalSiteSNatROAResource">-->
+    <!--</bean>-->
+    <!--<bean id="vlanROAResource" class="org.openo.sdnhub.overlayvpndriver.rest.VlanROAResource">-->
+    <!--</bean>-->
 
-    <bean id="interfaceIpROAResource"
-        class="org.openo.sdnhub.overlayvpndriver.rest.InterfaceIpROAResource">
-    </bean>
+    <!--<bean id="interfaceIpROAResource"-->
+        <!--class="org.openo.sdnhub.overlayvpndriver.rest.InterfaceIpROAResource">-->
+    <!--</bean>-->
 
-    <bean id="policyRouteROAResource"
-        class="org.openo.sdnhub.overlayvpndriver.rest.PolicyRouteROAResource">
-    </bean> -->
+    <!--<bean id="policyRouteROAResource"-->
+        <!--class="org.openo.sdnhub.overlayvpndriver.rest.PolicyRouteROAResource">-->
+    <!--</bean>-->
 
     <!-- auto wired beans -->
     <!-- <bean id="subnetService"
         class="org.openo.sdnhub.overlayvpndriver.sbi.impl.SubnetServiceImpl">
-    </bean>
+    </bean-->
     <bean id="staticRouteService"
         class="org.openo.sdnhub.overlayvpndriver.sbi.impl.StaticRouteImpl" />
 
     <bean id="deviceService"
-        class="org.openo.sdnhub.overlayvpndriver.sbi.impl.DeviceServiceImpl" /> -->
+        class="org.openo.sdnhub.overlayvpndriver.sbi.impl.DeviceServiceImpl"/>
     <bean id="vxlanService"
         class="org.openo.sdnhub.overlayvpndriver.sbi.impl.VxLanSvcImpl" />
 
@@ -125,10 +128,9 @@
     <bean id="ipsecService"
         class="org.openo.sdnhub.overlayvpndriver.sbi.impl.IpsecImpl" /> -->
 
-    <!-- <bean id="nqaConfigService"
-        class="org.openo.sdnhub.overlayvpndriver.sbi.impl.NqaConfigImpl" />
+    <bean id="nqaConfigService" class="org.openo.sdnhub.overlayvpndriver.sbi.impl.NqaConfigImpl" />
 
-    <bean id="policyRouteService"
+    <!--bean id="policyRouteService"
         class="org.openo.sdnhub.overlayvpndriver.sbi.impl.PolicyRouteImpl" /> -->
 
 </beans>
