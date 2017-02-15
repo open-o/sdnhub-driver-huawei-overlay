@@ -29,6 +29,7 @@ import org.openo.sdnhub.overlayvpndriver.service.model.ACResponse;
 import org.openo.sdnhub.overlayvpndriver.service.model.SbiSubnetBdInfoModel;
 import org.openo.sdno.exception.ParameterServiceException;
 import org.openo.sdno.framework.container.util.JsonUtil;
+import org.openo.sdno.overlayvpn.errorcode.ErrorCode;
 import org.openo.sdno.overlayvpn.result.ResultRsp;
 import org.openo.sdno.util.http.HTTPReturnMessage;
 import org.slf4j.Logger;
@@ -86,6 +87,6 @@ public class SubnetBDIfImpl {
         ACBDInfo bdInfo = acResponse.getData().get(0);
         model.setBdId(bdInfo.getBdId());
         model.setVbdifName(bdInfo.getVbdifName());
-        return new ResultRsp<SbiSubnetBdInfoModel>(DriverErrorCode.CLOUDVPN_SUCCESS, model);
+        return new ResultRsp<SbiSubnetBdInfoModel>(ErrorCode.OVERLAYVPN_SUCCESS, model);
     }
 }
