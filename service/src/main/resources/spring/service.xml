@@ -35,7 +35,7 @@
             <!--<ref bean="subnetROAResource"></ref>-->
             <ref bean="deviceROAResource"></ref>
             <!--<ref bean="subnetBDIfROAResource"></ref>-->
-            <!--<ref bean="localSiteSNatROAResource"></ref>-->
+            <ref bean="localSiteSNatROAResource"></ref>
             <!--<ref bean="vlanROAResource"></ref>-->
             <ref bean="interfaceIpROAResource"></ref>
             <!--<ref bean="policyRouteROAResource"></ref> &ndash;&gt;-->
@@ -77,9 +77,9 @@
     <!--<bean id="subnetBDIfROAResource"-->
         <!--class="org.openo.sdnhub.overlayvpndriver.rest.SubnetBDIfROAResource">-->
     <!--</bean>-->
-    <!--<bean id="localSiteSNatROAResource"-->
-        <!--class="org.openo.sdnhub.overlayvpndriver.rest.LocalSiteSNatROAResource">-->
-    <!--</bean>-->
+    <bean id="localSiteSNatROAResource"
+        class="org.openo.sdnhub.overlayvpndriver.rest.LocalSiteSNatROAResource">
+    </bean>
     <!--<bean id="vlanROAResource" class="org.openo.sdnhub.overlayvpndriver.rest.VlanROAResource">-->
     <!--</bean>-->
 
@@ -106,13 +106,13 @@
     <bean id="healthCheckRoaResource" class="org.openo.sdno.healthcheck.rest.HealthCheckRoaResource" />
     <bean id="checker" class="org.openo.sdno.healthcheck.service.DefaultHealthChecker" />
 
-    <!-- <bean id="localSiteSNatService"
+    <bean id="localSiteSNatService"
         class="org.openo.sdnhub.overlayvpndriver.sbi.impl.LocalSiteSNatServiceImpl" />
 
     <bean id="aclServiceImpl"
         class="org.openo.sdnhub.overlayvpndriver.sbi.impl.AclServiceImpl" />
 
-    <bean id="vlanService"
+    <!--bean id="vlanService"
         class="org.openo.sdnhub.overlayvpndriver.sbi.impl.VlanServiceImpl">
     </bean>
     <bean id="subnetBDIf"
