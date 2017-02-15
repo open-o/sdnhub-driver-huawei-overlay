@@ -50,12 +50,12 @@ public class SbiInterfaceIpConfig {
     /**
      * Ipv6 address allocation mode
      */
+    @AString(require=true, scope="dhcp,manual")
     private String mode6;
 
     /**
      * Ipv6 address
      */
-    @AString(require=true, scope="dhcp,manual")
     private String ipv6Address;
 
     /**
