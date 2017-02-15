@@ -29,16 +29,16 @@
             <!-- <ref bean="ipSecConnecStatusROAResource"></ref> -->
             <ref bean="vxLanRoaResource"></ref>
             <ref bean="healthCheckRoaResource"></ref>
-            <!-- <ref bean="portROAResource"></ref>
+            <!--ref bean="portROAResource"></ref-->
             <ref bean="nqaROAResource"></ref>
             <ref bean="staticRouteROAResource"></ref>
-            <ref bean="subnetROAResource"></ref>
+            <!--<ref bean="subnetROAResource"></ref>-->
             <ref bean="deviceROAResource"></ref>
-            <ref bean="subnetBDIfROAResource"></ref>
-            <ref bean="localSiteSNatROAResource"></ref>
-            <ref bean="vlanROAResource"></ref>
-            <ref bean="interfaceIpROAResource"></ref>
-            <ref bean="policyRouteROAResource"></ref> -->
+            <!--<ref bean="subnetBDIfROAResource"></ref>-->
+            <!--<ref bean="localSiteSNatROAResource"></ref>-->
+            <!--<ref bean="vlanROAResource"></ref>-->
+            <!--<ref bean="interfaceIpROAResource"></ref>-->
+            <!--<ref bean="policyRouteROAResource"></ref> &ndash;&gt;-->
         </jaxrs:serviceBeans>
         <!-- registering providers -->
         <jaxrs:providers>
