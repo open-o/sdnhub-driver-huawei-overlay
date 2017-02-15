@@ -17,8 +17,6 @@
 package org.openo.sdnhub.overlayvpndriver.rest;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.http.HttpStatus;
-import org.apache.ibatis.builder.ParameterExpression;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
 import org.openo.sdnhub.overlayvpndriver.common.util.RequestHeaderUtil;
 import org.openo.sdnhub.overlayvpndriver.controller.model.ControllerNbiStaticRoute;
@@ -29,7 +27,6 @@ import org.openo.sdno.overlayvpn.errorcode.ErrorCode;
 import org.openo.sdno.overlayvpn.model.v2.route.SbiNeStaticRoute;
 import org.openo.sdno.overlayvpn.result.FailData;
 import org.openo.sdno.overlayvpn.result.ResultRsp;
-import org.openo.sdno.overlayvpn.result.SvcExcptUtil;
 import org.openo.sdno.overlayvpn.util.check.UuidUtil;
 import org.openo.sdno.overlayvpn.util.check.ValidationUtil;
 import org.slf4j.Logger;

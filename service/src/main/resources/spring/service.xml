@@ -37,7 +37,7 @@
             <!--<ref bean="subnetBDIfROAResource"></ref>-->
             <!--<ref bean="localSiteSNatROAResource"></ref>-->
             <!--<ref bean="vlanROAResource"></ref>-->
-            <!--<ref bean="interfaceIpROAResource"></ref>-->
+            <ref bean="interfaceIpROAResource"></ref>
             <!--<ref bean="policyRouteROAResource"></ref> &ndash;&gt;-->
         </jaxrs:serviceBeans>
         <!-- registering providers -->
@@ -83,9 +83,9 @@
     <!--<bean id="vlanROAResource" class="org.openo.sdnhub.overlayvpndriver.rest.VlanROAResource">-->
     <!--</bean>-->
 
-    <!--<bean id="interfaceIpROAResource"-->
-        <!--class="org.openo.sdnhub.overlayvpndriver.rest.InterfaceIpROAResource">-->
-    <!--</bean>-->
+    <bean id="interfaceIpROAResource"
+        class="org.openo.sdnhub.overlayvpndriver.rest.InterfaceIpROAResource">
+    </bean>
 
     <!--<bean id="policyRouteROAResource"-->
         <!--class="org.openo.sdnhub.overlayvpndriver.rest.PolicyRouteROAResource">-->
@@ -117,10 +117,10 @@
     </bean>
     <bean id="subnetBDIf"
         class="org.openo.sdnhub.overlayvpndriver.sbi.impl.SubnetBDIfImpl">
-    </bean>
+    </bean-->
 
     <bean id="interfaceIpService"
-        class="org.openo.sdnhub.overlayvpndriver.sbi.impl.InterfaceIpServiceImpl" /> -->
+        class="org.openo.sdnhub.overlayvpndriver.sbi.impl.InterfaceIpServiceImpl" />
 
     <!-- <bean id="ipSecConnStatusService"
         class="org.openo.sdnhub.overlayvpndriver.sbi.impl.IpSecConnecStatusImpl" />
