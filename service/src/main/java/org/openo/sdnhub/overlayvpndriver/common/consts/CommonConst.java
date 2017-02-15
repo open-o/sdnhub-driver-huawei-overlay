@@ -31,17 +31,19 @@ public class CommonConst {
     public static final String ETHCONFIG_LIST = "ethInterfaceConfig";
 
     public static final String ETHCONFIG_INTERFACENAME = "name";
-    
+
     public static final String CTRL_HEADER_PARAM = "X-Driver-Parameter";
-    
+
     public static final String DEVICE_ID_PATH_PARAM = "deviceid";
 
     public static final String DEVICE_IDS_PATH_PARAM = "deviceIds";
 
     public static final String DEVICE_UUID_PATH_PARAM = "deviceuuid";
 
+    public static final String IDS_PATH_PARAM = "ids";
+
     public static final String ESN_QUERY_PARAM = "esn";
-    
+
     public static final String STATIC_ROUTE_CONFIGS = "staticRouteConfigs";
 
     // Device Restful interface URL Path Constants
