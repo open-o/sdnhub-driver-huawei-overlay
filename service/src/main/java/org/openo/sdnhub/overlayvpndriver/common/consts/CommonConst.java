@@ -44,6 +44,8 @@ public class CommonConst {
 
     public static final String ESN_QUERY_PARAM = "esn";
 
+    public static final String VNI_PATH_PARAM = "vni";
+
     public static final String STATIC_ROUTE_CONFIGS = "staticRouteConfigs";
 
     // Device Restful interface URL Path Constants
