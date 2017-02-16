@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
  * <br/>
  * <p>
  * </p>
- * 
+ *
  * @param <T>
  * @author
  * @version SDNHUB 0.5 02-Feb-2017
@@ -41,14 +41,14 @@ public class ResultRspUtil<T> {
 
     /**
      * <br/>
-     * 
+     *
      * @param dataObj
      * @param t
      * @return
      * @since SDNHUB 0.5
      */
     public List<T> parserRspDataList(Object dataObj, T t) {
-        List<T> greRspDataList = new ArrayList<T>();
+        List<T> greRspDataList = new ArrayList<>();
         if(dataObj instanceof List) {
             List dataList = (List)dataObj;
             for(int i = 0; i < dataList.size(); i++) {
@@ -85,14 +85,10 @@ public class ResultRspUtil<T> {
                 }
             }
             return objt;
-        } catch(InstantiationException e) {
-            LOGGER.error("parser " + class1.getName() + " from " + fieldMap
-                    + " failed for field is wrong or new instance failed.", e);
-        } catch(IllegalAccessException e) {
+        } catch(InstantiationException| IllegalAccessException e) {
             LOGGER.error("parser " + class1.getName() + " from " + fieldMap
                     + " failed for field is wrong or new instance failed.", e);
         }
         return null;
     }
-
 }

@@ -59,4 +59,7 @@ public class CommonConst {
     public static final String VXLAN_BATCH_DELETE_OPERATION_PATH = "/device/{deviceid}/batch-delete-vxlan";
     public static final String VXLAN_BATCH_QUERY_OPERATION_PATH = "/batch-query-vxlan";
     public static final String VXLAN_BATCH_UPDATE_OPERATION_PATH = "/batch-update-vxlan";
+    private CommonConst() {
+        // Do nothing
+    }
 }

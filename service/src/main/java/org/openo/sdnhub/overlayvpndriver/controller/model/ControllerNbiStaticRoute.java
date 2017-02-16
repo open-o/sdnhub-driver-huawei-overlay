@@ -150,8 +150,8 @@ public class ControllerNbiStaticRoute {
         return ipv6Address;
     }
 
-    public String setIpv6Address(String ipv6address) {
-        return this.ipv6Address = ipv6address;
+    public void setIpv6Address(String ipv6address) {
+        this.ipv6Address = ipv6address;
     }
 
     @Override

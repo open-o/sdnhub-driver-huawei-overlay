@@ -16,6 +16,8 @@
 
 package org.openo.sdnhub.overlayvpndriver.rest;
 
+import static org.openo.sdnhub.overlayvpndriver.common.consts.CommonConst.CTRL_HEADER_PARAM;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -32,14 +34,11 @@ import org.openo.sdnhub.overlayvpndriver.sbi.impl.DevicePortServiceImpl;
 import org.openo.sdnhub.overlayvpndriver.service.model.SbiIp;
 import org.openo.sdno.exception.ParameterServiceException;
 import org.openo.sdno.overlayvpn.result.ResultRsp;
-import org.openo.sdno.overlayvpn.result.SvcExcptUtil;
 import org.openo.sdno.overlayvpn.util.check.CheckStrUtil;
 import org.openo.sdno.overlayvpn.util.check.UuidUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
-import static org.openo.sdnhub.overlayvpndriver.common.consts.CommonConst.CTRL_HEADER_PARAM;
 
 /**
  * Restful interface for interface information.<br>
@@ -52,6 +51,8 @@ import static org.openo.sdnhub.overlayvpndriver.common.consts.CommonConst.CTRL_H
 public class PortROAResource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PortROAResource.class);
+
+    private String INVALID_CONTROLLER_UUID = "Invalid controller UUID.";
 
     /**
      * Query interface information of the current device using a specific controller.<br>
@@ -76,8 +77,8 @@ public class PortROAResource {
 
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
         if(!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error("Invalid controller UUID.");
-            throw new ParameterServiceException("Invalid controller UUID.");
+            LOGGER.error(INVALID_CONTROLLER_UUID);
+            throw new ParameterServiceException(INVALID_CONTROLLER_UUID);
         }
 
         if(null == deviceId || deviceId.isEmpty()) {

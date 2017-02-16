@@ -62,6 +62,8 @@ public class NqaROAResource {
 
     private static final String NQA_ID_LIST = "ids";
 
+    private String INVALID_CONTROLLER_UUID = "invalid controller UUID.";
+
     /**
      * Retrieves a NQA configuration using a specific Controller.<br>
      *
@@ -83,7 +85,7 @@ public class NqaROAResource {
         String ctrlUuid = ctrlUuidParam.substring(ctrlUuidParam.indexOf('=') + 1);
         if (!UuidUtil.validate(ctrlUuid)) {
             LOGGER.error("invalid controller UUID");
-            throw new ParameterServiceException("invalid controller UUID.");
+            throw new ParameterServiceException(INVALID_CONTROLLER_UUID);
         }
 
         CheckStrUtil.checkUuidStr(deviceId);
@@ -113,7 +115,7 @@ public class NqaROAResource {
         String ctrlUuid = ctrlUuidParam.substring(ctrlUuidParam.indexOf('=') + 1);
         if (!UuidUtil.validate(ctrlUuid)) {
             LOGGER.error("createNQA param error");
-            throw new ParameterServiceException("invalid controller UUID.");
+            throw new ParameterServiceException(INVALID_CONTROLLER_UUID);
         }
 
         CheckStrUtil.checkUuidStr(deviceId);
@@ -163,7 +165,7 @@ public class NqaROAResource {
         String ctrlUuid = ctrlUuidParam.substring(ctrlUuidParam.indexOf('=') + 1);
         if (!UuidUtil.validate(ctrlUuid)) {
             LOGGER.error("invalid controller UUID");
-            throw new ParameterServiceException("invalid controller UUID.");
+            throw new ParameterServiceException(INVALID_CONTROLLER_UUID);
         }
 
         CheckStrUtil.checkUuidStr(deviceId);
@@ -211,7 +213,7 @@ public class NqaROAResource {
         String ctrlUuid = ctrlUuidParam.substring(ctrlUuidParam.indexOf('=') + 1);
         if (!UuidUtil.validate(ctrlUuid)) {
             LOGGER.error("invalid controller UUID");
-            throw new ParameterServiceException("invalid controller UUID.");
+            throw new ParameterServiceException(INVALID_CONTROLLER_UUID);
         }
 
         CheckStrUtil.checkUuidStr(deviceId);

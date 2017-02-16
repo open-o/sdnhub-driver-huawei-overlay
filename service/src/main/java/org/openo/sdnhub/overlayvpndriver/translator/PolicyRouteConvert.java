@@ -61,11 +61,7 @@ public class PolicyRouteConvert {
         for(SbiNePolicyRoute tempSbiNePolicyRoute : checkOkroutelist) {
             TrafficPolicyList trafficPolicy = new TrafficPolicyList();
             trafficPolicy.setTrafficpolicyName(tempSbiNePolicyRoute.getTrafficPolicyName());
-            /*
-             * trafficPolicy.setDirection(tempSbiNePolicyRoute.getDirection());
-             * trafficPolicy.setInterfaceName(tempSbiNePolicyRoute.
-             * getInterfaceName());
-             */
+
             if(createOrUpdate) {
                 trafficPolicy.setUuid(tempSbiNePolicyRoute.getUuid());
             } else {
@@ -73,10 +69,7 @@ public class PolicyRouteConvert {
             }
 
             if(tempSbiNePolicyRoute.getFilterAction() != null) {
-                /*
-                 * trafficPolicy.setFilterActionList(tempSbiNePolicyRoute.
-                 * getFilterAction());
-                 */
+               //TODO:
             }
 
             if(!deviceIdToMqcMap.containsKey(tempSbiNePolicyRoute.getDeviceId())) {

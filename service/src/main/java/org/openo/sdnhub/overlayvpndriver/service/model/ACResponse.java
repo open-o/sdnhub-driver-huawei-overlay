@@ -18,7 +18,6 @@ package org.openo.sdnhub.overlayvpndriver.service.model;
 
 import java.util.List;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.openo.sdnhub.overlayvpndriver.common.consts.DriverErrorCode;
 import org.openo.sdno.overlayvpn.result.FailData;
@@ -27,7 +26,7 @@ import org.openo.sdno.overlayvpn.result.FailData;
  * <br/>
  * <p>
  * </p>
- * 
+ *
  * @param <T>
  * @author
  * @version SDNHUB 0.5 02-Feb-2017
@@ -109,7 +108,7 @@ public class ACResponse<T> {
     public void setData(T data) {
         this.data = data;
     }
-    
+
     public List<T> getSuccess() {
        return success;
     }

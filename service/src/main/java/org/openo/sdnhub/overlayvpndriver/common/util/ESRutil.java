@@ -23,19 +23,21 @@ import org.openo.baseservice.roa.util.restclient.RestfulParametes;
 import org.openo.baseservice.roa.util.restclient.RestfulResponse;
 import org.openo.sdno.framework.container.resthelper.RestfulProxy;
 import org.openo.sdno.framework.container.util.JsonUtil;
-import org.openo.sdno.overlayvpn.brs.model.ControllerMO;
 
 /**
  * <br/>
  * <p>
  * </p>
- * 
+ *
  * @author
  * @version SDNHUB 0.5 02-Feb-2017
  */
 public class ESRutil {
 
     private static final String URL = "/api/extsys/v1/sdncontrollers/";
+
+    private ESRutil(){
+    }
 
     /**
      * Queries ESR for controller details and returns contoller's properties as map.

@@ -37,6 +37,10 @@ public class NqaConfigImpl {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(NqaConfigImpl.class);
 
+    private static final String INVALID_CONTROLLER_UUID = "invalid controller UUID.";
+
+    private static final String RESPONSE_DATA = "body:{}";
+
     /**
      * NqaConfig query implementation.<br/>
      *
@@ -49,16 +53,16 @@ public class NqaConfigImpl {
     public ResultRsp<SbiNqa> queryNqaConfig(String cltuuid, String queryurl) throws ServiceException {
         if(StringUtils.isEmpty(cltuuid)) {
             LOGGER.error("queryNqaConfig, parameter error");
-            throw new ParameterServiceException("invalid controller UUID.");
+            throw new ParameterServiceException(INVALID_CONTROLLER_UUID);
         }
 
         final long beginTime = System.currentTimeMillis();
-        LOGGER.info("queryNqaConfig, nqa config begin time = " + beginTime);
+        LOGGER.debug("queryNqaConfig, nqa config begin time = " + beginTime);
 
         final HTTPReturnMessage queryRsp = OverlayVpnDriverProxy.getInstance().sendGetMsg(queryurl, null, cltuuid);
 
-        LOGGER.info("query nqa config cost time = " + (System.currentTimeMillis() - beginTime));
-        LOGGER.info("body:{}", queryRsp);
+        LOGGER.debug("query nqa config cost time = " + (System.currentTimeMillis() - beginTime));
+        LOGGER.debug(RESPONSE_DATA, queryRsp);
 
         final String actionDesc = "query nqa config";
 
@@ -79,17 +83,17 @@ public class NqaConfigImpl {
             throws ServiceException {
         if(StringUtils.isEmpty(cltuuid)) {
             LOGGER.error("createNqaConfig, parameter error");
-            throw new ParameterServiceException("invalid controller UUID.");
+            throw new ParameterServiceException(INVALID_CONTROLLER_UUID);
         }
 
         final long beginTime = System.currentTimeMillis();
-        LOGGER.info("createNqaConfig, nqa config begin time = " + beginTime);
+        LOGGER.debug("createNqaConfig, nqa config begin time = " + beginTime);
 
         final HTTPReturnMessage createRsp =
                 OverlayVpnDriverProxy.getInstance().sendPutMsg(createUrl, nqaListJson, cltuuid);
 
-        LOGGER.info("query nqa config cost time = " + (System.currentTimeMillis() - beginTime));
-        LOGGER.info("body:{}", createRsp);
+        LOGGER.debug("query nqa config cost time = " + (System.currentTimeMillis() - beginTime));
+        LOGGER.debug(RESPONSE_DATA, createRsp);
 
         final String actionDesc = "create nqa config";
 
@@ -110,17 +114,17 @@ public class NqaConfigImpl {
             throws ServiceException {
         if(StringUtils.isEmpty(cltuuid)) {
             LOGGER.error("updateNqaConfig, parameter error");
-            throw new ParameterServiceException("invalid controller UUID.");
+            throw new ParameterServiceException(INVALID_CONTROLLER_UUID);
         }
 
         final long beginTime = System.currentTimeMillis();
-        LOGGER.info("updateNqaConfig, nqa config begin time = " + beginTime);
+        LOGGER.debug("updateNqaConfig, nqa config begin time = " + beginTime);
 
         final HTTPReturnMessage updateRsp =
                 OverlayVpnDriverProxy.getInstance().sendPutMsg(updateUrl, nqaListJson, cltuuid);
 
-        LOGGER.info("update nqa config cost time = " + (System.currentTimeMillis() - beginTime));
-        LOGGER.info("body:{}", updateRsp);
+        LOGGER.debug("update nqa config cost time = " + (System.currentTimeMillis() - beginTime));
+        LOGGER.debug(RESPONSE_DATA, updateRsp);
 
         final String actionDesc = "update nqa config";
 
@@ -141,17 +145,17 @@ public class NqaConfigImpl {
             throws ServiceException {
         if(StringUtils.isEmpty(cltuuid)) {
             LOGGER.error("deleteNqaConfig, parameter error");
-            throw new ParameterServiceException("invalid controller UUID.");
+            throw new ParameterServiceException(INVALID_CONTROLLER_UUID);
         }
 
         final long beginTime = System.currentTimeMillis();
-        LOGGER.info("deleteNqaConfig, nqa config delete begin time = " + beginTime);
+        LOGGER.debug("deleteNqaConfig, nqa config delete begin time = " + beginTime);
 
         final HTTPReturnMessage deleteRsp =
                 OverlayVpnDriverProxy.getInstance().sendDeleteMsg(deleteUrl, nqaListJson, cltuuid);
 
-        LOGGER.info("delete nqa config cost time = " + (System.currentTimeMillis() - beginTime));
-        LOGGER.info("body:{}", deleteRsp);
+        LOGGER.debug("delete nqa config cost time = " + (System.currentTimeMillis() - beginTime));
+        LOGGER.debug(RESPONSE_DATA, deleteRsp);
 
         final String actionDesc = "update nqa config";
 

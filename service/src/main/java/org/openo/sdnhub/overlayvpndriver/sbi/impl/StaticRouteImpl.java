@@ -16,7 +16,12 @@
 
 package org.openo.sdnhub.overlayvpndriver.sbi.impl;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.codehaus.jackson.type.TypeReference;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
@@ -34,12 +39,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 /**
  * SBI Implementation of staticRoute services.<br/>
  *
@@ -48,11 +47,13 @@ import java.util.Map;
  */
 public class StaticRouteImpl {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(StaticRouteImpl.class);
+    private static final  Logger LOGGER = LoggerFactory.getLogger(StaticRouteImpl.class);
 
     private static final String DELETE_ROUTE_PARAMETER = "ids";
 
     private static final String DEST_IP_QUERY_PARAM = "?destIp=";
+
+    private static final String STATIC_ROUTE_CONFIG_FAILED = "static route configuration has failed.";
 
     /**
      * Query static routes<br/>
@@ -68,7 +69,7 @@ public class StaticRouteImpl {
                                                                         String destIp, String staticRouteId)
             throws ServiceException {
         ResultRsp<List<ControllerNbiStaticRoute>> resultRsp =
-                new ResultRsp<List<ControllerNbiStaticRoute>>(ErrorCode.OVERLAYVPN_SUCCESS);
+                new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS);
 
         String url = MessageFormat.format(ControllerUrlConst.CONST_CONFIG_STATICROUTE, deviceId);
 
@@ -107,7 +108,7 @@ public class StaticRouteImpl {
             throw new ServiceException(ErrorCode.ADAPTER_ROUTER_RESPONSE_FAIL);
         }
 
-        LOGGER.error("configstatic route failed");
+        LOGGER.error(STATIC_ROUTE_CONFIG_FAILED);
         return new ResultRsp<>(ErrorCode.ADAPTER_ROUTER_RESPONSE_FAIL);
 
     }
@@ -127,7 +128,7 @@ public class StaticRouteImpl {
             List<ControllerNbiStaticRoute> list, boolean createOrUpdate) throws ServiceException {
 
         ResultRsp<List<ControllerNbiStaticRoute>> resultRsp =
-                new ResultRsp<List<ControllerNbiStaticRoute>>(ErrorCode.OVERLAYVPN_SUCCESS);
+                new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS);
 
         StaticRouteConvert.filterCreatedStaticRouteList(ctrlUuid, deviceId, list);
 
@@ -141,7 +142,7 @@ public class StaticRouteImpl {
             return resultRsp;
         }
 
-        Map<String, List<ControllerNbiStaticRoute>> reqMap = new HashMap<String, List<ControllerNbiStaticRoute>>();
+        Map<String, List<ControllerNbiStaticRoute>> reqMap = new HashMap<>();
         reqMap.put("staticRouteConfigs", list);
         String url = MessageFormat.format(ControllerUrlConst.CONST_CONFIG_STATICROUTE, deviceId);
 
@@ -154,7 +155,7 @@ public class StaticRouteImpl {
             OverlayVpnDriverResponse<List<ControllerNbiStaticRoute>> acresponse = JsonUtil.fromJson(body,
                     new TypeReference<OverlayVpnDriverResponse<List<ControllerNbiStaticRoute>>>() {});
             if(!acresponse.isSucess()) {
-                return new ResultRsp<List<ControllerNbiStaticRoute>>(ErrorCode.ADAPTER_ROUTER_RESPONSE_FAIL,
+                return new ResultRsp<>(ErrorCode.ADAPTER_ROUTER_RESPONSE_FAIL,
                         acresponse.getErrmsg(), null, null, null);
             }
             resultRsp.setData(acresponse.getData());
@@ -162,7 +163,7 @@ public class StaticRouteImpl {
             return resultRsp;
         }
 
-        LOGGER.error("configstatic route failed");
+        LOGGER.error(STATIC_ROUTE_CONFIG_FAILED);
         return new ResultRsp<>(ErrorCode.ADAPTER_ROUTER_RESPONSE_FAIL);
 
     }
@@ -181,7 +182,7 @@ public class StaticRouteImpl {
 
     private List<ControllerNbiStaticRoute> filterAcExistStaticRouteList(String ctrlUuid, String deviceId,
             List<ControllerNbiStaticRoute> sbiStaticRoutes) throws ServiceException {
-        List<ControllerNbiStaticRoute> duplicateRoutes = new ArrayList<ControllerNbiStaticRoute>();
+        List<ControllerNbiStaticRoute> duplicateRoutes = new ArrayList<>();
 
         ResultRsp<List<ControllerNbiStaticRoute>> staticRouteListRsp = queryRouteByDevice(ctrlUuid, deviceId, null, null);
 
@@ -190,9 +191,9 @@ public class StaticRouteImpl {
         }
 
         List<ControllerNbiStaticRoute> existingAllRoutingList = staticRouteListRsp.getData();
-        List<ControllerNbiStaticRoute> routesToIgnore = new ArrayList<ControllerNbiStaticRoute>();
+        List<ControllerNbiStaticRoute> routesToIgnore = new ArrayList<>();
 
-        for(int i = (sbiStaticRoutes.size() - 1); i >= 0; i--) {
+        for(int i = sbiStaticRoutes.size() - 1; i >= 0; i--) {
             ControllerNbiStaticRoute tempCreateStaticRoute = sbiStaticRoutes.get(i);
             boolean isCreated = false;
 
@@ -227,8 +228,8 @@ public class StaticRouteImpl {
      */
     public ResultRsp<String> deleteRouteByDevice(String ctrlUuid, String deviceId, List<String> idList)
             throws ServiceException {
-        ResultRsp<String> resultRsp = new ResultRsp<String>(ErrorCode.OVERLAYVPN_SUCCESS);
-        Map<String, List<String>> reqMap = new HashMap<String, List<String>>();
+        ResultRsp<String> resultRsp = new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS);
+        Map<String, List<String>> reqMap = new HashMap<>();
         reqMap.put(DELETE_ROUTE_PARAMETER, idList);
         String url = MessageFormat.format(ControllerUrlConst.CONST_CONFIG_STATICROUTE, deviceId);
 
@@ -246,7 +247,7 @@ public class StaticRouteImpl {
             return resultRsp;
         }
 
-        LOGGER.error("configstatic route failed");
+        LOGGER.error(STATIC_ROUTE_CONFIG_FAILED);
         resultRsp.setErrorCode(ErrorCode.OVERLAYVPN_FAILED);
         resultRsp.setMessage("delete Route by device failed.");
         return resultRsp;

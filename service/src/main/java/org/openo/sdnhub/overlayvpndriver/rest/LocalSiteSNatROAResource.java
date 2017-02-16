@@ -16,6 +16,19 @@
 
 package org.openo.sdnhub.overlayvpndriver.rest;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+
 import org.openo.baseservice.remoteservice.exception.ServiceException;
 import org.openo.sdnhub.overlayvpndriver.common.util.RequestHeaderUtil;
 import org.openo.sdnhub.overlayvpndriver.controller.model.AcAcl;
@@ -28,7 +41,6 @@ import org.openo.sdnhub.overlayvpndriver.translator.SNatNetConvert;
 import org.openo.sdno.exception.ParameterServiceException;
 import org.openo.sdno.overlayvpn.errorcode.ErrorCode;
 import org.openo.sdno.overlayvpn.result.ResultRsp;
-import org.openo.sdno.overlayvpn.result.SvcExcptUtil;
 import org.openo.sdno.overlayvpn.util.check.UuidUtil;
 import org.openo.sdno.overlayvpn.util.check.ValidationUtil;
 import org.slf4j.Logger;
@@ -36,11 +48,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
 
 /**
  * Restful interface for LocalSiteSNatROAResource.<br/>
@@ -60,6 +67,9 @@ public class LocalSiteSNatROAResource {
     @Autowired
     private AclServiceImpl aclServiceImpl;
 
+    private static final String INVALID_CONTROLLER_UUID = "Invalid controller UUID.";
+
+    private static final String SNATNETMODEL_AC_OPERATOR = "SNatNetModel ac oper err.";
     /**
      * Create SNAT configuration.<br/>
      *
@@ -83,8 +93,8 @@ public class LocalSiteSNatROAResource {
 
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
         if(!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error("Invalid controller UUID.");
-            throw new ParameterServiceException("Invalid controller UUID.");
+            LOGGER.error(INVALID_CONTROLLER_UUID);
+            throw new ParameterServiceException(INVALID_CONTROLLER_UUID);
         }
 
         if(null == snatNet) {
@@ -99,15 +109,14 @@ public class LocalSiteSNatROAResource {
             throw new ServiceException("ACL operation error.");
         }
         AcSNat snat = SNatNetConvert.buildAcSNat(aclResult.getData(), snatNet);
-        ResultRsp<AcSNat> snatResult = new ResultRsp<AcSNat>(ErrorCode.OVERLAYVPN_SUCCESS, snat);
-        snatResult = localSiteSNatService.createSNat(snat, ctrlUuid, deviceId);
+        ResultRsp<AcSNat> snatResult = localSiteSNatService.createSNat(snat, ctrlUuid, deviceId);
         LOGGER.debug("create SNatNetModel cost {} ms.", System.currentTimeMillis() - startTime);
 
         if(!snatResult.isValid()) {
-            LOGGER.error("SNatNetModel ac oper err.");
-            throw new ParameterServiceException("SNatNetModel ac oper err.");
+            LOGGER.error(SNATNETMODEL_AC_OPERATOR);
+            throw new ParameterServiceException(SNATNETMODEL_AC_OPERATOR);
         }
-        return new ResultRsp<SbiSnatNetModel>(ErrorCode.OVERLAYVPN_SUCCESS, snatNet);
+        return new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS, snatNet);
     }
 
     private ResultRsp<AcAcl> createAcl(String ctrId, String deviceId, SbiSnatNetModel snatNetModel)
@@ -139,8 +148,8 @@ public class LocalSiteSNatROAResource {
         long startTime = System.currentTimeMillis();
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
         if(!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error("Invalid controller UUID.");
-            throw new ParameterServiceException("Invalid controller UUID.");
+            LOGGER.error(INVALID_CONTROLLER_UUID);
+            throw new ParameterServiceException(INVALID_CONTROLLER_UUID);
         }
         if(!StringUtils.hasLength(deviceId) || !StringUtils.hasLength(natId) || !StringUtils.hasLength(aclId)) {
             LOGGER.error("delete snat, param err.invalid path parameters");
@@ -160,7 +169,7 @@ public class LocalSiteSNatROAResource {
             LOGGER.error("Acl oper err.");
             throw new ParameterServiceException("Acl oper err.");
         }
-        return new ResultRsp<String>(ErrorCode.OVERLAYVPN_SUCCESS);
+        return new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS);
     }
 
     /**
@@ -186,8 +195,8 @@ public class LocalSiteSNatROAResource {
         long startTime = System.currentTimeMillis();
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
         if(!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error("Invalid controller UUID.");
-            throw new ParameterServiceException("Invalid controller UUID.");
+            LOGGER.error(INVALID_CONTROLLER_UUID);
+            throw new ParameterServiceException(INVALID_CONTROLLER_UUID);
         }
         if(!StringUtils.hasLength(deviceId) || !StringUtils.hasLength(natId) || !StringUtils.hasLength(aclId)) {
             LOGGER.error("query snat, param err.invalid path parameters");
@@ -202,7 +211,7 @@ public class LocalSiteSNatROAResource {
         }
 
         LOGGER.debug("query Snat cost {} ms.", System.currentTimeMillis() - startTime);
-        return new ResultRsp<String>(ErrorCode.OVERLAYVPN_SUCCESS);
+        return new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS);
     }
 
     /**
@@ -228,8 +237,8 @@ public class LocalSiteSNatROAResource {
 
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
         if(!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error("Invalid controller UUID.");
-            throw new ParameterServiceException("Invalid controller UUID.");
+            LOGGER.error(INVALID_CONTROLLER_UUID);
+            throw new ParameterServiceException(INVALID_CONTROLLER_UUID);
         }
         if(null == snatNet) {
             LOGGER.error("Local site SNat create: request body is null");
@@ -239,7 +248,7 @@ public class LocalSiteSNatROAResource {
         ValidationUtil.validateModel(snatNet);
         if("updateIp".equals(snatNet.getType())) {
             updateIp(snatNet, ctrlUuid, deviceId);
-            return new ResultRsp<SbiSnatNetModel>(ErrorCode.OVERLAYVPN_SUCCESS, snatNet);
+            return new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS, snatNet);
         }
         AcSNat acSnat = SNatNetConvert.buildAcSNat(snatNet);
 
@@ -248,9 +257,9 @@ public class LocalSiteSNatROAResource {
 
         if(!acResult.isValid()) {
             LOGGER.error("SNatNetModel oper err.");
-            throw new ParameterServiceException("SNatNetModel ac oper err.");
+            throw new ParameterServiceException(SNATNETMODEL_AC_OPERATOR);
         }
-        return new ResultRsp<SbiSnatNetModel>(ErrorCode.OVERLAYVPN_SUCCESS, snatNet);
+        return new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS, snatNet);
     }
 
     private void updateIp(SbiSnatNetModel snat, String ctrId, String deviceId) throws ServiceException {

@@ -72,12 +72,12 @@ public class DeviceServiceImpl {
                     JsonUtil.fromJson(msg.getBody(), new TypeReference<ACResponse<List<AdapterDeviceInfo>>>() {});
             if((null == response) || (!response.isSucceed())) {
                 LOGGER.error("query devices : parser msg to ACResponse error, msg : " + msg.getBody());
-                return new ResultRsp<List<AdapterDeviceInfo>>(DriverErrorCode.CLOUDVPN_FAILED,
+                return new ResultRsp<>(DriverErrorCode.CLOUDVPN_FAILED,
                         "query device httpReturnMessage return error", null, null, null);
             }
-            return new ResultRsp<List<AdapterDeviceInfo>>(DriverErrorCode.CLOUDVPN_SUCCESS, response.getData());
+            return new ResultRsp<>(DriverErrorCode.CLOUDVPN_SUCCESS, response.getData());
         }
-        return new ResultRsp<List<AdapterDeviceInfo>>(DriverErrorCode.CLOUDVPN_FAILED, "failed to get device details ",
+        return new ResultRsp<>(DriverErrorCode.CLOUDVPN_FAILED, "failed to get device details ",
                 null, null, null);
     }
 
@@ -107,10 +107,10 @@ public class DeviceServiceImpl {
                 return getResultData(response);
             } else {
                 LOGGER.error("create devices: parser msg to AcResponse error");
-                return new ResultRsp<AdapterDeviceInfo>(DriverErrorCode.CLOUDVPN_FAILED);
+                return new ResultRsp<>(DriverErrorCode.CLOUDVPN_FAILED);
             }
         }
-        return new ResultRsp<AdapterDeviceInfo>(DriverErrorCode.CLOUDVPN_FAILED,
+        return new ResultRsp<>(DriverErrorCode.CLOUDVPN_FAILED,
                 "create device httpReturnMsg return error", null, null, null);
     }
 
@@ -163,14 +163,14 @@ public class DeviceServiceImpl {
                 OverlayVpnDriverProxy.getInstance().sendPutMsg(url, JsonUtil.toJson(aDeviceInfo), ctrlUuid);
         LOGGER.debug("Device modify end time = " + (System.currentTimeMillis() - beginTime));
 
-        ResultRsp<String> rsp = new ResultRsp<String>();
+        ResultRsp<String> rsp = new ResultRsp<>();
         if(!modifyRsp.isSuccess() || (!StringUtils.hasLength(modifyRsp.getBody()))) {
             LOGGER.error("modify device HTTPReturn message error");
             Map<String, String> errorMap =
                     JsonUtil.fromJson(modifyRsp.getBody(), new TypeReference<Map<String, String>>() {
 
                     });
-            FailData<String> fail = new FailData<String>();
+            FailData<String> fail = new FailData<>();
             fail.setErrcode(errorMap.get("errorcode"));
             fail.setErrmsg(errorMap.get("errmsg"));
             rsp.setFail(Arrays.asList(fail));
@@ -181,7 +181,7 @@ public class DeviceServiceImpl {
             rsp.setErrorCode(response.getErrcode());
             rsp.setMessage(response.getErrmsg());
             if(!"0".equals(response.getErrcode())) {
-                FailData<String> fail = new FailData<String>();
+                FailData<String> fail = new FailData<>();
                 fail.setErrcode(response.getErrcode());
                 fail.setErrmsg(response.getErrmsg());
                 rsp.setFail(Arrays.asList(fail));
@@ -206,14 +206,14 @@ public class DeviceServiceImpl {
 
         long beginTime = System.currentTimeMillis();
         LOGGER.debug("Device delete begin time = " + beginTime);
-        Map<String, List<String>> ctrlInfoMap = new HashMap<String, List<String>>();
+        Map<String, List<String>> ctrlInfoMap = new HashMap<>();
         ctrlInfoMap.put(CommConst.DELETE_DEVICE_PARAMETER, deviceIdList);
         HTTPReturnMessage deleteRsp = OverlayVpnDriverProxy.getInstance()
                 .sendDeleteMsg(ControllerUrlConst.DELETE_DEVICES_URL, JsonUtil.toJson(ctrlInfoMap), ctrlUuid);
 
         LOGGER.debug("Device delete end time = " + (System.currentTimeMillis() - beginTime));
 
-        ResultRsp<String> rsp = new ResultRsp<String>();
+        ResultRsp<String> rsp = new ResultRsp<>();
 
         if(!deleteRsp.isSuccess() || (!StringUtils.hasLength(deleteRsp.getBody()))) {
             LOGGER.error("delete device error");

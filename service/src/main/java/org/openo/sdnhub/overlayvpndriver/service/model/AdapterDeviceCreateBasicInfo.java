@@ -16,14 +16,13 @@
 
 package org.openo.sdnhub.overlayvpndriver.service.model;
 
-import org.openo.sdno.overlayvpn.model.netmodel.localsite.AdapterDeviceReplaceInfo;
 import org.openo.sdno.overlayvpn.verify.annotation.AString;
 
 /**
  * Class of AdapterDevice Create Info.<br>
  * <p>
  * </p>
- * 
+ *
  * @author
  * @version SDNO 0.5 June 6, 2016
  */
@@ -118,7 +117,7 @@ public class AdapterDeviceCreateBasicInfo {
 
     /**
      * Override equals Function.<br>
-     * 
+     *
      * @param obj other Object
      * @return true if this object equals to other object
      * @since SDNO 0.5
@@ -148,5 +147,4 @@ public class AdapterDeviceCreateBasicInfo {
 
         return true;
     }
-
 }

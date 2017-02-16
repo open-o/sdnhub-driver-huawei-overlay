@@ -77,7 +77,7 @@ public class ACDelResponse {
     }
 
     public String getAllErrmsg() {
-        StringBuffer errInfo = new StringBuffer();
+        StringBuilder errInfo = new StringBuilder();
 
         if(StringUtils.isNotEmpty(errmsg)) {
             errInfo.append(errmsg).append("; ");

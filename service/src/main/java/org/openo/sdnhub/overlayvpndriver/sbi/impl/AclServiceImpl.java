@@ -82,10 +82,10 @@ public class AclServiceImpl {
             SvcExcptUtil.throwBadRequestException("AcAcl create: parameter error.");
         }
 
-        ResultRsp<AcAcl> resultRsp = new ResultRsp<AcAcl>(ErrorCode.OVERLAYVPN_SUCCESS);
+        ResultRsp<AcAcl> resultRsp = new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS);
         String createUrl = MessageFormat.format(ControllerUrlConst.ACL_URL, deviceId);
-        Map<String, Object> bodyMap = new HashMap<String, Object>();
-        List<AcAcl> bodyList = new ArrayList<AcAcl>();
+        Map<String, Object> bodyMap = new HashMap<>();
+        List<AcAcl> bodyList = new ArrayList<>();
         bodyList.add(acl);
         bodyMap.put("aclList", bodyList);
 
@@ -126,11 +126,11 @@ public class AclServiceImpl {
             SvcExcptUtil.throwBadRequestException("AcBranch AcAcl delete: parameter error.");
         }
 
-        ResultRsp<String> resultRsp = new ResultRsp<String>(ErrorCode.OVERLAYVPN_SUCCESS);
+        ResultRsp<String> resultRsp = new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS);
 
         String deleteUrl = MessageFormat.format(ControllerUrlConst.ACL_URL, deviceId);
-        Map<String, Object> params = new HashMap<String, Object>();
-        List<String> ids = new ArrayList<String>();
+        Map<String, Object> params = new HashMap<>();
+        List<String> ids = new ArrayList<>();
         ids.add(aclId);
         params.put("ids", ids);
 
@@ -187,10 +187,10 @@ public class AclServiceImpl {
         List<AcAcl> acAcls = acResponse.getData();
         for(AcAcl acl : acAcls) {
             if(aclId.equals(acl.getId())) {
-                return new ResultRsp<AcAcl>(ErrorCode.OVERLAYVPN_SUCCESS, acl);
+                return new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS, acl);
             }
         }
-        return new ResultRsp<AcAcl>(ErrorCode.OVERLAYVPN_FAILED);
+        return new ResultRsp<>(ErrorCode.OVERLAYVPN_FAILED);
     }
 
     /**
@@ -211,10 +211,10 @@ public class AclServiceImpl {
             SvcExcptUtil.throwBadRequestException("AcBranch AcAcl update: parameter error.");
         }
 
-        ResultRsp<AcAcl> resultRsp = new ResultRsp<AcAcl>(ErrorCode.OVERLAYVPN_SUCCESS);
+        ResultRsp<AcAcl> resultRsp = new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS);
         String updateUrl = MessageFormat.format(ControllerUrlConst.ACL_URL, deviceId);
-        Map<String, Object> bodyMap = new HashMap<String, Object>();
-        List<AcAcl> bodyList = new ArrayList<AcAcl>();
+        Map<String, Object> bodyMap = new HashMap<>();
+        List<AcAcl> bodyList = new ArrayList<>();
         bodyList.add(acl);
         bodyMap.put("aclList", bodyList);
 

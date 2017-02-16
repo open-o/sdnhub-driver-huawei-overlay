@@ -48,6 +48,8 @@ public class LocalSiteSNatServiceImpl {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LocalSiteSNatServiceImpl.class);
 
+    private static final String INVALID_DEVICE_ID_OR_NAT_ID = "Invalid device id or NAT id.";
+
     /**
      * Create SNAT configuration.<br/>
      *
@@ -65,10 +67,10 @@ public class LocalSiteSNatServiceImpl {
             throw new ParameterServiceException("Invalid device UUID.");
         }
 
-        ResultRsp<AcSNat> resultRsp = new ResultRsp<AcSNat>(ErrorCode.OVERLAYVPN_SUCCESS);
+        ResultRsp<AcSNat> resultRsp = new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS);
         String createUrl = MessageFormat.format(ControllerUrlConst.DEVICE_NAT_URL, deviceId);
-        Map<String, Object> bodyMap = new HashMap<String, Object>();
-        List<AcSNat> bodyList = new ArrayList<AcSNat>();
+        Map<String, Object> bodyMap = new HashMap<>();
+        List<AcSNat> bodyList = new ArrayList<>();
         bodyList.add(snat);
         bodyMap.put("natList", bodyList);
 
@@ -103,15 +105,15 @@ public class LocalSiteSNatServiceImpl {
     public ResultRsp<String> deleteSNat(String natId, String ctrlUuid, String deviceId) throws ServiceException {
 
         if(!StringUtils.hasLength(deviceId) || null == natId) {
-            LOGGER.error("Invalid device id or NAT id.");
-            throw new ParameterServiceException("Invalid device id or NAT id.");
+            LOGGER.error(INVALID_DEVICE_ID_OR_NAT_ID);
+            throw new ParameterServiceException(INVALID_DEVICE_ID_OR_NAT_ID);
         }
 
-        ResultRsp<String> resultRsp = new ResultRsp<String>(ErrorCode.OVERLAYVPN_SUCCESS);
+        ResultRsp<String> resultRsp = new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS);
         String deleteUrl = MessageFormat.format(ControllerUrlConst.DEVICE_NAT_URL, deviceId);
 
-        Map<String, Object> params = new HashMap<String, Object>();
-        List<String> ids = new ArrayList<String>();
+        Map<String, Object> params = new HashMap<>();
+        List<String> ids = new ArrayList<>();
         ids.add(natId);
         params.put("ids", ids);
 
@@ -144,14 +146,14 @@ public class LocalSiteSNatServiceImpl {
     public ResultRsp<AcSNat> updateSNat(AcSNat acSnat, String ctrlUuid, String deviceId) throws ServiceException {
 
         if(!StringUtils.hasLength(deviceId) || null == acSnat.getId()) {
-            LOGGER.error("Invalid device id or NAT id.");
-            throw new ParameterServiceException("Invalid device id or NAT id.");
+            LOGGER.error(INVALID_DEVICE_ID_OR_NAT_ID);
+            throw new ParameterServiceException(INVALID_DEVICE_ID_OR_NAT_ID);
         }
 
-        ResultRsp<AcSNat> resultRsp = new ResultRsp<AcSNat>(ErrorCode.OVERLAYVPN_SUCCESS);
+        ResultRsp<AcSNat> resultRsp = new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS);
         String updateUrl = MessageFormat.format(ControllerUrlConst.DEVICE_NAT_URL, deviceId);
-        Map<String, Object> bodyMap = new HashMap<String, Object>();
-        List<AcSNat> bodyList = new ArrayList<AcSNat>();
+        Map<String, Object> bodyMap = new HashMap<>();
+        List<AcSNat> bodyList = new ArrayList<>();
         bodyList.add(acSnat);
         bodyMap.put("natList", bodyList);
 
@@ -186,8 +188,8 @@ public class LocalSiteSNatServiceImpl {
     public ResultRsp<AcSNat> querySNat(String natId, String ctrlUuid, String deviceId) throws ServiceException {
 
         if(!StringUtils.hasLength(deviceId) || null == natId) {
-            LOGGER.error("Invalid device id or NAT id.");
-            throw new ParameterServiceException("Invalid device id or NAT id.");
+            LOGGER.error(INVALID_DEVICE_ID_OR_NAT_ID);
+            throw new ParameterServiceException(INVALID_DEVICE_ID_OR_NAT_ID);
         }
 
         String queryUrl = MessageFormat.format(ControllerUrlConst.DEVICE_NAT_URL, deviceId);
@@ -207,9 +209,8 @@ public class LocalSiteSNatServiceImpl {
         }
         AcSNat acSNats = acResponse.getData();
         if(natId.equals(acSNats.getId())) {
-            return new ResultRsp<AcSNat>(ErrorCode.OVERLAYVPN_SUCCESS, acSNats);
+            return new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS, acSNats);
         }
-        return new ResultRsp<AcSNat>(ErrorCode.OVERLAYVPN_FAILED);
+        return new ResultRsp<>(ErrorCode.OVERLAYVPN_FAILED);
     }
-
 }

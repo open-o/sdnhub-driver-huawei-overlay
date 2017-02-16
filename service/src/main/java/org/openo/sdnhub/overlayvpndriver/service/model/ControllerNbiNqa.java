@@ -56,6 +56,12 @@ public class ControllerNbiNqa {
 
     private String dstIPv6;
 
+    private String srcPortName;
+
+    private String dstPortName;
+
+    private String interval;
+
     public String getSrcIPv6() {
         return srcIPv6;
     }
@@ -71,12 +77,6 @@ public class ControllerNbiNqa {
     public void setDstIPv6(String dstIPv6) {
         this.dstIPv6 = dstIPv6;
     }
-
-    private String srcPortName;
-
-    private String dstPortName;
-
-    private String interval;
 
     public String getInterval() {
         return interval;

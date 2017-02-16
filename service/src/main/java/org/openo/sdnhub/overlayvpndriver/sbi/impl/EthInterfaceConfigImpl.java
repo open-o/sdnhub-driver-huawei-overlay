@@ -41,11 +41,11 @@ public final class EthInterfaceConfigImpl {
             throws ServiceException {
 
         final long beginTime = System.currentTimeMillis();
-        LOGGER.info("query eth config, begin time =" + beginTime);
+        LOGGER.debug("query eth config, begin time =" + beginTime);
         final HTTPReturnMessage queryRsp = OverlayVpnDriverProxy.getInstance().sendGetMsg(queryurl, null, cltuuid);
 
-        LOGGER.info("query eth config, cost time = " + (System.currentTimeMillis() - beginTime));
-        LOGGER.info("body:{}", queryRsp);
+        LOGGER.debug("query eth config, cost time = " + (System.currentTimeMillis() - beginTime));
+        LOGGER.debug("body:{}", queryRsp);
 
         final String queryRetBody = queryRsp.getBody();
         final String actionDesc = "query eth config";
@@ -61,12 +61,12 @@ public final class EthInterfaceConfigImpl {
         }
 
         final long beginTime = System.currentTimeMillis();
-        LOGGER.info("config eth, begin time =" + beginTime);
+        LOGGER.debug("config eth, begin time =" + beginTime);
 
         final HTTPReturnMessage configRsp =
                 OverlayVpnDriverProxy.getInstance().sendPutMsg(configUrl, ethListJson, cltuuid);
-        LOGGER.info("config eth , cost time = " + (System.currentTimeMillis() - beginTime));
-        LOGGER.info("body:{}", configRsp);
+        LOGGER.debug("config eth , cost time = " + (System.currentTimeMillis() - beginTime));
+        LOGGER.debug("body:{}", configRsp);
 
         final String retBody = configRsp.getBody();
         final String actionDesc = "config eth";

@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
  * <br/>
  * <p>
  * </p>
- * 
+ *
  * @author
  * @version SDNHUB 0.5 02-Feb-2017
  */
@@ -50,24 +50,29 @@ public class OverlayDriverHttpClient {
 
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(OverlayDriverHttpClient.class);
 
-    public HttpClient httpClient;
+    private HttpClient httpClient;
 
     private static class TrustAllX509TrustManager implements X509TrustManager {
 
+        @Override
         public X509Certificate[] getAcceptedIssuers() {
             return new X509Certificate[0];
         }
 
+        @Override
         public void checkServerTrusted(java.security.cert.X509Certificate[] certs, String authType) {
+            // Do Nothing
         }
 
+        @Override
         public void checkClientTrusted(java.security.cert.X509Certificate[] certs, String authType) {
+            // Do Nothing
         }
     }
 
     /**
      * <br/>
-     * 
+     *
      * @since SDNHUB 0.5
      */
     public void login() {
@@ -97,5 +102,4 @@ public class OverlayDriverHttpClient {
     public void setHttpClient(HttpClient httpClient) {
         this.httpClient = httpClient;
     }
-
 }

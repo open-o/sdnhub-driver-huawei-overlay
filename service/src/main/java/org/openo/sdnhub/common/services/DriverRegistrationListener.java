@@ -73,9 +73,9 @@ public class DriverRegistrationListener implements ServletContextListener {
     private ScheduledFuture<?> scheduler;
 
     /**
-     * 
+     *
      * <br/>
-     * 
+     *
      * @param arg0
      * @since   SDNHUB 0.5
      */
@@ -83,7 +83,7 @@ public class DriverRegistrationListener implements ServletContextListener {
     public void contextDestroyed(ServletContextEvent arg0) {
         String url = DRIVER_MANAGER_URL + "/" + instanceId;
 
-        LOGGER.info("Start unregister to driver manager, url: " + url);
+        LOGGER.debug("Start unregister to driver manager, url: " + url);
 
         RestfulParametes restParametes = new RestfulParametes();
 
@@ -92,7 +92,7 @@ public class DriverRegistrationListener implements ServletContextListener {
             RestfulResponse response = RestfulProxy.delete(url, restParametes);
 
             if(HttpCode.isSucess(response.getStatus())) {
-                LOGGER.info("Driver successfully un-registration with driver manager");
+                LOGGER.debug("Driver successfully un-registration with driver manager");
             } else {
                 LOGGER.warn("Driver failed un-registration with driver manager");
             }
@@ -104,9 +104,9 @@ public class DriverRegistrationListener implements ServletContextListener {
     }
 
     /**
-     * 
+     *
      * <br/>
-     * 
+     *
      * @param arg0
      * @since   SDNHUB 0.5
      */
@@ -114,7 +114,7 @@ public class DriverRegistrationListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent arg0) {
         File file = new File(DM_REGISTRATION_FILE);
         if(!file.exists()) {
-            LOGGER.info("Stop registering as can't find driver manager registion file");
+            LOGGER.debug("Stop registering as can't find driver manager registion file");
             return;
         }
 
@@ -139,16 +139,16 @@ public class DriverRegistrationListener implements ServletContextListener {
         restParametes.putHttpContextHeader("Content-Type", "application/json;charset=UTF-8");
         restParametes.setRawData(JsonUtil.toJson(dmRegistrationBodyMap));
 
-        LOGGER.info("Registering body: " + JsonUtil.toJson(dmRegistrationBodyMap));
+        LOGGER.debug("Registering body: " + JsonUtil.toJson(dmRegistrationBodyMap));
 
         // If the registration is unsuccessful re-attempt the driver registration.
         // If the registration is successful then finish the task by cancelling it.
         scheduler = scheduledExecutorService.scheduleAtFixedRate(() -> {
             try {
-                LOGGER.info("Start registering to driver manager");
+                LOGGER.debug("Start registering to driver manager");
                 RestfulResponse response = RestfulProxy.post(DRIVER_MANAGER_URL, restParametes);
                 if(HttpCode.isSucess(response.getStatus())) {
-                    LOGGER.info("Driver successfully registered with driver manager. Now Stop the scheduler.");
+                    LOGGER.debug("Driver successfully registered with driver manager. Now Stop the scheduler.");
                     this.scheduler.cancel(false);
                 } else {
                     LOGGER.warn("Driver failed registered with driver manager will reattempt the connection after "
@@ -156,15 +156,15 @@ public class DriverRegistrationListener implements ServletContextListener {
                 }
             } catch(ServiceException e) {
                 LOGGER.warn("Driver registration failed with driver manager, connection will be reattempted after "
-                        + DRIVER_REGISTRATION_DELAY + "seconds : " + e.toString());
+                        + DRIVER_REGISTRATION_DELAY + "seconds : " + e);
             }
         }, DRIVER_REGISTRATION_INITIAL_DELAY, DRIVER_REGISTRATION_DELAY, TimeUnit.SECONDS);
     }
 
     /**
-     * 
+     *
      * <br/>
-     * 
+     *
      * @param driverInfoMap
      * @since  SDNHUB 0.5
      */
@@ -178,7 +178,7 @@ public class DriverRegistrationListener implements ServletContextListener {
             String ipAddress = addr.getHostAddress();
             driverInfoMap.put(IP_KEY, ipAddress);
 
-            LOGGER.info("Local ip: " + ipAddress);
+            LOGGER.debug("Local ip: " + ipAddress);
         } catch(UnknownHostException e) {
             LOGGER.error("Unable to get IP address, " + e);
         }

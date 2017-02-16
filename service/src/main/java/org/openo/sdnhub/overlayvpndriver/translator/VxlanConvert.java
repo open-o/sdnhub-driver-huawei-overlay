@@ -40,12 +40,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 
 /**
- * <br/>
- * <p>
- * </p>
- * 
+ * Translator class for service SBI VxLan device model conversion to controller specific model.<br>
+ *
  * @author
- * @version SDNHUB 0.5 06-Feb-2017
+ * @version SDNHUB 0.5 Jun 19, 2017
  */
 public class VxlanConvert {
 
@@ -53,17 +51,20 @@ public class VxlanConvert {
 
     private static final String CONTROL = "control";
 
+    private VxlanConvert(){
+    }
+
     /**
-     * <br/>
-     * 
-     * @param vxLanInstanceList
-     * @return
+     * Translate service SBI VxLan device model structure to controller specific structure.<br>
+     *
+     * @param vxLanInstanceList collection of VxLan configuration from service SBI
+     * @return mapping of neId with collection of controller specific VxLan device model structure
      * @since SDNHUB 0.5
      */
     public static Map<String, List<VxLanDeviceModel>>
             convertVxlanInsToNetVxlanDeviceModel(List<SbiNeVxlanInstance> vxLanInstanceList) {
         Map<String, List<VxLanDeviceModel>> vxlanDeviceModelMap =
-                new ConcurrentHashMap<String, List<VxLanDeviceModel>>();
+                new ConcurrentHashMap<>();
 
         Iterator<SbiNeVxlanInstance> iterator = vxLanInstanceList.iterator();
         while(iterator.hasNext()) {
@@ -104,7 +105,7 @@ public class VxlanConvert {
         }
         netVxLanDeviceModel.setName(vxLanInstance.getConnectionId());
         netVxLanDeviceModel.setLocalAddress(vxLanInstance.getVxlanTunnelList().get(0).getSourceAddress());
-        List<Vni> vniList = new ArrayList<Vni>();
+        List<Vni> vniList = new ArrayList<>();
         vniList.add(createVni(vxLanInstance));
         netVxLanDeviceModel.setVniList(vniList);
         return netVxLanDeviceModel;
@@ -114,16 +115,16 @@ public class VxlanConvert {
         Vni netVni = new Vni();
         netVni.setVni(Integer.parseInt(vxLanInstance.getVni()));
         netVni.setMacLearingMode(CONTROL);
-        List<String> peerAddressList = new ArrayList<String>();
+        List<String> peerAddressList = new ArrayList<>();
 
         for(SbiNeVxlanTunnel vxlanTunnel : vxLanInstance.getVxlanTunnelList()) {
             peerAddressList.add(vxlanTunnel.getDestAddress());
         }
         netVni.setPeerAddresslist(peerAddressList);
 
-        List<String> portList = new ArrayList<String>();
-        List<Integer> vlanList = new ArrayList<Integer>();
-        List<PortVlan> portvlanlist = new ArrayList<PortVlan>();
+        List<String> portList = new ArrayList<>();
+        List<Integer> vlanList = new ArrayList<>();
+        List<PortVlan> portvlanlist = new ArrayList<>();
 
         for(SbiNeVxlanInterface vxlanInterface : vxLanInstance.getVxlanInterfaceList()) {
             if(vxlanInterface.getAccessType().equals(VxlanAccessType.PORT.getName())) {
@@ -147,96 +148,10 @@ public class VxlanConvert {
     }
 
     /**
-     * <br/>
-     * 
-     * @param vxLanInstanceList
-     * @param toBeUpdated
-     * @param toBeDeleted
-     * @since SDNHUB 0.5
-     */
-    public static void divideVxlanTOUpdateOrDelete(List<SbiNeVxlanInstance> vxLanInstanceList,
-            Map<String, List<SbiNeVxlanInstance>> toBeUpdated, Map<String, List<SbiNeVxlanInstance>> toBeDeleted) {
-
-        for(SbiNeVxlanInstance sbiNeVxlanInstance : vxLanInstanceList) {
-            // TODO getModifyMask is not there in SbiNeVxlanInstance.java
-            // if(!ModifyMaskType.DELETE.getName().equals(sbiNeVxlanInstance.getModifyMask())) {
-            List<SbiNeVxlanTunnel> vxlanTunnelList = sbiNeVxlanInstance.getVxlanTunnelList();
-            Iterator<SbiNeVxlanTunnel> tunnelIterator = vxlanTunnelList.iterator();
-
-            while(tunnelIterator.hasNext()) {
-                SbiNeVxlanTunnel nevxlanTunnel = tunnelIterator.next();
-                // TODO getModifyMask is not there in SbiNeVxlanInstance.java
-                // if(ModifyMaskType.DELETE.getName().equals(nevxlanTunnel.getModifyMask()) ||
-                // StringUtils.isEmpty((nevxlanTunnel.getExternalId()))){
-                tunnelIterator.remove();
-                // }
-            }
-            // }
-        }
-
-        for(SbiNeVxlanInstance sbiNeVxlanInstance : vxLanInstanceList) {
-            if(StringUtils.isEmpty(sbiNeVxlanInstance.getExternalId())) {
-                continue;
-            }
-
-            String currDeviceId = sbiNeVxlanInstance.getUuid();
-
-            if(CollectionUtils.isEmpty(sbiNeVxlanInstance.getVxlanTunnelList())) {
-
-                if(!toBeDeleted.containsKey(currDeviceId)) {
-                    toBeDeleted.put(currDeviceId, new ArrayList<SbiNeVxlanInstance>());
-                }
-
-                toBeDeleted.get(currDeviceId).add(sbiNeVxlanInstance);
-                continue;
-            }
-            // TODO getModifyMask is not there in SbiNeVxlanInstance.java
-            // if(!ModifyMaskType.DELETE.getName().equals(sbiNeVxlanInstance.getModifyMask())) {
-            if(!toBeDeleted.containsKey(currDeviceId)) {
-                toBeDeleted.put(currDeviceId, new ArrayList<SbiNeVxlanInstance>());
-            }
-
-            toBeDeleted.get(currDeviceId).add(sbiNeVxlanInstance);
-            // } else {
-            if(!toBeUpdated.containsKey(currDeviceId)) {
-                toBeUpdated.put(currDeviceId, new ArrayList<SbiNeVxlanInstance>());
-            }
-
-            toBeUpdated.get(currDeviceId).add(sbiNeVxlanInstance);
-        }
-    }
-
-    /**
-     * <br/>
-     * 
-     * @param sbiNeVxlanInstances
-     * @return
-     * @since SDNHUB 0.5
-     */
-    public static Map<String, List<VxLanDeviceModel>>
-            convertToDeviceModelForUpdate(List<SbiNeVxlanInstance> sbiNeVxlanInstances) {
-        Map<String, List<VxLanDeviceModel>> vxlanDeviceModelMap =
-                new ConcurrentHashMap<String, List<VxLanDeviceModel>>();
-
-        for(SbiNeVxlanInstance vxlanInstance : sbiNeVxlanInstances) {
-            String id = vxlanInstance.getUuid();
-
-            if(!vxlanDeviceModelMap.containsKey(id)) {
-                vxlanDeviceModelMap.put(id, new ArrayList<VxLanDeviceModel>());
-            }
-
-            vxlanDeviceModelMap.get(id).add(convertToVxlanDeviceModel(vxlanInstance));
-        }
-
-        return vxlanDeviceModelMap;
-    }
-
-    /**
-     * <br/>
-     * 
-     * @param vxLanInstanceList
-     * @return
-     * @throws ServiceException
+     * Validates VxLan configuration from service SBI.<br>
+     *
+     * @param vxLanInstanceList collection of VxLan configuration from service SBI
+     * @return collection of VxLan configuration
      * @since SDNHUB 0.5
      */
     public static List<SbiNeVxlanInstance> checkInputCreateVxlan(List<SbiNeVxlanInstance> vxLanInstanceList)
@@ -263,15 +178,15 @@ public class VxlanConvert {
     }
 
     /**
-     * <br/>
-     * 
-     * @param vxlanInstanceList
-     * @return
+     * Prepares mapping of VxLan configuration based on device id.<br/>
+     *
+     * @param vxlanInstanceList collection of VxLan configuration
+     * @return mapping of VxLan configuration based on device id.
      * @since SDNHUB 0.5
      */
     public static Map<String, List<SbiNeVxlanInstance>>
             divideVxlanInsByDeviceId(List<SbiNeVxlanInstance> vxlanInstanceList) {
-        Map<String, List<SbiNeVxlanInstance>> deviceIdToVxlanInsMap = new HashMap<String, List<SbiNeVxlanInstance>>();
+        Map<String, List<SbiNeVxlanInstance>> deviceIdToVxlanInsMap = new HashMap<>();
 
         for(SbiNeVxlanInstance sbiNeVxlanInstance : vxlanInstanceList) {
             String deviceId = sbiNeVxlanInstance.getDeviceId();
@@ -284,5 +199,4 @@ public class VxlanConvert {
 
         return deviceIdToVxlanInsMap;
     }
-
 }

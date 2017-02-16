@@ -65,7 +65,7 @@ public class AclConvert {
         acl.setAclNumber(Integer.valueOf(snatNetModel.getAclNumber()));
         acl.setAclName("aclName_" + snatNetModel.getAclNumber());
 
-        List<AcAclRule> rules = new ArrayList<AcAclRule>();
+        List<AcAclRule> rules = new ArrayList<>();
         AcAclRule denyRule1 = new AcAclRule();
         denyRule1.setId(10);
         denyRule1.setPolicy(POLICY_DENY);
@@ -105,8 +105,6 @@ public class AclConvert {
         rule.setId(200);
         rule.setPolicy(POLICY_PERMIT);
         if(isPrivateIpUsefull(snatNetModel)) {
-            // rule.setSrcIp(snatNetModel.getPrivateIpAddress() + "/" +
-            // snatNetModel.getPrivatePrefix());
         }
 
         rule.setDescription(snatNetModel.getDescription());

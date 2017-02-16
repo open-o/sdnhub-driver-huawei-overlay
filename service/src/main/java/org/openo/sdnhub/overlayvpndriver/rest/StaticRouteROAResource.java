@@ -76,7 +76,7 @@ public class StaticRouteROAResource {
 
         ResultRsp<SbiNeStaticRoute> totalResult = new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS);
         List<SbiNeStaticRoute> successedDatas = new ArrayList<>();
-        List<FailData<SbiNeStaticRoute>> failedDatas = new ArrayList<FailData<SbiNeStaticRoute>>();
+        List<FailData<SbiNeStaticRoute>> failedDatas = new ArrayList<>();
 
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
 
@@ -98,7 +98,7 @@ public class StaticRouteROAResource {
             if (resultRsp.isValid()) {
                 successedDatas.add(sbiNeStaticRoute);
             } else {
-                FailData<SbiNeStaticRoute> failData = new FailData<SbiNeStaticRoute>(resultRsp.getErrorCode(),
+                FailData<SbiNeStaticRoute> failData = new FailData<>(resultRsp.getErrorCode(),
                         resultRsp.getMessage(),sbiNeStaticRoute);
                 failedDatas.add(failData);
             }
@@ -135,13 +135,13 @@ public class StaticRouteROAResource {
             LOGGER.error("invalid controller UUID");
             throw new ParameterServiceException("invalid controller UUID.");
         }
-        ResultRsp<List<SbiNeStaticRoute>> totalResult = new ResultRsp<List<SbiNeStaticRoute>>();
+        ResultRsp<List<SbiNeStaticRoute>> totalResult = new ResultRsp<>();
         if(CollectionUtils.isEmpty(neStaticRoutes)) {
             throw new ParameterServiceException("Empty list of static routes recieved");
         }
 
         List<List<SbiNeStaticRoute>> successData = new ArrayList<>();
-        List<FailData<List<SbiNeStaticRoute>>> failDatas = new ArrayList<FailData<List<SbiNeStaticRoute>>>();
+        List<FailData<List<SbiNeStaticRoute>>> failDatas = new ArrayList<>();
 
         for(SbiNeStaticRoute neStaticRoute : neStaticRoutes) {
             ValidationUtil.validateModel(neStaticRoute);
@@ -200,7 +200,7 @@ public class StaticRouteROAResource {
             throw new ParameterServiceException("delete static route : body is null or empty");
         }
 
-        List<String> routerIds = new ArrayList<String>();
+        List<String> routerIds = new ArrayList<>();
         for(SbiNeStaticRoute router : neStaticRoutes) {
             String routerId = router.getExternalId();
             UuidUtil.validate(routerId);
@@ -276,7 +276,7 @@ public class StaticRouteROAResource {
             totalResult.setErrorCode(ErrorCode.OVERLAYVPN_FAILED);
         }
 
-        LOGGER.debug("static route update end. cost:{}", (System.currentTimeMillis() - beginTime));
+        LOGGER.debug("static route update end. cost:{}", System.currentTimeMillis() - beginTime);
 
         return totalResult;
     }

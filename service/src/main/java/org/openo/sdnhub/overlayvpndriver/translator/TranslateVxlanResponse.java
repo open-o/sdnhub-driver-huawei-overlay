@@ -29,15 +29,18 @@ import org.openo.sdno.overlayvpn.model.v2.vxlan.SbiNeVxlanTunnel;
  * <br/>
  * <p>
  * </p>
- * 
+ *
  * @author
  * @version SDNHUB 0.5 06-Feb-2017
  */
 public class TranslateVxlanResponse {
 
+    public TranslateVxlanResponse(){
+    }
+
     /**
      * <br/>
-     * 
+     *
      * @param sbiNeVxlanInstances
      * @param deviceId
      * @param VxLanDeviceModels
@@ -81,5 +84,4 @@ public class TranslateVxlanResponse {
         return !deviceId.equals(vxlanInstance.getUuid())
                 || !vxLanDeviceModel.getName().equals(vxlanInstance.getConnectionId());
     }
-
 }

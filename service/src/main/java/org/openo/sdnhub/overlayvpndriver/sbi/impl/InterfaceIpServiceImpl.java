@@ -63,15 +63,15 @@ public class InterfaceIpServiceImpl {
         LOGGER.debug("body:{}", modifyRsp);
         if(!modifyRsp.isSuccess()) {
             LOGGER.error("update interface ip error,status:{}", modifyRsp.getStatus());
-            return new ResultRsp<List<SbiInterfaceIpConfig>>(DriverErrorCode.CLOUDVPN_FAILED);
+            return new ResultRsp<>(DriverErrorCode.CLOUDVPN_FAILED);
         }
         ACResponse<List<SbiInterfaceIpConfig>> response =
                 JsonUtil.fromJson(modifyRsp.getBody(), new TypeReference<ACResponse<List<SbiInterfaceIpConfig>>>() {});
         if(null != response) {
-            return new ResultRsp<List<SbiInterfaceIpConfig>>(response.getErrcode(), response.getData());
+            return new ResultRsp<>(response.getErrcode(), response.getData());
         }
         LOGGER.error("update interface error:" + modifyRsp.getBody());
-        return new ResultRsp<List<SbiInterfaceIpConfig>>(DriverErrorCode.CLOUDVPN_FAILED);
+        return new ResultRsp<>(DriverErrorCode.CLOUDVPN_FAILED);
     }
 
     /**
@@ -91,14 +91,14 @@ public class InterfaceIpServiceImpl {
         LOGGER.debug("body:{}", queryRsp);
         if(!queryRsp.isSuccess()) {
             LOGGER.error("query interface ip error,status:{}", queryRsp.getStatus());
-            return new ResultRsp<List<SbiInterfaceIpConfig>>(DriverErrorCode.CLOUDVPN_FAILED);
+            return new ResultRsp<>(DriverErrorCode.CLOUDVPN_FAILED);
         }
         ACResponse<List<SbiInterfaceIpConfig>> response =
                 JsonUtil.fromJson(queryRsp.getBody(), new TypeReference<ACResponse<List<SbiInterfaceIpConfig>>>() {});
         if(null != response) {
-            return new ResultRsp<List<SbiInterfaceIpConfig>>(response.getErrcode(), response.getData());
+            return new ResultRsp<>(response.getErrcode(), response.getData());
         }
         LOGGER.error("query interface ip failed:" + queryRsp.getBody());
-        return new ResultRsp<List<SbiInterfaceIpConfig>>(DriverErrorCode.CLOUDVPN_FAILED);
+        return new ResultRsp<>(DriverErrorCode.CLOUDVPN_FAILED);
     }
 }

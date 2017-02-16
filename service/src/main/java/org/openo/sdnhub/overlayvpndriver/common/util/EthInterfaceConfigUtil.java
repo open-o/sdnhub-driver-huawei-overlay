@@ -66,14 +66,13 @@ public final class EthInterfaceConfigUtil
                     });
             if(response.isSucceed())
             {
-                return new ResultRsp<List<EthInterfaceConfig>>
+                return new ResultRsp<>
                 (org.openo.sdno.overlayvpn.errorcode.ErrorCode.OVERLAYVPN_SUCCESS, response.getData());
             }
             else
             {
                 //probably CLOUDVPN_SUCCESS should be CLOUDVPN_FAIL
-                return new ResultRsp<List<EthInterfaceConfig>>
-                (org.openo.sdno.overlayvpn.errorcode.ErrorCode.OVERLAYVPN_SUCCESS,response.getData());
+                return new ResultRsp<>(org.openo.sdno.overlayvpn.errorcode.ErrorCode.OVERLAYVPN_SUCCESS,response.getData());
             }
         }
         if(StringUtils.hasLength(retBody))
@@ -81,12 +80,12 @@ public final class EthInterfaceConfigUtil
             final Map<String, String> errorMap = JsonUtil.fromJson(retBody, new TypeReference<Map<String,String>>()
             {
             });
-            return new ResultRsp<List<EthInterfaceConfig>>
+            return new ResultRsp<>
             (ErrorCode.OVERLAYVPN_SUCCESS, errorMap.get("errmsg"),null,null,null);
         }
 
         LOGGER.error(actionDesc + ": parser msg to ACResponse error, msg:" + retBody);
 
-        return new ResultRsp<List<EthInterfaceConfig>>(ErrorCode.OVERLAYVPN_SUCCESS);
+        return new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS);
     }
 }

@@ -25,16 +25,16 @@ import javax.net.ssl.X509TrustManager;
  * <br/>
  * <p>
  * </p>
- * 
+ *
  * @author
  * @version SDNHUB 0.5 02-Feb-2017
  */
     public class TrustAllX509TrustManager implements X509TrustManager {
 
     /**
-     * 
+     *
      * <br/>
-     * 
+     *
      * @return
      * @since   SDNHUB 0.5
      */
@@ -44,9 +44,9 @@ import javax.net.ssl.X509TrustManager;
     }
 
     /**
-     * 
+     *
      * <br/>
-     * 
+     *
      * @param certs
      * @param authType
      * @throws CertificateException
@@ -54,13 +54,13 @@ import javax.net.ssl.X509TrustManager;
      */
     @Override
     public void checkClientTrusted(X509Certificate[] certs, String authType) throws CertificateException {
-
+        //Do Nothing
     }
 
     /**
-     * 
+     *
      * <br/>
-     * 
+     *
      * @param certs
      * @param authType
      * @throws CertificateException
@@ -68,7 +68,6 @@ import javax.net.ssl.X509TrustManager;
      */
     @Override
     public void checkServerTrusted(X509Certificate[] certs, String authType) throws CertificateException {
-
+        //Do Nothing
     }
-
 }

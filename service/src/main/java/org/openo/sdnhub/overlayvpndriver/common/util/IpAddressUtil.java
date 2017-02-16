@@ -35,6 +35,9 @@ public class IpAddressUtil {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IpAddressUtil.class);
 
+    private IpAddressUtil(){
+    }
+
     /**
      * Calculate subnet address.<br/>
      *
@@ -70,8 +73,7 @@ public class IpAddressUtil {
             return -1;
         }
 
-        ipAddr = ipAddr.trim();
-        String[] ipArray = StringUtils.split(ipAddr, '.');
+        String[] ipArray = StringUtils.split(ipAddr.trim(), '.');
         long[] ip = new long[4];
 
         ip[0] = Long.parseLong(ipArray[0]);
@@ -94,7 +96,7 @@ public class IpAddressUtil {
             return null;
         }
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
         sb.append(String.valueOf(ipAddr >>> 24));
         sb.append('.');
@@ -136,5 +138,4 @@ public class IpAddressUtil {
 
         return match;
     }
-
 }

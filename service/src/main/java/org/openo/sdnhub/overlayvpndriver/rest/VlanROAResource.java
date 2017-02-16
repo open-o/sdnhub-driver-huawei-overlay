@@ -19,7 +19,14 @@ package org.openo.sdnhub.overlayvpndriver.rest;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
@@ -32,7 +39,6 @@ import org.openo.sdnhub.overlayvpndriver.service.model.SbiIfVlan;
 import org.openo.sdno.exception.ParameterServiceException;
 import org.openo.sdno.overlayvpn.errorcode.ErrorCode;
 import org.openo.sdno.overlayvpn.result.ResultRsp;
-import org.openo.sdno.overlayvpn.result.SvcExcptUtil;
 import org.openo.sdno.overlayvpn.util.check.UuidUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,6 +60,8 @@ public class VlanROAResource {
 
     @Autowired
     private VlanServiceImpl vlanService;
+
+    private String INVALID_CONTROLLER_UUID = "Invalid controller UUID.";
 
     /**
      * Adds new interface Vlan configuration using a specific Controller.<br>
@@ -79,8 +87,8 @@ public class VlanROAResource {
 
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
         if(!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error("Invalid controller UUID.");
-            throw new ParameterServiceException("Invalid controller UUID.");
+            LOGGER.error(INVALID_CONTROLLER_UUID);
+            throw new ParameterServiceException(INVALID_CONTROLLER_UUID);
         }
 
         if(CollectionUtils.isEmpty(ifVlanList)) {
@@ -95,7 +103,7 @@ public class VlanROAResource {
         List<SbiIfVlan> ifVlans = vlanService.buildCreateIfVlanRsp(configRsp, ifVlanList);
         LOGGER.debug("create IfVlan cost {} ms.", System.currentTimeMillis() - startTime);
 
-        return new ResultRsp<List<SbiIfVlan>>(ErrorCode.OVERLAYVPN_SUCCESS, ifVlans);
+        return new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS, ifVlans);
 
     }
 
@@ -122,8 +130,8 @@ public class VlanROAResource {
         long startTime = System.currentTimeMillis();
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
         if(!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error("Invalid controller UUID.");
-            throw new ParameterServiceException("Invalid controller UUID.");
+            LOGGER.error(INVALID_CONTROLLER_UUID);
+            throw new ParameterServiceException(INVALID_CONTROLLER_UUID);
         }
 
         if(CollectionUtils.isEmpty(ifVlanList)) {
@@ -136,7 +144,7 @@ public class VlanROAResource {
         List<EthInterfaceConfig> configRsp = vlanService.configEth(ctrlUuid, deviceId, interfaceConfig);
         List<SbiIfVlan> ifVlans = vlanService.buildIfVlanRsp(configRsp);
         LOGGER.debug("Vlan update cost {} ms.", System.currentTimeMillis() - startTime);
-        return new ResultRsp<List<SbiIfVlan>>(ErrorCode.OVERLAYVPN_SUCCESS, ifVlans);
+        return new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS, ifVlans);
     }
 
     /**
@@ -162,12 +170,12 @@ public class VlanROAResource {
         long startTime = System.currentTimeMillis();
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
         if(!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error("Invalid controller UUID.");
-            throw new ParameterServiceException("Invalid controller UUID.");
+            LOGGER.error(INVALID_CONTROLLER_UUID);
+            throw new ParameterServiceException(INVALID_CONTROLLER_UUID);
         }
         List<EthInterfaceConfig> interfaceConfig = vlanService.queryEthByIds(ctrlUuid, deviceId, ids);
         List<SbiIfVlan> ifVlans = vlanService.buildIfVlanRsp(interfaceConfig);
         LOGGER.debug("Vlan query cost {} ms.", System.currentTimeMillis() - startTime);
-        return new ResultRsp<List<SbiIfVlan>>(ErrorCode.OVERLAYVPN_SUCCESS, ifVlans);
+        return new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS, ifVlans);
     }
 }

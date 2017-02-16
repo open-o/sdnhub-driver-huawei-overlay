@@ -24,7 +24,7 @@ import org.openo.sdno.overlayvpn.verify.annotation.AString;
 
 /**
  * Model class for vni in adapter layer. <br>
- * 
+ *
  * @author
  * @version SDNHUB Driver 0.5 Jan 20, 2017
  */
@@ -33,7 +33,7 @@ public class Vni extends AbstUuidModel {
     private boolean deleteMode;
 
     @AInt
-    private int vni;
+    private int virtualNetworkInterface;
 
     @AString(require = true)
     private String macLearingMode;
@@ -53,11 +53,11 @@ public class Vni extends AbstUuidModel {
     private List<PortVlan> portvlanlist;
 
     public int getVni() {
-        return vni;
+        return virtualNetworkInterface;
     }
 
     public void setVni(int vni) {
-        this.vni = vni;
+        this.virtualNetworkInterface = vni;
     }
 
     public boolean isDeleteMode() {

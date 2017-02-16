@@ -67,6 +67,8 @@ public class DeviceROAResource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DeviceROAResource.class);
 
+    private static final String INVALID_CONTROLLER_UUID="Invalid controller UUID.";
+
     @Autowired
     private DeviceServiceImpl deviceService;
 
@@ -91,8 +93,8 @@ public class DeviceROAResource {
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
 
         if(!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error("Invalid controller UUID.");
-            throw new ParameterServiceException("Invalid controller UUID.");
+            LOGGER.error(INVALID_CONTROLLER_UUID);
+            throw new ParameterServiceException(INVALID_CONTROLLER_UUID);
         }
 
         if(CollectionUtils.isEmpty(aDevCrtInfos)) {
@@ -105,7 +107,7 @@ public class DeviceROAResource {
         }
 
         Map<String, List<AdapterDeviceCreateBasicInfo>> crtInfoMap =
-                new ConcurrentHashMap<String, List<AdapterDeviceCreateBasicInfo>>();
+                new ConcurrentHashMap<>();
         crtInfoMap.put(CommConst.CREATE_DEVICE_PARAMETER, aDevCrtInfos);
 
         return deviceService.createDevices(ctrlUuid, JsonUtil.toJson(crtInfoMap));
@@ -132,11 +134,11 @@ public class DeviceROAResource {
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
 
         if(!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error("Invalid controller UUID.");
-            throw new ParameterServiceException("Invalid controller UUID.");
+            LOGGER.error(INVALID_CONTROLLER_UUID);
+            throw new ParameterServiceException(INVALID_CONTROLLER_UUID);
         }
 
-        Map<String, String> paramInfo = new HashMap<String, String>();
+        Map<String, String> paramInfo = new HashMap<>();
         paramInfo.put("keyWord", esn);
         return deviceService.queryDevices(ctrlUuid, JsonUtil.toJson(paramInfo));
     }
@@ -163,8 +165,8 @@ public class DeviceROAResource {
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
 
         if(!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error("Invalid controller UUID.");
-            throw new ParameterServiceException("Invalid controller UUID.");
+            LOGGER.error(INVALID_CONTROLLER_UUID);
+            throw new ParameterServiceException(INVALID_CONTROLLER_UUID);
         }
 
         if(CollectionUtils.isEmpty(deviceIds)) {
@@ -199,8 +201,8 @@ public class DeviceROAResource {
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
 
         if(!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error("Invalid controller UUID.");
-            throw new ParameterServiceException("Invalid controller UUID.");
+            LOGGER.error(INVALID_CONTROLLER_UUID);
+            throw new ParameterServiceException(INVALID_CONTROLLER_UUID);
         }
 
         if(!StringUtils.hasLength(deviceId)) {

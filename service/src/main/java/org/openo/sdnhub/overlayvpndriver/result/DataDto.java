@@ -57,5 +57,4 @@ public class DataDto {
     public void setData(List<ConfigCommonResult> data) {
         this.data = data;
     }
-
 }

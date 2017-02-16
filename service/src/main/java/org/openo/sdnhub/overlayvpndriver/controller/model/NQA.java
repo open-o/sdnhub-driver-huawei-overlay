@@ -54,14 +54,6 @@ public class NQA extends UuidModel {
     @AInt(min = 1, max = 225)
     private Integer ttl;
 
-    public Integer getTtl() {
-        return ttl;
-    }
-
-    public void setTtl(Integer ttl) {
-        this.ttl = ttl;
-    }
-
     @AInt(min = 0, max = 255)
     private Integer tos;
 
@@ -69,6 +61,14 @@ public class NQA extends UuidModel {
     private String ipsecConnectionId;
 
     private String nqaState;
+
+    public Integer getTtl() {
+        return ttl;
+    }
+
+    public void setTtl(Integer ttl) {
+        this.ttl = ttl;
+    }
 
     public String getSrcIp() {
         return srcIp;
@@ -157,5 +157,4 @@ public class NQA extends UuidModel {
     public void setNqaState(String nqaState) {
         this.nqaState = nqaState;
     }
-
 }

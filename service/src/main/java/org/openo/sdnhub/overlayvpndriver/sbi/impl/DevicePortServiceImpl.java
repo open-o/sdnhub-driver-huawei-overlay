@@ -42,6 +42,10 @@ public class DevicePortServiceImpl {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DevicePortServiceImpl.class);
 
+    private DevicePortServiceImpl(){
+    }
+
+
     /**
      * Query interface information of the current device using a specific controller.<br>
      *
@@ -62,7 +66,7 @@ public class DevicePortServiceImpl {
             OverlayVpnDriverResponse<SbiIp> acresponse =
                     JsonUtil.fromJson(body, new TypeReference<OverlayVpnDriverResponse<SbiIp>>() {});
             if(acresponse.isSucess()) {
-                ResultRsp<SbiIp> result = new ResultRsp<SbiIp>();
+                ResultRsp<SbiIp> result = new ResultRsp<>();
                 result.setErrorCode(acresponse.getErrcode());
                 result.setData(acresponse.getData());
                 return result;

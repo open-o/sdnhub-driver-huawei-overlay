@@ -52,6 +52,9 @@ public class InterfaceIpROAResource {
     @Autowired
     private InterfaceIpServiceImpl interfaceIpService;
 
+    private String INVALID_CONTROLLER_UUID = "Invalid controller UUID.";
+
+    private String NULL_DEVICE_ID = "deviceId is null";
     /**
      * Update IP related configuration for interface.<br/>
      *
@@ -74,13 +77,13 @@ public class InterfaceIpROAResource {
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
 
         if(!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error("Invalid controller UUID.");
-            throw new ParameterServiceException("Invalid controller UUID.");
+            LOGGER.error(INVALID_CONTROLLER_UUID);
+            throw new ParameterServiceException(INVALID_CONTROLLER_UUID);
         }
 
         if(!StringUtils.hasLength(deviceId)) {
-            LOGGER.error("deviceId is null");
-            throw new ParameterServiceException("deviceId is null");
+            LOGGER.error(NULL_DEVICE_ID);
+            throw new ParameterServiceException(NULL_DEVICE_ID);
         }
 
         if(CollectionUtils.isEmpty(interfaceIpConfigList)) {
@@ -91,9 +94,7 @@ public class InterfaceIpROAResource {
             ValidationUtil.validateModel(model);
         }
 
-        ResultRsp<List<SbiInterfaceIpConfig>> result =
-                interfaceIpService.updateInterfaceIpList(ctrlUuid, deviceId, interfaceIpConfigList);
-        return result;
+        return interfaceIpService.updateInterfaceIpList(ctrlUuid, deviceId, interfaceIpConfigList);
     }
 
     /**
@@ -116,16 +117,15 @@ public class InterfaceIpROAResource {
 
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
         if(!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error("Invalid controller UUID.");
-            throw new ParameterServiceException("Invalid controller UUID.");
+            LOGGER.error(INVALID_CONTROLLER_UUID);
+            throw new ParameterServiceException(INVALID_CONTROLLER_UUID);
         }
 
         if(!StringUtils.hasLength(deviceId)) {
-            LOGGER.error("deviceId is null");
-            throw new ParameterServiceException("deviceId is null");
+            LOGGER.error(NULL_DEVICE_ID);
+            throw new ParameterServiceException(NULL_DEVICE_ID);
         }
 
-        ResultRsp<List<SbiInterfaceIpConfig>> response = interfaceIpService.queryInterfaceIps(ctrlUuid, deviceId);
-        return response;
+        return interfaceIpService.queryInterfaceIps(ctrlUuid, deviceId);
     }
 }

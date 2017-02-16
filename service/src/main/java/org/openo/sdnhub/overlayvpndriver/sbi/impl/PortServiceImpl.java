@@ -59,17 +59,17 @@ public class PortServiceImpl {
         String queryUrl = MessageFormat.format(ControllerUrlConst.QUERY_DEVICE_PORT_URL, deviceId);
 
         long beginTime = System.currentTimeMillis();
-        LOGGER.info("qury ports begin time = " + beginTime + ", deviceId = " + deviceId);
+        LOGGER.debug("qury ports begin time = " + beginTime + ", deviceId = " + deviceId);
         HTTPReturnMessage httpMsg = OverlayVpnDriverProxy.getInstance().sendGetMsg(queryUrl, null, ctrlUuid);
-        LOGGER.info("qury ports cost time = " + (System.currentTimeMillis() - beginTime));
+        LOGGER.debug("qury ports cost time = " + (System.currentTimeMillis() - beginTime));
         String body = httpMsg.getBody();
 
-        LOGGER.info("qury ports return body : " + body);
+        LOGGER.debug("qury ports return body : " + body);
         if(httpMsg.isSuccess() && StringUtils.isNotEmpty(body)) {
             OverlayVpnDriverResponse acresponse =
                     JsonUtil.fromJson(body, new TypeReference<OverlayVpnDriverResponse<SbiIp>>() {});
             if(acresponse.isSucess()) {
-                return new ResultRsp<SbiIp>(acresponse.getErrcode() + acresponse.getErrmsg() + acresponse.getData());
+                return new ResultRsp<>(acresponse.getErrcode() + acresponse.getErrmsg() + acresponse.getData());
             }
             LOGGER.error("qury ports: asresponse return error" + acresponse.getErrmsg());
             throw new ServiceException(DriverErrorCode.ADAPTER_GRE_QUERY_WAN_INTERFACE_ERROR, acresponse.getErrmsg());

@@ -89,7 +89,7 @@ public class ResultUtil {
         }
         Object conInfoObj = configInfoMap.get("errmsg");
         if((null != conInfoObj) && (conInfoObj instanceof String)) {
-            return ((String)conInfoObj);
+            return (String)conInfoObj;
         }
         return "";
     }

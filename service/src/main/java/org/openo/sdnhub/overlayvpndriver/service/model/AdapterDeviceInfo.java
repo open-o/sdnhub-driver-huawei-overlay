@@ -297,5 +297,4 @@ public class AdapterDeviceInfo extends AdapterDeviceCreateBasicInfo {
     public void setModifyTime(String modifyTime) {
         this.modifyTime = modifyTime;
     }
-
 }

@@ -62,7 +62,7 @@ public class NqaConvert {
             OverlayVpnDriverResponse<List<SbiNqa>> acresponse =
                     JsonUtil.fromJson(httpMsg.getBody(), new TypeReference<OverlayVpnDriverResponse<List<SbiNqa>>>() {});
             if(acresponse.isSucess()) {
-                ResultRsp<SbiNqa> rsp = new ResultRsp<SbiNqa>();
+                ResultRsp<SbiNqa> rsp = new ResultRsp<>();
                 rsp.setSuccessed(acresponse.getData());
                 return rsp;
             }
@@ -74,12 +74,12 @@ public class NqaConvert {
         if(StringUtils.isNotEmpty(httpMsg.getBody())) {
             final Map<String, String> errorMap =
                     JsonUtil.fromJson(httpMsg.getBody(), new TypeReference<Map<String, String>>() {});
-            return new ResultRsp<SbiNqa>(errorMap.get("errcode") + errorMap.get("errmsg"));
+            return new ResultRsp<>(errorMap.get("errcode") + errorMap.get("errmsg"));
         }
 
         LOGGER.error(actionDesc + ": parser msg to ACResponse error, msg : " + httpMsg.getBody());
 
-        return new ResultRsp<SbiNqa>(DriverErrorCode.CLOUDVPN_FAILED);
+        return new ResultRsp<>(DriverErrorCode.CLOUDVPN_FAILED);
 
     }
 

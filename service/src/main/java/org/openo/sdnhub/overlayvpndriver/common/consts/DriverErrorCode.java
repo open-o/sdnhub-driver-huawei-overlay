@@ -20,21 +20,13 @@ package org.openo.sdnhub.overlayvpndriver.common.consts;
  * <br/>
  * <p>
  * </p>
- * 
+ *
  * @author
  * @version SDNHUB 0.5 02-Feb-2017
  */
 public class DriverErrorCode {
 
     public static final String SUCCESS = "0";
-
-    private DriverErrorCode() {
-
-    }
-
-    public static boolean isSucess(String code) {
-        return SUCCESS.equals(code);
-    }
 
     public static final String ADAPTER_VXLAN_PLUGIN_WORKING_ERROR = "ccadapter.vxlan.plugin_working_error";
 
@@ -122,11 +114,18 @@ public class DriverErrorCode {
     public static final String ADAPTER_SITE_SUBNET_QUERY_ERROR = "adapter.site.subnet.query.error";
 
     public static final String ADAPTER_SITE_SUBNET_NOT_EXIST_ON_CONTROLLER = "no.subnet.on.controller";
-    
+
     public static final String ADAPTER_SITE_SNAT_DELETE_ERROR = "adapter.site.snat.delete.error";
     public static final String ADAPTER_SITE_SNAT_DELETE_TUNNEL_ERROR = "adapter.site.snat.delete.tunnel.error";
     public static final String ADAPTER_SITE_SNAT_CREATE_ERROR = "adapter.site.snat.create.error";
     public static final String ADAPTER_SITE_SNAT_TUNNEL_ERROR = "adapter.site.snat.tunnel.error";
     public static final String ADAPTER_SITE_SNAT_UPDATE_ERROR = "adapter.site.snat.update.error";
     public static final String ADAPTER_SITE_SNAT_UPDATE_TUNNEL_ERROR = "adapter.site.snat.update.tunnel.error";
+
+    private DriverErrorCode() {
+    }
+
+    public static boolean isSucess(String code) {
+        return SUCCESS.equals(code);
+    }
 };
