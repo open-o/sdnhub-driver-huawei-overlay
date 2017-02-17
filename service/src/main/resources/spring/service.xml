@@ -31,7 +31,7 @@
             <ref bean="portROAResource"></ref>
             <ref bean="nqaROAResource"></ref>
             <ref bean="staticRouteROAResource"></ref>
-            <!--<ref bean="subnetROAResource"></ref>-->
+            <ref bean="subnetROAResource"></ref>
             <ref bean="deviceROAResource"></ref>
             <ref bean="subnetBDIfROAResource"></ref>
             <ref bean="localSiteSNatROAResource"></ref>
@@ -62,9 +62,9 @@
         class="org.openo.sdnhub.overlayvpndriver.rest.StaticRouteROAResource">
     </bean>
 
-    <!--<bean id="subnetROAResource" -->
-          <!--class="org.openo.sdnhub.overlayvpndriver.rest.SubnetROAResource">-->
-    <!--</bean>-->
+    <bean id="subnetROAResource"
+          class="org.openo.sdnhub.overlayvpndriver.rest.SubnetROAResource">
+    </bean>
 
     <bean id="deviceROAResource"
         class="org.openo.sdnhub.overlayvpndriver.rest.DeviceROAResource">
@@ -88,9 +88,9 @@
     </bean>
 
     <!-- auto wired beans -->
-    <!-- <bean id="subnetService"
+    <bean id="subnetService"
         class="org.openo.sdnhub.overlayvpndriver.sbi.impl.SubnetServiceImpl">
-    </bean-->
+    </bean>
     <bean id="staticRouteService"
         class="org.openo.sdnhub.overlayvpndriver.sbi.impl.StaticRouteImpl" />
 
