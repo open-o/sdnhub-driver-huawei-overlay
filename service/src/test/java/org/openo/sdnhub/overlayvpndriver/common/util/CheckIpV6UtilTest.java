@@ -22,79 +22,79 @@ import org.junit.Test;
 
 public class CheckIpV6UtilTest {
 
-    @Test
-    public void isValidIpV6Test() {
-
-        boolean r = CheckIpV6Util.isValidIpV6("ip");
-        assertEquals(false, r);
-    }
-    @Test
-    public void isValidIpV6Test1() {
-
-        boolean r = CheckIpV6Util.isValidIpV6("");
-        assertEquals(false, r);
-    }
-    @Test
-    public void isValidIpV6Test2() {
-
-        boolean r = CheckIpV6Util.isValidIpV6("10.10.10.12/123");
-        assertEquals(false, r);
-    }
-    @Test
-    public void isValidIpV6Test3() {
-
-        boolean r = CheckIpV6Util.isValidIpV6("10.10.10.12");
-        assertEquals(false, r);
-    }
-    @Test
-    public void isValidIpV6Test4() {
-
-        boolean r = CheckIpV6Util.isValidIpV6("10:::10//10.12 && 10..20.20/12");
-        assertEquals(false, r);
-    }
-
-    @Test
-    public void isValidIpV6Test5() {
-
-        boolean r = CheckIpV6Util.isValidIpV6("10::10:20//20");
-        assertEquals(false, r);
-    }
-    @Test
-    public void isValidIpV6Test6() {
-
-        boolean r = CheckIpV6Util.isValidIpV6("10:10:20");
-        assertEquals(false, r);
-    }
-
-    @Test
-        public void isValidIpV6Test7() {
-
-        boolean r = CheckIpV6Util.isValidIpV6("10//20..30:::30::20");
-        assertEquals(false, r);
-    }
-
-    @Test
-    public void isValidIpV6Test8() {
-
-        boolean r = CheckIpV6Util.isValidIpV6("10:::20");
-        assertEquals(false, r);
-    }
-    @Test
-    public void isValidIpV6Test9() {
-
-        boolean r = CheckIpV6Util.isValidIpV6("10/20.30  ::");
-        assertEquals(false, r);
-    }
-    @Test
-    public void isValidIpV6Test10() {
-
-        boolean r = CheckIpV6Util.isValidIpV6("10/20/:30");
-        assertEquals(false,r);
-    }
-
-    @Test
+	@Test
+	public void isValidIpV6Test() {
+		
+		boolean r = CheckIpV6Util.isValidIpV6("ip");
+		assertEquals(false, r);
+	}
+	@Test
+	public void isValidIpV6Test1() {
+		
+	    boolean r = CheckIpV6Util.isValidIpV6("");
+		assertEquals(false, r);
+	}
+	@Test
+	public void isValidIpV6Test2() {
+		
+	    boolean r = CheckIpV6Util.isValidIpV6("10.10.10.12/123");
+		assertEquals(false, r);
+	}
+	@Test
+	public void isValidIpV6Test3() {
+		
+	    boolean r = CheckIpV6Util.isValidIpV6("10.10.10.12");
+		assertEquals(false, r);
+	}
+	@Test
+	public void isValidIpV6Test4() {
+		
+	    boolean r = CheckIpV6Util.isValidIpV6("10:::10//10.12 && 10..20.20/12");
+		assertEquals(false, r);
+	}
+	
+	@Test
+	public void isValidIpV6Test5() {
+		
+	    boolean r = CheckIpV6Util.isValidIpV6("10::10:20//20");
+		assertEquals(false, r);
+	}
+	@Test
+	public void isValidIpV6Test6() {
+		
+	    boolean r = CheckIpV6Util.isValidIpV6("10:10:20");
+		assertEquals(false, r);
+	}
+	
+	@Test
+		public void isValidIpV6Test7() {
+		
+	    boolean r = CheckIpV6Util.isValidIpV6("10//20..30:::30::20");
+		assertEquals(false, r);
+	}
+	
+	@Test
+	public void isValidIpV6Test8() {
+		
+	    boolean r = CheckIpV6Util.isValidIpV6("10:::20");
+		assertEquals(false, r);
+	}
+	@Test
+	public void isValidIpV6Test9() {
+		
+	    boolean r = CheckIpV6Util.isValidIpV6("10/20.30  ::");
+		assertEquals(false, r);
+	}
+	@Test
+	public void isValidIpV6Test10() {
+		
+	    boolean r = CheckIpV6Util.isValidIpV6("10/20/:30");
+		assertEquals(false,r);
+	}
+	
+	@Test
     public void isValidIpV6TestValid() {
-
+        
         boolean r = CheckIpV6Util.isValidIpV6("2001:2001:2001:2001:2001:2001:2001:2001");
         assertEquals(true,r);
     }

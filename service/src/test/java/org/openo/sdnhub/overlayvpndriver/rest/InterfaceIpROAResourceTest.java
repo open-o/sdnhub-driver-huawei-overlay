@@ -73,6 +73,7 @@ public class InterfaceIpROAResourceTest {
                 interfaceIpConfig.setInterfaceName("InterfaceOne");
                 interfaceIpConfig.setMode("manual");
                 interfaceIpConfig.setIpv6Address("manual");
+                interfaceIpConfig.setMode6("manual");
 
                 dataList.add(interfaceIpConfig);
                 response.setData(dataList);
@@ -86,6 +87,7 @@ public class InterfaceIpROAResourceTest {
         interfaceIpConfig.setInterfaceName("InterfaceOne");
         interfaceIpConfig.setMode("manual");
         interfaceIpConfig.setIpv6Address("manual");
+        interfaceIpConfig.setMode6("manual");
         List<SbiInterfaceIpConfig> interfaceIpList = Arrays.asList(interfaceIpConfig);
         ResultRsp<List<SbiInterfaceIpConfig>> expected =
                 interfaceIpROAResource.updateInterfaceIp(null, ctrlUuidParam, deviceId, interfaceIpList);
@@ -107,6 +109,7 @@ public class InterfaceIpROAResourceTest {
         SbiInterfaceIpConfig interfaceIpConfig = new SbiInterfaceIpConfig();
         interfaceIpConfig.setInterfaceName("InterfaceOne");
         interfaceIpConfig.setMode("manual");
+        interfaceIpConfig.setMode6("manual");
         interfaceIpConfig.setIpv6Address("manual");
         List<SbiInterfaceIpConfig> interfaceIpList = Arrays.asList(interfaceIpConfig);
         interfaceIpROAResource.updateInterfaceIp(null, ctrlUuidParam, null, interfaceIpList);
@@ -145,6 +148,7 @@ public class InterfaceIpROAResourceTest {
         SbiInterfaceIpConfig interfaceIpConfig = new SbiInterfaceIpConfig();
         interfaceIpConfig.setInterfaceName("InterfaceOne");
         interfaceIpConfig.setMode("manual");
+        interfaceIpConfig.setMode6("manual");
         interfaceIpConfig.setIpv6Address("manual");
         List<SbiInterfaceIpConfig> interfaceIpList = Arrays.asList(interfaceIpConfig);
         ResultRsp<List<SbiInterfaceIpConfig>> expected =

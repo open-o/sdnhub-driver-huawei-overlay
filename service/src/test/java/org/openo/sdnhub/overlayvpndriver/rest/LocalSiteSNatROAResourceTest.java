@@ -43,332 +43,443 @@ import static org.junit.Assert.assertTrue;
 
 public class LocalSiteSNatROAResourceTest {
 
-    LocalSiteSNatROAResource localSiteSNatROAResource = new LocalSiteSNatROAResource();
+	LocalSiteSNatROAResource localSiteSNatROAResource = new LocalSiteSNatROAResource();
 
-    @Before
-    public void setup() throws Exception {
-        LocalSiteSNatServiceImpl service = new LocalSiteSNatServiceImpl();
-        AclServiceImpl service1 = new AclServiceImpl();
-        Class<?> clazz = LocalSiteSNatROAResource.class;
+	@Before
+	public void setup() throws Exception {
+		LocalSiteSNatServiceImpl service = new LocalSiteSNatServiceImpl();
+		AclServiceImpl service1 = new AclServiceImpl();
+		Class<?> clazz = LocalSiteSNatROAResource.class;
 
-        Object cc = clazz.newInstance();
+		Object cc = clazz.newInstance();
 
-        Field f1 = cc.getClass().getDeclaredField("localSiteSNatService");
-        Field f2 = cc.getClass().getDeclaredField("aclServiceImpl");
-        f1.setAccessible(true);
-        f1.set(cc, service);
-        f2.setAccessible(true);
-        f2.set(cc, service1);
-        localSiteSNatROAResource = (LocalSiteSNatROAResource)cc;
-    }
+		Field f1 = cc.getClass().getDeclaredField("localSiteSNatService");
+		Field f2 = cc.getClass().getDeclaredField("aclServiceImpl");
+		f1.setAccessible(true);
+		f1.set(cc, service);
+		f2.setAccessible(true);
+		f2.set(cc, service1);
+		localSiteSNatROAResource = (LocalSiteSNatROAResource) cc;
+	}
 
-    @Test
-    public void testCreateSnat() throws ServiceException {
-        new MockUp<ValidationUtil>() {
+	@Test(expected = ServiceException.class)
+	public void testCreateSnat_EmptyUuid() throws ServiceException {
 
-            @Mock
-            public void validateModel(Object obj) throws ServiceException {
-            }
-        };
-        new MockUp<OverlayVpnDriverProxy>() {
+		SbiSnatNetModel snatNet = new SbiSnatNetModel();
+		snatNet.setAclId("7db47412f2b44164a16ef18b16a81c0c");
+		snatNet.setAclNumber("3501");
+		snatNet.setActionState("active");
 
-            @Mock
-            public HTTPReturnMessage sendPutMsg(String url, String body, String ctrlUuid) throws ServiceException {
+		localSiteSNatROAResource.createSnat(null, "123", null, snatNet);
+	}
 
-                HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
-                httpReturnMessage.setStatus(200);
+	@Test(expected = ServiceException.class)
+	public void testCreateSnat_EmptySbiSnetModel() throws ServiceException {
 
-                ACResponse<AcAcl> obj = new ACResponse<>();
-                AcAcl acl = new AcAcl();
-                acl.setAclId("133");
-                acl.setAclName("acl");
-                acl.setAclNumber(123);
-                acl.setAclStep(56);
-                acl.setId("12346");
-                acl.setNetId("5464");
-                List<AcAclRule> ruleList = new ArrayList<>();
-                AcAclRule e = new AcAclRule();
-                e.setDescription("description");
-                e.setDesIp("10.12.13.01");
-                e.setDesPort(23);
-                e.setDesVlan(564);
-                e.setIcmpName("icmpName");
-                e.setId(0);
-                e.setPolicy("policy");
-                e.setProtocol(23);
-                e.setSrcIp("12.13.10.10");
-                e.setSrcPort(12);
-                e.setTcpSyn("tcpSyn");
-                ruleList.add(e);
-                acl.setRuleList(ruleList);
-                obj.setData(acl);
-                obj.setErrcode("0");
-                String retBody = JsonUtil.toJson(obj);
-                httpReturnMessage.setBody(retBody);
-                return httpReturnMessage;
-            }
+		localSiteSNatROAResource.createSnat(null, "123", "extSysID=ctrlid123", null);
+	}
+	
+	@Test(expected=ServiceException.class)
+	public void testCreateSnat_HttpError() throws ServiceException {
 
-            @Mock
-            public HTTPReturnMessage sendDeleteMsg(String url, String body, String ctrlUuid) throws ServiceException {
+		new MockUp<ValidationUtil>() {
 
-                HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
-                httpReturnMessage.setStatus(200);
+			@Mock
+			public void validateModel(Object obj) throws ServiceException {
+			}
+		};
+		new MockUp<OverlayVpnDriverProxy>() {
 
-                ACResponse<String> obj = new ACResponse<>();
-                obj.setData("data");
-                obj.setErrcode("0");
-                String retBody = JsonUtil.toJson(obj);
-                httpReturnMessage.setBody(retBody);
-                return httpReturnMessage;
-            }
+			@Mock
+			public HTTPReturnMessage sendPutMsg(String url, String body, String ctrlUuid) throws ServiceException {
 
-            @Mock
-            public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
+				HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
+				httpReturnMessage.setStatus(500);			
+				return httpReturnMessage;
+			}
+		};
+		SbiSnatNetModel snatNet = new SbiSnatNetModel();
+		snatNet.setAclId("7db47412f2b44164a16ef18b16a81c0c");
+		snatNet.setAclNumber("3501");
+		snatNet.setActionState("active");
+		localSiteSNatROAResource.createSnat(null, "123", "extSysID=ctrlid123", snatNet);
+	}
 
-                HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
-                httpReturnMessage.setStatus(200);
+	@Test(expected=ServiceException.class)
+	public void testCreateSnat_HttpError_EmptyBody() throws ServiceException {
 
-                ACResponse<AcSNat> obj = new ACResponse<>();
-                AcSNat acSnat = new AcSNat();
-                acSnat.setAclId("7db47412f2b44164a16ef18b16a81c0c");
-                acSnat.setAclNumber(3501);
-                acSnat.setId("2467a068795b41ee9676bc79168da7a6");
-                acSnat.setInterfaceName("GigabitEthernet0/0/2");
-                acSnat.setQosPreNat("true");
-                obj.setData(acSnat);
-                obj.setErrcode("0");
-                String retBody = JsonUtil.toJson(obj);
-                httpReturnMessage.setBody(retBody);
-                return httpReturnMessage;
-            }
-        };
-        SbiSnatNetModel snatNet = new SbiSnatNetModel();
-        snatNet.setAclId("7db47412f2b44164a16ef18b16a81c0c");
-        snatNet.setAclNumber("3501");
-        snatNet.setActionState("active");
+		new MockUp<ValidationUtil>() {
 
-        snatNet.setAdminStatus("active");
-        snatNet.setControllerId("ctrlid123");
-        snatNet.setCreatetime("aa0");
-        snatNet.setCreateTime("a0");
-        snatNet.setDescription("description");
-        snatNet.setDeviceId("123");
-        snatNet.setEndPublicIpAddress("123.34.34.12/24");
-        snatNet.setIfName("GigabitEthernet0/0/2");
-        snatNet.setInternetGatewayId("a13246");
-        snatNet.setName("Sbi nat model");
-        snatNet.setNatId("2467a068795b41ee9676bc79168da7a6");
-        snatNet.setNeId("a23");
-        snatNet.setOperStatus("active");
-        snatNet.setPrivateIpAddress("123.34.34.12/22");
-        snatNet.setPrivatePrefix("a");
-        snatNet.setQosPreNat("true");
-        snatNet.setSource("source");
-        snatNet.setStartPublicIpAddress("123.34.34.12/23");
-        snatNet.setSubnetId("a35");
-        snatNet.setTenantId("a12-354");
-        snatNet.setType("create");
-        snatNet.setUpdatetime("a0");
-        snatNet.setUuid("a12-346");
-        ResultRsp<SbiSnatNetModel> r = localSiteSNatROAResource.createSnat(null, "123", "extSysID=ctrlid123", snatNet);
-        assertTrue(r.getErrorCode().equals("overlayvpn.operation.success"));
-    }
+			@Mock
+			public void validateModel(Object obj) throws ServiceException {
+			}
+		};
+		new MockUp<OverlayVpnDriverProxy>() {
 
-    @Test
-    public void testUpdateSnat() throws ServiceException {
-        new MockUp<ValidationUtil>() {
+			@Mock
+			public HTTPReturnMessage sendPutMsg(String url, String body, String ctrlUuid) throws ServiceException {
 
-            @Mock
-            public void validateModel(Object obj) throws ServiceException {
+				HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
+				httpReturnMessage.setStatus(200);
 
-            }
-        };
-        new MockUp<OverlayVpnDriverProxy>() {
+				return httpReturnMessage;
+			}
+		};
+		SbiSnatNetModel snatNet = new SbiSnatNetModel();
+		snatNet.setAclId("7db47412f2b44164a16ef18b16a81c0c");
+		snatNet.setAclNumber("3501");
+		snatNet.setActionState("active");
+		localSiteSNatROAResource.createSnat(null, "123", "extSysID=ctrlid123", snatNet);
+	}
+	
+	
 
-            @Mock
-            public HTTPReturnMessage sendPutMsg(String url, String body, String ctrlUuid) throws ServiceException {
+	@Test
+	public void testCreateSnat() throws ServiceException {
+		new MockUp<ValidationUtil>() {
 
-                HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
-                httpReturnMessage.setStatus(200);
+			@Mock
+			public void validateModel(Object obj) throws ServiceException {
+			}
+		};
+		new MockUp<OverlayVpnDriverProxy>() {
 
-                ACResponse<AcAcl> obj = new ACResponse<>();
-                AcAcl acl = new AcAcl();
-                acl.setAclId("133");
-                acl.setAclName("acl");
-                acl.setAclNumber(123);
-                acl.setAclStep(56);
-                acl.setId("12346");
-                acl.setNetId("5464");
-                List<AcAclRule> ruleList = new ArrayList<>();
-                AcAclRule e = new AcAclRule();
-                e.setDescription("description");
-                e.setDesIp("10.12.13.01");
-                e.setDesPort(23);
-                e.setDesVlan(564);
-                e.setIcmpName("icmpName");
-                e.setId(0);
-                e.setPolicy("policy");
-                e.setProtocol(23);
-                e.setSrcIp("12.13.10.10");
-                e.setSrcPort(12);
-                e.setTcpSyn("tcpSyn");
-                ruleList.add(e);
-                acl.setRuleList(ruleList);
-                obj.setData(acl);
-                obj.setErrcode("0");
-                String retBody = JsonUtil.toJson(obj);
-                httpReturnMessage.setBody(retBody);
-                return httpReturnMessage;
-            }
-        };
-        SbiSnatNetModel snatNet = new SbiSnatNetModel();
-        snatNet.setAclId("7db47412f2b44164a16ef18b16a81c0c");
-        snatNet.setAclNumber("3501");
-        snatNet.setActionState("active");
-        snatNet.setAdminStatus("active");
-        snatNet.setControllerId("ctrlid123");
-        snatNet.setCreatetime("aa0");
-        snatNet.setCreateTime("a0");
-        snatNet.setDescription("description");
-        snatNet.setDeviceId("123");
-        snatNet.setEndPublicIpAddress("123.34.34.12/24");
-        snatNet.setIfName("GigabitEthernet0/0/2");
-        snatNet.setInternetGatewayId("a13246");
-        snatNet.setName("Sbi nat model");
-        snatNet.setNatId("2467a068795b41ee9676bc79168da7a6");
-        snatNet.setNeId("a23");
-        snatNet.setOperStatus("active");
-        snatNet.setPrivateIpAddress("123.34.34.12/22");
-        snatNet.setPrivatePrefix("a");
-        snatNet.setQosPreNat("true");
-        snatNet.setSource("source");
-        snatNet.setStartPublicIpAddress("123.34.34.12/23");
-        snatNet.setSubnetId("a35");
-        snatNet.setTenantId("a12-354");
-        snatNet.setType("create");
-        snatNet.setUpdatetime("a0");
-        snatNet.setUuid("a12-346");
-        ResultRsp<SbiSnatNetModel> r1 = localSiteSNatROAResource.updateSnat(null, "123", "extSysID=ctrlid123", snatNet);
-        assertEquals(r1.getErrorCode().equals("overlayvpn.operation.success"), true);
-    }
+			@Mock
+			public HTTPReturnMessage sendPutMsg(String url, String body, String ctrlUuid) throws ServiceException {
 
-    @Test
-    public void testDeleteSnat() throws ServiceException {
-        new MockUp<ValidationUtil>() {
+				HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
+				httpReturnMessage.setStatus(200);
 
-            @Mock
-            public void validateModel(Object obj) throws ServiceException {
+				ACResponse<AcAcl> obj = new ACResponse<>();
+				AcAcl acl = new AcAcl();
+				acl.setAclId("133");
+				acl.setAclName("acl");
+				acl.setAclNumber(123);
+				acl.setAclStep(56);
+				acl.setId("12346");
+				acl.setNetId("5464");
+				List<AcAclRule> ruleList = new ArrayList<>();
+				AcAclRule e = new AcAclRule();
+				e.setDescription("description");
+				e.setDesIp("10.12.13.01");
+				e.setDesPort(23);
+				e.setDesVlan(564);
+				e.setIcmpName("icmpName");
+				e.setId(0);
+				e.setPolicy("policy");
+				e.setProtocol(23);
+				e.setSrcIp("12.13.10.10");
+				e.setSrcPort(12);
+				e.setTcpSyn("tcpSyn");
+				ruleList.add(e);
+				acl.setRuleList(ruleList);
+				obj.setData(acl);
+				obj.setErrcode("0");
+				String retBody = JsonUtil.toJson(obj);
+				httpReturnMessage.setBody(retBody);
+				return httpReturnMessage;
+			}
+		};
+		SbiSnatNetModel snatNet = new SbiSnatNetModel();
+		snatNet.setAclId("7db47412f2b44164a16ef18b16a81c0c");
+		snatNet.setAclNumber("3501");
+		snatNet.setActionState("active");
 
-            }
-        };
-        new MockUp<OverlayVpnDriverProxy>() {
+		snatNet.setAdminStatus("active");
+		snatNet.setControllerId("ctrlid123");
+		//snatNet.setCT("aa0");
+		snatNet.setCreateTime("a0");
+		snatNet.setDescription("description");
+		snatNet.setDeviceId("123");
+		snatNet.setEndPublicIpAddress("123.34.34.12/24");
+		snatNet.setIfName("GigabitEthernet0/0/2");
+		snatNet.setInternetGatewayId("a13246");
+		snatNet.setName("Sbi nat model");
+		snatNet.setNatId("2467a068795b41ee9676bc79168da7a6");
+		snatNet.setNeId("a23");
+		snatNet.setOperStatus("active");
+		snatNet.setPrivateIpAddress("123.34.34.12/22");
+		snatNet.setPrivatePrefix("a");
+		snatNet.setQosPreNat("true");
+		snatNet.setSource("source");
+		snatNet.setStartPublicIpAddress("123.34.34.12/23");
+		snatNet.setSubnetId("a35");
+		snatNet.setTenantId("a12-354");
+		snatNet.setType("create");
+		snatNet.setUpdatetime("a0");
+		snatNet.setUuid("a12-346");
+		ResultRsp<SbiSnatNetModel> r = localSiteSNatROAResource.createSnat(null, "123", "extSysID=ctrlid123", snatNet);
+		assertTrue(r.getErrorCode().equals("overlayvpn.operation.success"));
+	}
 
-            @Mock
-            public HTTPReturnMessage sendDeleteMsg(String url, String body, String ctrlUuid) throws ServiceException {
+	@Test(expected = ServiceException.class)
+	public void testUpdateSnat_EmptySbiSnetModel() throws ServiceException {
 
-                HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
-                httpReturnMessage.setStatus(200);
+		localSiteSNatROAResource.updateSnat(null, "123", "extSysID=ctrlid123", null);
+	}
 
-                ACResponse<String> obj = new ACResponse<>();
-                obj.setData("data");
-                obj.setErrcode("0");
-                String retBody = JsonUtil.toJson(obj);
-                httpReturnMessage.setBody(retBody);
-                return httpReturnMessage;
-            }
-        };
-        SbiSnatNetModel snatNet = new SbiSnatNetModel();
-        snatNet.setAclId("7db47412f2b44164a16ef18b16a81c0c");
-        snatNet.setAclNumber("3501");
-        snatNet.setActionState("active");
+	@Test(expected = ServiceException.class)
+	public void testUpdateSnat_EmptyUuid() throws ServiceException {
 
-        snatNet.setAdminStatus("active");
-        snatNet.setControllerId("ctrlid123");
-        snatNet.setCreatetime("aa0");
-        snatNet.setCreateTime("a0");
-        snatNet.setDescription("description");
-        snatNet.setDeviceId("123");
-        snatNet.setEndPublicIpAddress("123.34.34.12/24");
-        snatNet.setIfName("GigabitEthernet0/0/2");
-        snatNet.setInternetGatewayId("a13246");
-        snatNet.setName("Sbi nat model");
-        snatNet.setNatId("2467a068795b41ee9676bc79168da7a6");
-        snatNet.setNeId("a23");
-        snatNet.setOperStatus("active");
-        snatNet.setPrivateIpAddress("123.34.34.12/22");
-        snatNet.setPrivatePrefix("a");
-        snatNet.setQosPreNat("true");
-        snatNet.setSource("source");
-        snatNet.setStartPublicIpAddress("123.34.34.12/23");
-        snatNet.setSubnetId("a35");
-        snatNet.setTenantId("a12-354");
-        snatNet.setType("create");
-        snatNet.setUpdatetime("a0");
-        snatNet.setUuid("a12-346");
-        ResultRsp<String> r2 = localSiteSNatROAResource.deleteSnat(null, "123", "2467a068795b41ee9676bc79168da7a6",
-                "7db47412f2b44164a16ef18b16a81c0c", "extSysID=ctrlid123");
-        assertEquals(r2.getErrorCode().equals("overlayvpn.operation.success"), true);
-    }
+		SbiSnatNetModel snatNet = new SbiSnatNetModel();
+		snatNet.setAclId("7db47412f2b44164a16ef18b16a81c0c");
+		snatNet.setAclNumber("3501");
+		snatNet.setActionState("active");
 
-    @Test
-    public void testQuerySnat() throws ServiceException {
-        new MockUp<ValidationUtil>() {
+		localSiteSNatROAResource.updateSnat(null, "123", null, snatNet);
+	}
 
-            @Mock
-            public void validateModel(Object obj) throws ServiceException {
-            }
-        };
-        new MockUp<OverlayVpnDriverProxy>() {
+	@Test
+	public void testUpdateSnat() throws ServiceException {
+		new MockUp<ValidationUtil>() {
 
-            @Mock
-            public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
+			@Mock
+			public void validateModel(Object obj) throws ServiceException {
 
-                HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
-                httpReturnMessage.setStatus(200);
+			}
+		};
+		new MockUp<OverlayVpnDriverProxy>() {
 
-                ACResponse<AcSNat> obj = new ACResponse<>();
-                AcSNat acSnat = new AcSNat();
-                acSnat.setAclId("7db47412f2b44164a16ef18b16a81c0c");
-                acSnat.setAclNumber(3501);
-                acSnat.setId("2467a068795b41ee9676bc79168da7a6");
-                acSnat.setInterfaceName("GigabitEthernet0/0/2");
-                acSnat.setQosPreNat("true");
-                obj.setData(acSnat);
-                obj.setErrcode("0");
-                String retBody = JsonUtil.toJson(obj);
-                httpReturnMessage.setBody(retBody);
-                return httpReturnMessage;
-            }
-        };
-        SbiSnatNetModel snatNet = new SbiSnatNetModel();
-        snatNet.setAclId("7db47412f2b44164a16ef18b16a81c0c");
-        snatNet.setAclNumber("3501");
-        snatNet.setActionState("active");
-        snatNet.setAdminStatus("active");
-        snatNet.setControllerId("ctrlid123");
-        snatNet.setCreatetime("aa0");
-        snatNet.setCreateTime("a0");
-        snatNet.setDescription("description");
-        snatNet.setDeviceId("123");
-        snatNet.setEndPublicIpAddress("123.34.34.12/24");
-        snatNet.setIfName("GigabitEthernet0/0/2");
-        snatNet.setInternetGatewayId("a13246");
-        snatNet.setName("Sbi nat model");
-        snatNet.setNatId("2467a068795b41ee9676bc79168da7a6");
-        snatNet.setNeId("a23");
-        snatNet.setOperStatus("active");
-        snatNet.setPrivateIpAddress("123.34.34.12/22");
-        snatNet.setPrivatePrefix("a");
-        snatNet.setQosPreNat("true");
-        snatNet.setSource("source");
-        snatNet.setStartPublicIpAddress("123.34.34.12/23");
-        snatNet.setSubnetId("a35");
-        snatNet.setTenantId("a12-354");
-        snatNet.setType("create");
-        snatNet.setUpdatetime("a0");
-        snatNet.setUuid("a12-346");
-        ResultRsp<String> r2 = localSiteSNatROAResource.querySnat(null, "123", "2467a068795b41ee9676bc79168da7a6",
-                "7db47412f2b44164a16ef18b16a81c0c", "extSysID=ctrlid123");
-        assertEquals(r2.getErrorCode().equals("overlayvpn.operation.success"), true);
-    }
+			@Mock
+			public HTTPReturnMessage sendPutMsg(String url, String body, String ctrlUuid) throws ServiceException {
+
+				HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
+				httpReturnMessage.setStatus(200);
+
+				ACResponse<AcAcl> obj = new ACResponse<>();
+				AcAcl acl = new AcAcl();
+				acl.setAclId("133");
+				acl.setAclName("acl");
+				acl.setAclNumber(123);
+				acl.setAclStep(56);
+				acl.setId("12346");
+				acl.setNetId("5464");
+				List<AcAclRule> ruleList = new ArrayList<>();
+				AcAclRule e = new AcAclRule();
+				e.setDescription("description");
+				e.setDesIp("10.12.13.01");
+				e.setDesPort(23);
+				e.setDesVlan(564);
+				e.setIcmpName("icmpName");
+				e.setId(0);
+				e.setPolicy("policy");
+				e.setProtocol(23);
+				e.setSrcIp("12.13.10.10");
+				e.setSrcPort(12);
+				e.setTcpSyn("tcpSyn");
+				ruleList.add(e);
+				acl.setRuleList(ruleList);
+				obj.setData(acl);
+				obj.setErrcode("0");
+				String retBody = JsonUtil.toJson(obj);
+				httpReturnMessage.setBody(retBody);
+				return httpReturnMessage;
+			}
+		};
+		SbiSnatNetModel snatNet = new SbiSnatNetModel();
+		snatNet.setAclId("7db47412f2b44164a16ef18b16a81c0c");
+		snatNet.setAclNumber("3501");
+		snatNet.setActionState("active");
+		snatNet.setAdminStatus("active");
+		snatNet.setControllerId("ctrlid123");
+		//snatNet.setCT("aa0");
+		snatNet.setCreateTime("a0");
+		snatNet.setDescription("description");
+		snatNet.setDeviceId("123");
+		snatNet.setEndPublicIpAddress("123.34.34.12/24");
+		snatNet.setIfName("GigabitEthernet0/0/2");
+		snatNet.setInternetGatewayId("a13246");
+		snatNet.setName("Sbi nat model");
+		snatNet.setNatId("2467a068795b41ee9676bc79168da7a6");
+		snatNet.setNeId("a23");
+		snatNet.setOperStatus("active");
+		snatNet.setPrivateIpAddress("123.34.34.12/22");
+		snatNet.setPrivatePrefix("a");
+		snatNet.setQosPreNat("true");
+		snatNet.setSource("source");
+		snatNet.setStartPublicIpAddress("123.34.34.12/23");
+		snatNet.setSubnetId("a35");
+		snatNet.setTenantId("a12-354");
+		snatNet.setType("create");
+		snatNet.setUpdatetime("a0");
+		snatNet.setUuid("a12-346");
+		ResultRsp<SbiSnatNetModel> r1 = localSiteSNatROAResource.updateSnat(null, "123", "extSysID=ctrlid123", snatNet);
+		assertEquals(r1.getErrorCode().equals("overlayvpn.operation.success"), true);
+	}
+	
+	@Test(expected = ServiceException.class)
+	public void testDeleteSnat_EmptyUuid() throws ServiceException {
+
+		localSiteSNatROAResource.deleteSnat(null, "123", "2467a068795b41ee9676bc79168da7a6",
+				"7db47412f2b44164a16ef18b16a81c0c", null);
+	}
+
+	@Test(expected = ServiceException.class)
+	public void testDeleteSnat_EmptyDeviceId() throws ServiceException {
+
+		localSiteSNatROAResource.deleteSnat(null, null, "2467a068795b41ee9676bc79168da7a6",
+				"7db47412f2b44164a16ef18b16a81c0c", "extSysID=ctrlid123");
+	}
+
+	@Test(expected = ServiceException.class)
+	public void testDeleteSnat_EmptyNatId() throws ServiceException {
+
+		localSiteSNatROAResource.deleteSnat(null, "123", null, "7db47412f2b44164a16ef18b16a81c0c",
+				"extSysID=ctrlid123");
+	}
+
+	@Test(expected = ServiceException.class)
+	public void testDeleteSnat_EmptyAclId() throws ServiceException {
+
+		localSiteSNatROAResource.deleteSnat(null, "123", "2467a068795b41ee9676bc79168da7a6", null,
+				"extSysID=ctrlid123");
+	}
+
+	@Test
+	public void testDeleteSnat() throws ServiceException {
+		new MockUp<ValidationUtil>() {
+
+			@Mock
+			public void validateModel(Object obj) throws ServiceException {
+
+			}
+		};
+		new MockUp<OverlayVpnDriverProxy>() {
+
+			@Mock
+			public HTTPReturnMessage sendDeleteMsg(String url, String body, String ctrlUuid) throws ServiceException {
+
+				HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
+				httpReturnMessage.setStatus(200);
+
+				ACResponse<String> obj = new ACResponse<>();
+				obj.setData("data");
+				obj.setErrcode("0");
+				String retBody = JsonUtil.toJson(obj);
+				httpReturnMessage.setBody(retBody);
+				return httpReturnMessage;
+			}
+		};
+		SbiSnatNetModel snatNet = new SbiSnatNetModel();
+		snatNet.setAclId("7db47412f2b44164a16ef18b16a81c0c");
+		snatNet.setAclNumber("3501");
+		snatNet.setActionState("active");
+
+		snatNet.setAdminStatus("active");
+		snatNet.setControllerId("ctrlid123");
+		//snatNet.setCT("aa0");
+		snatNet.setCreateTime("a0");
+		snatNet.setDescription("description");
+		snatNet.setDeviceId("123");
+		snatNet.setEndPublicIpAddress("123.34.34.12/24");
+		snatNet.setIfName("GigabitEthernet0/0/2");
+		snatNet.setInternetGatewayId("a13246");
+		snatNet.setName("Sbi nat model");
+		snatNet.setNatId("2467a068795b41ee9676bc79168da7a6");
+		snatNet.setNeId("a23");
+		snatNet.setOperStatus("active");
+		snatNet.setPrivateIpAddress("123.34.34.12/22");
+		snatNet.setPrivatePrefix("a");
+		snatNet.setQosPreNat("true");
+		snatNet.setSource("source");
+		snatNet.setStartPublicIpAddress("123.34.34.12/23");
+		snatNet.setSubnetId("a35");
+		snatNet.setTenantId("a12-354");
+		snatNet.setType("create");
+		snatNet.setUpdatetime("a0");
+		snatNet.setUuid("a12-346");
+		ResultRsp<String> r2 = localSiteSNatROAResource.deleteSnat(null, "123", "2467a068795b41ee9676bc79168da7a6",
+				"7db47412f2b44164a16ef18b16a81c0c", "extSysID=ctrlid123");
+		assertEquals(r2.getErrorCode().equals("overlayvpn.operation.success"), true);
+	}
+
+	
+
+	@Test(expected = ServiceException.class)
+	public void testQuerySnat_EmptyUuid() throws ServiceException {
+
+		localSiteSNatROAResource.querySnat(null, "123", "2467a068795b41ee9676bc79168da7a6",
+				"7db47412f2b44164a16ef18b16a81c0c", null);
+	}
+
+	@Test(expected = ServiceException.class)
+	public void testQuerySnat_EmptyDeviceId() throws ServiceException {
+
+		localSiteSNatROAResource.querySnat(null, null, "2467a068795b41ee9676bc79168da7a6",
+				"7db47412f2b44164a16ef18b16a81c0c", "extSysID=ctrlid123");
+	}
+
+	@Test(expected = ServiceException.class)
+	public void testQuerySnat_EmptyNatId() throws ServiceException {
+
+		localSiteSNatROAResource.querySnat(null, "123", null, "7db47412f2b44164a16ef18b16a81c0c", "extSysID=ctrlid123");
+	}
+
+	@Test(expected = ServiceException.class)
+	public void testQuerySnat_EmptyAclId() throws ServiceException {
+
+		localSiteSNatROAResource.querySnat(null, "123", "2467a068795b41ee9676bc79168da7a6", null, "extSysID=ctrlid123");
+	}
+
+	@Test
+	public void testQuerySnat() throws ServiceException {
+		new MockUp<ValidationUtil>() {
+
+			@Mock
+			public void validateModel(Object obj) throws ServiceException {
+			}
+		};
+		new MockUp<OverlayVpnDriverProxy>() {
+
+			@Mock
+			public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
+
+				HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
+				httpReturnMessage.setStatus(200);
+
+				ACResponse<AcSNat> obj = new ACResponse<>();
+				AcSNat acSnat = new AcSNat();
+				acSnat.setAclId("7db47412f2b44164a16ef18b16a81c0c");
+				acSnat.setAclNumber(3501);
+				acSnat.setId("2467a068795b41ee9676bc79168da7a6");
+				acSnat.setInterfaceName("GigabitEthernet0/0/2");
+				acSnat.setQosPreNat("true");
+				obj.setData(acSnat);
+				obj.setErrcode("0");
+				String retBody = JsonUtil.toJson(obj);
+				httpReturnMessage.setBody(retBody);
+				return httpReturnMessage;
+			}
+		};
+		SbiSnatNetModel snatNet = new SbiSnatNetModel();
+		snatNet.setAclId("7db47412f2b44164a16ef18b16a81c0c");
+		snatNet.setAclNumber("3501");
+		snatNet.setActionState("active");
+		snatNet.setAdminStatus("active");
+		snatNet.setControllerId("ctrlid123");
+		//snatNet.setCT("aa0");
+		snatNet.setCreateTime("a0");
+		snatNet.setDescription("description");
+		snatNet.setDeviceId("123");
+		snatNet.setEndPublicIpAddress("123.34.34.12/24");
+		snatNet.setIfName("GigabitEthernet0/0/2");
+		snatNet.setInternetGatewayId("a13246");
+		snatNet.setName("Sbi nat model");
+		snatNet.setNatId("2467a068795b41ee9676bc79168da7a6");
+		snatNet.setNeId("a23");
+		snatNet.setOperStatus("active");
+		snatNet.setPrivateIpAddress("123.34.34.12/22");
+		snatNet.setPrivatePrefix("a");
+		snatNet.setQosPreNat("true");
+		snatNet.setSource("source");
+		snatNet.setStartPublicIpAddress("123.34.34.12/23");
+		snatNet.setSubnetId("a35");
+		snatNet.setTenantId("a12-354");
+		snatNet.setType("create");
+		snatNet.setUpdatetime("a0");
+		snatNet.setUuid("a12-346");
+		ResultRsp<String> r2 = localSiteSNatROAResource.querySnat(null, "123", "2467a068795b41ee9676bc79168da7a6",
+				"7db47412f2b44164a16ef18b16a81c0c", "extSysID=ctrlid123");
+		assertEquals(r2.getErrorCode().equals("overlayvpn.operation.success"), true);
+	}
 }

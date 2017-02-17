@@ -15,7 +15,8 @@
  */
 package org.openo.sdnhub.overlayvpndriver.rest;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -389,13 +390,13 @@ public class VxLanRoaResourceTest {
                 configCommonResult.setId("externalId12345");
                 configCommonResultList.add(configCommonResult);
                 acDelResponse.setSuccess(configCommonResultList);
-                acDelResponse.setErrocode("0");
+                acDelResponse.setErrmsg("0");
                 msg.setBody(JsonUtil.toJson(acDelResponse));
                 return msg;
             }
         };
         ResultRsp<SbiNeVxlanInstance> batchDeleteVxlanResponse = vxLanRoaResource.batchDeleteVxlan(null, "device12345", CTRL_UUID, sbiVxLanInstanceList);
-        assertEquals("overlayvpn.operation.success", batchDeleteVxlanResponse.getErrorCode());
+        assertEquals("overlayvpn.operation.failed", batchDeleteVxlanResponse.getErrorCode());
     }
 
     @Test
@@ -415,7 +416,7 @@ public class VxLanRoaResourceTest {
                 configCommonResult.setId("externalId12345");
                 configCommonResultList.add(configCommonResult);
                 acDelResponse.setSuccess(configCommonResultList);
-                acDelResponse.setErrocode("failure");
+                acDelResponse.setErrmsg("failure");
                 msg.setBody(JsonUtil.toJson(acDelResponse));
                 return msg;
             }

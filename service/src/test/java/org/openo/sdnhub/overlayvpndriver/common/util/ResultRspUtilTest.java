@@ -25,28 +25,28 @@ import java.util.Map;
 import org.junit.Test;
 
 public class ResultRspUtilTest {
-
+    
     @Test
     public void parserRspDataListTestNormal(){
         ResultRspUtil<TestObj> util = new ResultRspUtil<>();
-
+        
         List<Map<String,String>> dataObj = new ArrayList<>();
         Map<String,String> map = new HashMap<>();
         map.put("id", "12345");
         dataObj.add(map);
-
-        TestObj info = new TestObj();
+        
+        TestObj info = new TestObj();      
         List<TestObj> adptList = util.parserRspDataList(dataObj, info);
-        assertEquals(adptList.get(0).getId(), "12345");
+        assertEquals(adptList.get(0).getId(), "12345");       
     }
 }
 class TestObj{
-    private String id = null;
+    private String id = null;    
     public String getId() {
         return id;
-    }
+    }  
     public void setId(String id) {
         this.id = id;
     }
-
+    
 }

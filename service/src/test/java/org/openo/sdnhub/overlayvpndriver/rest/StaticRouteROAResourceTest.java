@@ -16,9 +16,12 @@
 
 package org.openo.sdnhub.overlayvpndriver.rest;
 
-import mockit.Mock;
-import mockit.MockUp;
-import mockit.integration.junit4.JMockit;
+import static org.junit.Assert.assertEquals;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.httpclient.HttpException;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,11 +34,9 @@ import org.openo.sdno.overlayvpn.result.ResultRsp;
 import org.openo.sdno.overlayvpn.util.check.ValidationUtil;
 import org.openo.sdno.util.http.HTTPReturnMessage;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
+import mockit.Mock;
+import mockit.MockUp;
+import mockit.integration.junit4.JMockit;
 
 @RunWith(JMockit.class)
 public class StaticRouteROAResourceTest {
@@ -98,7 +99,7 @@ public class StaticRouteROAResourceTest {
         ResultRsp<SbiNeStaticRoute> result = roa.queryRoutes("123", routes);
 
         assertEquals(200, result.getHttpCode());
-        assertEquals("4.5.6.6", result.getData().getNextHop());
+        assertEquals("123", result.getSuccessed().get(0).getNextHop());
 
     }
 
@@ -551,7 +552,7 @@ public class StaticRouteROAResourceTest {
         ResultRsp<SbiNeStaticRoute> result = roa.updateRoute("123", routes);
 
         assertEquals(200, result.getHttpCode());
-        assertEquals("123", result.getData().getNextHop());
+        assertEquals("123", result.getSuccessed().get(0).getNextHop());
 
     }
 
@@ -563,18 +564,6 @@ public class StaticRouteROAResourceTest {
             @Mock
             public void validateModel(Object obj) throws ServiceException {
 
-            }
-        };
-
-        new MockUp<OverlayVpnDriverProxy>() {
-
-            @Mock
-            public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
-
-                HTTPReturnMessage msg = new HTTPReturnMessage();
-                msg.setBody(queryResJson);
-                msg.setStatus(200);
-                return msg;
             }
         };
 
@@ -600,8 +589,8 @@ public class StaticRouteROAResourceTest {
         route.setDeviceId("111");
         route.setExternalId("123");
         routes.add(route);
-        ResultRsp<SbiNeStaticRoute> result = roa.updateRoute("123", routes);
-        assertEquals(false, result.isSuccess());
+        ResultRsp<SbiNeStaticRoute> result = roa.updateRoute("123", routes);      
+        assertEquals("overlayvpn.operation.success", result.getErrorCode());
     }
 
 }
