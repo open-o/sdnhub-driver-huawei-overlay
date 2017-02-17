@@ -82,12 +82,17 @@ public class SubnetServiceImpl {
         if(!acResponse.isSucceed()) {
             LOGGER.error("Subnet create :acresponse return error :" + acResponse.getErrmsg());
             String errorCode = DriverErrorCode.ADAPTER_SITE_SUBNET_CREATE_TUNNEL_ERROR;
-            if(ControllerErrorRsp.CTRL_ERR_SUBNET_SAME.equals(acResponse.getErrcode())) {
+
+            if(ControllerErrorRsp.CTRL_ERR_SUBNET_SAME.getErrCode()
+                    .equals(acResponse.getErrcode())) {
                 errorCode = DriverErrorCode.SUBNET_SUBNET_SAME;
             }
-            if(ControllerErrorRsp.CTRL_ERR_SUBNET_VNI_ALREADY_EXIST.equals(acResponse.getErrcode())) {
+
+            if(ControllerErrorRsp.CTRL_ERR_SUBNET_VNI_ALREADY_EXIST.getErrCode()
+                    .equals(acResponse.getErrcode())) {
                 errorCode = DriverErrorCode.SUBNET_VNI_ALREADY_EXIST;
             }
+
             throw new ServiceException(errorCode, acResponse.getErrmsg());
         }
         resultRsp.setData(acResponse.getData());

@@ -31,4 +31,8 @@ public enum ControllerErrorRsp {
     ControllerErrorRsp(String errCode) {
         this.errCode = errCode;
     }
+
+    public String getErrCode() {
+        return errCode;
+    }
 }
