@@ -54,7 +54,7 @@ public class InterfaceIpROAResource {
 
     private String INVALID_CONTROLLER_UUID = "Invalid controller UUID.";
 
-    private String NULL_DEVICE_ID = "deviceId is null";
+    private String DEVICE_ID_IS_NULL = "deviceId is null";
     /**
      * Update IP related configuration for interface.<br/>
      *
@@ -82,8 +82,8 @@ public class InterfaceIpROAResource {
         }
 
         if(!StringUtils.hasLength(deviceId)) {
-            LOGGER.error(NULL_DEVICE_ID);
-            throw new ParameterServiceException(NULL_DEVICE_ID);
+            LOGGER.error(DEVICE_ID_IS_NULL);
+            throw new ParameterServiceException(DEVICE_ID_IS_NULL);
         }
 
         if(CollectionUtils.isEmpty(interfaceIpConfigList)) {
@@ -122,8 +122,8 @@ public class InterfaceIpROAResource {
         }
 
         if(!StringUtils.hasLength(deviceId)) {
-            LOGGER.error(NULL_DEVICE_ID);
-            throw new ParameterServiceException(NULL_DEVICE_ID);
+            LOGGER.error(DEVICE_ID_IS_NULL);
+            throw new ParameterServiceException(DEVICE_ID_IS_NULL);
         }
 
         return interfaceIpService.queryInterfaceIps(ctrlUuid, deviceId);

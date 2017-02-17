@@ -55,7 +55,7 @@ import org.springframework.stereotype.Service;
 /**
  * Restful interface for Policy Route configuration.<br>
  *
- * @author Mahesh
+ * @author
  * @version SDNHUB 0.5 Jun 19, 2017
  */
 @Service

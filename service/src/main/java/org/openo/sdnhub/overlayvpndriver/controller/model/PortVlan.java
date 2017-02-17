@@ -21,12 +21,12 @@ import org.openo.sdno.overlayvpn.verify.annotation.AString;
 
 /**
  * Model class for port vlan in adapter layer. <br>
- * 
+ *
  * @author
  * @version SDNHUB Driver 0.5 Jan 30, 2017
  */
 public class PortVlan {
-    
+
     @AString(min = 1, max = 32, require = true)
     private String port;
 
@@ -35,7 +35,7 @@ public class PortVlan {
 
     /**
      * Constructor<br>
-     * 
+     *
      * @since SDNHUB Driver 0.5
      */
     public PortVlan() {
@@ -44,7 +44,7 @@ public class PortVlan {
 
     /**
      * Constructor<br>
-     * 
+     *
      * @param port port number
      * @param vlan VLAN Id
      * @since SDNHUB Driver 0.5

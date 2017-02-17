@@ -105,6 +105,7 @@ public class AclConvert {
         rule.setId(200);
         rule.setPolicy(POLICY_PERMIT);
         if(isPrivateIpUsefull(snatNetModel)) {
+            // Do nothing
         }
 
         rule.setDescription(snatNetModel.getDescription());

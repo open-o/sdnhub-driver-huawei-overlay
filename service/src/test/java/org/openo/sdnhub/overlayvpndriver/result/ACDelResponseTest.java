@@ -32,14 +32,14 @@ import mockit.MockUp;
 
 public class ACDelResponseTest {
     ACDelResponse aCDelResponse = new ACDelResponse();
-    
+
     @Test
     public void testGetAllErrmsg() {
         new MockUp<StringUtils>(){
             @Mock
             public boolean isNotEmpty(String str) {
                 return false;
-                
+
             }
         };
         aCDelResponse.getAllErrmsg();
@@ -50,7 +50,7 @@ public class ACDelResponseTest {
             @Mock
             public boolean isNotEmpty(String str) {
                 return true;
-                
+
             }
         };
         aCDelResponse.getAllErrmsg();
@@ -61,7 +61,7 @@ public class ACDelResponseTest {
             @Mock
             public boolean isNotEmpty(Collection coll) {
                 return true;
-                
+
             }
         };
         List<DataDto> fail = new ArrayList<>();
@@ -77,7 +77,7 @@ public class ACDelResponseTest {
             @Mock
             public boolean isNotEmpty(Collection coll) {
                 return true;
-                
+
             }
         };
         List<DataDto> fail = new ArrayList<>();
@@ -93,7 +93,7 @@ public class ACDelResponseTest {
             @Mock
            public boolean isNotEmpty(Collection coll) {
                 return false;
-                
+
             }
         };
         aCDelResponse.getAllErrmsg();

@@ -43,7 +43,7 @@ import org.springframework.stereotype.Service;
 /**
  * Restful interface for interface information.<br>
  *
- * @author Mahesh
+ * @author
  * @version SDNHUB 0.5 Jun 19, 2017
  */
 @Service

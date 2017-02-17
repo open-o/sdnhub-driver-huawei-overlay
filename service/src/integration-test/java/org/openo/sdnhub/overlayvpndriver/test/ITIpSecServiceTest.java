@@ -67,7 +67,7 @@ public class ITIpSecServiceTest extends TestManager {
                 HttpModelUtils.praseHttpRquestResponse(FileUtils.readFromJson(createFile));
         HttpResponse createResponse = execTestCase(createFile, new SuccessChecker());
     }
-    
+
     private class SuccessChecker implements IChecker {
 
         @Override

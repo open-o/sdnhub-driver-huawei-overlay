@@ -58,11 +58,11 @@ import org.springframework.util.StringUtils;
 /**
  * Restful interface for Device configuration.<br>
  *
- * @author Mahesh
+ * @author
  * @version SDNHUB 0.5 Jun 19, 2017
  */
 @Service
-@Path(CommonConst.DEVICE_RESTFUL_PATH)
+@Path("/sbi-localsite/v1")
 public class DeviceROAResource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DeviceROAResource.class);
@@ -83,7 +83,7 @@ public class DeviceROAResource {
      * @since SDNHUB 0.5
      */
     @POST
-    @Path(CommonConst.DEVICE_RESTFUL_OPERATION_PATH)
+    @Path("/devices")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ResultRsp<AdapterDeviceInfo> createDevices(@Context HttpServletRequest request,
@@ -124,7 +124,7 @@ public class DeviceROAResource {
      * @since SDNHUB 0.5
      */
     @GET
-    @Path(CommonConst.DEVICE_RESTFUL_OPERATION_PATH)
+    @Path("/devices")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ResultRsp<List<AdapterDeviceInfo>> queryDeviceByEsn(@Context HttpServletRequest request,
@@ -154,7 +154,7 @@ public class DeviceROAResource {
      * @since SDNHUB 0.5
      */
     @DELETE
-    @Path(CommonConst.DEVICE_RESTFUL_OPERATION_PATH)
+    @Path("/devices")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ResultRsp<String> deleteDevices(@Context HttpServletRequest request,
@@ -190,7 +190,7 @@ public class DeviceROAResource {
      * @since SDNHUB 0.5
      */
     @PUT
-    @Path(CommonConst.DEVICE_RESTFUL_UPDATE_OPERATION_PATH)
+    @Path("/deviceid/{deviceuuid}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ResultRsp<String> modifyDevice(@Context HttpServletRequest request,

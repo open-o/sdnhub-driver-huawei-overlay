@@ -48,18 +48,7 @@ public class CommonConst {
 
     public static final String STATIC_ROUTE_CONFIGS = "staticRouteConfigs";
 
-    // Device Restful interface URL Path Constants
-    public static final String DEVICE_RESTFUL_PATH = "/sbi-localsite/v1";
-    public static final String DEVICE_RESTFUL_OPERATION_PATH = "/devices";
-    public static final String DEVICE_RESTFUL_UPDATE_OPERATION_PATH = "/deviceid/{deviceuuid}";
+    public static final String NQA_LIST = "nqaList";
 
-    // VxLan Restful interface URL Path constants
-    public static final String VXLAN_RESTFUL_PATH = "/sbi-vxlan/v1";
-    public static final String VXLAN_BATCH_CREATE_OPERATION_PATH = "/batch-create-vxlan";
-    public static final String VXLAN_BATCH_DELETE_OPERATION_PATH = "/device/{deviceid}/batch-delete-vxlan";
-    public static final String VXLAN_BATCH_QUERY_OPERATION_PATH = "/batch-query-vxlan";
-    public static final String VXLAN_BATCH_UPDATE_OPERATION_PATH = "/batch-update-vxlan";
-    private CommonConst() {
-        // Do nothing
-    }
+    public static final String NQA_ID_LIST = "ids";
 }

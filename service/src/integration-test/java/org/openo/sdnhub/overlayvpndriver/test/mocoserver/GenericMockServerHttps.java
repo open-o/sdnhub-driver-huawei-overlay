@@ -27,34 +27,34 @@ import org.openo.sdno.testframework.moco.MocoHttpsServer;
 import org.openo.sdno.testframework.moco.responsehandler.MocoResponseHandler;
 
 public class GenericMockServerHttps extends MocoHttpsServer{
-	
-	private List<String> mockJsons = new ArrayList<>();
-	
-	public GenericMockServerHttps(){
-		super();
-	}
-	
-	 public void addMockJsons(String [] jsons) {
-	        this.mockJsons.addAll(Arrays.asList(jsons));
-	    }
 
-	    @Override
-	    public void addRequestResponsePairs() {
-	        for(String file : mockJsons) {
-	            this.addRequestResponsePair(file, new MockResponseHandler());
-	        }
-	    }
+    private List<String> mockJsons = new ArrayList<>();
 
-	    private class MockResponseHandler extends MocoResponseHandler {
+    public GenericMockServerHttps(){
+        super();
+    }
 
-	        @Override
-	        public void processRequestandResponse(HttpRquestResponse httpObject) {
-	            HttpRequest req = httpObject.getRequest();
-	            HttpResponse res = httpObject.getResponse();
+     public void addMockJsons(String [] jsons) {
+            this.mockJsons.addAll(Arrays.asList(jsons));
+        }
 
-	            System.out.println(req);
-	            System.out.println(res);
+        @Override
+        public void addRequestResponsePairs() {
+            for(String file : mockJsons) {
+                this.addRequestResponsePair(file, new MockResponseHandler());
+            }
+        }
 
-	        }
-	    }
+        private class MockResponseHandler extends MocoResponseHandler {
+
+            @Override
+            public void processRequestandResponse(HttpRquestResponse httpObject) {
+                HttpRequest req = httpObject.getRequest();
+                HttpResponse res = httpObject.getResponse();
+
+                System.out.println(req);
+                System.out.println(res);
+
+            }
+        }
 }

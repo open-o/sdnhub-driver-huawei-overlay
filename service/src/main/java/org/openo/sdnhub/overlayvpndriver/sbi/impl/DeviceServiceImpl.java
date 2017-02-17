@@ -42,7 +42,7 @@ import org.springframework.util.StringUtils;
 /**
  * Restful device configuration service implementation.<br>
  *
- * @author Mahesh
+ * @author
  * @version SDNHUB 0.5 Jun 19, 2017
  */
 public class DeviceServiceImpl {

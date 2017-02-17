@@ -20,7 +20,7 @@ package org.openo.sdnhub.overlayvpndriver.service.model;
  * Class of Configuration Site NetworkElement Model.<br>
  * <p>
  * </p>
- * 
+ *
  * @author
  * @version SDNO 0.5 June 6, 2016
  */

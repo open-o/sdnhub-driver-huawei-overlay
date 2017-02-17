@@ -37,14 +37,14 @@ import org.springframework.util.StringUtils;
 /**
  * Vlan service implementation.<br>
  *
- * @author Mahesh
+ * @author
  * @version SDNHUB 0.5 Jan 16, 2017
  */
 public class VlanServiceImpl {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(VlanServiceImpl.class);
 
-    private static final String LOCAL_SITE_VLAN_AC_ERROR = "localsite.vlan.ac.error";
+    private static final String LOG_LOCAL_SITE_VLAN_AC_ERROR = "localsite.vlan.ac.error";
 
     /**
      * Queries device ethernet configuration by if-name using a specific Controller.<br>
@@ -69,7 +69,7 @@ public class VlanServiceImpl {
         ResultRsp<List<EthInterfaceConfig>> response = EthInterfaceConfigImpl.queryEthConfig(ctrlUuid, queryUrl);
         if(!response.isValid()) {
             LOGGER.error("query eth failed,info :" + response.toString());
-            throw new ServiceException(LOCAL_SITE_VLAN_AC_ERROR, "query eth config fail in ac");
+            throw new ServiceException(LOG_LOCAL_SITE_VLAN_AC_ERROR, "query eth config fail in ac");
         }
         return response.getData();
     }
@@ -114,7 +114,7 @@ public class VlanServiceImpl {
                 EthInterfaceConfigImpl.configEthInterface(ctrlUuid, configUrl, JsonUtil.toJson(crtInfoMap));
         if(!response.isValid()) {
             LOGGER.error("config eth fail, info: " + response.toString());
-            throw new ServiceException(LOCAL_SITE_VLAN_AC_ERROR, "eth config fail in ac");
+            throw new ServiceException(LOG_LOCAL_SITE_VLAN_AC_ERROR, "eth config fail in ac");
         }
         return response.getData();
     }
@@ -172,7 +172,7 @@ public class VlanServiceImpl {
         List<EthInterfaceConfig> ethConfigList = queryEthByName(ctrlUuid, deviceId, ifVlan.getIfName());
         if(CollectionUtils.isEmpty(ethConfigList)) {
             LOGGER.error("no eth config in AC");
-            throw new ServiceException(LOCAL_SITE_VLAN_AC_ERROR, "no config in ac");
+            throw new ServiceException(LOG_LOCAL_SITE_VLAN_AC_ERROR, "no config in ac");
         }
         EthInterfaceConfig ethConfig = ethConfigList.get(0);
         ethConfig.setDefaultVlan(ifVlan.getDefaultVlan().toString());
@@ -202,7 +202,7 @@ public class VlanServiceImpl {
         ResultRsp<List<EthInterfaceConfig>> response = EthInterfaceConfigImpl.queryEthConfig(ctrlUuid, queryUrl);
         if(!response.isValid()) {
             LOGGER.error("query eth failed, info :" + response.toString());
-            throw new ServiceException(LOCAL_SITE_VLAN_AC_ERROR, "query eth config fail in ac");
+            throw new ServiceException(LOG_LOCAL_SITE_VLAN_AC_ERROR, "query eth config fail in ac");
         }
         return response.getData();
     }

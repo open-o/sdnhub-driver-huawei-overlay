@@ -1,10 +1,10 @@
 {
     "name":"acbranchdb",
-    
+
     "owner":"acBranchSvc",
-    
+
     "authorization":"private",
-    
+
     "allowread":
     [
         "acBranchSvc"

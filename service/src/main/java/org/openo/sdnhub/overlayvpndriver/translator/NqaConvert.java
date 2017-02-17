@@ -141,9 +141,7 @@ public class NqaConvert {
             controllerNbiNqa.setProbeCount(sbiNqa.getProbeCount());
             controllerNbiNqa.setInterval(sbiNqa.getInterval());
             controllerNbiNqaList.add(controllerNbiNqa);
-
         }
         return controllerNbiNqaList;
     }
-
 }

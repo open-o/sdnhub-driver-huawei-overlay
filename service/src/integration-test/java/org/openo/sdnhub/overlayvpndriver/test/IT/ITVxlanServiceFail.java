@@ -34,123 +34,123 @@ import org.openo.sdno.testframework.util.file.FileUtils;
 public class ITVxlanServiceFail {
 
 
-	
-	VxlanDriverServiceFailServer failServer = new VxlanDriverServiceFailServer();
-	VxlanDriverHttpsFailServer failServerHttps = new VxlanDriverHttpsFailServer();
 
-	@Before
-	public void setup() throws ServiceException {
-		failServerHttps.start();
-		failServer.start();
-	}
+    VxlanDriverServiceFailServer failServer = new VxlanDriverServiceFailServer();
+    VxlanDriverHttpsFailServer failServerHttps = new VxlanDriverHttpsFailServer();
 
-	@After
-	public void tearDown() throws ServiceException {
-		failServerHttps.stop();
-		failServer.stop();
-	}
+    @Before
+    public void setup() throws ServiceException {
+        failServerHttps.start();
+        failServer.start();
+    }
 
-	@Test
-	public void testCreateFail() throws ServiceException {
+    @After
+    public void tearDown() throws ServiceException {
+        failServerHttps.stop();
+        failServer.stop();
+    }
 
-		File createFile = new File("src/integration-test/resources/overlayvpndriver/createvxlanfail.json");
-		HttpRquestResponse createHttpObject = HttpModelUtils
-				.praseHttpRquestResponse(FileUtils.readFromJson(createFile));
-		HttpResponse createResponse = new TestManager().execTestCase(createFile, new SuccessChecker());
-		String response = createResponse.getData();
-	}
-	
-	@Test
-	public void testCreateInvalidIp() throws ServiceException {
+    @Test
+    public void testCreateFail() throws ServiceException {
 
-		File createFile = new File("src/integration-test/resources/overlayvpndriver/createvxlanFailInvalidIp.json");
-		HttpRquestResponse createHttpObject = HttpModelUtils
-				.praseHttpRquestResponse(FileUtils.readFromJson(createFile));
-		HttpResponse createResponse = new TestManager().execTestCase(createFile, new FailChecker());
-		String response = createResponse.getData();
-	}
-	
-	@Test
-	public void testUpdateFail() throws ServiceException {
+        File createFile = new File("src/integration-test/resources/overlayvpndriver/createvxlanfail.json");
+        HttpRquestResponse createHttpObject = HttpModelUtils
+                .praseHttpRquestResponse(FileUtils.readFromJson(createFile));
+        HttpResponse createResponse = new TestManager().execTestCase(createFile, new SuccessChecker());
+        String response = createResponse.getData();
+    }
 
-		File createFile = new File("src/integration-test/resources/overlayvpndriver/updatevxlan.json");
-		HttpRquestResponse createHttpObject = HttpModelUtils
-				.praseHttpRquestResponse(FileUtils.readFromJson(createFile));
-		HttpResponse createResponse = new TestManager().execTestCase(createFile, new SuccessChecker());
-		String response = createResponse.getData();
-	}
-	
-	@Test
-	public void testUpdateFail_invalidIp() throws ServiceException {
+    @Test
+    public void testCreateInvalidIp() throws ServiceException {
 
-		File createFile = new File("src/integration-test/resources/overlayvpndriver/updatevxlanFailInvalidIp.json");
-		HttpRquestResponse createHttpObject = HttpModelUtils
-				.praseHttpRquestResponse(FileUtils.readFromJson(createFile));
-		HttpResponse createResponse = new TestManager().execTestCase(createFile, new FailChecker());
-		String response = createResponse.getData();
-	}
-	
-	@Test
-	public void testQuery() throws ServiceException {
+        File createFile = new File("src/integration-test/resources/overlayvpndriver/createvxlanFailInvalidIp.json");
+        HttpRquestResponse createHttpObject = HttpModelUtils
+                .praseHttpRquestResponse(FileUtils.readFromJson(createFile));
+        HttpResponse createResponse = new TestManager().execTestCase(createFile, new FailChecker());
+        String response = createResponse.getData();
+    }
 
-		File createFile = new File("src/integration-test/resources/overlayvpndriver/queryvxlanFail.json");
-		HttpRquestResponse createHttpObject = HttpModelUtils
-				.praseHttpRquestResponse(FileUtils.readFromJson(createFile));
-		HttpResponse createResponse = new TestManager().execTestCase(createFile, new FailChecker());
-		String response = createResponse.getData();
-	}
-	
-	@Test
-	public void testDelete() throws ServiceException {
+    @Test
+    public void testUpdateFail() throws ServiceException {
 
-		File createFile = new File("src/integration-test/resources/overlayvpndriver/deletevxlanFail.json");
-		HttpRquestResponse createHttpObject = HttpModelUtils
-				.praseHttpRquestResponse(FileUtils.readFromJson(createFile));
-		HttpResponse createResponse = new TestManager().execTestCase(createFile, new SuccessChecker());
-		String response = createResponse.getData();
-	}
-	
-	@Test
-	public void testDelete_invalidIp() throws ServiceException {
+        File createFile = new File("src/integration-test/resources/overlayvpndriver/updatevxlan.json");
+        HttpRquestResponse createHttpObject = HttpModelUtils
+                .praseHttpRquestResponse(FileUtils.readFromJson(createFile));
+        HttpResponse createResponse = new TestManager().execTestCase(createFile, new SuccessChecker());
+        String response = createResponse.getData();
+    }
 
-		File createFile = new File("src/integration-test/resources/overlayvpndriver/deletevxlanFailInvalidIp.json");
-		HttpRquestResponse createHttpObject = HttpModelUtils
-				.praseHttpRquestResponse(FileUtils.readFromJson(createFile));
-		HttpResponse createResponse = new TestManager().execTestCase(createFile, new FailChecker());
-		String response = createResponse.getData();
-	}
-	
-	@Test
-	public void testDelete_invlidIp() throws ServiceException {
+    @Test
+    public void testUpdateFail_invalidIp() throws ServiceException {
 
-		File createFile = new File("src/integration-test/resources/overlayvpndriver/deletevxlanFailInvalidIp.json");
-		HttpRquestResponse createHttpObject = HttpModelUtils
-				.praseHttpRquestResponse(FileUtils.readFromJson(createFile));
-		HttpResponse createResponse = new TestManager().execTestCase(createFile, new FailChecker());
-		String response = createResponse.getData();
-	}
-	
-	private class SuccessChecker implements IChecker {
+        File createFile = new File("src/integration-test/resources/overlayvpndriver/updatevxlanFailInvalidIp.json");
+        HttpRquestResponse createHttpObject = HttpModelUtils
+                .praseHttpRquestResponse(FileUtils.readFromJson(createFile));
+        HttpResponse createResponse = new TestManager().execTestCase(createFile, new FailChecker());
+        String response = createResponse.getData();
+    }
 
-		@Override
-		public boolean check(HttpResponse response) {
-			if (response.getStatus() >= 200 && response.getStatus() <= 204) {
-				return true;
-			}
-			return false;
-		}
-	}
-	
-	private class FailChecker implements IChecker {
+    @Test
+    public void testQuery() throws ServiceException {
 
-		@Override
-		public boolean check(HttpResponse response) {
-			if (response.getStatus() == 500) {
-				return true;
-			}
-			return false;
-		}
-	}
+        File createFile = new File("src/integration-test/resources/overlayvpndriver/queryvxlanFail.json");
+        HttpRquestResponse createHttpObject = HttpModelUtils
+                .praseHttpRquestResponse(FileUtils.readFromJson(createFile));
+        HttpResponse createResponse = new TestManager().execTestCase(createFile, new FailChecker());
+        String response = createResponse.getData();
+    }
+
+    @Test
+    public void testDelete() throws ServiceException {
+
+        File createFile = new File("src/integration-test/resources/overlayvpndriver/deletevxlanFail.json");
+        HttpRquestResponse createHttpObject = HttpModelUtils
+                .praseHttpRquestResponse(FileUtils.readFromJson(createFile));
+        HttpResponse createResponse = new TestManager().execTestCase(createFile, new SuccessChecker());
+        String response = createResponse.getData();
+    }
+
+    @Test
+    public void testDelete_invalidIp() throws ServiceException {
+
+        File createFile = new File("src/integration-test/resources/overlayvpndriver/deletevxlanFailInvalidIp.json");
+        HttpRquestResponse createHttpObject = HttpModelUtils
+                .praseHttpRquestResponse(FileUtils.readFromJson(createFile));
+        HttpResponse createResponse = new TestManager().execTestCase(createFile, new FailChecker());
+        String response = createResponse.getData();
+    }
+
+    @Test
+    public void testDelete_invlidIp() throws ServiceException {
+
+        File createFile = new File("src/integration-test/resources/overlayvpndriver/deletevxlanFailInvalidIp.json");
+        HttpRquestResponse createHttpObject = HttpModelUtils
+                .praseHttpRquestResponse(FileUtils.readFromJson(createFile));
+        HttpResponse createResponse = new TestManager().execTestCase(createFile, new FailChecker());
+        String response = createResponse.getData();
+    }
+
+    private class SuccessChecker implements IChecker {
+
+        @Override
+        public boolean check(HttpResponse response) {
+            if (response.getStatus() >= 200 && response.getStatus() <= 204) {
+                return true;
+            }
+            return false;
+        }
+    }
+
+    private class FailChecker implements IChecker {
+
+        @Override
+        public boolean check(HttpResponse response) {
+            if (response.getStatus() == 500) {
+                return true;
+            }
+            return false;
+        }
+    }
 
 
 

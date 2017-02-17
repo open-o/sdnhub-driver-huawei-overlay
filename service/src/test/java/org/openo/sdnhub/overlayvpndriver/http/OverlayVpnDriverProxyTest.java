@@ -21,9 +21,9 @@ import org.openo.baseservice.remoteservice.exception.ServiceException;
 import org.openo.sdno.util.http.HTTPReturnMessage;
 
 public class OverlayVpnDriverProxyTest {
-    
+
     OverlayVpnDriverProxy proxy = OverlayVpnDriverProxy.getInstance();
-    
+
     @Test(expected = ServiceException.class)
     public void getMsgTestException() throws ServiceException {
         HTTPReturnMessage message = OverlayVpnDriverProxy.getInstance().sendGetMsg("http://test", null, "test123");

@@ -169,7 +169,7 @@
             <version>4.8.2</version>
             <scope>test</scope>
         </dependency>
-        
+
         <dependency>
             <groupId>org.openo.integration</groupId>
             <artifactId>org.openo.sdno.testframework</artifactId>

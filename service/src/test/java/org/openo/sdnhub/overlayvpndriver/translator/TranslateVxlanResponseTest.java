@@ -37,17 +37,17 @@ public class TranslateVxlanResponseTest {
         SbiNeVxlanInstance sbiVxlan=new SbiNeVxlanInstance();
         VxLanDeviceModel deviceVxlan=new VxLanDeviceModel();
         Vni vni=new Vni();
-        
+
         List<SbiNeVxlanTunnel> tunnelList=new ArrayList<SbiNeVxlanTunnel>();
         SbiNeVxlanTunnel tunnel=new SbiNeVxlanTunnel();
         tunnel.setVni("Vni");
         tunnelList.add(tunnel);
-        
+
         List<SbiNeVxlanInterface> interfaceList=new ArrayList<SbiNeVxlanInterface>();
         SbiNeVxlanInterface interfaceLan=new SbiNeVxlanInterface();
         interfaceLan.setLocalName("LocalName");
         interfaceList.add(interfaceLan);
-        
+
         List<SbiNeVxlanInstance> sbiList=new ArrayList<SbiNeVxlanInstance>();
         sbiVxlan.setNbiVxlanTunnelId("Nbi");
         sbiVxlan.setVni("1234");
@@ -56,7 +56,7 @@ public class TranslateVxlanResponseTest {
         sbiVxlan.setVxlanTunnelList(tunnelList);
         sbiVxlan.setVxlanInterfaceList(interfaceList);
         sbiList.add(sbiVxlan);
-        
+
         vni.setVni(1234);
         vni.setDeleteMode(true);
         vni.setMacLearingMode("Mac");
@@ -65,38 +65,38 @@ public class TranslateVxlanResponseTest {
         vni.setEvpnRtImport("evpnRtImport");
         List<Vni> vniList=new ArrayList<Vni>();
         vniList.add(vni);
-        
+
         deviceVxlan.setVneId(1234);
         deviceVxlan.setName("name");
         deviceVxlan.setLocalAddress("address");
         deviceVxlan.setVniList(vniList);
-        
-       
+
+
         List<VxLanDeviceModel> vxLanList=new ArrayList<VxLanDeviceModel>();
         vxLanList.add(deviceVxlan);
-        
+
         TranslateVxlanResponse response=new TranslateVxlanResponse();
         response.translateVxlanId(sbiList, deviceId, vxLanList);
         assertTrue(true);
     }
-    
+
     @Test
     public void translateTunnelExternalIdcheckNeVxlan() {
         String deviceId="device";
         SbiNeVxlanInstance sbiVxlan=new SbiNeVxlanInstance();
         VxLanDeviceModel deviceVxlan=new VxLanDeviceModel();
         Vni vni=new Vni();
-        
+
         List<SbiNeVxlanTunnel> tunnelList=new ArrayList<SbiNeVxlanTunnel>();
         SbiNeVxlanTunnel tunnel=new SbiNeVxlanTunnel();
         tunnel.setVni("Vni");
         tunnelList.add(tunnel);
-        
+
         List<SbiNeVxlanInterface> interfaceList=new ArrayList<SbiNeVxlanInterface>();
         SbiNeVxlanInterface interfaceLan=new SbiNeVxlanInterface();
         interfaceLan.setLocalName("LocalName");
         interfaceList.add(interfaceLan);
-        
+
         List<SbiNeVxlanInstance> sbiList=new ArrayList<SbiNeVxlanInstance>();
         sbiVxlan.setNbiVxlanTunnelId("Nbi");
         sbiVxlan.setVni("1234");
@@ -105,7 +105,7 @@ public class TranslateVxlanResponseTest {
         sbiVxlan.setVxlanTunnelList(tunnelList);
         sbiVxlan.setVxlanInterfaceList(interfaceList);
         sbiList.add(sbiVxlan);
-        
+
         vni.setVni(1234);
         vni.setDeleteMode(true);
         vni.setMacLearingMode("Mac");
@@ -114,38 +114,38 @@ public class TranslateVxlanResponseTest {
         vni.setEvpnRtImport("evpnRtImport");
         List<Vni> vniList=new ArrayList<Vni>();
         vniList.add(vni);
-        
+
         deviceVxlan.setVneId(1234);
         deviceVxlan.setName("name");
         deviceVxlan.setLocalAddress("address");
         deviceVxlan.setVniList(vniList);
-        
-       
+
+
         List<VxLanDeviceModel> vxLanList=new ArrayList<VxLanDeviceModel>();
         vxLanList.add(deviceVxlan);
-        
+
         TranslateVxlanResponse response=new TranslateVxlanResponse();
         response.translateVxlanId(sbiList, deviceId, vxLanList);
         assertTrue(true);
     }
-    
+
     @Test
     public void translateTunnelExternalIdVniListNull() {
         String deviceId="device";
         SbiNeVxlanInstance sbiVxlan=new SbiNeVxlanInstance();
         VxLanDeviceModel deviceVxlan=new VxLanDeviceModel();
         Vni vni=new Vni();
-        
+
         List<SbiNeVxlanTunnel> tunnelList=new ArrayList<SbiNeVxlanTunnel>();
         SbiNeVxlanTunnel tunnel=new SbiNeVxlanTunnel();
         tunnel.setVni("Vni");
         tunnelList.add(tunnel);
-        
+
         List<SbiNeVxlanInterface> interfaceList=new ArrayList<SbiNeVxlanInterface>();
         SbiNeVxlanInterface interfaceLan=new SbiNeVxlanInterface();
         interfaceLan.setLocalName("LocalName");
         interfaceList.add(interfaceLan);
-        
+
         List<SbiNeVxlanInstance> sbiList=new ArrayList<SbiNeVxlanInstance>();
         sbiVxlan.setNbiVxlanTunnelId("Nbi");
         sbiVxlan.setVni("1234");
@@ -154,7 +154,7 @@ public class TranslateVxlanResponseTest {
         sbiVxlan.setVxlanTunnelList(tunnelList);
         sbiVxlan.setVxlanInterfaceList(interfaceList);
         sbiList.add(sbiVxlan);
-        
+
         vni.setVni(1234);
         vni.setDeleteMode(true);
         vni.setMacLearingMode("Mac");
@@ -163,38 +163,38 @@ public class TranslateVxlanResponseTest {
         vni.setEvpnRtImport("evpnRtImport");
         List<Vni> vniList=new ArrayList<Vni>();
         vniList.add(vni);
-        
+
         deviceVxlan.setVneId(1234);
         deviceVxlan.setName("name");
         deviceVxlan.setLocalAddress("address");
         deviceVxlan.setVniList(null);
-        
-       
+
+
         List<VxLanDeviceModel> vxLanList=new ArrayList<VxLanDeviceModel>();
         vxLanList.add(deviceVxlan);
-        
+
         TranslateVxlanResponse response=new TranslateVxlanResponse();
         response.translateVxlanId(sbiList, deviceId, vxLanList);
         assertTrue(true);
     }
-    
+
     @Test
     public void translateTunnelExternalIdVniNotEqual() {
         String deviceId="device";
         SbiNeVxlanInstance sbiVxlan=new SbiNeVxlanInstance();
         VxLanDeviceModel deviceVxlan=new VxLanDeviceModel();
         Vni vni=new Vni();
-        
+
         List<SbiNeVxlanTunnel> tunnelList=new ArrayList<SbiNeVxlanTunnel>();
         SbiNeVxlanTunnel tunnel=new SbiNeVxlanTunnel();
         tunnel.setVni("Vni");
         tunnelList.add(tunnel);
-        
+
         List<SbiNeVxlanInterface> interfaceList=new ArrayList<SbiNeVxlanInterface>();
         SbiNeVxlanInterface interfaceLan=new SbiNeVxlanInterface();
         interfaceLan.setLocalName("LocalName");
         interfaceList.add(interfaceLan);
-        
+
         List<SbiNeVxlanInstance> sbiList=new ArrayList<SbiNeVxlanInstance>();
         sbiVxlan.setNbiVxlanTunnelId("Nbi");
         sbiVxlan.setVni("12");
@@ -203,7 +203,7 @@ public class TranslateVxlanResponseTest {
         sbiVxlan.setVxlanTunnelList(tunnelList);
         sbiVxlan.setVxlanInterfaceList(interfaceList);
         sbiList.add(sbiVxlan);
-        
+
         vni.setVni(1234);
         vni.setDeleteMode(true);
         vni.setMacLearingMode("Mac");
@@ -212,16 +212,16 @@ public class TranslateVxlanResponseTest {
         vni.setEvpnRtImport("evpnRtImport");
         List<Vni> vniList=new ArrayList<Vni>();
         vniList.add(vni);
-        
+
         deviceVxlan.setVneId(1234);
         deviceVxlan.setName("name");
         deviceVxlan.setLocalAddress("address");
         deviceVxlan.setVniList(vniList);
-        
-       
+
+
         List<VxLanDeviceModel> vxLanList=new ArrayList<VxLanDeviceModel>();
         vxLanList.add(deviceVxlan);
-        
+
         TranslateVxlanResponse response=new TranslateVxlanResponse();
         response.translateVxlanId(sbiList, deviceId, vxLanList);
         assertTrue(true);

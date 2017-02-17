@@ -24,7 +24,7 @@ import org.openo.sdno.overlayvpn.verify.annotation.AString;
 
 /**
  * Model converting class, converting SDNO model to adapter model. <br>
- * 
+ *
  * @author
  * @version SDNHUB Driver 0.5 Jan 20, 2017
  */
@@ -65,12 +65,12 @@ public class VxLanDeviceModel extends AbstUuidModel {
         this.localAddress = localAddress;
     }
 
-	public List<Vni> getVniList() {
-		return vniList;
-	}
+    public List<Vni> getVniList() {
+        return vniList;
+    }
 
-	public void setVniList(List<Vni> vniList) {
-		this.vniList = vniList;
-	}
-    
+    public void setVniList(List<Vni> vniList) {
+        this.vniList = vniList;
+    }
+
 }

@@ -69,7 +69,7 @@ public class LocalSiteSNatROAResource {
 
     private static final String INVALID_CONTROLLER_UUID = "Invalid controller UUID.";
 
-    private static final String SNATNETMODEL_AC_OPERATOR = "SNatNetModel ac oper err.";
+    private static final String NETMODEL_AC_OPER_ERROR = "SNatNetModel ac oper err.";
     /**
      * Create SNAT configuration.<br/>
      *
@@ -113,8 +113,8 @@ public class LocalSiteSNatROAResource {
         LOGGER.debug("create SNatNetModel cost {} ms.", System.currentTimeMillis() - startTime);
 
         if(!snatResult.isValid()) {
-            LOGGER.error(SNATNETMODEL_AC_OPERATOR);
-            throw new ParameterServiceException(SNATNETMODEL_AC_OPERATOR);
+            LOGGER.error(NETMODEL_AC_OPER_ERROR);
+            throw new ParameterServiceException(NETMODEL_AC_OPER_ERROR);
         }
         return new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS, snatNet);
     }
@@ -257,7 +257,7 @@ public class LocalSiteSNatROAResource {
 
         if(!acResult.isValid()) {
             LOGGER.error("SNatNetModel oper err.");
-            throw new ParameterServiceException(SNATNETMODEL_AC_OPERATOR);
+            throw new ParameterServiceException(NETMODEL_AC_OPER_ERROR);
         }
         return new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS, snatNet);
     }

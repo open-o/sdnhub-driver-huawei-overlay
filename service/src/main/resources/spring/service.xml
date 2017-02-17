@@ -25,7 +25,7 @@
     <jaxrs:server id="restContainer" address="/">
         <!-- registering beans -->
         <jaxrs:serviceBeans>
-            <!-- <ref bean="ipSecRoaResource"></ref> -->
+            <ref bean="ipSecRoaResource"></ref>
             <ref bean="vxLanRoaResource"></ref>
             <ref bean="healthCheckRoaResource"></ref>
             <ref bean="portROAResource"></ref>
@@ -45,8 +45,8 @@
         </jaxrs:providers>
     </jaxrs:server>
 
-    <!-- <bean id="ipSecRoaResource" class="org.openo.sdnhub.overlayvpndriver.rest.IpSecRoaResource">
-    </bean> -->
+    <bean id="ipSecRoaResource" class="org.openo.sdnhub.overlayvpndriver.rest.IpSecRoaResource">
+    </bean>
 
     <bean id="vxLanRoaResource" class="org.openo.sdnhub.overlayvpndriver.rest.VxLanRoaResource">
     </bean>
@@ -118,11 +118,8 @@
     <bean id="interfaceIpService"
         class="org.openo.sdnhub.overlayvpndriver.sbi.impl.InterfaceIpServiceImpl" />
 
-    <!-- <bean id="ipSecConnStatusService"
-        class="org.openo.sdnhub.overlayvpndriver.sbi.impl.IpSecConnecStatusImpl" />
-
     <bean id="ipsecService"
-        class="org.openo.sdnhub.overlayvpndriver.sbi.impl.IpsecImpl" /> -->
+        class="org.openo.sdnhub.overlayvpndriver.sbi.impl.IpsecImpl" />
 
     <bean id="nqaConfigService" class="org.openo.sdnhub.overlayvpndriver.sbi.impl.NqaConfigImpl" />
 

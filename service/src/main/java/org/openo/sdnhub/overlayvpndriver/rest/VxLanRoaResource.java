@@ -63,7 +63,7 @@ import org.springframework.stereotype.Service;
  * @version SDNHUB 0.5 Jun 19, 2017
  */
 @Service
-@Path(CommonConst.VXLAN_RESTFUL_PATH)
+@Path("/sbi-vxlan/v1")
 public class VxLanRoaResource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(VxLanRoaResource.class);
@@ -83,7 +83,7 @@ public class VxLanRoaResource {
      * @since SDNHUB 0.5
      */
     @POST
-    @Path(CommonConst.VXLAN_BATCH_CREATE_OPERATION_PATH)
+    @Path("/batch-create-vxlan")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ResultRsp<SbiNeVxlanInstance> createVxlan(@Context HttpServletRequest request,
@@ -145,7 +145,7 @@ public class VxLanRoaResource {
      * @since SDNHUB 0.5
      */
     @POST
-    @Path(CommonConst.VXLAN_BATCH_DELETE_OPERATION_PATH)
+    @Path("/device/{deviceid}/batch-delete-vxlan")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @SuppressWarnings("unchecked")
@@ -215,7 +215,7 @@ public class VxLanRoaResource {
      * @since SDNHUB 0.5
      */
     @POST
-    @Path(CommonConst.VXLAN_BATCH_QUERY_OPERATION_PATH)
+    @Path("/batch-query-vxlan")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ResultRsp<SbiNeVxlanInstance> queryVxlan(@Context HttpServletRequest request,
@@ -267,7 +267,7 @@ public class VxLanRoaResource {
      * @since SDNHUB 0.5
      */
     @POST
-    @Path(CommonConst.VXLAN_BATCH_UPDATE_OPERATION_PATH)
+    @Path("/batch-update-vxlan")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ResultRsp<SbiNeVxlanInstance> updateVxlan(@Context HttpServletRequest request,

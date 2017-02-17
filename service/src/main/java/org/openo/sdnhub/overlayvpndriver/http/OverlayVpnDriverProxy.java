@@ -53,13 +53,13 @@ public class OverlayVpnDriverProxy {
 
     private HttpClient httpClient;
 
-    private static final String applicationJson="application/json";
+    private static final String JSON_APPLICATION_TYPE="application/json";
 
-    private static final String sContentType="Content-Type";
+    private static final String JSON_CONTENT_TYPE="Content-Type";
 
-    private static final String accept="Accept";
+    private static final String JSON_ACCEPT="Accept";
 
-    private static final String sSendPostMsg="@sendpostmsg";
+    private static final String LOG_SEND_POST_MSG="@sendpostmsg";
 
     private OverlayVpnDriverProxy() {
         this.initHttpClient();
@@ -107,8 +107,8 @@ public class OverlayVpnDriverProxy {
             String finalurl = getControllerUrl(url, ctrlUuid);
 
             HttpGet httpget = new HttpGet(finalurl);
-            httpget.addHeader(sContentType, applicationJson);
-            httpget.addHeader(accept, applicationJson);
+            httpget.addHeader(JSON_CONTENT_TYPE, JSON_APPLICATION_TYPE);
+            httpget.addHeader(JSON_ACCEPT, JSON_APPLICATION_TYPE);
 
             if(body!=null) {
                 // Do Nothing, This is for fixing sonar issue
@@ -152,16 +152,16 @@ public class OverlayVpnDriverProxy {
             String finalurl = getControllerUrl(url, ctrlUuid);
 
             HttpPost httppost = new HttpPost(finalurl);
-            httppost.addHeader(sContentType, applicationJson);
-            httppost.addHeader(accept, applicationJson);
+            httppost.addHeader(JSON_CONTENT_TYPE, JSON_APPLICATION_TYPE);
+            httppost.addHeader(JSON_ACCEPT, JSON_APPLICATION_TYPE);
             if(StringUtils.hasLength(body)) {
                 StringEntity reqEntity = new StringEntity(body);
                 httppost.setEntity(reqEntity);
             }
 
-            LOGGER.debug(sSendPostMsg + finalurl);
+            LOGGER.debug(LOG_SEND_POST_MSG + finalurl);
             HttpResponse response = httpClient.execute(httppost);
-            LOGGER.debug(sSendPostMsg + finalurl + response);
+            LOGGER.debug(LOG_SEND_POST_MSG + finalurl + response);
 
             HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
             ContentType contentType = ContentType.get(response.getEntity());
@@ -199,17 +199,17 @@ public class OverlayVpnDriverProxy {
             String finalurl = getControllerUrl(url, ctrlUuid);
 
             HttpPut httpput = new HttpPut(finalurl);
-            httpput.addHeader(sContentType, applicationJson);
-            httpput.addHeader(accept, applicationJson);
+            httpput.addHeader(JSON_CONTENT_TYPE, JSON_APPLICATION_TYPE);
+            httpput.addHeader(JSON_ACCEPT, JSON_APPLICATION_TYPE);
 
             if(StringUtils.hasLength(body)) {
                 StringEntity reqEntity = new StringEntity(body);
                 httpput.setEntity(reqEntity);
             }
 
-            LOGGER.debug(sSendPostMsg + finalurl);
+            LOGGER.debug(LOG_SEND_POST_MSG + finalurl);
             HttpResponse response = httpClient.execute(httpput);
-            LOGGER.debug(sSendPostMsg + finalurl + response);
+            LOGGER.debug(LOG_SEND_POST_MSG + finalurl + response);
 
             HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
             ContentType contentType = ContentType.get(response.getEntity());
@@ -246,15 +246,15 @@ public class OverlayVpnDriverProxy {
             String finalurl = getControllerUrl(url, ctrlUuid);
 
             HttpDelete httpdelete = new HttpDelete(finalurl);
-            httpdelete.addHeader(sContentType, applicationJson);
-            httpdelete.addHeader(accept, applicationJson);
+            httpdelete.addHeader(JSON_CONTENT_TYPE, JSON_APPLICATION_TYPE);
+            httpdelete.addHeader(JSON_ACCEPT, JSON_APPLICATION_TYPE);
             if(StringUtils.hasLength(body)) {
                 //Do Nothing
             }
 
-            LOGGER.debug(sSendPostMsg + finalurl);
+            LOGGER.debug(LOG_SEND_POST_MSG + finalurl);
             HttpResponse response = httpClient.execute(httpdelete);
-            LOGGER.debug(sSendPostMsg + finalurl + response);
+            LOGGER.debug(LOG_SEND_POST_MSG + finalurl + response);
 
             HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
             ContentType contentType = ContentType.get(response.getEntity());

@@ -39,7 +39,7 @@ import org.springframework.util.StringUtils;
 /**
  * Subnet Vni-related BD service implementation.<br>
  *
- * @author Mahesh
+ * @author
  * @version SDNHUB 0.5 Jan 16, 2017
  */
 public class SubnetBDIfImpl {

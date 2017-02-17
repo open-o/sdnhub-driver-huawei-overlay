@@ -57,7 +57,7 @@ public class Ip extends UuidModel {
     private boolean isTypeV4;
 
     public Ip() {
-        //it is a non-parameter constructor
+        //Non-parameter constructor
     }
 
     public Ip(String ipv4, String ipMask) {

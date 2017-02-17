@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
  * <br/>
  * <p>
  * </p>
- * 
+ *
  * @author
  * @version SDNHUB 0.5 02-Feb-2017
  */
@@ -43,7 +43,7 @@ public class CheckIpV6Util {
 
     /**
      * <br/>
-     * 
+     *
      * @param ip
      * @return
      * @since SDNHUB 0.5

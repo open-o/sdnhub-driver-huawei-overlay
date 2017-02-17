@@ -53,7 +53,7 @@ public class StaticRouteImpl {
 
     private static final String DEST_IP_QUERY_PARAM = "?destIp=";
 
-    private static final String STATIC_ROUTE_CONFIG_FAILED = "static route configuration has failed.";
+    private static final String LOG_STATIC_ROUTE_CONFIG_FAILED = "static route configuration has failed.";
 
     /**
      * Query static routes<br/>
@@ -108,7 +108,7 @@ public class StaticRouteImpl {
             throw new ServiceException(ErrorCode.ADAPTER_ROUTER_RESPONSE_FAIL);
         }
 
-        LOGGER.error(STATIC_ROUTE_CONFIG_FAILED);
+        LOGGER.error(LOG_STATIC_ROUTE_CONFIG_FAILED);
         return new ResultRsp<>(ErrorCode.ADAPTER_ROUTER_RESPONSE_FAIL);
 
     }
@@ -163,7 +163,7 @@ public class StaticRouteImpl {
             return resultRsp;
         }
 
-        LOGGER.error(STATIC_ROUTE_CONFIG_FAILED);
+        LOGGER.error(LOG_STATIC_ROUTE_CONFIG_FAILED);
         return new ResultRsp<>(ErrorCode.ADAPTER_ROUTER_RESPONSE_FAIL);
 
     }
@@ -247,7 +247,7 @@ public class StaticRouteImpl {
             return resultRsp;
         }
 
-        LOGGER.error(STATIC_ROUTE_CONFIG_FAILED);
+        LOGGER.error(LOG_STATIC_ROUTE_CONFIG_FAILED);
         resultRsp.setErrorCode(ErrorCode.OVERLAYVPN_FAILED);
         resultRsp.setMessage("delete Route by device failed.");
         return resultRsp;

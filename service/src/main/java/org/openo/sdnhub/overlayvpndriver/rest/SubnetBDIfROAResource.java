@@ -46,7 +46,7 @@ import static org.openo.sdnhub.overlayvpndriver.common.consts.CommonConst.VNI_PA
 /**
  * Restful interface for Vni-related BD information.<br>
  *
- * @author Mahesh
+ * @author
  * @version SDNHUB 0.5 Jun 19, 2017
  */
 @Service

@@ -20,7 +20,7 @@ package org.openo.sdnhub.overlayvpndriver.result;
  * <br/>
  * <p>
  * </p>
- * 
+ *
  * @author
  * @version SDNHUB 0.5 02-Feb-2017
  */

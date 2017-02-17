@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Port service implementation.<br>
  *
- * @author Mahesh
+ * @author
  * @version SDNHUB 0.5 Jan 16, 2017
  */
 public class DevicePortServiceImpl {

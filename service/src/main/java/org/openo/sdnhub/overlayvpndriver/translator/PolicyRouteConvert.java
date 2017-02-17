@@ -61,7 +61,7 @@ public class PolicyRouteConvert {
         for(SbiNePolicyRoute tempSbiNePolicyRoute : checkOkroutelist) {
             TrafficPolicyList trafficPolicy = new TrafficPolicyList();
             trafficPolicy.setTrafficpolicyName(tempSbiNePolicyRoute.getTrafficPolicyName());
-
+            //TODO: need to set direction and interface-name
             if(createOrUpdate) {
                 trafficPolicy.setUuid(tempSbiNePolicyRoute.getUuid());
             } else {

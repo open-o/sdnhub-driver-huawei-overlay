@@ -34,41 +34,41 @@ public class DriverRegistrationListenerTest {
         listener.contextInitialized(null);
         assertTrue(true);
     }
-    
+
     @Test
     public void contextDestroyedTestNormal(){
-        
+
         new MockUp<RestfulProxy>() {
-            
+
             @Mock
             public RestfulResponse delete(String url,RestfulParametes restParametes){
-                
+
                 RestfulResponse resp = new RestfulResponse();
                 resp.setStatus(200);
                 return resp;
             }
-            
-            
+
+
         };
         DriverRegistrationListener listener = new DriverRegistrationListener();
         listener.contextDestroyed(null);
         assertTrue(true);
     }
-    
+
     @Test
     public void contextDestroyedTestHttpError(){
-        
+
         new MockUp<RestfulProxy>() {
-            
+
             @Mock
             public RestfulResponse delete(String url,RestfulParametes restParametes){
-                
+
                 RestfulResponse resp = new RestfulResponse();
                 resp.setStatus(500);
                 return resp;
             }
-            
-            
+
+
         };
         DriverRegistrationListener listener = new DriverRegistrationListener();
         listener.contextDestroyed(null);

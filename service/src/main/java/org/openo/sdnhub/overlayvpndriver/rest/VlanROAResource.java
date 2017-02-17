@@ -49,7 +49,7 @@ import org.springframework.util.CollectionUtils;
 /**
  * Restful interface for Vlan configuration.<br>
  *
- * @author Mahesh
+ * @author
  * @version SDNHUB 0.5 Jun 19, 2017
  */
 @Service
