@@ -83,12 +83,12 @@ public class LocalSiteSNatServiceImpl {
             throw new ServiceException(DriverErrorCode.ADAPTER_SITE_SNAT_CREATE_ERROR,
                     "AcSNat create:  httpMsg return error.");
         }
-        ACResponse<AcSNat> acResponse = JsonUtil.fromJson(body, new TypeReference<ACResponse<AcSNat>>() {});
+        ACResponse<List<AcSNat>> acResponse = JsonUtil.fromJson(body, new TypeReference<ACResponse<List<AcSNat>>>() {});
         if(!acResponse.isSucceed()) {
             LOGGER.error("AcSNat create :acresponse return error :" + acResponse.getErrmsg());
             throw new ServiceException(DriverErrorCode.ADAPTER_SITE_SNAT_TUNNEL_ERROR, acResponse.getErrmsg());
         }
-        resultRsp.setData(acResponse.getData());
+        resultRsp.setData(acResponse.getData().get(0));
         return resultRsp;
     }
 
@@ -166,12 +166,12 @@ public class LocalSiteSNatServiceImpl {
             throw new ServiceException(DriverErrorCode.ADAPTER_SITE_SNAT_UPDATE_ERROR,
                     "AcSNat update:  httpMsg return error.");
         }
-        ACResponse<AcSNat> acResponse = JsonUtil.fromJson(body, new TypeReference<ACResponse<AcSNat>>() {});
+        ACResponse<List<AcSNat>> acResponse = JsonUtil.fromJson(body, new TypeReference<ACResponse<List<AcSNat>>>() {});
         if(!acResponse.isSucceed()) {
             LOGGER.error("AcSNat update :acresponse return error :" + acResponse.getErrmsg());
             throw new ServiceException(DriverErrorCode.ADAPTER_SITE_SNAT_UPDATE_TUNNEL_ERROR, acResponse.getErrmsg());
         }
-        resultRsp.setData(acResponse.getData());
+        resultRsp.setData(acResponse.getData().get(0));
         return resultRsp;
     }
 
@@ -202,15 +202,17 @@ public class LocalSiteSNatServiceImpl {
                     "AcSNat query:  httpMsg return error.");
 
         }
-        ACResponse<AcSNat> acResponse = JsonUtil.fromJson(body, new TypeReference<ACResponse<AcSNat>>() {});
+        ACResponse<List<AcSNat>> acResponse = JsonUtil.fromJson(body, new TypeReference<ACResponse<List<AcSNat>>>() {});
         if(!acResponse.isSucceed()) {
             LOGGER.error("AcSNat query :acresponse return error :" + acResponse.getErrmsg());
             throw new ServiceException(DriverErrorCode.ADAPTER_SITE_SNAT_UPDATE_TUNNEL_ERROR, acResponse.getErrmsg());
         }
-        AcSNat acSNats = acResponse.getData();
-        if(natId.equals(acSNats.getId())) {
-            return new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS, acSNats);
+        List<AcSNat> acSNats = acResponse.getData();
+        for(AcSNat acSNat : acSNats) {
+            if(natId.equals(acSNat.getId())) {
+                return new ResultRsp<AcSNat>(ErrorCode.OVERLAYVPN_SUCCESS, acSNat);
+            }
         }
-        return new ResultRsp<>(ErrorCode.OVERLAYVPN_FAILED);
+        return new ResultRsp<AcSNat>(ErrorCode.OVERLAYVPN_FAILED);
     }
 }
