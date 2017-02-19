@@ -28,12 +28,13 @@ import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.type.TypeReference;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
 import org.openo.sdnhub.overlayvpndriver.common.consts.DriverErrorCode;
+import org.openo.sdnhub.overlayvpndriver.common.consts.HttpCode;
 import org.openo.sdnhub.overlayvpndriver.controller.consts.ControllerUrlConst;
-import org.openo.sdnhub.overlayvpndriver.controller.model.ControllerNbiPolicyRoute;
 import org.openo.sdnhub.overlayvpndriver.controller.model.TrafficPolicyList;
 import org.openo.sdnhub.overlayvpndriver.http.OverlayVpnDriverProxy;
 import org.openo.sdnhub.overlayvpndriver.result.ACDelResponse;
 import org.openo.sdnhub.overlayvpndriver.result.OverlayVpnDriverResponse;
+import org.openo.sdnhub.overlayvpndriver.service.model.ACResponse;
 import org.openo.sdnhub.overlayvpndriver.service.model.SbiNePolicyRoute;
 import org.openo.sdno.exception.ParameterServiceException;
 import org.openo.sdno.framework.container.util.JsonUtil;
@@ -132,7 +133,7 @@ public class PolicyRouteImpl {
         crtInfoMap.put(DELETE_ROUTE_PARAMETER, idList);
 
         HTTPReturnMessage httpMsg =
-                OverlayVpnDriverProxy.getInstance().sendPutMsg(greTunnelcUrl, JsonUtil.toJson(crtInfoMap), ctrlUuid);
+                OverlayVpnDriverProxy.getInstance().sendDeleteMsg(greTunnelcUrl, JsonUtil.toJson(crtInfoMap), ctrlUuid);
         String body = httpMsg.getBody();
         LOGGER.debug("delete qos policy return body : " + body);
         if(httpMsg.isSuccess() && StringUtils.isNotEmpty(body)) {
@@ -145,6 +146,13 @@ public class PolicyRouteImpl {
             return resultRsp;
         }
         LOGGER.error("delete qos policy: httpMsg return error");
+
+        if(HttpCode.TIMEOUT == httpMsg.getStatus()) {
+            resultRsp.setErrorCode(DriverErrorCode.ADAPTER_CTRL_TIMEOUT);
+            resultRsp.setMessage("delete qos policy timeout!");
+            return resultRsp;
+        }
+
         resultRsp.setErrorCode(DriverErrorCode.ADAPTER_QOS_DELETE_ERROR);
         resultRsp.setMessage("delete qos policy: httpMsg return error");
         return resultRsp;
@@ -175,13 +183,14 @@ public class PolicyRouteImpl {
         LOGGER.debug("mqc policy query return body: " + body);
 
         if(httpMsg.isSuccess() && StringUtils.isNotEmpty(body)) {
-            OverlayVpnDriverResponse<ControllerNbiPolicyRoute> acresponse =
-                    JsonUtil.fromJson(body, new TypeReference<OverlayVpnDriverResponse<ControllerNbiPolicyRoute>>() {});
-            if(acresponse.isSucess()) {
-                return new ResultRsp<List<TrafficPolicyList>>(ErrorCode.OVERLAYVPN_SUCCESS,
-                        ((ControllerNbiPolicyRoute)acresponse.getData()).getTrafficPolicyList());
+            ACResponse<List<TrafficPolicyList>> acresponse =
+                    JsonUtil.fromJson(body, new TypeReference<ACResponse<List<TrafficPolicyList>>>() {});
+
+            if(acresponse.isSucceed()) {
+                return new ResultRsp<List<TrafficPolicyList>>(ErrorCode.OVERLAYVPN_SUCCESS, acresponse.getData());
             }
-            LOGGER.error("qos policy create: acresponse return error: " + acresponse.getErrmsg());
+            LOGGER.error("AcBranch qos policy create: acresponse return error: " + acresponse.getErrmsg());
+
             return new ResultRsp<List<TrafficPolicyList>>(DriverErrorCode.ADAPTER_QOS_CREATE_ERROR);
         }
 
@@ -195,15 +204,14 @@ public class PolicyRouteImpl {
      * Validates Policy route configuration.<br>
      *
      * @param sbiNePolicyRouteList collection of Policy route configuration needs to be validated
-     * @param cltuuid controller UUID
      * @param failedDatas collection of failed Policy route configuration during validation
      * @param checkOkRouteList validated collection of Policy route configuration
      * @return controller UUID
      * @throws ServiceException when input validation fails
      * @since SDNHUB 0.5
      */
-    public static String checkInputData(List<SbiNePolicyRoute> sbiNePolicyRouteList, String cltuuid,
-                                  List<FailData<SbiNePolicyRoute>> failedDatas, List<SbiNePolicyRoute> checkOkRouteList)
+    public static void checkInputData(List<SbiNePolicyRoute> sbiNePolicyRouteList,
+            List<FailData<SbiNePolicyRoute>> failedDatas, List<SbiNePolicyRoute> checkOkRouteList)
             throws ServiceException {
 
         LOGGER.debug("create policy route input body :" + sbiNePolicyRouteList.toString());
@@ -222,7 +230,6 @@ public class PolicyRouteImpl {
                 failedDatas.add(failData);
             }
         }
-        return cltuuid;
     }
 
     /**
@@ -253,9 +260,10 @@ public class PolicyRouteImpl {
      * @return nbiRoute valid policy route configuration from service SBI otherwise returns null
      * @since SDNHUB 0.5
      */
-    private static SbiNePolicyRoute findCorrespondNbiModel(TrafficPolicyList staticRoute, List<SbiNePolicyRoute> nbiRoutes) {
+    private static SbiNePolicyRoute findCorrespondNbiModel(TrafficPolicyList staticRoute,
+            List<SbiNePolicyRoute> nbiRoutes) {
         for(SbiNePolicyRoute nbiRoute : nbiRoutes) {
-            if(nbiRoute.getUuid().equals(staticRoute.getUuid())) {
+            if(nbiRoute.getUuid().equals(staticRoute.getId())) {
                 return nbiRoute;
             }
         }
@@ -271,7 +279,7 @@ public class PolicyRouteImpl {
      * @since SDNHUB 0.5
      */
     public static Map<String, List<SbiNePolicyRoute>> deriveByDeviceId(final String ctrlUuid,
-                                                                        final List<SbiNePolicyRoute> nbiNeTunnelList) {
+            final List<SbiNePolicyRoute> nbiNeTunnelList) {
         Map<String, List<SbiNePolicyRoute>> deviceIdToTunnelListMap =
                 new ConcurrentHashMap<String, List<SbiNePolicyRoute>>();
         if(CollectionUtils.isEmpty(nbiNeTunnelList)) {

@@ -21,12 +21,12 @@ import org.openo.sdno.overlayvpn.verify.annotation.AString;
 import java.util.List;
 
 /**
- * Model class for TrafficPolicyList.<br/>
+ * Model class for TrafficPolicy.<br/>
  *
  * @author
  * @version SDNHUB 0.5 02-Feb-2017
  */
-public class TrafficPolicyList {
+public class TrafficPolicy {
 
     private String id;
 

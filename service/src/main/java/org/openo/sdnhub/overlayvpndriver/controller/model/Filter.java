@@ -22,9 +22,7 @@ import org.openo.sdno.overlayvpn.verify.annotation.AInt;
 import org.openo.sdno.overlayvpn.verify.annotation.AString;
 
 /**
- * <br/>
- * <p>
- * </p>
+ * Model class for Filter.<br/>
  *
  * @author
  * @version SDNHUB 0.5 02-Feb-2017

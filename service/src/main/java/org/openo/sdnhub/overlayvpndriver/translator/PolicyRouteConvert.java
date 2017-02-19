@@ -17,15 +17,28 @@
 package org.openo.sdnhub.overlayvpndriver.translator;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import org.codehaus.jackson.type.TypeReference;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
+import org.openo.sdnhub.overlayvpndriver.controller.model.FilterAction;
+import org.openo.sdnhub.overlayvpndriver.controller.model.FilterActionList;
+import org.openo.sdnhub.overlayvpndriver.controller.model.Redirect;
+import org.openo.sdnhub.overlayvpndriver.controller.model.TrafficInterface;
 import org.openo.sdnhub.overlayvpndriver.controller.model.TrafficPolicyList;
+import org.openo.sdnhub.overlayvpndriver.controller.model.AclPolicy;
+import org.openo.sdnhub.overlayvpndriver.controller.model.AclRule;
+import org.openo.sdnhub.overlayvpndriver.controller.model.Action;
+import org.openo.sdnhub.overlayvpndriver.controller.model.Filter;
 import org.openo.sdnhub.overlayvpndriver.service.model.SbiNePolicyRoute;
+import org.openo.sdno.framework.container.util.JsonUtil;
+import org.openo.sdno.util.ip.IpUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,28 +62,71 @@ public class PolicyRouteConvert {
      * <br/>
      *
      * @param checkOkroutelist
-     * @param createOrUpdate
      * @return
      * @throws ServiceException
      * @since SDNHUB 0.5
      */
-    public static Map<String, List<TrafficPolicyList>> convert2Route(List<SbiNePolicyRoute> checkOkroutelist,
-            boolean createOrUpdate) throws ServiceException {
+    public static Map<String, List<TrafficPolicyList>> convert2Route(List<SbiNePolicyRoute> checkOkroutelist) throws ServiceException {
 
         Map<String, List<TrafficPolicyList>> deviceIdToMqcMap = new ConcurrentHashMap<>();
         for(SbiNePolicyRoute tempSbiNePolicyRoute : checkOkroutelist) {
             TrafficPolicyList trafficPolicy = new TrafficPolicyList();
             trafficPolicy.setTrafficpolicyName(tempSbiNePolicyRoute.getTrafficPolicyName());
-            //TODO: need to set direction and interface-name
-            if(createOrUpdate) {
-                trafficPolicy.setUuid(tempSbiNePolicyRoute.getUuid());
-            } else {
-                trafficPolicy.setUuid(tempSbiNePolicyRoute.getUuid());
+
+            trafficPolicy.setId(tempSbiNePolicyRoute.getExternalId());
+            trafficPolicy.setExtend(true);
+            FilterActionList nbiFilterAction = new FilterActionList();
+            try {
+                nbiFilterAction = JsonUtil.fromJson(tempSbiNePolicyRoute.getFilterAction(),
+                        new TypeReference<FilterActionList>() {});
+            } catch(IllegalArgumentException e) {
+                LOGGER.error("json type error.", e);
+                throw new ServiceException("convert2Route: json type error.");
             }
 
-            if(tempSbiNePolicyRoute.getFilterAction() != null) {
-               //TODO:
+            FilterAction filterAction = new FilterAction();
+            Filter filter = new Filter();
+            List<AclPolicy> aclPolicies = new ArrayList<AclPolicy>();
+            Iterator<AclRule> iterator = nbiFilterAction.getRuleList().iterator();
+
+            while(iterator.hasNext()) {
+                AclRule rule = iterator.next();
+                AclPolicy aclPolicy = new AclPolicy();
+                aclPolicy.setPolicy(rule.getPolicy());
+                if(null != rule.getSrcIp()) {
+                    aclPolicy.setSrcIp(rule.getSrcIp().getIpv4());
+                    aclPolicy.setSrcNetMask(IpUtils.prefixToMask(Integer.valueOf(rule.getSrcIp().getIpMask())));
+                }
+                if(null != rule.getDesIp()) {
+                    aclPolicy.setDesIp(rule.getDesIp().getIpv4());
+                    aclPolicy.setDesNetMask(IpUtils.prefixToMask(Integer.valueOf(rule.getDesIp().getIpMask())));
+                }
+
+                aclPolicies.add(aclPolicy);
             }
+
+            filter.setAclPolicy(aclPolicies);
+
+            Action action = new Action();
+            Redirect rediret = new Redirect();
+
+            org.openo.sdnhub.overlayvpndriver.service.model.Action tempAction = nbiFilterAction.getAction();
+
+            if(null != tempAction.getNextHopIp()) {
+                rediret.setNextHopIp(tempAction.getNextHopIp().getIpv4());
+            }
+            action.setRedirect(rediret);
+
+            filterAction.setAction(action);
+            filterAction.setFilter(filter);
+
+            trafficPolicy.setFilterActionList(Arrays.asList(filterAction));
+
+            TrafficInterface trafficInterface = new TrafficInterface();
+            trafficInterface.setInterfaceName(tempSbiNePolicyRoute.getInterfaceName());
+            trafficInterface.setDirection(tempSbiNePolicyRoute.getDirection());
+
+            trafficPolicy.setInterfaceList(Arrays.asList(trafficInterface));
 
             if(!deviceIdToMqcMap.containsKey(tempSbiNePolicyRoute.getDeviceId())) {
                 deviceIdToMqcMap.put(tempSbiNePolicyRoute.getDeviceId(), new ArrayList<TrafficPolicyList>());
@@ -94,14 +150,12 @@ public class PolicyRouteConvert {
             return;
         }
         for(TrafficPolicyList tempRoute : list) {
-            if(StringUtils.isEmpty(tempRoute.getUuid())) {
+            if(StringUtils.isEmpty(tempRoute.getId())) {
                 LOGGER.warn("do not get static id, outInfer = " + tempRoute.getTrafficpolicyName());
                 continue;
             }
             for(SbiNePolicyRoute tempNeRouter : checkOkroutelist) {
-                if(tempRoute.getUuid().equals(tempNeRouter.getUuid())
-                        && tempRoute.getTrafficpolicyName().equals(tempNeRouter.getTrafficPolicyName())) {
-                    tempNeRouter.setUuid(tempRoute.getUuid());
+                if(tempRoute.getId().equals(tempNeRouter.getExternalId())) {
                     successedDatas.add(tempNeRouter);
                 }
             }

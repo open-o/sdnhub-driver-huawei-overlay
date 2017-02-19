@@ -33,6 +33,7 @@ import org.junit.Test;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
 import org.openo.sdnhub.overlayvpndriver.controller.model.ControllerNbiPolicyRoute;
 import org.openo.sdnhub.overlayvpndriver.controller.model.InterfaceList;
+import org.openo.sdnhub.overlayvpndriver.controller.model.TrafficInterface;
 import org.openo.sdnhub.overlayvpndriver.controller.model.TrafficPolicyList;
 import org.openo.sdnhub.overlayvpndriver.http.OverlayVpnDriverProxy;
 import org.openo.sdnhub.overlayvpndriver.result.ACDelResponse;
@@ -116,10 +117,10 @@ public class PolicyRouteROAResourceTest {
 
                 List<TrafficPolicyList> trafficPolicyList = new LinkedList<TrafficPolicyList>();
                 TrafficPolicyList trafficPolicy = new TrafficPolicyList();
-                InterfaceList interface1 = new InterfaceList();
+                TrafficInterface interface1 = new TrafficInterface();
                 interface1.setInterfaceName("eth0");
-                List<InterfaceList> interfaceList = Arrays.asList(interface1);
-                trafficPolicy.setUuid("uid-1234");
+                List<TrafficInterface> interfaceList = Arrays.asList(interface1);
+                trafficPolicy.setId("uid-1234");
                 trafficPolicy.setTrafficpolicyName("self-traffic-policy-1");
                 trafficPolicy.setInterfaceList(interfaceList);
                 trafficPolicyList.add(trafficPolicy);
@@ -162,10 +163,10 @@ public class PolicyRouteROAResourceTest {
 
                 List<TrafficPolicyList> trafficPolicyList = new LinkedList<TrafficPolicyList>();
                 TrafficPolicyList trafficPolicy = new TrafficPolicyList();
-                InterfaceList interface1 = new InterfaceList();
+                TrafficInterface interface1 = new TrafficInterface();
                 interface1.setInterfaceName("eth0");
-                List<InterfaceList> interfaceList = Arrays.asList(interface1);
-                trafficPolicy.setUuid("uid-1234");
+                List<TrafficInterface> interfaceList = Arrays.asList(interface1);
+                trafficPolicy.setId("uid-1234");
                 trafficPolicy.setTrafficpolicyName("self-traffic-policy-1");
                 trafficPolicy.setInterfaceList(interfaceList);
                 trafficPolicyList.add(trafficPolicy);
@@ -242,10 +243,10 @@ public class PolicyRouteROAResourceTest {
 
                 List<TrafficPolicyList> trafficPolicyList = new LinkedList<TrafficPolicyList>();
                 TrafficPolicyList trafficPolicy = new TrafficPolicyList();
-                InterfaceList interface1 = new InterfaceList();
+                TrafficInterface interface1 = new TrafficInterface();
                 interface1.setInterfaceName("eth0");
-                List<InterfaceList> interfaceList = Arrays.asList(interface1);
-                trafficPolicy.setUuid("uid-1234");
+                List<TrafficInterface> interfaceList = Arrays.asList(interface1);
+                trafficPolicy.setId("uid-1234");
                 trafficPolicy.setTrafficpolicyName("self-traffic-policy-1");
                 trafficPolicy.setInterfaceList(interfaceList);
                 trafficPolicyList.add(trafficPolicy);
@@ -288,10 +289,10 @@ public class PolicyRouteROAResourceTest {
 
                 List<TrafficPolicyList> trafficPolicyList = new LinkedList<TrafficPolicyList>();
                 TrafficPolicyList trafficPolicy = new TrafficPolicyList();
-                InterfaceList interface1 = new InterfaceList();
+                TrafficInterface interface1 = new TrafficInterface();
                 interface1.setInterfaceName("eth0");
-                List<InterfaceList> interfaceList = Arrays.asList(interface1);
-                trafficPolicy.setUuid("uid-1234");
+                List<TrafficInterface> interfaceList = Arrays.asList(interface1);
+                trafficPolicy.setId("uid-1234");
                 trafficPolicy.setTrafficpolicyName("self-traffic-policy-1");
                 trafficPolicy.setInterfaceList(interfaceList);
                 trafficPolicyList.add(trafficPolicy);
@@ -337,10 +338,10 @@ public class PolicyRouteROAResourceTest {
 
                 List<TrafficPolicyList> trafficPolicyList = new LinkedList<TrafficPolicyList>();
                 TrafficPolicyList trafficPolicy = new TrafficPolicyList();
-                InterfaceList interface1 = new InterfaceList();
+                TrafficInterface interface1 = new TrafficInterface();
                 interface1.setInterfaceName("eth0");
-                List<InterfaceList> interfaceList = Arrays.asList(interface1);
-                trafficPolicy.setUuid("uid-1234");
+                List<TrafficInterface> interfaceList = Arrays.asList(interface1);
+                trafficPolicy.setId("uid-1234");
                 trafficPolicy.setTrafficpolicyName("self-traffic-policy-1");
                 trafficPolicy.setInterfaceList(interfaceList);
                 trafficPolicyList.add(trafficPolicy);
@@ -380,10 +381,10 @@ public class PolicyRouteROAResourceTest {
 
                 List<TrafficPolicyList> trafficPolicyList = new LinkedList<TrafficPolicyList>();
                 TrafficPolicyList trafficPolicy = new TrafficPolicyList();
-                InterfaceList interface1 = new InterfaceList();
+                TrafficInterface interface1 = new TrafficInterface();
                 interface1.setInterfaceName("eth0");
-                List<InterfaceList> interfaceList = Arrays.asList(interface1);
-                trafficPolicy.setUuid("uid-1234");
+                List<TrafficInterface> interfaceList = Arrays.asList(interface1);
+                trafficPolicy.setId("uid-1234");
                 trafficPolicy.setTrafficpolicyName("self-traffic-policy-1");
                 trafficPolicy.setInterfaceList(interfaceList);
                 trafficPolicyList.add(trafficPolicy);
@@ -422,10 +423,10 @@ public class PolicyRouteROAResourceTest {
 
                 List<TrafficPolicyList> trafficPolicyList = new LinkedList<TrafficPolicyList>();
                 TrafficPolicyList trafficPolicy = new TrafficPolicyList();
-                InterfaceList interface1 = new InterfaceList();
+                TrafficInterface interface1 = new TrafficInterface();
                 interface1.setInterfaceName("eth0");
-                List<InterfaceList> interfaceList = Arrays.asList(interface1);
-                trafficPolicy.setUuid("uid-1234");
+                List<TrafficInterface> interfaceList = Arrays.asList(interface1);
+                trafficPolicy.setId("uid-1234");
                 trafficPolicy.setTrafficpolicyName("self-traffic-policy-1");
                 trafficPolicy.setInterfaceList(interfaceList);
                 trafficPolicyList.add(trafficPolicy);

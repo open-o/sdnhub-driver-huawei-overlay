@@ -16,25 +16,29 @@
 
 package org.openo.sdnhub.overlayvpndriver.controller.model;
 
+import java.util.List;
+
+import org.openo.sdno.overlayvpn.model.v2.uuid.UuidModel;
+
 /**
- * <br/>
- * <p>
- * </p>
+ * Model class for FilterActionList.<br/>
  *
  * @author
  * @version SDNHUB 0.5 02-Feb-2017
  */
-public class FilterActionList {
+public class FilterActionList extends UuidModel {
 
-    private Action action;
+    private org.openo.sdnhub.overlayvpndriver.service.model.Action action;
+
+    private List<AclRule> ruleList;
 
     private Filter filter;
 
-    public Action getAction() {
+    public org.openo.sdnhub.overlayvpndriver.service.model.Action getAction() {
         return action;
     }
 
-    public void setAction(Action action) {
+    public void setAction(org.openo.sdnhub.overlayvpndriver.service.model.Action action) {
         this.action = action;
     }
 
@@ -44,6 +48,14 @@ public class FilterActionList {
 
     public void setFilter(Filter filter) {
         this.filter = filter;
+    }
+
+    public List<AclRule> getRuleList() {
+        return ruleList;
+    }
+
+    public void setRuleList(List<AclRule> ruleList) {
+        this.ruleList = ruleList;
     }
 
     @Override

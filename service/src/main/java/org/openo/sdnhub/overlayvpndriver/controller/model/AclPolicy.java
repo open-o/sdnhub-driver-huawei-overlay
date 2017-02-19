@@ -20,9 +20,7 @@ import org.openo.sdno.overlayvpn.verify.annotation.AIp;
 import org.openo.sdno.overlayvpn.verify.annotation.AString;
 
 /**
- * <br/>
- * <p>
- * </p>
+ * Model class for AclPolicy.<br/>
  *
  * @author
  * @version SDNHUB 0.5 02-Feb-2017
@@ -43,7 +41,7 @@ public class AclPolicy {
     private Integer srcPort;
 
     @AIp
-    private String descIp;
+    private String desIp;
 
     @AIp
     private String desNetMask;
@@ -82,12 +80,12 @@ public class AclPolicy {
         this.srcNetMask = srcNetMask;
     }
 
-    public String getDescIp() {
-        return descIp;
+    public String getDesIp() {
+        return desIp;
     }
 
-    public void setDescIp(String descIp) {
-        this.descIp = descIp;
+    public void setDesIp(String descIp) {
+        this.desIp = descIp;
     }
 
     public String getDesNetMask() {

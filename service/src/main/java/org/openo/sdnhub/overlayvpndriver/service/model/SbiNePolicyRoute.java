@@ -34,6 +34,11 @@ public class SbiNePolicyRoute extends SbiRouteNetModel {
     @AString(require = true, min = 1, max = 10000)
     private String filterAction = null;
 
+    @AString(require = true, scope = "policy")
+    private String type = "policy";
+
+    private String  srcDeviceId;
+
     /**
      * Constructor<br/>
      *
