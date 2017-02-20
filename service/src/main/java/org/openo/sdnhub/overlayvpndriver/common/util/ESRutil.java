@@ -34,7 +34,7 @@ import org.openo.sdno.framework.container.util.JsonUtil;
  */
 public class ESRutil {
 
-    private static final String URL = "/api/extsys/v1/sdncontrollers/";
+    private static final String URL = "/openoapi/extsys/v1/sdncontrollers/";
 
     private ESRutil(){
     }
