@@ -154,7 +154,7 @@ public class SbiSubnetNetModel extends BaseServiceModel {
      * Mode of Ipv6 Address
      */
     @AString(require = false, scope = "server,relay")
-    private String dhcp6Mode = "relay";
+    private String dhcp6Mode = "server";
 
     /**
      * Prior Dns Server
@@ -169,6 +169,15 @@ public class SbiSubnetNetModel extends BaseServiceModel {
     @NONInvField
     @AString(require = false)
     private String standbyDnsServer;
+
+    public SbiSubnetNetModel() { super(); }
+
+    public SbiSubnetNetModel(String neId, String controllerId, String networkId) {
+        this();
+        this.neId = neId;
+        this.controllerId = controllerId;
+        this.networkId = networkId;
+    }
 
     public String getNeId() {
         return neId;
@@ -353,5 +362,4 @@ public class SbiSubnetNetModel extends BaseServiceModel {
     public void setStandbyDnsServer(String standbyDnsServer) {
         this.standbyDnsServer = standbyDnsServer;
     }
-
 }

@@ -80,7 +80,7 @@ public class SubnetBDIfImpl {
             LOGGER.error("BDInfo query :ac response return error :" + acResponse.getErrmsg());
             throw new ServiceException(DriverErrorCode.ADAPTER_FAILED, acResponse.getErrmsg());
         }
-        if(acResponse.getData().isEmpty()) {
+        if(null == acResponse.getData() || acResponse.getData().isEmpty()) {
             LOGGER.error("BDInfo query : response is empty");
             throw new ServiceException(DriverErrorCode.ADAPTER_FAILED, "response is empty");
         }
