@@ -16,18 +16,27 @@
 
 package org.openo.sdnhub.overlayvpndriver.translator;
 
+import org.codehaus.jackson.type.TypeReference;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
+import org.openo.sdnhub.overlayvpndriver.common.consts.DriverErrorCode;
+import org.openo.sdnhub.overlayvpndriver.controller.consts.ControllerUrlConst;
 import org.openo.sdnhub.overlayvpndriver.controller.model.ACDhcp6Config;
 import org.openo.sdnhub.overlayvpndriver.controller.model.ACNetwork;
 import org.openo.sdnhub.overlayvpndriver.controller.model.ACSubnet;
-import org.openo.sdnhub.overlayvpndriver.service.model.DhcpConfig;
-import org.openo.sdnhub.overlayvpndriver.service.model.DnsServerConfig;
-import org.openo.sdnhub.overlayvpndriver.service.model.SbiSubnetNetModel;
-import org.openo.sdnhub.overlayvpndriver.service.model.TimeConfig;
+import org.openo.sdnhub.overlayvpndriver.http.OverlayVpnDriverProxy;
+import org.openo.sdnhub.overlayvpndriver.sbi.impl.SubnetServiceImpl;
+import org.openo.sdnhub.overlayvpndriver.service.model.*;
+import org.openo.sdno.exception.ParameterServiceException;
+import org.openo.sdno.framework.container.util.JsonUtil;
+import org.openo.sdno.overlayvpn.result.ResultRsp;
+import org.openo.sdno.util.http.HTTPReturnMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Utility converter class for subnet model.<br/>
@@ -125,25 +134,48 @@ public class SubnetConvert {
      * Update SbiSubnetNet model information.<br/>
      *
      * @param subnet information to update in previous model
-     * @param prevNetwork Model to be updated
+     * @param ctrId Controller UUID
+     * @param deviceId Device Id
      * @return Updated model from the information of subnet
      * @throws ServiceException
      * @since SDNHUB 0.5
      */
-    public static SbiSubnetNetModel buildUpdateAcNetwork(SbiSubnetNetModel subnet, SbiSubnetNetModel prevNetwork)
-            throws ServiceException {
-        if(null == subnet.getNetworkId()) {
-            LOGGER.error("update subnet. param invalid.");
-            throw new ServiceException(ADAPTER_SITE_SUBNET_PARAM_ERROR, "update subnet. param invalid.");
+    public static ACNetwork buildUpdateAcNetwork(SbiSubnetNetModel subnet, String ctrId, String deviceId)
+            throws ServiceException
+    {
+        if (null == subnet.getNetworkId())
+        {
+            LOGGER.error("update Subnet: param invalid.");
+            throw new ServiceException(ADAPTER_SITE_SUBNET_PARAM_ERROR, "update Subnet: param invalid.");
+        }
+        ACNetwork network = getNetworkById(subnet.getNetworkId(), ctrId, deviceId);
+
+        if (null == network)
+        {
+            LOGGER.error("update Subnet: network isn`t exist.");
+            throw new ServiceException(ADAPTER_SITE_SUBNET_PARAM_ERROR, "update Subnet: network isn`t exist.");
         }
 
-        if(null == prevNetwork) {
-            LOGGER.error("update subnet. network is not exist.");
-            throw new ServiceException(ADAPTER_SITE_SUBNET_PARAM_ERROR, "update subnet. network is not exist.");
+        network.setDescription(subnet.getDescription());
+        network.setName(subnet.getName());
+
+        return network;
+    }
+
+    public static ACNetwork getNetworkById(String networkId, String ctrlUuid, String deviceId)
+            throws ServiceException
+    {
+        ResultRsp<List<ACNetwork>> result = SubnetServiceImpl.queryNetwork(ctrlUuid, deviceId);
+
+        List<ACNetwork> acNetworks = result.getData();
+
+        for (ACNetwork acNetwork : acNetworks)
+        {
+            if (acNetwork.getId().equals(networkId))
+            {
+                return acNetwork;
+            }
         }
-        prevNetwork.setDescription(subnet.getDescription());
-        prevNetwork.setName(subnet.getName());
-        prevNetwork.setNeId(subnet.getNeId());
-        return prevNetwork;
+        return null;
     }
 }

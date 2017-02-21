@@ -35,6 +35,7 @@ import org.springframework.util.StringUtils;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -109,7 +110,7 @@ public class SubnetServiceImpl {
      * @throws ServiceException In case of update operation fails
      * @since SDNHUB 0.5
      */
-    public ResultRsp<SbiSubnetNetModel> updateSubnet(SbiSubnetNetModel network, String ctrlUuid, String deviceId)
+    public ResultRsp<ACNetwork> updateSubnet(SbiSubnetNetModel network, String ctrlUuid, String deviceId)
             throws ServiceException {
 
         if(!StringUtils.hasLength(ctrlUuid) || !StringUtils.hasLength(deviceId) || null == network.getNeId()) {
@@ -117,7 +118,7 @@ public class SubnetServiceImpl {
             throw new ParameterServiceException("Invalid parameters.");
         }
 
-        ResultRsp<SbiSubnetNetModel> resultRsp = new ResultRsp<SbiSubnetNetModel>(DriverErrorCode.SUCCESS);
+        ResultRsp<ACNetwork> resultRsp = new ResultRsp<>(DriverErrorCode.SUCCESS);
         String updateUrl = MessageFormat.format(ControllerUrlConst.DEVICE_NETWORK_URL, deviceId);
         HTTPReturnMessage httpMsg =
                 OverlayVpnDriverProxy.getInstance().sendPutMsg(updateUrl, JsonUtil.toJson(network), ctrlUuid);
@@ -128,8 +129,8 @@ public class SubnetServiceImpl {
             throw new ServiceException(DriverErrorCode.ADAPTER_SITE_SUBNET_UPDATE_ERROR,
                     "Subnet update:  httpMsg return error.");
         }
-        ACResponse<SbiSubnetNetModel> acResponse =
-                JsonUtil.fromJson(body, new TypeReference<ACResponse<SbiSubnetNetModel>>() {
+        ACResponse<ACNetwork> acResponse =
+                JsonUtil.fromJson(body, new TypeReference<ACResponse<ACNetwork>>() {
                 });
         if(!acResponse.isSucceed()) {
             LOGGER.error("Subnet update :acresponse return error :" + acResponse.getErrmsg());
@@ -189,30 +190,48 @@ public class SubnetServiceImpl {
      * @throws ServiceException In case of query operation fails
      * @since SDNHUB 0.5
      */
-    public ResultRsp<SbiSubnetNetModel> queryNetwork(String ctrlUuid, String deviceId) throws ServiceException {
-
-        if(!StringUtils.hasLength(ctrlUuid) || !StringUtils.hasLength(deviceId)) {
+    public static ResultRsp<List<ACNetwork>> queryNetwork(String ctrlUuid, String deviceId)//NOPMD
+            throws ServiceException
+    {
+        if (!StringUtils.hasLength(ctrlUuid) || !StringUtils.hasLength(deviceId))
+        {
             LOGGER.error("Invalid parameters.");
             throw new ParameterServiceException("Invalid parameters.");
         }
 
-        ResultRsp<SbiSubnetNetModel> resultRsp = new ResultRsp<SbiSubnetNetModel>(DriverErrorCode.CLOUDVPN_SUCCESS);
+        ResultRsp<List<ACNetwork>> resultRsp = new ResultRsp<List<ACNetwork>>(DriverErrorCode.CLOUDVPN_SUCCESS);
+
         String getUrl = MessageFormat.format(ControllerUrlConst.DEVICE_NETWORK_URL, deviceId);
+
+        long beginTime = System.currentTimeMillis();
+        LOGGER.debug("Subnet query begin time = " + beginTime + ", deviceId: " + deviceId);
+
         HTTPReturnMessage httpMsg = OverlayVpnDriverProxy.getInstance().sendGetMsg(getUrl, null, ctrlUuid);
+
+        LOGGER.debug("Subnet query cost time = " + (System.currentTimeMillis() - beginTime));
+
         String body = httpMsg.getBody();
-        if((!httpMsg.isSuccess()) || (!StringUtils.hasLength(body))) {
-            LOGGER.error("query subnet : httpMsg return  error ");
-            throw new ServiceException(DriverErrorCode.ADAPTER_SITE_SUBNET_QUERY_ERROR,
-                    "Subnet query:  httpMsg return error.");
+
+        LOGGER.error("AcBranch subnet query. Return Body={} ", body);
+
+        if ((!httpMsg.isSuccess()) || (!StringUtils.hasLength(body)))
+        {
+            LOGGER.error("Query Subnet: httpMsg return error.");
+            throw new ServiceException(DriverErrorCode.ADAPTER_SITE_SUBNET_QUERY_ERROR, "Subnet query: httpMsg return error.");
         }
-        ACResponse<SbiSubnetNetModel> acResponse =
-                JsonUtil.fromJson(body, new TypeReference<ACResponse<SbiSubnetNetModel>>() {});
-        if(!acResponse.isSucceed()) {
-            LOGGER.error("Subnet query :acresponse return error :" + acResponse.getErrmsg());
-            throw new ServiceException(DriverErrorCode.ADAPTER_SITE_SUBNET_NOT_EXIST_ON_CONTROLLER,
-                    acResponse.getErrmsg());
+
+        @SuppressWarnings("rawtypes")
+        ACResponse<ACNetwork> acResponse =
+                JsonUtil.fromJson(body, new TypeReference<ACResponse<ACNetwork>>() {
+                });
+
+        if (!acResponse.isSucceed())
+        {
+            LOGGER.error("AcBranch subnet query: acresponse return error, errMsg: " + acResponse.getErrmsg());
+            throw new ServiceException(DriverErrorCode.ADAPTER_SITE_SUBNET_NOT_EXIST_ON_CONTROLLER, acResponse.getErrmsg());
         }
-        resultRsp.setData(acResponse.getData());
+
+        resultRsp.setData(Arrays.asList(acResponse.getData()));
         return resultRsp;
     }
 }

@@ -23,7 +23,9 @@ import org.openo.sdnhub.overlayvpndriver.sbi.impl.SubnetServiceImpl;
 import org.openo.sdnhub.overlayvpndriver.service.model.SbiSubnetNetModel;
 import org.openo.sdnhub.overlayvpndriver.translator.SubnetConvert;
 import org.openo.sdno.exception.ParameterServiceException;
+import org.openo.sdno.overlayvpn.errorcode.ErrorCode;
 import org.openo.sdno.overlayvpn.result.ResultRsp;
+import org.openo.sdno.overlayvpn.result.SvcExcptUtil;
 import org.openo.sdno.overlayvpn.util.check.UuidUtil;
 import org.openo.sdno.overlayvpn.util.check.ValidationUtil;
 import org.slf4j.Logger;
@@ -63,7 +65,7 @@ public class SubnetROAResource {
      * @since SDNHUB 0.5
      */
     @POST
-    @Path("/device/{deviceid}/subnet")
+    @Path("/device/{deviceuuid}/subnet")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ResultRsp<SbiSubnetNetModel> createSubnet(@Context HttpServletRequest request,
@@ -81,8 +83,15 @@ public class SubnetROAResource {
 
         long beginTime = System.currentTimeMillis();
         ResultRsp<SbiSubnetNetModel> acResult = subnetService.createSubnet(network, ctrlUuid, deviceId);
-        LOGGER.info("create subnet cost {} ms.", System.currentTimeMillis() - beginTime);
-        return acResult;
+        LOGGER.debug("create subnet cost {} ms.", System.currentTimeMillis() - beginTime);
+
+        if (!acResult.isValid()) {
+            LOGGER.error("Create subnet: controller operation error.");
+            SvcExcptUtil.throwBadRequestException("Create subnet: controller operation error.");
+        }
+
+        subnet.setNetworkId(acResult.getData().getNetworkId());
+        return new ResultRsp<SbiSubnetNetModel>(ErrorCode.OVERLAYVPN_SUCCESS, subnet);
     }
 
     /**
@@ -97,11 +106,11 @@ public class SubnetROAResource {
      * @since SDNHUB 0.5
      */
     @PUT
-    @Path("/device/{deviceid}/subnet")
+    @Path("/device/{deviceuuid}/subnet")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ResultRsp<SbiSubnetNetModel> updateSubnet(@Context HttpServletRequest request,
-            @PathParam("deviceid") String deviceId, @HeaderParam("X-Driver-Parameter") String ctrlUuidParam,
+            @PathParam("deviceuuid") String deviceId, @HeaderParam("X-Driver-Parameter") String ctrlUuidParam,
             SbiSubnetNetModel subnet) throws ServiceException {
 
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
@@ -112,14 +121,18 @@ public class SubnetROAResource {
 
         ValidationUtil.validateModel(subnet);
         long beginTime = System.currentTimeMillis();
-        ResultRsp<SbiSubnetNetModel> acNetwork = subnetService.queryNetwork(ctrlUuid, deviceId);
+        ACNetwork network = SubnetConvert.buildUpdateAcNetwork(subnet, ctrlUuid, deviceId);
 
-        LOGGER.info("update subnet cost {} ms.", System.currentTimeMillis() - beginTime);
-        SbiSubnetNetModel prevNetwork = acNetwork.getData();
+        ResultRsp<ACNetwork> acResult = subnetService.updateSubnet(subnet, ctrlUuid, deviceId);
+        LOGGER.debug("Update subnet cost {} ms.", System.currentTimeMillis() - beginTime);
 
-        SbiSubnetNetModel network = SubnetConvert.buildUpdateAcNetwork(subnet, prevNetwork);
-        ResultRsp<SbiSubnetNetModel> acResult = subnetService.updateSubnet(network, ctrlUuid, deviceId);
-        return acResult;
+        if (!acResult.isValid())
+        {
+            LOGGER.error("Update subnet: controller operation error.");
+            SvcExcptUtil.throwBadRequestException("Update subnet: controller operation error.");
+        }
+
+        return new ResultRsp<SbiSubnetNetModel>(ErrorCode.OVERLAYVPN_SUCCESS, subnet);
     }
 
     /**
@@ -134,7 +147,7 @@ public class SubnetROAResource {
      * @since SDNHUB 0.5
      */
     @DELETE
-    @Path("/device/{deviceid}/subnet/{networkid}")
+    @Path("device/{deviceuuid}/subnet/{networkid}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ResultRsp<String> deleteSubnet(@Context HttpServletRequest request, @PathParam("deviceid") String deviceId,
@@ -150,8 +163,13 @@ public class SubnetROAResource {
         LOGGER.error("AC delete subnet.networkId={}", networkId);
         long beginTime = System.currentTimeMillis();
         ResultRsp<String> acResult = subnetService.deleteSubnet(networkId, ctrlUuid, deviceId);
-        LOGGER.info("delete subnet cost {} ms.", System.currentTimeMillis() - beginTime);
-        return acResult;
+        LOGGER.debug("Delete subnet cost {} ms.", System.currentTimeMillis() - beginTime);
+
+        if (!acResult.isSuccess()) {
+            LOGGER.error("Delete subnet: controller operation error.");
+            SvcExcptUtil.throwBadRequestException("Delete subnet: controller operation error.");
+        }
+        return new ResultRsp<String>(ErrorCode.OVERLAYVPN_SUCCESS);
     }
 
     /**
@@ -166,7 +184,7 @@ public class SubnetROAResource {
      * @since SDNHUB 0.5
      */
     @GET
-    @Path("/device/{deviceid}/subnet/{networkid}")
+    @Path("device/{deviceuuid}/subnet/{networkid}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ResultRsp<SbiSubnetNetModel> getSubnet(@Context HttpServletRequest request,
@@ -179,11 +197,20 @@ public class SubnetROAResource {
             throw new ParameterServiceException("Invalid controller UUID.");
         }
 
-        LOGGER.error("get subnet.networkId={}", networkId);
+        LOGGER.debug("get subnet.networkId={}", networkId);
         long beginTime = System.currentTimeMillis();
-        ResultRsp<SbiSubnetNetModel> acNetwork = subnetService.queryNetwork(ctrlUuid, deviceId);
-        LOGGER.info("query subnet cost {} ms.", System.currentTimeMillis() - beginTime);
-        return acNetwork;
-    }
 
+        ACNetwork acNetwork = SubnetConvert.getNetworkById(networkId, ctrlUuid, deviceId);
+        SbiSubnetNetModel subnetNetModel = new SbiSubnetNetModel(deviceId, ctrlUuid, networkId);
+        if (acNetwork == null)
+        {
+            LOGGER.info("Query subnet cost {} ms,body is :null.", System.currentTimeMillis() - beginTime);
+            return new ResultRsp<SbiSubnetNetModel>(ErrorCode.OVERLAYVPN_SUCCESS, subnetNetModel);
+        }
+        subnetNetModel.setDescription(acNetwork.getDescription());
+        LOGGER.info("Query subnet cost {} ms,body is :{}.", System.currentTimeMillis() - beginTime,
+                acNetwork.toString());
+
+        return new ResultRsp<SbiSubnetNetModel>(ErrorCode.OVERLAYVPN_SUCCESS, subnetNetModel);
+    }
 }
