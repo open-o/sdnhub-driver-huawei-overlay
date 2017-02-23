@@ -37,7 +37,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class VlanRoaResourceTest {
+public class VlanROAResourceTest {
 
     private String putresp =
             "{\"errcode\":\"0\",\"errmsg\":\"\",\"data\":[{\"id\":\"b6cf7eb4038049dfac86391421f37b7f\",\"name\":"

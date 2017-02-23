@@ -49,7 +49,7 @@ import java.util.List;
 
 import javax.ws.rs.WebApplicationException;
 
-public class VxLanRoaResourceTest {
+public class VxLanROAResourceTest {
 
     private static final String CTRL_UUID = "extSysID=81244ad0-b4ea-41ed-969e-d5588b32fd4c";
 

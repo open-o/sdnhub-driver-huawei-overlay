@@ -44,7 +44,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DeviceRoaResourceTest {
+public class DeviceROAResourceTest {
 
     private static final String CTRL_UUID = "extSysID=81244ad0-b4ea-41ed-969e-d5588b32fd4c";
 

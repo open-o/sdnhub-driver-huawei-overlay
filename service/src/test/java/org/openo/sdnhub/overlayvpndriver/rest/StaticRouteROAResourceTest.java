@@ -39,7 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RunWith(JMockit.class)
-public class StaticRouteRoaResourceTest {
+public class StaticRouteROAResourceTest {
 
     StaticRouteROAResource roa = new StaticRouteROAResource();
 

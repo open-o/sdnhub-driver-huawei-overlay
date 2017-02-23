@@ -36,7 +36,7 @@ import org.openo.sdno.util.http.HTTPReturnMessage;
 
 import java.lang.reflect.Field;
 
-public class SubnetRoaResourceTest {
+public class SubnetROAResourceTest {
 
     private static final String CTRL_UUID = "extSysID=81244ad0-b4ea-41ed-969e-d5588b32f";
 

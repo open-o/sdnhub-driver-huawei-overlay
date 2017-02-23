@@ -46,7 +46,7 @@ import java.util.List;
 
 
 
-public class LocalSiteSnatRoaResourceTest {
+public class LocalSiteSNatROAResourceTest {
 
     LocalSiteSNatROAResource localSiteSnatRoaResource = new LocalSiteSNatROAResource();
 

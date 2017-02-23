@@ -28,7 +28,7 @@ import java.util.Collection;
 import java.util.List;
 
 
-public class AcDelResponseTest {
+public class ACDelResponseTest {
 
     ACDelResponse acDelResponse = new ACDelResponse();
 

@@ -42,7 +42,7 @@ import javax.servlet.http.HttpServletRequest;
 
 
 
-public class SubnetBdIfRoAResourceTest {
+public class SubnetBDIfROAResourceTest {
 
     @Mocked
     HttpServletRequest request;

@@ -31,7 +31,7 @@ import org.openo.sdno.util.http.HTTPReturnMessage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SubnetBdIfImplTest {
+public class SubnetBDIfImplTest {
 
     String jsonbody =
             "{\"errcode\": \"0\",\"errmsg\": \"\",\"data\": [{\"id\": \"db12e63b259444eda12c96a42fe47e56\","

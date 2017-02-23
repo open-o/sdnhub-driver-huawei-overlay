@@ -36,7 +36,7 @@ import org.openo.sdno.util.http.HTTPReturnMessage;
  * @author
  * @version SDNHUB 0.5 03-Feb-2017
  */
-public class PortRoAResourceTest {
+public class PortROAResourceTest {
 
     private PortROAResource portRoAResource = new PortROAResource();
 

@@ -37,7 +37,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class NqaRoaResourceTest {
+public class NqaROAResourceTest {
 
     NqaROAResource nqaRoaResource = new NqaROAResource();
 

@@ -54,7 +54,7 @@ import java.util.Map;
 
 import javax.ws.rs.WebApplicationException;
 
-public class PolicyRouteRoAResourceTest {
+public class PolicyRouteROAResourceTest {
 
     private static final String CTRL_UUID = "1234567";
 

@@ -38,7 +38,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class InterfaceIpRoaResourceTest {
+public class InterfaceIpROAResourceTest {
 
     InterfaceIpROAResource interfaceIpRoaResource = new InterfaceIpROAResource();
 
