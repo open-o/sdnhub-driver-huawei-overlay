@@ -112,7 +112,7 @@ public class PolicyRouteConvert {
 
             org.openo.sdnhub.overlayvpndriver.service.model.Action tempAction = nbiFilterAction.getAction();
 
-            if(null != tempAction.getNextHopIp()) {
+            if(tempAction!=null && null != tempAction.getNextHopIp()) {
                 rediret.setNextHopIp(tempAction.getNextHopIp().getIpv4());
             }
             action.setRedirect(rediret);

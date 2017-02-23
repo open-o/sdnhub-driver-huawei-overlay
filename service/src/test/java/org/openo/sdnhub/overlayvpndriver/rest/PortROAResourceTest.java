@@ -16,7 +16,10 @@
 
 package org.openo.sdnhub.overlayvpndriver.rest;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+
+import mockit.Mock;
+import mockit.MockUp;
 
 import org.junit.Test;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
@@ -24,9 +27,6 @@ import org.openo.sdnhub.overlayvpndriver.http.OverlayVpnDriverProxy;
 import org.openo.sdnhub.overlayvpndriver.service.model.SbiIp;
 import org.openo.sdno.overlayvpn.result.ResultRsp;
 import org.openo.sdno.util.http.HTTPReturnMessage;
-
-import mockit.Mock;
-import mockit.MockUp;
 
 /**
  * <br/>
@@ -36,12 +36,14 @@ import mockit.MockUp;
  * @author
  * @version SDNHUB 0.5 03-Feb-2017
  */
-public class PortROAResourceTest {
+public class PortRoAResourceTest {
 
-    private PortROAResource portROAResource = new PortROAResource();
+    private PortROAResource portRoAResource = new PortROAResource();
 
     String queryResJson =
-            "{\"errcode\":\"0\",\"errmsg\":null,\"pageIndex\":0,\"pageSize\":0,\"totalRecords\":0,\"data\":{\"ipv4\":\"192.168.1.2\",\"ipv6\":\"\",\"ipMask\":\"\",\"prefixLength\":\"\",\"id\":\"\"},\"success\":[],\"fail\":[],\"sucess\":true}";
+            "{\"errcode\":\"0\",\"errmsg\":null,\"pageIndex\":0," + "\"pageSize\":0,\"totalRecords\":0,\"data\":"
+                    + "{\"ipv4\":\"192.168.1.2\",\"ipv6\":\"\",\"ipMask\":\"\",\"prefixLength\":" + "\"\",\"id\":\"\"},"
+                    + "\"success\":[],\"fail\":[],\"sucess\":true}";
 
     @Test
     public void testQueryPort() throws ServiceException {
@@ -58,8 +60,8 @@ public class PortROAResourceTest {
             }
         };
 
-        ResultRsp<SbiIp> result = portROAResource.queryPortIpByPortName(null, "extSysID=ctrlid1024", "123");
-        assertEquals(result.getErrorCode(),"0");
+        ResultRsp<SbiIp> result = portRoAResource.queryPortIpByPortName(null, "extSysID=ctrlid1024", "123");
+        assertEquals(result.getErrorCode(), "0");
     }
 
     @Test(expected = ServiceException.class)
@@ -76,13 +78,14 @@ public class PortROAResourceTest {
                 return msg;
             }
         };
-        portROAResource.queryPortIpByPortName(null, "extSysID=ctrlid1024", "123");
+        portRoAResource.queryPortIpByPortName(null, "extSysID=ctrlid1024", "123");
     }
 
     @Test(expected = ServiceException.class)
     public void testQueryPortInvalidResponseJson() throws ServiceException {
 
         new MockUp<OverlayVpnDriverProxy>() {
+
             @Mock
             public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
 
@@ -93,13 +96,14 @@ public class PortROAResourceTest {
             }
         };
 
-        portROAResource.queryPortIpByPortName(null, "extSysID=ctrlid1024", "123");
+        portRoAResource.queryPortIpByPortName(null, "extSysID=ctrlid1024", "123");
     }
 
     @Test(expected = ServiceException.class)
     public void testQueryPortInvalidBody() throws ServiceException {
 
         new MockUp<OverlayVpnDriverProxy>() {
+
             @Mock
             public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
 
@@ -110,16 +114,16 @@ public class PortROAResourceTest {
             }
         };
 
-        portROAResource.queryPortIpByPortName(null, "extSysID=ctrlid1024", "123");
+        portRoAResource.queryPortIpByPortName(null, "extSysID=ctrlid1024", "123");
     }
 
     @Test(expected = ServiceException.class)
     public void testQueryPortInvalidCtrlUuid() throws ServiceException {
-        portROAResource.queryPortIpByPortName(null, "extSysID=!@#$", "123");
+        portRoAResource.queryPortIpByPortName(null, "extSysID=!@#$", "123");
     }
 
     @Test(expected = ServiceException.class)
     public void testQueryPortInvalidDeviceId() throws ServiceException {
-        portROAResource.queryPortIpByPortName(null, "extSysID=ctrlid1024", null);
+        portRoAResource.queryPortIpByPortName(null, "extSysID=ctrlid1024", null);
     }
 }

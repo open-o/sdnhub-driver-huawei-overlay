@@ -1,0 +1,36 @@
+{
+	"request": {
+		"uri": "http://localhost:8080/openoapi/sbi-localsite/v1/device/abd123/bdinfo/vni/1234",
+		"method": "get",
+		"headers": {
+			"Content-Type": "application/json",
+			"X-Driver-Parameter": "extSysID=ctrlid123"
+		},
+		"json": {}
+	},
+	"response": {
+		"status": 200,
+		"json": {
+			"errorCode": "success",
+			"data": {},
+			"descArg": "",
+			"reasonArg": "",
+			"detailArg": "",
+			"adviceArg": "",
+			"httpCode": 200,
+			"message": "",
+			"successed": {
+				"controllerId": "ctrlid123",
+				"neId": "12345",
+				"deviceId": "abd123",
+				"vni": "1234",
+				"subnetId": "123456",
+				"bdId": "1234",
+				"vbdifName": "vbd IF name"
+			}
+
+		}
+
+
+	}
+}

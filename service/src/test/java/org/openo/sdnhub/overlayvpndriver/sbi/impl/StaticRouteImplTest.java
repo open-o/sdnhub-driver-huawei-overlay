@@ -18,8 +18,8 @@ package org.openo.sdnhub.overlayvpndriver.sbi.impl;
 
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
-import java.util.List;
+import mockit.Mock;
+import mockit.MockUp;
 
 import org.junit.Test;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
@@ -30,97 +30,140 @@ import org.openo.sdno.framework.container.util.JsonUtil;
 import org.openo.sdno.overlayvpn.result.ResultRsp;
 import org.openo.sdno.util.http.HTTPReturnMessage;
 
-import mockit.Mock;
-import mockit.MockUp;
+import java.util.ArrayList;
+import java.util.List;
 
 public class StaticRouteImplTest {
-	
-	String queryResJson =
-            "{\"errcode\":\"0\",\"errmsg\":null,\"pageIndex\":0,\"pageSize\":0,\"totalRecords\":0,\"data\":{\"ipv4\":\"192.168.1.2\",\"ipv6\":\"\",\"ipMask\":\"\",\"prefixLength\":\"\",\"id\":\"\"},\"success\":[],\"fail\":[],\"sucess\":true}";
-	
-	 @Test
-	    public void queryRouteByDevice() throws ServiceException{
-		 String ctrlUuid="123";
-		 String deviceId="111";
-         String destIp="10.20.10.30";
-         String staticRouteId="staticRouteId";
-         
-         new MockUp<OverlayVpnDriverProxy>() {
-             @Mock
-             public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
 
-                 HTTPReturnMessage msg = new HTTPReturnMessage();
-                 
-                 OverlayVpnDriverResponse<List<ControllerNbiStaticRoute>> response=new OverlayVpnDriverResponse<List<ControllerNbiStaticRoute>>();
-                 
-                 List<ControllerNbiStaticRoute> list=new ArrayList<ControllerNbiStaticRoute>();
-                 
-                 ControllerNbiStaticRoute route=new ControllerNbiStaticRoute();
-                 route.setId("123");
-                 list.add(route);
-                 response.setData(list);
-                 response.setErrcode("success");
-                 msg.setBody(JsonUtil.toJson(response));
-                 return msg;
-             }
-         };
-         
-         new MockUp<HTTPReturnMessage>() {
-         	@Mock
-             public boolean isSuccess() {
-         		return true;
-         	}
-         };
-		 
-         new MockUp<OverlayVpnDriverResponse>() {
-          	@Mock
-              public boolean isSucess() {
-          		return true;
-          	}
-          };
-		 StaticRouteImpl impl=new StaticRouteImpl();
-		 ResultRsp<List<ControllerNbiStaticRoute>> rsp=impl.queryRouteByDevice(ctrlUuid, deviceId, destIp, staticRouteId);
-		 assertTrue("overlayvpn.operation.success".equals(rsp.getErrorCode()));
-		 
-	 }
-	 
-	 @Test(expected=ServiceException.class)
-	    public void configStaticRoute() throws ServiceException{
-		 
-		 new MockUp<OverlayVpnDriverProxy>() {
-             @Mock
-             public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
+    String queryResJson =
+            "{\"errcode\":\"0\",\"errmsg\":null,\"pageIndex\":0,\"pageSize\":0,\"totalRecords\":0,"
+            + "\"data\":{\"ipv4\":\"192.168.1.2\",\"ipv6\":\"\",\"ipMask\":\"\","
+            + "\"prefixLength\":\"\",\"id\":\"\"},\"success\":[],\"fail\":[],\"sucess\":true}";
 
-                 HTTPReturnMessage msg = new HTTPReturnMessage();
-                 
-                 OverlayVpnDriverResponse<List<ControllerNbiStaticRoute>> response=new OverlayVpnDriverResponse<List<ControllerNbiStaticRoute>>();
-                 
-                 List<ControllerNbiStaticRoute> list=new ArrayList<ControllerNbiStaticRoute>();
-                 
-                 ControllerNbiStaticRoute route=new ControllerNbiStaticRoute();
-                 route.setId("123");
-                 list.add(route);
-                 response.setData(list);
-                 response.setErrcode("0");
-                 msg.setBody(JsonUtil.toJson(response));
-                 return msg;
-             }
-         };
-         
-         new MockUp<HTTPReturnMessage>() {
-         	@Mock
-             public boolean isSuccess() {
-         		return true;
-         	}
-         };
-		 StaticRouteImpl impl=new StaticRouteImpl();
-		 List<ControllerNbiStaticRoute> list=new ArrayList();
-		 ControllerNbiStaticRoute route=new ControllerNbiStaticRoute();
-		 route.setId("123");
-		 list.add(route);
-		 String ctrlUuid="123";
-		 String deviceId="111";
-		 impl.configStaticRoute(ctrlUuid, deviceId, list,true);
-	 }
+    @Test
+    public void queryRouteByDevice() throws ServiceException {
+        String ctrlUuid = "123";
 
+        new MockUp<OverlayVpnDriverProxy>() {
+
+            @Mock
+            public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
+
+                OverlayVpnDriverResponse<List<ControllerNbiStaticRoute>> response =
+                        new OverlayVpnDriverResponse<List<ControllerNbiStaticRoute>>();
+
+                List<ControllerNbiStaticRoute> list = new ArrayList<ControllerNbiStaticRoute>();
+
+                ControllerNbiStaticRoute route = new ControllerNbiStaticRoute();
+                route.setId("123");
+                list.add(route);
+                response.setData(list);
+                response.setErrcode("success");
+
+                HTTPReturnMessage msg = new HTTPReturnMessage();
+                msg.setBody(JsonUtil.toJson(response));
+                return msg;
+            }
+        };
+
+        new MockUp<HTTPReturnMessage>() {
+
+            @Mock
+            public boolean isSuccess() {
+                return true;
+            }
+        };
+
+        new MockUp<OverlayVpnDriverResponse<List<ControllerNbiStaticRoute>>>() {
+            @Mock
+            public boolean isSucess() {
+                return true;
+            }
+        };
+        String deviceId = "111";
+        String destIp = "10.20.10.30";
+        String staticRouteId = "staticRouteId";
+        StaticRouteImpl impl = new StaticRouteImpl();
+        ResultRsp<List<ControllerNbiStaticRoute>> rsp =
+                impl.queryRouteByDevice(ctrlUuid, deviceId, destIp, staticRouteId);
+        assertTrue("overlayvpn.operation.success".equals(rsp.getErrorCode()));
+
+    }
+
+    @Test(expected = ServiceException.class)
+    public void configStaticRoute() throws ServiceException {
+
+        new MockUp<OverlayVpnDriverProxy>() {
+
+            @Mock
+            public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
+
+                OverlayVpnDriverResponse<List<ControllerNbiStaticRoute>> response =
+                        new OverlayVpnDriverResponse<List<ControllerNbiStaticRoute>>();
+
+                List<ControllerNbiStaticRoute> list = new ArrayList<ControllerNbiStaticRoute>();
+
+                ControllerNbiStaticRoute route = new ControllerNbiStaticRoute();
+                route.setId("123");
+                list.add(route);
+                response.setData(list);
+                response.setErrcode("0");
+
+                HTTPReturnMessage msg = new HTTPReturnMessage();
+                msg.setBody(JsonUtil.toJson(response));
+                return msg;
+            }
+        };
+
+        new MockUp<HTTPReturnMessage>() {
+
+            @Mock
+            public boolean isSuccess() {
+                return true;
+            }
+        };
+        StaticRouteImpl impl = new StaticRouteImpl();
+        List<ControllerNbiStaticRoute> list = new ArrayList<>();
+        ControllerNbiStaticRoute route = new ControllerNbiStaticRoute();
+        route.setId("123");
+        list.add(route);
+        String ctrlUuid = "123";
+        String deviceId = "111";
+        impl.configStaticRoute(ctrlUuid, deviceId, list, true);
+    }
+
+    @Test(expected = ServiceException.class)
+    public void queryRouteByDeviceFailure() throws ServiceException {
+        String ctrlUuid = "123";
+        String deviceId = "111";
+        String destIp = "10.20.10.30";
+        String staticRouteId = "staticRouteId";
+
+        new MockUp<OverlayVpnDriverProxy>() {
+
+            @Mock
+            public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
+
+                OverlayVpnDriverResponse<List<ControllerNbiStaticRoute>> response =
+                        new OverlayVpnDriverResponse<List<ControllerNbiStaticRoute>>();
+
+                List<ControllerNbiStaticRoute> list = new ArrayList<ControllerNbiStaticRoute>();
+
+                ControllerNbiStaticRoute route = new ControllerNbiStaticRoute();
+                route.setId("123");
+                list.add(route);
+                response.setData(null);
+                response.setErrcode("01");
+
+                HTTPReturnMessage msg = new HTTPReturnMessage();
+                msg.setBody(JsonUtil.toJson(response));
+                msg.setStatus(200);
+                return msg;
+            }
+        };
+
+        StaticRouteImpl impl = new StaticRouteImpl();
+        impl.queryRouteByDevice(ctrlUuid, deviceId, destIp, staticRouteId);
+
+    }
 }

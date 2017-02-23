@@ -13,162 +13,199 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.openo.sdnhub.overlayvpndriver.sbi.impl;
-
-import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.Test;
-import org.openo.baseservice.remoteservice.exception.ServiceException;
-import org.openo.sdnhub.overlayvpndriver.controller.model.AcAcl;
-import org.openo.sdnhub.overlayvpndriver.controller.model.AcAclRule;
-import org.openo.sdnhub.overlayvpndriver.controller.model.AcSNat;
-import org.openo.sdnhub.overlayvpndriver.http.OverlayVpnDriverProxy;
-import org.openo.sdnhub.overlayvpndriver.service.model.ACResponse;
-import org.openo.sdnhub.overlayvpndriver.service.model.SbiSnatNetModel;
-import org.openo.sdno.framework.container.util.JsonUtil;
-import org.openo.sdno.overlayvpn.result.ResultRsp;
-import org.openo.sdno.overlayvpn.util.check.ValidationUtil;
-import org.openo.sdno.util.http.HTTPReturnMessage;
 
 import mockit.Mock;
 import mockit.MockUp;
 
+import org.junit.Test;
+
+import org.openo.baseservice.remoteservice.exception.ServiceException;
+import org.openo.sdnhub.overlayvpndriver.controller.model.AcSNat;
+import org.openo.sdnhub.overlayvpndriver.http.OverlayVpnDriverProxy;
+import org.openo.sdno.exception.ParameterServiceException;
+import org.openo.sdno.util.http.HTTPReturnMessage;
+
 public class LocalSiteSNatServiceImplTest {
-	LocalSiteSNatServiceImpl service = new LocalSiteSNatServiceImpl();
-	AcSNat acSnat = new AcSNat();	
-	
-	@Test(expected=ServiceException.class)
-	public void testCreateSnat_HTTPError() throws ServiceException {
-		
-		new MockUp<OverlayVpnDriverProxy>() {
 
-			@Mock
-			public HTTPReturnMessage sendPutMsg(String url, String body, String ctrlUuid) throws ServiceException {
+    LocalSiteSNatServiceImpl service = new LocalSiteSNatServiceImpl();
 
-				HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
-				httpReturnMessage.setStatus(500);			
-				return httpReturnMessage;
-			}
-		};		
-		service.createSNat(null, "123", "extSysID=ctrlid123");
-	}
-	
-	@Test(expected=ServiceException.class)
-	public void testCreateSnat_HTTPError_EmptyBody() throws ServiceException {
-		
-		new MockUp<OverlayVpnDriverProxy>() {
+    AcSNat acSnat = new AcSNat();
 
-			@Mock
-			public HTTPReturnMessage sendPutMsg(String url, String body, String ctrlUuid) throws ServiceException {
-				HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
-				httpReturnMessage.setStatus(200);
+    @Test(expected = ServiceException.class)
+    public void testCreateSnatHttpError() throws ServiceException {
 
-				return httpReturnMessage;
-			}
-		};		
-		service.createSNat(null, "123", "extSysID=ctrlid123");
-	}
-	
-	@Test(expected=ServiceException.class)
-	public void testUpdateSNat_HTTPError() throws ServiceException {
-		
-		new MockUp<OverlayVpnDriverProxy>() {
+        new MockUp<OverlayVpnDriverProxy>() {
 
-			@Mock
-			public HTTPReturnMessage sendPutMsg(String url, String body, String ctrlUuid) throws ServiceException {
+            @Mock
+            public HTTPReturnMessage sendPutMsg(String url, String body, String ctrlUuid) throws ServiceException {
 
-				HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
-				httpReturnMessage.setStatus(500);			
-				return httpReturnMessage;
-			}
-		};
-		acSnat.setId("2467a068795b41ee9676bc79168da7a6");
-		service.updateSNat(acSnat, "extSysID=ctrlid123", "device123");
-	}
-	
-	@Test(expected=ServiceException.class)
-	public void testUpdateSNat_HTTPError_EmptyBody() throws ServiceException {
-		
-		new MockUp<OverlayVpnDriverProxy>() {
+                HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
+                httpReturnMessage.setStatus(500);
+                return httpReturnMessage;
+            }
+        };
+        service.createSNat(null, "123", "extSysID=ctrlid123");
+    }
 
-			@Mock
-			public HTTPReturnMessage sendPutMsg(String url, String body, String ctrlUuid) throws ServiceException {
-				HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
-				httpReturnMessage.setStatus(200);
+    @Test(expected = ServiceException.class)
+    public void testCreateSnatHttpErrorEmptyBody() throws ServiceException {
 
-				return httpReturnMessage;
-			}
-		};	
-		acSnat.setId("2467a068795b41ee9676bc79168da7a6");
-		service.updateSNat(acSnat, "extSysID=ctrlid123", "123");
-	}
-	
-	@Test(expected=ServiceException.class)
-	public void testQuerySnat_HTTPError() throws ServiceException {
-		
-		new MockUp<OverlayVpnDriverProxy>() {
+        new MockUp<OverlayVpnDriverProxy>() {
 
-			@Mock
-			public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
+            @Mock
+            public HTTPReturnMessage sendPutMsg(String url, String body, String ctrlUuid) throws ServiceException {
+                HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
+                httpReturnMessage.setStatus(200);
 
-				HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
-				httpReturnMessage.setStatus(500);			
-				return httpReturnMessage;
-			}
-		};		
-		service.querySNat("2467a068795b41ee9676bc79168da7a6", "extSysID=ctrlid123", "123");
-	}
-	
-	@Test(expected=ServiceException.class)
-	public void testQuerySnat_HTTPError_EmptyBody() throws ServiceException {
-		
-		new MockUp<OverlayVpnDriverProxy>() {
+                return httpReturnMessage;
+            }
+        };
+        service.createSNat(null, "123", "extSysID=ctrlid123");
+    }
 
-			@Mock
-			public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
+    @Test(expected = ParameterServiceException.class)
+    public void testCreateSnatDeviceId() throws ServiceException {
 
-				HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
-				httpReturnMessage.setStatus(200);
+        service.createSNat(null, "123", "");
+    }
 
-				return httpReturnMessage;
-			}
-		};		
-		service.querySNat("2467a068795b41ee9676bc79168da7a6", "extSysID=ctrlid123", "123");
-	}
-	
-	@Test(expected=ServiceException.class)
-	public void testDeleteSNat_HTTPError() throws ServiceException {
-		
-		new MockUp<OverlayVpnDriverProxy>() {
+    @Test(expected = ServiceException.class)
+    public void testUpdateSNatHttpError() throws ServiceException {
 
-			@Mock
-			public HTTPReturnMessage sendDeleteMsg(String url, String body, String ctrlUuid) throws ServiceException {
+        new MockUp<OverlayVpnDriverProxy>() {
 
-				HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
-				httpReturnMessage.setStatus(500);			
-				return httpReturnMessage;
-			}
-		};		
-		service.deleteSNat("2467a068795b41ee9676bc79168da7a6", "extSysID=ctrlid123", "123");
-	}
-	
-	@Test(expected=ServiceException.class)
-	public void testDeleteSNat_HTTPError_EmptyBody() throws ServiceException {
-		
-		new MockUp<OverlayVpnDriverProxy>() {
+            @Mock
+            public HTTPReturnMessage sendPutMsg(String url, String body, String ctrlUuid) throws ServiceException {
 
-			@Mock
-			public HTTPReturnMessage sendDeleteMsg(String url, String body, String ctrlUuid) throws ServiceException {
+                HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
+                httpReturnMessage.setStatus(500);
+                return httpReturnMessage;
+            }
+        };
+        acSnat.setId("2467a068795b41ee9676bc79168da7a6");
+        service.updateSNat(acSnat, "extSysID=ctrlid123", "device123");
+    }
 
-				HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
-				httpReturnMessage.setStatus(200);
+    @Test(expected = ServiceException.class)
+    public void testUpdateSNatDeviceId() throws ServiceException {
 
-				return httpReturnMessage;
-			}
-		};		
-		service.deleteSNat("2467a068795b41ee9676bc79168da7a6", "extSysID=ctrlid123", "123");
-	}
+        acSnat.setId("2467a068795b41ee9676bc79168da7a6");
+        service.updateSNat(acSnat, "extSysID=ctrlid123", "");
+    }
+
+    @Test(expected = ServiceException.class)
+    public void testUpdateSNatIdNull() throws ServiceException {
+
+        acSnat.setId(null);
+        service.updateSNat(acSnat, "extSysID=ctrlid123", "");
+    }
+
+    @Test(expected = ServiceException.class)
+    public void testUpdateSNatHttpErrorEmptyBody() throws ServiceException {
+
+        new MockUp<OverlayVpnDriverProxy>() {
+
+            @Mock
+            public HTTPReturnMessage sendPutMsg(String url, String body, String ctrlUuid) throws ServiceException {
+                HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
+                httpReturnMessage.setStatus(200);
+
+                return httpReturnMessage;
+            }
+        };
+        acSnat.setId("2467a068795b41ee9676bc79168da7a6");
+        service.updateSNat(acSnat, "extSysID=ctrlid123", "123");
+    }
+
+    @Test(expected = ServiceException.class)
+    public void testQuerySnatHttpError() throws ServiceException {
+
+        new MockUp<OverlayVpnDriverProxy>() {
+
+            @Mock
+            public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
+
+                HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
+                httpReturnMessage.setStatus(500);
+                return httpReturnMessage;
+            }
+        };
+        service.querySNat("2467a068795b41ee9676bc79168da7a6", "extSysID=ctrlid123", "123");
+    }
+
+    @Test(expected = ServiceException.class)
+    public void testQuerySnatHttpErrorEmptyBody() throws ServiceException {
+
+        new MockUp<OverlayVpnDriverProxy>() {
+
+            @Mock
+            public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
+
+                HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
+                httpReturnMessage.setStatus(200);
+
+                return httpReturnMessage;
+            }
+        };
+        service.querySNat("2467a068795b41ee9676bc79168da7a6", "extSysID=ctrlid123", "123");
+    }
+
+    @Test(expected = ParameterServiceException.class)
+    public void testQuerySnatdeviceId() throws ServiceException {
+
+        service.querySNat("2467a068795b41ee9676bc79168da7a6", "extSysID=ctrlid123", "");
+    }
+
+    @Test(expected = ParameterServiceException.class)
+    public void testQuerySnatNatId() throws ServiceException {
+
+        service.querySNat(null, "extSysID=ctrlid123", "123");
+    }
+
+    @Test(expected = ServiceException.class)
+    public void testDeleteSNatHttpError() throws ServiceException {
+
+        new MockUp<OverlayVpnDriverProxy>() {
+
+            @Mock
+            public HTTPReturnMessage sendDeleteMsg(String url, String body, String ctrlUuid) throws ServiceException {
+
+                HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
+                httpReturnMessage.setStatus(500);
+                return httpReturnMessage;
+            }
+        };
+        service.deleteSNat("2467a068795b41ee9676bc79168da7a6", "extSysID=ctrlid123", "123");
+    }
+
+    @Test(expected = ParameterServiceException.class)
+    public void testDeleteSNatDeviceId() throws ServiceException {
+
+        service.deleteSNat("2467a068795b41ee9676bc79168da7a6", "extSysID=ctrlid123", "");
+    }
+
+    @Test(expected = ParameterServiceException.class)
+    public void testDeleteSNatId() throws ServiceException {
+
+        service.deleteSNat(null, "extSysID=ctrlid123", "123");
+    }
+
+    @Test(expected = ServiceException.class)
+    public void testDeleteSNatHttpErrorEmptyBody() throws ServiceException {
+
+        new MockUp<OverlayVpnDriverProxy>() {
+
+            @Mock
+            public HTTPReturnMessage sendDeleteMsg(String url, String body, String ctrlUuid) throws ServiceException {
+
+                HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
+                httpReturnMessage.setStatus(200);
+
+                return httpReturnMessage;
+            }
+        };
+        service.deleteSNat("2467a068795b41ee9676bc79168da7a6", "extSysID=ctrlid123", "123");
+    }
 }

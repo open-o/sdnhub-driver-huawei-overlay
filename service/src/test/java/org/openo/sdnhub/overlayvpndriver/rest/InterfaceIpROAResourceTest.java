@@ -16,8 +16,11 @@
 
 package org.openo.sdnhub.overlayvpndriver.rest;
 
+import static org.junit.Assert.assertEquals;
+
 import mockit.Mock;
 import mockit.MockUp;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
@@ -35,25 +38,27 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+public class InterfaceIpRoaResourceTest {
 
-public class InterfaceIpROAResourceTest {
-
-    InterfaceIpROAResource interfaceIpROAResource = new InterfaceIpROAResource();
+    InterfaceIpROAResource interfaceIpRoaResource = new InterfaceIpROAResource();
 
     private static final String ctrlUuidParam = "extSysID=81244ad0-b4ea-41ed-969e-d5588b32fd4c";
 
     private static final String deviceId = "81244ad0-b4ea-41ed-969e-d5588b32fd4a";
 
+    /**
+     * <br/>
+     *
+     * @since SDNHUB 0.5
+     */
     @Before
     public void setup() {
         try {
-            Field field = interfaceIpROAResource.getClass().getDeclaredField("interfaceIpService");
+            Field field = interfaceIpRoaResource.getClass().getDeclaredField("interfaceIpService");
             field.setAccessible(true);
             InterfaceIpServiceImpl interfaceIpService = new InterfaceIpServiceImpl();
-            field.set(interfaceIpROAResource, interfaceIpService);
-
-        } catch(Exception e) {
+            field.set(interfaceIpRoaResource, interfaceIpService);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -62,12 +67,9 @@ public class InterfaceIpROAResourceTest {
     public void updateInterfaceIpTestNormal() throws ServiceException {
 
         new MockUp<OverlayVpnDriverProxy>() {
+
             @Mock
             public HTTPReturnMessage sendPutMsg(String url, String body, String ctrlUuid) throws ServiceException {
-                HTTPReturnMessage msg = new HTTPReturnMessage();
-
-                ACResponse<List<SbiInterfaceIpConfig>> response = new ACResponse<>();
-                List<SbiInterfaceIpConfig> dataList = new ArrayList<>();
 
                 SbiInterfaceIpConfig interfaceIpConfig = new SbiInterfaceIpConfig();
                 interfaceIpConfig.setInterfaceName("InterfaceOne");
@@ -75,9 +77,12 @@ public class InterfaceIpROAResourceTest {
                 interfaceIpConfig.setIpv6Address("manual");
                 interfaceIpConfig.setMode6("manual");
 
+                List<SbiInterfaceIpConfig> dataList = new ArrayList<>();
                 dataList.add(interfaceIpConfig);
+                ACResponse<List<SbiInterfaceIpConfig>> response = new ACResponse<>();
                 response.setData(dataList);
                 response.setErrcode(ErrorCode.OVERLAYVPN_SUCCESS);
+                HTTPReturnMessage msg = new HTTPReturnMessage();
                 msg.setBody(JsonUtil.toJson(response));
                 msg.setStatus(200);
                 return msg;
@@ -90,18 +95,18 @@ public class InterfaceIpROAResourceTest {
         interfaceIpConfig.setMode6("manual");
         List<SbiInterfaceIpConfig> interfaceIpList = Arrays.asList(interfaceIpConfig);
         ResultRsp<List<SbiInterfaceIpConfig>> expected =
-                interfaceIpROAResource.updateInterfaceIp(null, ctrlUuidParam, deviceId, interfaceIpList);
+                interfaceIpRoaResource.updateInterfaceIp(null, ctrlUuidParam, deviceId, interfaceIpList);
         assertEquals(expected.getErrorCode(), ErrorCode.OVERLAYVPN_SUCCESS);
     }
 
     @Test(expected = ServiceException.class)
-    public void updateInterfaceIpTestNullUUID() throws ServiceException {
+    public void updateInterfaceIpTestNullUuid() throws ServiceException {
         SbiInterfaceIpConfig interfaceIpConfig = new SbiInterfaceIpConfig();
         interfaceIpConfig.setInterfaceName("InterfaceOne");
         interfaceIpConfig.setMode("manual");
         interfaceIpConfig.setIpv6Address("manual");
         List<SbiInterfaceIpConfig> interfaceIpList = Arrays.asList(interfaceIpConfig);
-        interfaceIpROAResource.updateInterfaceIp(null, null, deviceId, interfaceIpList);
+        interfaceIpRoaResource.updateInterfaceIp(null, null, deviceId, interfaceIpList);
     }
 
     @Test(expected = ServiceException.class)
@@ -112,12 +117,12 @@ public class InterfaceIpROAResourceTest {
         interfaceIpConfig.setMode6("manual");
         interfaceIpConfig.setIpv6Address("manual");
         List<SbiInterfaceIpConfig> interfaceIpList = Arrays.asList(interfaceIpConfig);
-        interfaceIpROAResource.updateInterfaceIp(null, ctrlUuidParam, null, interfaceIpList);
+        interfaceIpRoaResource.updateInterfaceIp(null, ctrlUuidParam, null, interfaceIpList);
     }
 
     @Test(expected = ServiceException.class)
     public void updateInterfaceIpTestEmptyBody() throws ServiceException {
-        interfaceIpROAResource.updateInterfaceIp(null, ctrlUuidParam, deviceId, null);
+        interfaceIpRoaResource.updateInterfaceIp(null, ctrlUuidParam, deviceId, null);
     }
 
     @Test
@@ -127,19 +132,17 @@ public class InterfaceIpROAResourceTest {
 
             @Mock
             public HTTPReturnMessage sendPutMsg(String url, String body, String ctrlUuid) throws ServiceException {
-                HTTPReturnMessage msg = new HTTPReturnMessage();
-
-                ACResponse<List<SbiInterfaceIpConfig>> response = new ACResponse<>();
-                List<SbiInterfaceIpConfig> dataList = new ArrayList<>();
-
                 SbiInterfaceIpConfig interfaceIpConfig = new SbiInterfaceIpConfig();
                 interfaceIpConfig.setInterfaceName("InterfaceOne");
                 interfaceIpConfig.setMode("manual");
                 interfaceIpConfig.setIpv6Address("manual");
 
+                List<SbiInterfaceIpConfig> dataList = new ArrayList<>();
                 dataList.add(interfaceIpConfig);
+                ACResponse<List<SbiInterfaceIpConfig>> response = new ACResponse<>();
                 response.setData(dataList);
                 response.setErrcode(ErrorCode.OVERLAYVPN_SUCCESS);
+                HTTPReturnMessage msg = new HTTPReturnMessage();
                 msg.setBody(JsonUtil.toJson(response));
                 msg.setStatus(500);
                 return msg;
@@ -152,7 +155,7 @@ public class InterfaceIpROAResourceTest {
         interfaceIpConfig.setIpv6Address("manual");
         List<SbiInterfaceIpConfig> interfaceIpList = Arrays.asList(interfaceIpConfig);
         ResultRsp<List<SbiInterfaceIpConfig>> expected =
-                interfaceIpROAResource.updateInterfaceIp(null, ctrlUuidParam, deviceId, interfaceIpList);
+                interfaceIpRoaResource.updateInterfaceIp(null, ctrlUuidParam, deviceId, interfaceIpList);
         assertEquals(expected.getErrorCode(), "cloudvpn.failed");
     }
 
@@ -166,15 +169,14 @@ public class InterfaceIpROAResourceTest {
                 HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
                 httpReturnMessage.setStatus(200);
 
-                ACResponse<List<SbiInterfaceIpConfig>> response = new ACResponse<>();
-                List<SbiInterfaceIpConfig> dataList = new ArrayList<>();
-
                 SbiInterfaceIpConfig interfaceIpConfig = new SbiInterfaceIpConfig();
                 interfaceIpConfig.setInterfaceName("InterfaceOne");
                 interfaceIpConfig.setMode("manual");
                 interfaceIpConfig.setIpv6Address("manual");
 
+                List<SbiInterfaceIpConfig> dataList = new ArrayList<>();
                 dataList.add(interfaceIpConfig);
+                ACResponse<List<SbiInterfaceIpConfig>> response = new ACResponse<>();
                 response.setData(dataList);
                 response.setErrcode(ErrorCode.OVERLAYVPN_SUCCESS);
                 httpReturnMessage.setBody(JsonUtil.toJson(response));
@@ -184,20 +186,20 @@ public class InterfaceIpROAResourceTest {
         };
 
         ResultRsp<List<SbiInterfaceIpConfig>> result =
-                interfaceIpROAResource.queryInterfaceIp(null, ctrlUuidParam, deviceId);
+                interfaceIpRoaResource.queryInterfaceIp(null, ctrlUuidParam, deviceId);
         assertEquals(result.getErrorCode(), ErrorCode.OVERLAYVPN_SUCCESS);
     }
 
     @Test(expected = ServiceException.class)
     public void queryInterfaceIpTestNullCtrlUuid() throws ServiceException {
 
-        interfaceIpROAResource.queryInterfaceIp(null, null, deviceId);
+        interfaceIpRoaResource.queryInterfaceIp(null, null, deviceId);
     }
 
     @Test(expected = ServiceException.class)
     public void queryInterfaceIpTestNullDeviceId() throws ServiceException {
 
-        interfaceIpROAResource.queryInterfaceIp(null, ctrlUuidParam, null);
+        interfaceIpRoaResource.queryInterfaceIp(null, ctrlUuidParam, null);
     }
 
     @Test
@@ -210,15 +212,14 @@ public class InterfaceIpROAResourceTest {
                 HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
                 httpReturnMessage.setStatus(500);
 
-                ACResponse<List<SbiInterfaceIpConfig>> response = new ACResponse<>();
-                List<SbiInterfaceIpConfig> dataList = new ArrayList<>();
-
                 SbiInterfaceIpConfig interfaceIpConfig = new SbiInterfaceIpConfig();
                 interfaceIpConfig.setInterfaceName("InterfaceOne");
                 interfaceIpConfig.setMode("manual");
                 interfaceIpConfig.setIpv6Address("manual");
 
+                List<SbiInterfaceIpConfig> dataList = new ArrayList<>();
                 dataList.add(interfaceIpConfig);
+                ACResponse<List<SbiInterfaceIpConfig>> response = new ACResponse<>();
                 response.setData(dataList);
                 response.setErrcode(ErrorCode.OVERLAYVPN_SUCCESS);
                 httpReturnMessage.setBody(JsonUtil.toJson(response));
@@ -228,8 +229,8 @@ public class InterfaceIpROAResourceTest {
         };
 
         ResultRsp<List<SbiInterfaceIpConfig>> result =
-                interfaceIpROAResource.queryInterfaceIp(null, ctrlUuidParam, deviceId);
-        assertEquals(result.getErrorCode(),"cloudvpn.failed");
+                interfaceIpRoaResource.queryInterfaceIp(null, ctrlUuidParam, deviceId);
+        assertEquals(result.getErrorCode(), "cloudvpn.failed");
     }
 
 }

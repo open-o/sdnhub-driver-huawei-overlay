@@ -16,47 +16,39 @@
 
 package org.openo.sdnhub.overlayvpndriver.common.util;
 
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
-import org.openo.sdnhub.overlayvpndriver.controller.model.AcAcl;
 import org.openo.sdnhub.overlayvpndriver.controller.model.EthInterfaceConfig;
-import org.openo.sdnhub.overlayvpndriver.http.OverlayVpnDriverProxy;
 import org.openo.sdnhub.overlayvpndriver.service.model.ACResponse;
 import org.openo.sdno.framework.container.util.JsonUtil;
 import org.openo.sdno.overlayvpn.result.ResultRsp;
 import org.openo.sdno.util.http.HTTPReturnMessage;
 
-import mockit.Mock;
-import mockit.MockUp;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EthInterfaceConfigUtilTest {
-	
-	@Test
-    public void parseResponse() throws ServiceException{
-		
-		String actionDesc="actionDesc";
-		ACResponse<List<EthInterfaceConfig>> response=new ACResponse<>();
-    	List<EthInterfaceConfig> list=new ArrayList();
-    	EthInterfaceConfig eth=new EthInterfaceConfig();
-    	eth.setDescription("des");
-    	list.add(eth);
-    	
+
+    @Test
+    public void parseResponse() throws ServiceException {
+        ACResponse<List<EthInterfaceConfig>> response = new ACResponse<>();
+        List<EthInterfaceConfig> list = new ArrayList<>();
+        EthInterfaceConfig eth = new EthInterfaceConfig();
+        eth.setDescription("des");
+        list.add(eth);
+
         HTTPReturnMessage msg = new HTTPReturnMessage();
         response.setData(list);
         response.setErrcode("01");
         msg.setBody(JsonUtil.toJson(response));
         msg.setStatus(200);
-        
-        ResultRsp<List<EthInterfaceConfig>> rsp=EthInterfaceConfigUtil.parseResponse(msg, msg.getBody(), actionDesc);
-        assertEquals("overlayvpn.operation.success",rsp.getErrorCode());
-        
-		
-		
-	}
+        String actionDesc = "actionDesc";
+
+        ResultRsp<List<EthInterfaceConfig>> rsp = EthInterfaceConfigUtil.parseResponse(msg, msg.getBody(), actionDesc);
+        assertEquals("overlayvpn.operation.success", rsp.getErrorCode());
+
+    }
 
 }

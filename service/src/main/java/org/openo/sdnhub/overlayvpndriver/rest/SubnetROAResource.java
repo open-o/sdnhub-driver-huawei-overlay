@@ -16,7 +16,21 @@
 
 package org.openo.sdnhub.overlayvpndriver.rest;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+
 import org.openo.baseservice.remoteservice.exception.ServiceException;
+import org.openo.sdnhub.overlayvpndriver.common.consts.DriverErrorCode;
 import org.openo.sdnhub.overlayvpndriver.common.util.RequestHeaderUtil;
 import org.openo.sdnhub.overlayvpndriver.controller.model.ACNetwork;
 import org.openo.sdnhub.overlayvpndriver.sbi.impl.SubnetServiceImpl;
@@ -32,11 +46,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
 
 /**
  * Restful interface for subnet resource.<br/>
@@ -69,7 +78,7 @@ public class SubnetROAResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ResultRsp<SbiSubnetNetModel> createSubnet(@Context HttpServletRequest request,
-            @PathParam("deviceuuid") String deviceId, @HeaderParam("X-Driver-Parameter") String ctrlUuidParam,
+            @PathParam("deviceid") String deviceId, @HeaderParam("X-Driver-Parameter") String ctrlUuidParam,
             SbiSubnetNetModel subnet) throws ServiceException {
 
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
@@ -150,7 +159,7 @@ public class SubnetROAResource {
     @Path("device/{deviceuuid}/subnet/{networkid}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ResultRsp<String> deleteSubnet(@Context HttpServletRequest request, @PathParam("deviceuuid") String deviceId,
+    public ResultRsp<String> deleteSubnet(@Context HttpServletRequest request, @PathParam("deviceid") String deviceId,
             @PathParam("networkid") String networkId, @HeaderParam("X-Driver-Parameter") String ctrlUuidParam)
             throws ServiceException {
 
@@ -188,7 +197,7 @@ public class SubnetROAResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ResultRsp<SbiSubnetNetModel> getSubnet(@Context HttpServletRequest request,
-            @PathParam("deviceuuid") String deviceId, @PathParam("networkid") String networkId,
+            @PathParam("deviceid") String deviceId, @PathParam("networkid") String networkId,
             @HeaderParam("X-Driver-Parameter") String ctrlUuidParam) throws ServiceException {
 
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
@@ -211,6 +220,6 @@ public class SubnetROAResource {
         LOGGER.info("Query subnet cost {} ms,body is :{}.", System.currentTimeMillis() - beginTime,
                 acNetwork.toString());
 
-        return new ResultRsp<SbiSubnetNetModel>(ErrorCode.OVERLAYVPN_SUCCESS, subnetNetModel);
+        return new ResultRsp<SbiSubnetNetModel>(DriverErrorCode.OVERLAYVPN_SUCCESS, subnetNetModel);
     }
 }

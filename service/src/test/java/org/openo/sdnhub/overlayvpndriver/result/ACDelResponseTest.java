@@ -16,86 +16,94 @@
 
 package org.openo.sdnhub.overlayvpndriver.result;
 
-import static org.junit.Assert.*;
+
+import mockit.Mock;
+import mockit.MockUp;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
-import org.junit.Test;
 
-import mockit.Mock;
-import mockit.MockUp;
+public class AcDelResponseTest {
 
+    ACDelResponse acDelResponse = new ACDelResponse();
 
-public class ACDelResponseTest {
-    ACDelResponse aCDelResponse = new ACDelResponse();
-    
     @Test
     public void testGetAllErrmsg() {
-        new MockUp<StringUtils>(){
+        new MockUp<StringUtils>() {
+
             @Mock
             public boolean isNotEmpty(String str) {
                 return false;
-                
+
             }
         };
-        aCDelResponse.getAllErrmsg();
+        acDelResponse.getAllErrmsg();
     }
+
     @Test
     public void testGetAllErrmsg1() {
-        new MockUp<StringUtils>(){
+        new MockUp<StringUtils>() {
+
             @Mock
             public boolean isNotEmpty(String str) {
                 return true;
-                
+
             }
         };
-        aCDelResponse.getAllErrmsg();
+        acDelResponse.getAllErrmsg();
     }
+
     @Test
     public void testGetAllErrmsg11() {
-        new MockUp<CollectionUtils>(){
+        new MockUp<CollectionUtils>() {
+
             @Mock
-            public boolean isNotEmpty(Collection coll) {
+            public boolean isNotEmpty(Collection<?> coll) {
                 return true;
-                
+
             }
         };
         List<DataDto> fail = new ArrayList<>();
         DataDto dataDto = new DataDto();
         dataDto.setErrmsg("success");
         fail.add(dataDto);
-        aCDelResponse.setFail(fail);
-        aCDelResponse.getAllErrmsg();
+        acDelResponse.setFail(fail);
+        acDelResponse.getAllErrmsg();
     }
+
     @Test
     public void testGetAllErrmsg111() {
-        new MockUp<CollectionUtils>(){
+        new MockUp<CollectionUtils>() {
+
             @Mock
-            public boolean isNotEmpty(Collection coll) {
+            public boolean isNotEmpty(Collection<?> coll) {
                 return true;
-                
+
             }
         };
         List<DataDto> fail = new ArrayList<>();
         DataDto dataDto = new DataDto();
         dataDto.setErrmsg("");
         fail.add(dataDto);
-        aCDelResponse.setFail(fail);
-        aCDelResponse.getAllErrmsg();
+        acDelResponse.setFail(fail);
+        acDelResponse.getAllErrmsg();
     }
+
     @Test
     public void testGetAllErrmsg12() {
-        new MockUp<CollectionUtils>(){
+        new MockUp<CollectionUtils>() {
+
             @Mock
-           public boolean isNotEmpty(Collection coll) {
+            public boolean isNotEmpty(Collection<?> coll) {
                 return false;
-                
+
             }
         };
-        aCDelResponse.getAllErrmsg();
+        acDelResponse.getAllErrmsg();
     }
 }

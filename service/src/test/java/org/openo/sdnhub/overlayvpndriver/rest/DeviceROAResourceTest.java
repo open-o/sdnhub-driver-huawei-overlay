@@ -16,20 +16,18 @@
 
 package org.openo.sdnhub.overlayvpndriver.rest;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
+import mockit.Mock;
+import mockit.MockUp;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
 import org.openo.sdnhub.overlayvpndriver.common.consts.DriverErrorCode;
 import org.openo.sdnhub.overlayvpndriver.http.OverlayVpnDriverProxy;
-import org.openo.sdnhub.overlayvpndriver.rest.DeviceROAResource;
 import org.openo.sdnhub.overlayvpndriver.sbi.impl.DeviceServiceImpl;
 import org.openo.sdnhub.overlayvpndriver.service.model.ACResponse;
 import org.openo.sdnhub.overlayvpndriver.service.model.AdapterDeviceCreateBasicInfo;
@@ -39,17 +37,27 @@ import org.openo.sdno.overlayvpn.result.ResultRsp;
 import org.openo.sdno.overlayvpn.util.check.ValidationUtil;
 import org.openo.sdno.util.http.HTTPReturnMessage;
 
-import mockit.Mock;
-import mockit.MockUp;
 
-public class DeviceROAResourceTest {
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class DeviceRoaResourceTest {
 
     private static final String CTRL_UUID = "extSysID=81244ad0-b4ea-41ed-969e-d5588b32fd4c";
 
     DeviceROAResource resource = null;
 
+    /**
+     * <br/>
+     *
+     * @throws Exception setup exception
+     * @since SDNHUB 0.5
+     */
     @Before
-    public void setup() throws Exception{
+    public void setup() throws Exception {
         DeviceServiceImpl service = new DeviceServiceImpl();
         Class<?> clazz = DeviceROAResource.class;
 
@@ -62,8 +70,9 @@ public class DeviceROAResourceTest {
     }
 
     @Test
-    public void queryDeviceByEsnTestSuccess() throws ServiceException{
+    public void queryDeviceByEsnTestSuccess() throws ServiceException {
         new MockUp<OverlayVpnDriverProxy>() {
+
             @Mock
             public HTTPReturnMessage sendPostMsg(String url, String body, String ctrlUuid) throws ServiceException {
                 HTTPReturnMessage msg = new HTTPReturnMessage();
@@ -83,13 +92,14 @@ public class DeviceROAResourceTest {
             }
         };
         ResultRsp<List<AdapterDeviceInfo>> resp = resource.queryDeviceByEsn(null, CTRL_UUID, "123");
-        assertTrue("success".equals(resp.getErrorCode()) &&
-                resp.getData().get(0).getId().equals("81244ad0-b4ea-41ed-969e-d5588b32fd4c"));
+        assertTrue("success".equals(resp.getErrorCode())
+                && resp.getData().get(0).getId().equals("81244ad0-b4ea-41ed-969e-d5588b32fd4c"));
     }
 
     @Test
-    public void queryDeviceByEsnTestFailHttp500() throws ServiceException{
+    public void queryDeviceByEsnTestFailHttp500() throws ServiceException {
         new MockUp<OverlayVpnDriverProxy>() {
+
             @Mock
             public HTTPReturnMessage sendPostMsg(String url, String body, String ctrlUuid) throws ServiceException {
 
@@ -114,8 +124,9 @@ public class DeviceROAResourceTest {
     }
 
     @Test
-    public void queryDeviceByEsnTestFailNullBody() throws ServiceException{
+    public void queryDeviceByEsnTestFailNullBody() throws ServiceException {
         new MockUp<OverlayVpnDriverProxy>() {
+
             @Mock
             public HTTPReturnMessage sendPostMsg(String url, String body, String ctrlUuid) throws ServiceException {
 
@@ -140,8 +151,9 @@ public class DeviceROAResourceTest {
     }
 
     @Test
-    public void queryDeviceByEsnTestFailResponse() throws ServiceException{
+    public void queryDeviceByEsnTestFailResponse() throws ServiceException {
         new MockUp<OverlayVpnDriverProxy>() {
+
             @Mock
             public HTTPReturnMessage sendPostMsg(String url, String body, String ctrlUuid) throws ServiceException {
 
@@ -150,7 +162,7 @@ public class DeviceROAResourceTest {
 
                 ACResponse<List<AdapterDeviceInfo>> response = new ACResponse<List<AdapterDeviceInfo>>();
 
-                List<AdapterDeviceInfo> deviceInfoList = new ArrayList<AdapterDeviceInfo>();
+                List<AdapterDeviceInfo> deviceInfoList = new ArrayList<>();
                 AdapterDeviceInfo deviceInfo = new AdapterDeviceInfo();
                 deviceInfo.setId("81244ad0-b4ea-41ed-969e-d5588b32fd4c");
 
@@ -166,15 +178,15 @@ public class DeviceROAResourceTest {
 
     }
 
-
-    @Test(expected=ServiceException.class)
-    public void queryDeviceByEsnTestNullUUID() throws ServiceException{
+    @Test(expected = ServiceException.class)
+    public void queryDeviceByEsnTestNullUuid() throws ServiceException {
         resource.queryDeviceByEsn(null, null, "123");
     }
 
     @Test
-    public void createDevicesTestSuccess() throws ServiceException{
+    public void createDevicesTestSuccess() throws ServiceException {
         new MockUp<OverlayVpnDriverProxy>() {
+
             @Mock
             public HTTPReturnMessage sendPostMsg(String url, String body, String ctrlUuid) throws ServiceException {
 
@@ -194,7 +206,6 @@ public class DeviceROAResourceTest {
                 return msg;
             }
         };
-        List<AdapterDeviceCreateBasicInfo> aDevCrtInfos = new ArrayList<AdapterDeviceCreateBasicInfo>();
 
         AdapterDeviceCreateBasicInfo adapterCreateInfo = new AdapterDeviceCreateBasicInfo();
         adapterCreateInfo.setName("testdevice");
@@ -202,40 +213,43 @@ public class DeviceROAResourceTest {
         adapterCreateInfo.setOrgnizationName("huawei");
         adapterCreateInfo.setDescription("test device");
 
-        aDevCrtInfos.add(adapterCreateInfo);
-        ResultRsp<AdapterDeviceInfo> resp = resource.createDevices(null, CTRL_UUID, aDevCrtInfos);
+        List<AdapterDeviceCreateBasicInfo> adevCrtInfos = new ArrayList<>();
+        adevCrtInfos.add(adapterCreateInfo);
+        ResultRsp<AdapterDeviceInfo> resp = resource.createDevices(null, CTRL_UUID, adevCrtInfos);
 
         assertEquals("success", resp.getErrorCode());
         assertEquals(resp.getSuccessed().get(0).getId(), "81244ad0-b4ea-41ed-969e-d5588b32fd4c");
     }
 
-    @Test(expected=ServiceException.class)
-    public void createDevicesTestEmptyDeviceList() throws ServiceException{
-        List<AdapterDeviceCreateBasicInfo> aDevCrtInfos = new ArrayList<AdapterDeviceCreateBasicInfo>();
-        resource.createDevices(null, CTRL_UUID, aDevCrtInfos);
+    @Test(expected = ServiceException.class)
+    public void createDevicesTestEmptyDeviceList() throws ServiceException {
+        List<AdapterDeviceCreateBasicInfo> adevCrtInfos = new ArrayList<AdapterDeviceCreateBasicInfo>();
+        resource.createDevices(null, CTRL_UUID, adevCrtInfos);
     }
 
-    @Test(expected=ServiceException.class)
-    public void createDevicesTestSuccessNullUUID() throws ServiceException{
-        List<AdapterDeviceCreateBasicInfo> aDevCrtInfos = new ArrayList<AdapterDeviceCreateBasicInfo>();
+    @Test(expected = ServiceException.class)
+    public void createDevicesTestSuccessNullUuid() throws ServiceException {
         AdapterDeviceCreateBasicInfo adapterCreateInfo = new AdapterDeviceCreateBasicInfo();
         adapterCreateInfo.setName("testdevice");
         adapterCreateInfo.setEsn("aaaaaaaaaabbbbbbbbbb");
         adapterCreateInfo.setOrgnizationName("huawei");
         adapterCreateInfo.setDescription("test device");
-        aDevCrtInfos.add(adapterCreateInfo);
-        resource.createDevices(null, null,aDevCrtInfos);
+        List<AdapterDeviceCreateBasicInfo> adevCrtInfos = new ArrayList<>();
+        adevCrtInfos.add(adapterCreateInfo);
+        resource.createDevices(null, null, adevCrtInfos);
     }
 
     @Test
-    public void modifyDeviceTestSuccess() throws ServiceException{
-        new MockUp<ValidationUtil>(){
+    public void modifyDeviceTestSuccess() throws ServiceException {
+        new MockUp<ValidationUtil>() {
+
             @Mock
             public void validateModel(Object obj) throws ServiceException {
                 return;
             }
         };
         new MockUp<OverlayVpnDriverProxy>() {
+
             @Mock
             public HTTPReturnMessage sendPutMsg(String url, String body, String ctrlUuid) throws ServiceException {
 
@@ -261,23 +275,23 @@ public class DeviceROAResourceTest {
     }
 
     @Test
-    public void modifyDeviceTestFailControllerResponse() throws ServiceException{
-        new MockUp<ValidationUtil>(){
+    public void modifyDeviceTestFailControllerResponse() throws ServiceException {
+        new MockUp<ValidationUtil>() {
+
             @Mock
             public void validateModel(Object obj) throws ServiceException {
                 return;
             }
         };
         new MockUp<OverlayVpnDriverProxy>() {
+
             @Mock
             public HTTPReturnMessage sendPutMsg(String url, String body, String ctrlUuid) throws ServiceException {
 
                 HTTPReturnMessage msg = new HTTPReturnMessage();
                 msg.setStatus(500);
 
-                ACResponse<AdapterDeviceInfo> response = new ACResponse<AdapterDeviceInfo>();
-
-                Map<String,String> errMap = new HashMap<>();
+                Map<String, String> errMap = new HashMap<>();
                 errMap.put("errorcode", DriverErrorCode.ADAPTER_FAILED);
                 msg.setBody(JsonUtil.toJson(errMap));
                 return msg;
@@ -293,35 +307,37 @@ public class DeviceROAResourceTest {
         assertTrue("cloudvpn.adapter.failed".equals(failData));
     }
 
-    @Test(expected=ServiceException.class)
-    public void modifyDeviceTestNullDeviceInfo() throws ServiceException{
+    @Test(expected = ServiceException.class)
+    public void modifyDeviceTestNullDeviceInfo() throws ServiceException {
         resource.modifyDevice(null, CTRL_UUID, "12345", null);
     }
 
-    @Test(expected=ServiceException.class)
-    public void modifyDeviceTestNullDeviceId() throws ServiceException{
+    @Test(expected = ServiceException.class)
+    public void modifyDeviceTestNullDeviceId() throws ServiceException {
         AdapterDeviceInfo adapterDevInfo = new AdapterDeviceInfo();
 
         adapterDevInfo.setId("81244ad0-b4ea-41ed-969e-d5588b32fd4c");
         resource.modifyDevice(null, CTRL_UUID, null, adapterDevInfo);
     }
 
-    @Test(expected=ServiceException.class)
-    public void modifyDeviceTestNullUUID() throws ServiceException{
+    @Test(expected = ServiceException.class)
+    public void modifyDeviceTestNullUuid() throws ServiceException {
         AdapterDeviceInfo adapterDevInfo = new AdapterDeviceInfo();
         adapterDevInfo.setId("81244ad0-b4ea-41ed-969e-d5588b32fd4c");
         resource.modifyDevice(null, null, "12345", adapterDevInfo);
     }
 
     @Test
-    public void deleteDevicesTestSuccess() throws ServiceException{
-        new MockUp<ValidationUtil>(){
+    public void deleteDevicesTestSuccess() throws ServiceException {
+        new MockUp<ValidationUtil>() {
+
             @Mock
             public void validateModel(Object obj) throws ServiceException {
                 return;
             }
         };
         new MockUp<OverlayVpnDriverProxy>() {
+
             @Mock
             public HTTPReturnMessage sendDeleteMsg(String url, String body, String ctrlUuid) throws ServiceException {
 
@@ -329,7 +345,7 @@ public class DeviceROAResourceTest {
                 msg.setStatus(200);
 
                 ACResponse<String> response = new ACResponse<String>();
-                Map<String,String> resultMap = new HashMap<String,String>();
+                Map<String, String> resultMap = new HashMap<String, String>();
                 resultMap.put("result", "success");
                 response.setErrcode("0");
                 response.setData(JsonUtil.toJson(resultMap));
@@ -339,27 +355,27 @@ public class DeviceROAResourceTest {
         };
         List<String> idList = new ArrayList<>();
         idList.add("12345");
-        ResultRsp<String> resp = resource.deleteDevices(null, idList,CTRL_UUID);
+        ResultRsp<String> resp = resource.deleteDevices(null, idList, CTRL_UUID);
         assertTrue("0".equals(resp.getErrorCode()));
     }
 
     @Test
-    public void deleteDevicesTestControllerResponseFail() throws ServiceException{
-        new MockUp<ValidationUtil>(){
+    public void deleteDevicesTestControllerResponseFail() throws ServiceException {
+        new MockUp<ValidationUtil>() {
+
             @Mock
             public void validateModel(Object obj) throws ServiceException {
                 return;
             }
         };
         new MockUp<OverlayVpnDriverProxy>() {
+
             @Mock
             public HTTPReturnMessage sendDeleteMsg(String url, String body, String ctrlUuid) throws ServiceException {
                 HTTPReturnMessage msg = new HTTPReturnMessage();
                 msg.setStatus(500);
 
-                ACResponse<AdapterDeviceInfo> response = new ACResponse<AdapterDeviceInfo>();
-
-                Map<String,String> errMap = new HashMap<>();
+                Map<String, String> errMap = new HashMap<>();
                 errMap.put("errorcode", DriverErrorCode.ADAPTER_FAILED);
                 msg.setBody(JsonUtil.toJson(errMap));
                 return msg;
@@ -367,17 +383,17 @@ public class DeviceROAResourceTest {
         };
         List<String> idList = new ArrayList<>();
         idList.add("12345");
-        ResultRsp<String> resp = resource.deleteDevices(null, idList,CTRL_UUID);
+        ResultRsp<String> resp = resource.deleteDevices(null, idList, CTRL_UUID);
         assertTrue("500".equals(resp.getErrorCode()));
     }
 
-    @Test(expected=ServiceException.class)
-    public void deleteDevicesTestNullDeviceId() throws ServiceException{
-        resource.deleteDevices(null,null, CTRL_UUID);
+    @Test(expected = ServiceException.class)
+    public void deleteDevicesTestNullDeviceId() throws ServiceException {
+        resource.deleteDevices(null, null, CTRL_UUID);
     }
 
-    @Test(expected=ServiceException.class)
-    public void deleteDevicesTestNullUUID() throws ServiceException{
+    @Test(expected = ServiceException.class)
+    public void deleteDevicesTestNullUuid() throws ServiceException {
         resource.deleteDevices(null, null, "12345");
     }
 }

@@ -13,18 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.openo.sdnhub.overlayvpndriver.rest;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
-import javax.ws.rs.WebApplicationException;
-
+import mockit.Mock;
+import mockit.MockUp;
 import org.junit.Before;
 import org.junit.Test;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
@@ -42,28 +39,43 @@ import org.openo.sdno.overlayvpn.model.v2.vxlan.SbiNeVxlanTunnel;
 import org.openo.sdno.overlayvpn.result.FailData;
 import org.openo.sdno.overlayvpn.result.ResultRsp;
 import org.openo.sdno.overlayvpn.util.check.ValidationUtil;
+
 import org.openo.sdno.util.http.HTTPReturnMessage;
 
-import mockit.Mock;
-import mockit.MockUp;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.ws.rs.WebApplicationException;
 
 public class VxLanRoaResourceTest {
+
     private static final String CTRL_UUID = "extSysID=81244ad0-b4ea-41ed-969e-d5588b32fd4c";
+
     VxLanRoaResource vxLanRoaResource = new VxLanRoaResource();
 
     List<SbiNeVxlanInstance> sbiVxLanInstanceList = new ArrayList<SbiNeVxlanInstance>();
+
     SbiNeVxlanInstance sbiNeVxlanInstance = new SbiNeVxlanInstance();
 
+    /**
+     * <br/>
+     *
+     * @throws Exception setup failure exception
+     * @since SDNHUB 0.5
+     */
+
     @Before
-    public void setup() throws Exception{
+    public void setup() throws Exception {
 
         List<String> vxlanInterfaces = new ArrayList<>();
         vxlanInterfaces.add("interface1");
         vxlanInterfaces.add("interface2");
         List<SbiNeVxlanTunnel> vxlanTunnelList = new ArrayList<>();
         SbiNeVxlanTunnel sbiNeVxlanTunnel = new SbiNeVxlanTunnel();
-        vxlanTunnelList.add(sbiNeVxlanTunnel );
-        List<String> vxlanTunnels = new ArrayList<>();
+        vxlanTunnelList.add(sbiNeVxlanTunnel);
+
         SbiNeVxlanInterface sbiNeVxlanInterface = new SbiNeVxlanInterface();
         sbiNeVxlanInterface.setConnectionId("connectionId");
         sbiNeVxlanInterface.setAccessType("DOT1Q");
@@ -76,8 +88,9 @@ public class VxLanRoaResourceTest {
         sbiNeVxlanInstance.setArpProxy("arpProxy");
         sbiNeVxlanInstance.setConnectionId("connectionId");
         sbiNeVxlanInstance.setControllerId("controllerId");
-        sbiNeVxlanInstance.setCreatetime((long) 1236549);
-        sbiNeVxlanInstance.setDescription("description");;
+        sbiNeVxlanInstance.setCreatetime((long)1236549);
+        sbiNeVxlanInstance.setDescription("description");
+        ;
         sbiNeVxlanInstance.setDeployStatus("deployStatus");
         sbiNeVxlanInstance.setDeviceId("device12345");
         sbiNeVxlanInstance.setExternalId("1111");
@@ -93,12 +106,13 @@ public class VxLanRoaResourceTest {
         sbiNeVxlanInstance.setVni("1");
         sbiNeVxlanInstance.setVxlanInterfaces(vxlanInterfaces);
         sbiNeVxlanInstance.setVxlanTunnelList(vxlanTunnelList);
+        List<String> vxlanTunnels = new ArrayList<>();
         sbiNeVxlanInstance.setVxlanTunnels(vxlanTunnels);
         sbiNeVxlanInstance.setVxlanInterfaceList(vxlanInterfaceList);
 
         sbiVxLanInstanceList.add(sbiNeVxlanInstance);
 
-        //Setting the impl service obj using reflection
+        // Setting the impl service obj using reflection
         Field field = vxLanRoaResource.getClass().getDeclaredField("vxlanService");
         field.setAccessible(true);
         field.set(vxLanRoaResource, new VxLanSvcImpl());
@@ -107,7 +121,8 @@ public class VxLanRoaResourceTest {
     @Test
     public void testCreateVxlan() throws WebApplicationException, ServiceException {
 
-        new MockUp<ValidationUtil>(){
+        new MockUp<ValidationUtil>() {
+
             @Mock
             public void validateModel(Object obj) throws ServiceException {
                 return;
@@ -115,13 +130,15 @@ public class VxLanRoaResourceTest {
         };
 
         new MockUp<OverlayVpnDriverProxy>() {
+
             @Mock
             public HTTPReturnMessage sendPutMsg(String url, String body, String ctrlUuid) throws ServiceException {
 
                 HTTPReturnMessage msg = new HTTPReturnMessage();
                 msg.setStatus(200);
 
-                OverlayVpnDriverResponse<List<VxLanDeviceModel>> response = new OverlayVpnDriverResponse<List<VxLanDeviceModel>>();
+                OverlayVpnDriverResponse<List<VxLanDeviceModel>> response =
+                        new OverlayVpnDriverResponse<List<VxLanDeviceModel>>();
 
                 List<VxLanDeviceModel> vxLanDeviceModelList = new ArrayList<VxLanDeviceModel>();
                 VxLanDeviceModel vxLanDeviceModel = new VxLanDeviceModel();
@@ -147,7 +164,8 @@ public class VxLanRoaResourceTest {
     @Test
     public void testCreateVxlanCreateResultSuccess() throws WebApplicationException, ServiceException {
 
-        new MockUp<ValidationUtil>(){
+        new MockUp<ValidationUtil>() {
+
             @Mock
             public void validateModel(Object obj) throws ServiceException {
                 return;
@@ -155,13 +173,15 @@ public class VxLanRoaResourceTest {
         };
 
         new MockUp<OverlayVpnDriverProxy>() {
+
             @Mock
             public HTTPReturnMessage sendPutMsg(String url, String body, String ctrlUuid) throws ServiceException {
 
                 HTTPReturnMessage msg = new HTTPReturnMessage();
                 msg.setStatus(200);
 
-                OverlayVpnDriverResponse<List<VxLanDeviceModel>> response = new OverlayVpnDriverResponse<List<VxLanDeviceModel>>();
+                OverlayVpnDriverResponse<List<VxLanDeviceModel>> response =
+                        new OverlayVpnDriverResponse<List<VxLanDeviceModel>>();
 
                 List<VxLanDeviceModel> vxLanDeviceModelList = new ArrayList<VxLanDeviceModel>();
                 VxLanDeviceModel vxLanDeviceModel = new VxLanDeviceModel();
@@ -175,7 +195,8 @@ public class VxLanRoaResourceTest {
                 return msg;
             }
         };
-        ResultRsp<SbiNeVxlanInstance> createVxlanResponse = vxLanRoaResource.createVxlan(null, CTRL_UUID, sbiVxLanInstanceList);
+        ResultRsp<SbiNeVxlanInstance> createVxlanResponse =
+                vxLanRoaResource.createVxlan(null, CTRL_UUID, sbiVxLanInstanceList);
         List<SbiNeVxlanInstance> successed = createVxlanResponse.getSuccessed();
 
         assertEquals("overlayvpn.operation.success", createVxlanResponse.getErrorCode());
@@ -186,18 +207,18 @@ public class VxLanRoaResourceTest {
     public void testQueryVxlan() throws ServiceException {
 
         new MockUp<OverlayVpnDriverProxy>() {
+
             @Mock
             public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
 
                 HTTPReturnMessage msg = new HTTPReturnMessage();
                 msg.setStatus(200);
 
-                OverlayVpnDriverResponse<List<VxLanDeviceModel>> response = new OverlayVpnDriverResponse<List<VxLanDeviceModel>>();
 
-                List<VxLanDeviceModel> vxLanDeviceModelList = new ArrayList<VxLanDeviceModel>();
+
+
                 VxLanDeviceModel vxLanDeviceModel = new VxLanDeviceModel();
                 vxLanDeviceModel.setUuid("1111");
-
 
                 List<Vni> vniList = new ArrayList<>();
                 Vni vni = new Vni();
@@ -205,8 +226,12 @@ public class VxLanRoaResourceTest {
                 vniList.add(vni);
 
                 vxLanDeviceModel.setVniList(vniList);
+
+                List<VxLanDeviceModel> vxLanDeviceModelList = new ArrayList<VxLanDeviceModel>();
                 vxLanDeviceModelList.add(vxLanDeviceModel);
 
+                OverlayVpnDriverResponse<List<VxLanDeviceModel>> response =
+                        new OverlayVpnDriverResponse<List<VxLanDeviceModel>>();
                 response.setData(vxLanDeviceModelList);
                 response.setErrcode("0");
                 msg.setBody(JsonUtil.toJson(response));
@@ -214,18 +239,18 @@ public class VxLanRoaResourceTest {
             }
         };
 
-         ResultRsp<SbiNeVxlanInstance> result = vxLanRoaResource.queryVxlan(null, CTRL_UUID, sbiVxLanInstanceList);
-         assertEquals("overlayvpn.operation.success", result.getErrorCode());
-         assertEquals("1", result.getSuccessed().get(0).getVni());
+        ResultRsp<SbiNeVxlanInstance> result = vxLanRoaResource.queryVxlan(null, CTRL_UUID, sbiVxLanInstanceList);
+        assertEquals("overlayvpn.operation.success", result.getErrorCode());
+        assertEquals("1", result.getSuccessed().get(0).getVni());
     }
 
     @Test
     public void testQueryVxlanEmptyInput() throws ServiceException {
 
         try {
-         vxLanRoaResource.queryVxlan(null, CTRL_UUID, null);
-         fail("exception not thrown");
-        }catch(ServiceException e) {
+            vxLanRoaResource.queryVxlan(null, CTRL_UUID, null);
+            fail("exception not thrown");
+        } catch (ServiceException e) {
             assertEquals(e.getMessage(), "overlayvpn.operation.paramter_invalid");
         }
     }
@@ -234,13 +259,15 @@ public class VxLanRoaResourceTest {
     public void testQueryVxlan_Noresult() throws ServiceException {
 
         new MockUp<OverlayVpnDriverProxy>() {
+
             @Mock
             public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
 
                 HTTPReturnMessage msg = new HTTPReturnMessage();
                 msg.setStatus(200);
 
-                OverlayVpnDriverResponse<List<VxLanDeviceModel>> response = new OverlayVpnDriverResponse<List<VxLanDeviceModel>>();
+                OverlayVpnDriverResponse<List<VxLanDeviceModel>> response =
+                        new OverlayVpnDriverResponse<List<VxLanDeviceModel>>();
 
                 response.setErrcode("0");
                 msg.setBody(JsonUtil.toJson(response));
@@ -248,23 +275,24 @@ public class VxLanRoaResourceTest {
             }
         };
 
-         ResultRsp<SbiNeVxlanInstance> result = vxLanRoaResource.queryVxlan(null, CTRL_UUID, sbiVxLanInstanceList);
-         assertEquals("overlayvpn.operation.failed", result.getErrorCode());
+        ResultRsp<SbiNeVxlanInstance> result = vxLanRoaResource.queryVxlan(null, CTRL_UUID, sbiVxLanInstanceList);
+        assertEquals("overlayvpn.operation.failed", result.getErrorCode());
     }
 
     @Test
     public void testQueryVxlan_NoMatchingFound() throws ServiceException {
 
         new MockUp<OverlayVpnDriverProxy>() {
+
             @Mock
             public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
 
                 HTTPReturnMessage msg = new HTTPReturnMessage();
                 msg.setStatus(200);
 
-                OverlayVpnDriverResponse<List<VxLanDeviceModel>> response = new OverlayVpnDriverResponse<List<VxLanDeviceModel>>();
 
-                List<VxLanDeviceModel> vxLanDeviceModelList = new ArrayList<VxLanDeviceModel>();
+
+
                 VxLanDeviceModel vxLanDeviceModel = new VxLanDeviceModel();
                 vxLanDeviceModel.setUuid("1111");
 
@@ -274,8 +302,12 @@ public class VxLanRoaResourceTest {
                 vniList.add(vni);
 
                 vxLanDeviceModel.setVniList(vniList);
+
+                List<VxLanDeviceModel> vxLanDeviceModelList = new ArrayList<VxLanDeviceModel>();
                 vxLanDeviceModelList.add(vxLanDeviceModel);
 
+                OverlayVpnDriverResponse<List<VxLanDeviceModel>> response =
+                        new OverlayVpnDriverResponse<List<VxLanDeviceModel>>();
                 response.setData(vxLanDeviceModelList);
                 response.setErrcode("0");
                 msg.setBody(JsonUtil.toJson(response));
@@ -283,14 +315,15 @@ public class VxLanRoaResourceTest {
             }
         };
 
-         ResultRsp<SbiNeVxlanInstance> result = vxLanRoaResource.queryVxlan(null, CTRL_UUID, sbiVxLanInstanceList);
-         assertEquals("overlayvpn.operation.failed", result.getErrorCode());
+        ResultRsp<SbiNeVxlanInstance> result = vxLanRoaResource.queryVxlan(null, CTRL_UUID, sbiVxLanInstanceList);
+        assertEquals("overlayvpn.operation.failed", result.getErrorCode());
     }
 
-    @Test(expected=ServiceException.class)
+    @Test(expected = ServiceException.class)
     public void testQueryVxlan_getFail() throws ServiceException {
 
         new MockUp<OverlayVpnDriverProxy>() {
+
             @Mock
             public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
 
@@ -301,21 +334,23 @@ public class VxLanRoaResourceTest {
             }
         };
 
-         vxLanRoaResource.queryVxlan(null, CTRL_UUID, sbiVxLanInstanceList);
+        vxLanRoaResource.queryVxlan(null, CTRL_UUID, sbiVxLanInstanceList);
 
     }
 
-    @Test(expected=ServiceException.class)
+    @Test(expected = ServiceException.class)
     public void testQueryVxlan_getFail2() throws ServiceException {
 
         new MockUp<OverlayVpnDriverProxy>() {
+
             @Mock
             public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
 
                 HTTPReturnMessage msg = new HTTPReturnMessage();
                 msg.setStatus(200);
 
-                OverlayVpnDriverResponse<List<VxLanDeviceModel>> response = new OverlayVpnDriverResponse<List<VxLanDeviceModel>>();
+                OverlayVpnDriverResponse<List<VxLanDeviceModel>> response =
+                        new OverlayVpnDriverResponse<List<VxLanDeviceModel>>();
 
                 response.setErrcode("1");
                 msg.setBody(JsonUtil.toJson(response));
@@ -323,19 +358,21 @@ public class VxLanRoaResourceTest {
             }
         };
 
-         vxLanRoaResource.queryVxlan(null, CTRL_UUID, sbiVxLanInstanceList);
+        vxLanRoaResource.queryVxlan(null, CTRL_UUID, sbiVxLanInstanceList);
     }
 
     @Test
     public void testUpdate() throws ServiceException {
         new MockUp<OverlayVpnDriverProxy>() {
+
             @Mock
             public HTTPReturnMessage sendPutMsg(String url, String body, String ctrlUuid) throws ServiceException {
 
                 HTTPReturnMessage msg = new HTTPReturnMessage();
                 msg.setStatus(200);
 
-                OverlayVpnDriverResponse<List<VxLanDeviceModel>> response = new OverlayVpnDriverResponse<List<VxLanDeviceModel>>();
+                OverlayVpnDriverResponse<List<VxLanDeviceModel>> response =
+                        new OverlayVpnDriverResponse<List<VxLanDeviceModel>>();
 
                 List<VxLanDeviceModel> vxLanDeviceModelList = new ArrayList<VxLanDeviceModel>();
                 VxLanDeviceModel vxLanDeviceModel = new VxLanDeviceModel();
@@ -358,6 +395,7 @@ public class VxLanRoaResourceTest {
     @Test
     public void testUpdate_fail() throws ServiceException {
         new MockUp<OverlayVpnDriverProxy>() {
+
             @Mock
             public HTTPReturnMessage sendPutMsg(String url, String body, String ctrlUuid) throws ServiceException {
 
@@ -376,52 +414,60 @@ public class VxLanRoaResourceTest {
     @Test
     public void testBatchDeleteVxlanResultSuccess() throws WebApplicationException, ServiceException {
         new MockUp<OverlayVpnDriverProxy>() {
+
             @Mock
             public HTTPReturnMessage sendDeleteMsg(String url, String body, String ctrlUuid) throws ServiceException {
 
                 HTTPReturnMessage msg = new HTTPReturnMessage();
                 msg.setStatus(200);
 
-                ACDelResponse acDelResponse = new ACDelResponse();
+
                 List<String> deleteIdList = new LinkedList<String>();
                 deleteIdList.add("externalId12345");
                 List<ConfigCommonResult> configCommonResultList = new LinkedList<ConfigCommonResult>();
                 ConfigCommonResult configCommonResult = new ConfigCommonResult();
                 configCommonResult.setId("externalId12345");
                 configCommonResultList.add(configCommonResult);
+
+                ACDelResponse acDelResponse = new ACDelResponse();
                 acDelResponse.setSuccess(configCommonResultList);
                 acDelResponse.setErrmsg("0");
                 msg.setBody(JsonUtil.toJson(acDelResponse));
                 return msg;
             }
         };
-        ResultRsp<SbiNeVxlanInstance> batchDeleteVxlanResponse = vxLanRoaResource.batchDeleteVxlan(null, "device12345", CTRL_UUID, sbiVxLanInstanceList);
+        ResultRsp<SbiNeVxlanInstance> batchDeleteVxlanResponse =
+                vxLanRoaResource.batchDeleteVxlan(null, "device12345", CTRL_UUID, sbiVxLanInstanceList);
         assertEquals("overlayvpn.operation.failed", batchDeleteVxlanResponse.getErrorCode());
     }
 
     @Test
     public void testBatchDeleteVxlanResultFailure() throws WebApplicationException, ServiceException {
         new MockUp<OverlayVpnDriverProxy>() {
+
             @Mock
             public HTTPReturnMessage sendDeleteMsg(String url, String body, String ctrlUuid) throws ServiceException {
 
                 HTTPReturnMessage msg = new HTTPReturnMessage();
                 msg.setStatus(200);
 
-                ACDelResponse acDelResponse = new ACDelResponse();
+
                 List<String> deleteIdList = new LinkedList<String>();
                 deleteIdList.add("externalId12345");
                 List<ConfigCommonResult> configCommonResultList = new LinkedList<ConfigCommonResult>();
                 ConfigCommonResult configCommonResult = new ConfigCommonResult();
                 configCommonResult.setId("externalId12345");
                 configCommonResultList.add(configCommonResult);
+
+                ACDelResponse acDelResponse = new ACDelResponse();
                 acDelResponse.setSuccess(configCommonResultList);
                 acDelResponse.setErrmsg("failure");
                 msg.setBody(JsonUtil.toJson(acDelResponse));
                 return msg;
             }
         };
-        ResultRsp<SbiNeVxlanInstance> batchDeleteVxlanResponse = vxLanRoaResource.batchDeleteVxlan(null, "device12345", CTRL_UUID, sbiVxLanInstanceList);
+        ResultRsp<SbiNeVxlanInstance> batchDeleteVxlanResponse =
+                vxLanRoaResource.batchDeleteVxlan(null, "device12345", CTRL_UUID, sbiVxLanInstanceList);
         assertEquals("overlayvpn.operation.failed", batchDeleteVxlanResponse.getErrorCode());
     }
 }

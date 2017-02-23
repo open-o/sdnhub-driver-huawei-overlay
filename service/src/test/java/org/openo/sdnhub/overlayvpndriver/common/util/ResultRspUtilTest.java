@@ -13,40 +13,45 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.openo.sdnhub.overlayvpndriver.common.util;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Test;
-
 public class ResultRspUtilTest {
-    
+
     @Test
-    public void parserRspDataListTestNormal(){
+    public void parserRspDataListTestNormal() {
         ResultRspUtil<TestObj> util = new ResultRspUtil<>();
-        
-        List<Map<String,String>> dataObj = new ArrayList<>();
-        Map<String,String> map = new HashMap<>();
+
+        List<Map<String, String>> dataObj = new ArrayList<>();
+        Map<String, String> map = new HashMap<>();
         map.put("id", "12345");
         dataObj.add(map);
-        
-        TestObj info = new TestObj();      
+
+        TestObj info = new TestObj();
         List<TestObj> adptList = util.parserRspDataList(dataObj, info);
-        assertEquals(adptList.get(0).getId(), "12345");       
+        assertEquals(adptList.get(0).getId(), "12345");
     }
-}
-class TestObj{
-    private String id = null;    
-    public String getId() {
-        return id;
-    }  
-    public void setId(String id) {
-        this.id = id;
+
+    public static class TestObj {
+
+        private String id = null;
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
     }
-    
 }

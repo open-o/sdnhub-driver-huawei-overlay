@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.openo.sdnhub.overlayvpndriver.sbi.impl;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-import java.util.ArrayList;
-import java.util.List;
+import mockit.Mock;
+import mockit.MockUp;
 
 import org.junit.Test;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
@@ -29,55 +30,180 @@ import org.openo.sdno.framework.container.util.JsonUtil;
 import org.openo.sdno.overlayvpn.result.ResultRsp;
 import org.openo.sdno.util.http.HTTPReturnMessage;
 
-import mockit.Mock;
-import mockit.MockUp;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AclServiceImplTest {
-	
-	String queryResJson =
-            "{\"errcode\":\"0\",\"errmsg\":null,\"pageIndex\":0,\"pageSize\":0,\"totalRecords\":0,\"data\":{\"ipv4\":\"192.168.1.2\",\"ipv6\":\"\",\"ipMask\":\"\",\"prefixLength\":\"\",\"id\":\"\"},\"success\":[],\"fail\":[],\"sucess\":true}";
-	
-	@Test(expected = ServiceException.class)
-	public void createAclCtrlUuidNull() throws ServiceException {
-		String sDeviceId="deviceId";
-		AclServiceImpl impl=new AclServiceImpl();
-		impl.createAcl(null,null,sDeviceId);
-	}
-	
-	@Test(expected = ServiceException.class)
-	public void createAclDeviceNull() throws ServiceException {
-		String sCtrlUuid="CtrlUuid";
-		AclServiceImpl impl=new AclServiceImpl();
-		impl.createAcl(null,sCtrlUuid,null);
-	}
-	
-	@Test(expected = ServiceException.class)
-	public void deleteAclCtrlUuidNull() throws ServiceException {
-		String sDeviceId="deviceId";
-		AclServiceImpl impl=new AclServiceImpl();
-		impl.deleteAcl(null,null,sDeviceId);
-	}
-	
-	@Test(expected = ServiceException.class)
-	public void deleteAclDeviceNull() throws ServiceException {
-		String sCtrlUuid="CtrlUuid";
-		AclServiceImpl impl=new AclServiceImpl();
-		impl.deleteAcl(null,sCtrlUuid,null);
-	}
-	
-	@Test
-	public void queryAcl() throws ServiceException{
-		
-		new MockUp<OverlayVpnDriverProxy>() {
+
+    AclServiceImpl impl = new AclServiceImpl();
+
+    String queryResJson =
+            "{\"errcode\":\"0\",\"errmsg\":null,\"pageIndex\":0,\"pageSize\":0,"
+            + "\"totalRecords\":0,\"data\":{\"ipv4\":\"192.168.1.2\","
+            + "\"ipv6\":\"\",\"ipMask\":\"\",\"prefixLength\":\"\","
+            + "\"id\":\"\"},\"success\":[],\"fail\":[],\"sucess\":true}";
+
+    @Test(expected = ServiceException.class)
+    public void createAclCtrlUuidNull() throws ServiceException {
+        String deviceId = "deviceId";
+        impl.createAcl(null, null, deviceId);
+    }
+
+    @Test(expected = ServiceException.class)
+    public void createAclDeviceNull() throws ServiceException {
+        String ctrlUuid = "CtrlUuid";
+        impl.createAcl(null, ctrlUuid, null);
+    }
+
+    @Test(expected = ServiceException.class)
+    public void deleteAclCtrlUuidNull() throws ServiceException {
+        String deviceId = "deviceId";
+        impl.deleteAcl(null, null, deviceId);
+    }
+
+    @Test(expected = ServiceException.class)
+    public void deleteAclDeviceNull() throws ServiceException {
+        String ctrlUuid = "CtrlUuid";
+        impl.deleteAcl(null, ctrlUuid, null);
+    }
+
+    @Test(expected = ServiceException.class)
+    public void testDeleteAclHttpError() throws ServiceException {
+
+        new MockUp<OverlayVpnDriverProxy>() {
+
+            @Mock
+            public HTTPReturnMessage sendDeleteMsg(String url, String body, String ctrlUuid) throws ServiceException {
+
+                HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
+                httpReturnMessage.setStatus(500);
+                return httpReturnMessage;
+            }
+        };
+        impl.deleteAcl("acl123", "123", "extSysID=ctrlid123");
+    }
+
+    @Test(expected = ServiceException.class)
+    public void testDeleteAclHttpErrorEmptyBody() throws ServiceException {
+
+        new MockUp<OverlayVpnDriverProxy>() {
+
+            @Mock
+            public HTTPReturnMessage sendDeleteMsg(String url, String body, String ctrlUuid) throws ServiceException {
+                HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
+                httpReturnMessage.setStatus(200);
+
+                return httpReturnMessage;
+            }
+        };
+        impl.deleteAcl("acl123", "123", "extSysID=ctrlid123");
+    }
+
+    @Test(expected = ServiceException.class)
+    public void testDeleteAclAcResponseFailure() throws ServiceException {
+
+        new MockUp<OverlayVpnDriverProxy>() {
+
+            @Mock
+            public HTTPReturnMessage sendDeleteMsg(String url, String body, String ctrlUuid) throws ServiceException {
+
+                ACResponse<String> response = new ACResponse<>();
+                HTTPReturnMessage msg = new HTTPReturnMessage();
+                response.setData("acldelete");
+                response.setErrcode("1");
+                msg.setBody(JsonUtil.toJson(response));
+                msg.setStatus(200);
+                return msg;
+            }
+        };
+        impl.deleteAcl("acl123", "123", "extSysID=ctrlid123");
+    }
+
+    @Test(expected = ServiceException.class)
+    public void testQueryAclHttpError() throws ServiceException {
+
+        new MockUp<OverlayVpnDriverProxy>() {
+
             @Mock
             public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
-            	
-            	ACResponse<List<AcAcl>> response=new ACResponse<>();
-            	List<AcAcl> list=new ArrayList();
-            	AcAcl acl=new AcAcl();
-            	acl.setAclId("123");
-            	list.add(acl);
-            	
+
+                HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
+                httpReturnMessage.setStatus(500);
+                return httpReturnMessage;
+            }
+        };
+        impl.queryAcl("acl123", "123", "extSysID=ctrlid123");
+    }
+
+    @Test(expected = ServiceException.class)
+    public void testQueryAclHttpErrorEmptyBody() throws ServiceException {
+
+        new MockUp<OverlayVpnDriverProxy>() {
+
+            @Mock
+            public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
+                HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
+                httpReturnMessage.setStatus(200);
+
+                return httpReturnMessage;
+            }
+        };
+        impl.queryAcl("acl123", "123", "extSysID=ctrlid123");
+    }
+
+    @Test(expected = ServiceException.class)
+    public void testQueryAclAcResponseFailure() throws ServiceException {
+
+        new MockUp<OverlayVpnDriverProxy>() {
+
+            @Mock
+            public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
+
+                ACResponse<List<AcAcl>> response = new ACResponse<>();
+                List<AcAcl> list = new ArrayList<>();
+                AcAcl acl = new AcAcl();
+                acl.setAclId("123");
+                list.add(acl);
+
+                HTTPReturnMessage msg = new HTTPReturnMessage();
+                response.setData(list);
+                response.setErrcode("1");
+                msg.setBody(JsonUtil.toJson(response));
+                msg.setStatus(200);
+                return msg;
+            }
+        };
+        impl.queryAcl("acl123", "123", "extSysID=ctrlid123");
+    }
+
+    @Test(expected = ServiceException.class)
+    public void queryAclCtrlNull() throws ServiceException {
+
+        String deviceId = "deviceId";
+        impl.queryAcl(null, null, deviceId);
+    }
+
+    @Test(expected = ServiceException.class)
+    public void queryAclDeviceNull() throws ServiceException {
+
+        String ctrlUuid = "CtrlUuid";
+        impl.queryAcl(null, ctrlUuid, null);
+    }
+
+    @Test
+    public void queryAcl() throws ServiceException {
+
+        new MockUp<OverlayVpnDriverProxy>() {
+
+            @Mock
+            public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
+
+                ACResponse<List<AcAcl>> response = new ACResponse<>();
+                List<AcAcl> list = new ArrayList<>();
+                AcAcl acl = new AcAcl();
+                acl.setAclId("123");
+                list.add(acl);
+
                 HTTPReturnMessage msg = new HTTPReturnMessage();
                 response.setData(list);
                 response.setErrcode("0");
@@ -86,30 +212,92 @@ public class AclServiceImplTest {
                 return msg;
             }
         };
-        
-		
-		AclServiceImpl impl=new AclServiceImpl();
-		String sAclId="aclId";
-		String sCtrlUuid="CtrlUuid";
-		String sDeviceId="deviceId";
-		ResultRsp<AcAcl> rsp=impl.queryAcl(sAclId,sCtrlUuid,sDeviceId);
-	
-		assertEquals("overlayvpn.operation.failed",rsp.getErrorCode());
-	}
-	
-	@Test
-	public void updateAcl() throws ServiceException{
-		
-		new MockUp<OverlayVpnDriverProxy>() {
+
+        String aclId = "aclId";
+        String ctrlUuid = "CtrlUuid";
+        String deviceId = "deviceId";
+        ResultRsp<AcAcl> rsp = impl.queryAcl(aclId, ctrlUuid, deviceId);
+
+        assertEquals("overlayvpn.operation.failed", rsp.getErrorCode());
+    }
+
+    @Test(expected = ServiceException.class)
+    public void testUpdateAclHttpError() throws ServiceException {
+
+        new MockUp<OverlayVpnDriverProxy>() {
+
             @Mock
             public HTTPReturnMessage sendPutMsg(String url, String body, String ctrlUuid) throws ServiceException {
-            	
-            	ACResponse<List<AcAcl>> response=new ACResponse<>();
-            	List<AcAcl> list=new ArrayList();
-            	AcAcl acl=new AcAcl();
-            	acl.setAclId("123");
-            	list.add(acl);
-            	
+
+                HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
+                httpReturnMessage.setStatus(500);
+                return httpReturnMessage;
+            }
+        };
+        AcAcl acl = new AcAcl();
+        acl.setAclName("name");
+        impl.updateAcl(acl, "123", "extSysID=ctrlid123");
+    }
+
+    @Test(expected = ServiceException.class)
+    public void testUpdateAclHttpErrorEmptyBody() throws ServiceException {
+
+        new MockUp<OverlayVpnDriverProxy>() {
+
+            @Mock
+            public HTTPReturnMessage sendPutMsg(String url, String body, String ctrlUuid) throws ServiceException {
+                HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
+                httpReturnMessage.setStatus(200);
+
+                return httpReturnMessage;
+            }
+        };
+        AcAcl acl = new AcAcl();
+        acl.setAclName("name");
+        impl.updateAcl(acl, "123", "extSysID=ctrlid123");
+    }
+
+    @Test(expected = ServiceException.class)
+    public void testUpdateAclAcResponseFailure() throws ServiceException {
+
+        new MockUp<OverlayVpnDriverProxy>() {
+
+            @Mock
+            public HTTPReturnMessage sendPutMsg(String url, String body, String ctrlUuid) throws ServiceException {
+
+                ACResponse<List<AcAcl>> response = new ACResponse<>();
+                List<AcAcl> list = new ArrayList<>();
+                AcAcl acl = new AcAcl();
+                acl.setAclId("123");
+                list.add(acl);
+
+                HTTPReturnMessage msg = new HTTPReturnMessage();
+                response.setData(list);
+                response.setErrcode("1");
+                msg.setBody(JsonUtil.toJson(response));
+                msg.setStatus(200);
+                return msg;
+            }
+        };
+        AcAcl acl = new AcAcl();
+        acl.setAclName("name");
+        impl.updateAcl(acl, "123", "extSysID=ctrlid123");
+    }
+
+    @Test
+    public void updateAcl() throws ServiceException {
+
+        new MockUp<OverlayVpnDriverProxy>() {
+
+            @Mock
+            public HTTPReturnMessage sendPutMsg(String url, String body, String ctrlUuid) throws ServiceException {
+
+                ACResponse<List<AcAcl>> response = new ACResponse<>();
+                List<AcAcl> list = new ArrayList<>();
+                AcAcl acl = new AcAcl();
+                acl.setAclId("123");
+                list.add(acl);
+
                 HTTPReturnMessage msg = new HTTPReturnMessage();
                 response.setData(list);
                 response.setErrcode("0");
@@ -118,34 +306,31 @@ public class AclServiceImplTest {
                 return msg;
             }
         };
-        
-		
-		AclServiceImpl impl=new AclServiceImpl();
-		String sAclId="aclId";
-		String sCtrlUuid="CtrlUuid";
-		String sDeviceId="deviceId";
-		AcAcl acl=new AcAcl();
-		acl.setAclName("name");
-		ResultRsp<AcAcl> rsp=impl.updateAcl(acl,sCtrlUuid,sDeviceId);
-		assertEquals("overlayvpn.operation.success",rsp.getErrorCode());
-	}
-	
-	
-	@Test(expected = ServiceException.class)
-	public void queryAclCtrlNull() throws ServiceException{
-		
-		AclServiceImpl impl=new AclServiceImpl();
-		
-		String sDeviceId="deviceId";
-		ResultRsp<AcAcl> rsp=impl.queryAcl(null,null,sDeviceId);
-	}
-	
-	@Test(expected = ServiceException.class)
-	public void queryAclDeviceNull() throws ServiceException{
-		
-		AclServiceImpl impl=new AclServiceImpl();
-		
-		String sCtrlUuid="CtrlUuid";
-		ResultRsp<AcAcl> rsp=impl.queryAcl(null,sCtrlUuid,null);
-	}
+
+        String ctrlUuid = "CtrlUuid";
+        String deviceId = "deviceId";
+        AcAcl acl = new AcAcl();
+        acl.setAclName("name");
+        ResultRsp<AcAcl> rsp = impl.updateAcl(acl, ctrlUuid, deviceId);
+        assertEquals("overlayvpn.operation.success", rsp.getErrorCode());
+    }
+
+    @Test(expected = ServiceException.class)
+    public void updateAclCtrluuid() throws ServiceException {
+
+        String deviceId = "deviceId";
+        AcAcl acl = new AcAcl();
+        acl.setAclName("name");
+        impl.updateAcl(acl, "", deviceId);
+    }
+
+    @Test(expected = ServiceException.class)
+    public void updateAclDeviceId() throws ServiceException {
+
+        String ctrlUuid = "CtrlUuid";
+        AcAcl acl = new AcAcl();
+        acl.setAclName("name");
+        impl.updateAcl(acl, ctrlUuid, "");
+    }
+
 }

@@ -18,33 +18,31 @@ package org.openo.sdnhub.overlayvpndriver.sbi.impl;
 
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Test;
+import org.openo.baseservice.remoteservice.exception.ServiceException;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 
-import org.junit.Test;
-import org.openo.baseservice.remoteservice.exception.ServiceException;
-import org.openo.sdnhub.overlayvpndriver.http.OverlayVpnDriverProxy;
-import org.openo.sdnhub.overlayvpndriver.result.OverlayVpnDriverResponse;
-import org.openo.sdno.util.http.HTTPReturnMessage;
-
-import mockit.Mock;
-import mockit.MockUp;
-
 public class EthInterfaceConfigImplTest {
 
-	String queryResJson = "{\"errcode\":\"0\",\"errmsg\":null,\"pageIndex\":0,\"pageSize\":0,\"totalRecords\":0,\"data\":{\"ipv4\":\"192.168.1.2\",\"ipv6\":\"\",\"ipMask\":\"\",\"prefixLength\":\"\",\"id\":\"\"},\"success\":[],\"fail\":[],\"sucess\":true}";
+    String queryResJson =
+            "{\"errcode\":\"0\",\"errmsg\":null,\"pageIndex\":0,\"pageSize\":0,"
+            + "\"totalRecords\":0,\"data\":{\"ipv4\":\"192.168.1.2\","
+            + "\"ipv6\":\"\",\"ipMask\":\"\",\"prefixLength\":\"\","
+            + "\"id\":\"\"},\"success\":[],\"fail\":[],\"sucess\":true}";
 
-	@Test
-	public void testPrivateConstructor() throws Exception {
-		Constructor<EthInterfaceConfigImpl> constructor = EthInterfaceConfigImpl.class.getDeclaredConstructor();
-		assertTrue("Constructor is not private", Modifier.isPrivate(constructor.getModifiers()));
-		constructor.setAccessible(true);
-		constructor.newInstance();
-	}
+    @Test
+    public void testPrivateConstructor() throws Exception {
+        Constructor<EthInterfaceConfigImpl> constructor = EthInterfaceConfigImpl.class.getDeclaredConstructor();
+        assertTrue("Constructor is not private", Modifier.isPrivate(constructor.getModifiers()));
+        constructor.setAccessible(true);
+        constructor.newInstance();
+    }
 
-	@Test(expected = ServiceException.class)
-	public void configEthInterfaceTest() throws Exception {
-		EthInterfaceConfigImpl.configEthInterface(null, "", "");
-	}
+    @Test(expected = ServiceException.class)
+    public void configEthInterfaceTest() throws Exception {
+        EthInterfaceConfigImpl.configEthInterface(null, "", "");
+    }
 
 }

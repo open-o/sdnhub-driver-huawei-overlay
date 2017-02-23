@@ -16,54 +16,54 @@
 
 package org.openo.sdnhub.overlayvpndriver.common.util;
 
-import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
 
 public class IpAddressUtilTest {
 
     @Test
-    public void testcalcSubnet(){
+    public void testcalcSubnet() {
         assertEquals(IpAddressUtil.calcSubnet("", 12), null);
     }
 
     @Test
-    public void testcalcSubnet4(){
+    public void testcalcSubnet4() {
         assertEquals(IpAddressUtil.calcSubnet("12", 12), null);
     }
 
     @Test
-    public void testcalcSubnet1(){
+    public void testcalcSubnet1() {
         assertEquals(IpAddressUtil.calcSubnet("1.1.1.1", 0), "0.0.0.0");
     }
 
     @Test
-    public void testcalcSubnet2(){
+    public void testcalcSubnet2() {
         assertEquals(IpAddressUtil.calcSubnet("1.1.1.1", 33), "1.1.1.1");
     }
 
     @Test
-    public void testcalcSubnet3(){
+    public void testcalcSubnet3() {
         assertEquals(IpAddressUtil.calcSubnet("1.1.1.1", 30), "1.1.1.0");
     }
 
     @Test
-    public void testlongToIp(){
+    public void testlongToIp() {
         assertEquals(IpAddressUtil.longToIp(-123), null);
     }
 
     @Test
-    public void testlongToIp1(){
+    public void testlongToIp1() {
         assertEquals(IpAddressUtil.longToIp(4294967296L), null);
     }
 
     @Test
-    public void testlongToIp2(){
+    public void testlongToIp2() {
         assertEquals(IpAddressUtil.longToIp(123), "0.0.0.123");
     }
 
     @Test
-    public void testipToLong(){
+    public void testipToLong() {
         assertEquals(IpAddressUtil.ipToLong("12"), -1);
     }
 }

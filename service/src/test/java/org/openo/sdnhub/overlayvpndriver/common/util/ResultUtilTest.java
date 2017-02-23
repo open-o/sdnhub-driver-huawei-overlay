@@ -19,11 +19,11 @@ package org.openo.sdnhub.overlayvpndriver.common.util;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.junit.Test;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ResultUtilTest {
 
@@ -36,21 +36,21 @@ public class ResultUtilTest {
     }
 
     @Test
-    public void testGetErrorCode_1() throws ServiceException {
+    public void testGetErrorCode1() throws ServiceException {
         Map<String, String> configInfoMap = new HashMap<>();
         configInfoMap.put("errcode", "200");
         assertEquals(ResultUtil.getErrorCode(configInfoMap), 200);
     }
 
     @Test
-    public void testGetErrorCode_2() throws ServiceException {
+    public void testGetErrorCode2() throws ServiceException {
         Map<String, String> configInfoMap = new HashMap<>();
         configInfoMap.put("errcode", null);
         assertEquals(ResultUtil.getErrorCode(configInfoMap), 0);
     }
 
     @Test
-    public void testGetErrorCode_3() throws ServiceException {
+    public void testGetErrorCode3() throws ServiceException {
         Map<String, Integer> configInfoMap = new HashMap<>();
         configInfoMap.put("errcode", 123);
         assertEquals(ResultUtil.getErrorCode(configInfoMap), 0);
@@ -59,18 +59,25 @@ public class ResultUtilTest {
     @Test
     public void testGetErrorCodebk() throws ServiceException {
         Map<String, Integer> configInfoMap = new HashMap<>();
-        configInfoMap.put("errcode", 123);
+        configInfoMap.put("errCode", 123);
+        assertEquals(ResultUtil.getErrorCodebk(configInfoMap), 123);
+    }
+
+    @Test
+    public void testGetErrorCodebkNullMapValue() throws ServiceException {
+        Map<String, Integer> configInfoMap = new HashMap<>();
+        configInfoMap.put("errCode", null);
         assertEquals(ResultUtil.getErrorCodebk(configInfoMap), 0);
     }
 
     @Test
-    public void testGetErrorCodebk_1() throws ServiceException {
+    public void testGetErrorCodebk1() throws ServiceException {
         Map<String, Integer> configInfoMap = new HashMap<>();
-        configInfoMap.put("errcode", null);
+        configInfoMap.put("err", null);
         assertEquals(ResultUtil.getErrorCodebk(configInfoMap), 0);
     }
 
-   @Test
+    @Test
     public void testGetErrorMsg() throws ServiceException {
         Map<String, Integer> configInfoMap = new HashMap<>();
         configInfoMap.put("errcodes", null);
@@ -78,35 +85,34 @@ public class ResultUtilTest {
     }
 
     @Test
-    public void testGetErrorMsg_1() throws ServiceException {
+    public void testGetErrorMsg1() throws ServiceException {
         Map<String, String> configInfoMap = new HashMap<>();
         configInfoMap.put("errmsg", "string");
         assertEquals(ResultUtil.getErrorMsg(configInfoMap), "string");
     }
 
     @Test
-    public void testGetErrorMsg_2() throws ServiceException {
+    public void testGetErrorMsg2() throws ServiceException {
         Map<String, Integer> configInfoMap = new HashMap<>();
         configInfoMap.put("errmsg", 123);
         assertEquals(ResultUtil.getErrorMsg(configInfoMap), "");
     }
 
-    
     @Test
-    public void testGetErrorMsg_3() throws ServiceException {
+    public void testGetErrorMsg3() throws ServiceException {
         Map<String, String> configInfoMap = new HashMap<>();
         configInfoMap.put("errmsg", null);
         assertEquals(ResultUtil.getErrorMsg(configInfoMap), "");
     }
-    
+
     @Test
-    public void parserACResponse() throws ServiceException {
+    public void parserAcResponse() throws ServiceException {
         assertEquals(ResultUtil.parserACResponse(""), null);
     }
-    
+
     @Test
-    public void parserACResponse_1() throws ServiceException {
+    public void parserAcResponse1() throws ServiceException {
         assertTrue(ResultUtil.parserACResponse("{ip:123}") != null);
     }
-    
+
 }

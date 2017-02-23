@@ -68,7 +68,7 @@ public class SubnetServiceImpl {
             throw new ParameterServiceException("Invalid parameters.");
         }
 
-        ResultRsp<SbiSubnetNetModel> resultRsp = new ResultRsp<SbiSubnetNetModel>(DriverErrorCode.SUCCESS);
+        ResultRsp<SbiSubnetNetModel> resultRsp = new ResultRsp<SbiSubnetNetModel>(DriverErrorCode.OVERLAYVPN_SUCCESS);
         String createUrl = MessageFormat.format(ControllerUrlConst.DEVICE_NETWORK_URL, deviceId);
         HTTPReturnMessage httpMsg =
                 OverlayVpnDriverProxy.getInstance().sendPutMsg(createUrl, JsonUtil.toJson(network), ctrlUuid);
@@ -118,7 +118,7 @@ public class SubnetServiceImpl {
             throw new ParameterServiceException("Invalid parameters.");
         }
 
-        ResultRsp<ACNetwork> resultRsp = new ResultRsp<>(DriverErrorCode.SUCCESS);
+        ResultRsp<ACNetwork> resultRsp = new ResultRsp<>(DriverErrorCode.OVERLAYVPN_SUCCESS);
         String updateUrl = MessageFormat.format(ControllerUrlConst.DEVICE_NETWORK_URL, deviceId);
         HTTPReturnMessage httpMsg =
                 OverlayVpnDriverProxy.getInstance().sendPutMsg(updateUrl, JsonUtil.toJson(network), ctrlUuid);
@@ -157,7 +157,7 @@ public class SubnetServiceImpl {
             throw new ParameterServiceException("Invalid parameters.");
         }
 
-        ResultRsp<String> resultRsp = new ResultRsp<String>(DriverErrorCode.SUCCESS);
+        ResultRsp<String> resultRsp = new ResultRsp<String>(DriverErrorCode.OVERLAYVPN_SUCCESS);
         String deleteUrl = MessageFormat.format(ControllerUrlConst.DEVICE_NETWORK_URL, deviceId);
         List<String> ids = new ArrayList<String>();
         ids.add(networkId);

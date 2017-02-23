@@ -13,165 +13,337 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.openo.sdnhub.overlayvpndriver.translator;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
+import mockit.Mock;
+import mockit.MockUp;
+
+import org.junit.Before;
 import org.junit.Test;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
 import org.openo.sdnhub.overlayvpndriver.controller.model.VxLanDeviceModel;
 import org.openo.sdno.overlayvpn.model.v2.vxlan.SbiNeVxlanInstance;
 import org.openo.sdno.overlayvpn.model.v2.vxlan.SbiNeVxlanInterface;
 import org.openo.sdno.overlayvpn.model.v2.vxlan.SbiNeVxlanTunnel;
-import org.openo.sdno.overlayvpn.model.v2.vxlan.SbiVxlanNetModel;
 import org.openo.sdno.overlayvpn.util.check.ValidationUtil;
 
-import mockit.Mock;
-import mockit.MockUp;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 
 public class VxlanConvertTest {
 
-	@SuppressWarnings("unchecked")
-	@Test
-	public void testConvertVxlanInsToNetVxlanDeviceModel() {
-		List<SbiNeVxlanInstance> list = new ArrayList<>();
-		SbiNeVxlanInstance vxLanInstanceList = new SbiNeVxlanInstance();
-		vxLanInstanceList.getArpBroadcastSuppress();
-		vxLanInstanceList.getArpProxy();
-		vxLanInstanceList.getKeepAlive();
-		vxLanInstanceList.getVni();
-		vxLanInstanceList.getNbiVxlanTunnelId();
-		vxLanInstanceList.getVxlanTunnelList();
-		vxLanInstanceList.getVxlanTunnels();
-		vxLanInstanceList.getVxlanInterfaces();
-		vxLanInstanceList.getVxlanInterfaceList();
-		list.add(vxLanInstanceList);
+    List<SbiNeVxlanInstance> sbiVxLanInstanceList = new ArrayList<SbiNeVxlanInstance>();
 
-		Map<String, List<VxLanDeviceModel>> convertVxlanInsToNetVxlanDeviceModel = VxlanConvert.convertVxlanInsToNetVxlanDeviceModel(list);
+    SbiNeVxlanInstance sbiNeVxlanInstance = new SbiNeVxlanInstance();
 
-		assertEquals(true,convertVxlanInsToNetVxlanDeviceModel.isEmpty());
-	}
 
-	
+    /**
+     * <br/>
+     *
+     * @throws Exception setup failure exception
+     * @since SDNHUB 0.5
+     */
+    @Before
+    public void setup() throws Exception {
 
-	@Test
-	public void testConvertVxlanInsToNetVxlanDeviceModel1() {
+        List<String> vxlanInterfaces = new ArrayList<>();
+        vxlanInterfaces.add("interface1");
+        vxlanInterfaces.add("interface2");
+        List<SbiNeVxlanTunnel> vxlanTunnelList = new ArrayList<>();
+        SbiNeVxlanTunnel sbiNeVxlanTunnel = new SbiNeVxlanTunnel();
+        vxlanTunnelList.add(sbiNeVxlanTunnel);
 
-		List<VxLanDeviceModel> list2 = new ArrayList<>();
+        SbiNeVxlanInterface sbiNeVxlanInterface = new SbiNeVxlanInterface();
+        sbiNeVxlanInterface.setConnectionId("connectionId");
+        sbiNeVxlanInterface.setAccessType("port");
+        List<SbiNeVxlanInterface> vxlanInterfaceList = new ArrayList<>();
+        vxlanInterfaceList.add(sbiNeVxlanInterface);
 
-		Map<String, List<VxLanDeviceModel>> map1 = new ConcurrentHashMap<String, List<VxLanDeviceModel>>();
+        sbiNeVxlanInstance.setActiveStatus("active");
+        sbiNeVxlanInstance.setAdditionalInfo("additionalInfo");
+        sbiNeVxlanInstance.setArpBroadcastSuppress("arpBroadcastSuppress");
+        sbiNeVxlanInstance.setArpProxy("arpProxy");
+        sbiNeVxlanInstance.setConnectionId("connectionId");
+        sbiNeVxlanInstance.setControllerId("controllerId");
+        sbiNeVxlanInstance.setCreatetime((long)1236549);
+        sbiNeVxlanInstance.setDescription("description");
+        ;
+        sbiNeVxlanInstance.setDeployStatus("deployStatus");
+        sbiNeVxlanInstance.setDeviceId("device12345");
+        sbiNeVxlanInstance.setKeepAlive("keepAlive");
+        sbiNeVxlanInstance.setName("name");
+        sbiNeVxlanInstance.setNbiVxlanTunnelId("nbiVxlanTunnelId");
+        sbiNeVxlanInstance.setOperationStatus("operationStatus");
+        sbiNeVxlanInstance.setPeerDeviceId("peerDeviceId");
+        sbiNeVxlanInstance.setRunningStatus("runningStatus");
+        sbiNeVxlanInstance.setTenantId("tenantId");
+        sbiNeVxlanInstance.setUpdatetime((long)13548);
+        sbiNeVxlanInstance.setUuid("uuid");
+        sbiNeVxlanInstance.setVni("1");
+        sbiNeVxlanInstance.setVxlanInterfaces(vxlanInterfaces);
+        sbiNeVxlanInstance.setVxlanTunnelList(vxlanTunnelList);
+        List<String> vxlanTunnels = new ArrayList<>();
+        sbiNeVxlanInstance.setVxlanTunnels(vxlanTunnels);
+        sbiNeVxlanInstance.setVxlanInterfaceList(vxlanInterfaceList);
 
-		VxLanDeviceModel vxLandevicemodel = new VxLanDeviceModel();
+        sbiVxLanInstanceList.add(sbiNeVxlanInstance);
+    }
 
-		vxLandevicemodel.setUuid("21254");
-		vxLandevicemodel.setLocalAddress(null);
-		vxLandevicemodel.setName(null);
-		vxLandevicemodel.setVneId(0);
+    @Test
+    public void testConvertVxlanInsToNetVxlanDeviceModel() {
 
-		list2.add(vxLandevicemodel);
+        SbiNeVxlanInstance vxLanInstanceList = new SbiNeVxlanInstance();
+        vxLanInstanceList.getArpBroadcastSuppress();
+        vxLanInstanceList.getArpProxy();
+        vxLanInstanceList.getKeepAlive();
+        vxLanInstanceList.getVni();
+        vxLanInstanceList.getNbiVxlanTunnelId();
+        vxLanInstanceList.getVxlanTunnelList();
+        vxLanInstanceList.getVxlanTunnels();
+        vxLanInstanceList.getVxlanInterfaces();
+        vxLanInstanceList.getVxlanInterfaceList();
+        List<SbiNeVxlanInstance> list = new ArrayList<>();
+        list.add(vxLanInstanceList);
 
-		SbiVxlanNetModel sbiVxlanNetModel = new SbiVxlanNetModel();
+        Map<String, List<VxLanDeviceModel>> convertVxlanInsToNetVxlanDeviceModel =
+                VxlanConvert.convertVxlanInsToNetVxlanDeviceModel(list);
 
-		sbiVxlanNetModel.setDeviceId("123");
-		map1.containsKey(123);
-		map1.put("123", list2);
+        assertEquals(true, convertVxlanInsToNetVxlanDeviceModel.isEmpty());
 
-		List<SbiNeVxlanInstance> list1 = new ArrayList<>();
+    }
 
-		SbiNeVxlanInstance vxLanInstanceList = new SbiNeVxlanInstance();
+    @Test
+    public void testConvertVxlanInsToNetVxlanDeviceModel_Interface_port() {
 
-		vxLanInstanceList.setKeepAlive("null");
-		vxLanInstanceList.setVni("0465");
-		vxLanInstanceList.setExternalId("1772783");
-		List<SbiNeVxlanTunnel> tunnelList = new ArrayList<>();
-		SbiNeVxlanTunnel tunnel = new SbiNeVxlanTunnel();
-		tunnel.setSourceAddress("1.2.2.3");
+        sbiNeVxlanInstance.setKeepAlive("null");
+        sbiNeVxlanInstance.setVni("0465");
+        List<SbiNeVxlanTunnel> tunnelList = new ArrayList<>();
+        SbiNeVxlanTunnel tunnel = new SbiNeVxlanTunnel();
+        tunnel.setSourceAddress("1.2.2.3");
 
-		tunnelList.add(tunnel);
-		vxLanInstanceList.setVxlanTunnelList(tunnelList);
-		vxLanInstanceList.setDeviceId("546757");
+        tunnelList.add(tunnel);
+        sbiNeVxlanInstance.setVxlanTunnelList(tunnelList);
+        sbiNeVxlanInstance.setDeviceId("546757");
+        List<SbiNeVxlanInstance> sbiNeVxLanList = new ArrayList<>();
+        sbiNeVxLanList.add(sbiNeVxlanInstance);
 
-		list1.add(vxLanInstanceList);
+        Map<String, List<VxLanDeviceModel>> convertVxlanInsToNetVxlanDeviceModel =
+                VxlanConvert.convertVxlanInsToNetVxlanDeviceModel(sbiNeVxLanList);
+        assertEquals("1.2.2.3", convertVxlanInsToNetVxlanDeviceModel.get("546757").get(0).getLocalAddress());
+    }
 
-		Map<String, List<VxLanDeviceModel>> convertVxlanInsToNetVxlanDeviceModel = VxlanConvert.convertVxlanInsToNetVxlanDeviceModel(list1);		
-		assertEquals("1772783",convertVxlanInsToNetVxlanDeviceModel.get("546757").get(0).getUuid());
-	}
+    @Test
+    public void testConvertVxlanInsToNetVxlanDeviceModelList_Interface_port() {
 
-	@Test(expected = ServiceException.class)
-	public void testCheckInputCreateVxlan_EmptyList() throws ServiceException {
-		List<SbiNeVxlanInstance> list = new ArrayList<>();
+        sbiNeVxlanInstance.setKeepAlive("null");
+        sbiNeVxlanInstance.setVni("0465");
+        sbiNeVxlanInstance.setExternalId("1772783");
+        List<SbiNeVxlanTunnel> tunnelList = new ArrayList<>();
+        SbiNeVxlanTunnel tunnel = new SbiNeVxlanTunnel();
+        tunnel.setSourceAddress("1.2.2.3");
+        tunnel.setExternalId("tunnel123");
 
-		SbiNeVxlanInstance vxLanInstance = new SbiNeVxlanInstance();
-		vxLanInstance.getArpProxy();
-		vxLanInstance.getKeepAlive();
-		vxLanInstance.getVni();
-		vxLanInstance.setVxlanTunnelList(new ArrayList<>());
-		vxLanInstance.getVxlanInterfaceList();
+        tunnelList.add(tunnel);
+        sbiNeVxlanInstance.setVxlanTunnelList(tunnelList);
+        sbiNeVxlanInstance.setDeviceId("546757");
+        List<SbiNeVxlanInstance> sbiNeVxLanList = new ArrayList<>();
+        sbiNeVxLanList.add(sbiNeVxlanInstance);
+        sbiNeVxlanInstance.setDeviceId("546758");
+        sbiNeVxLanList.add(sbiNeVxlanInstance);
 
-		VxlanConvert.checkInputCreateVxlan(list);
+        Map<String, List<VxLanDeviceModel>> convertVxlanInsToNetVxlanDeviceModel =
+                VxlanConvert.convertVxlanInsToNetVxlanDeviceModel(sbiNeVxLanList);
+        assertEquals("1.2.2.3", convertVxlanInsToNetVxlanDeviceModel.get("546758").get(0).getLocalAddress());
+    }
 
-	}
+    @Test
+    public void testConvertVxlanInsToNetVxlanDeviceModel_Interface_dot1q_EmptyPortId() {
 
-	@Test
-	public void testCheckInputCreateVxlan2() throws ServiceException {
-		
-        new MockUp<ValidationUtil>(){
+        SbiNeVxlanInterface sbiNeVxlanInterface = new SbiNeVxlanInterface();
+        sbiNeVxlanInterface.setConnectionId("connectionId");
+        sbiNeVxlanInterface.setAccessType("dot1q");
+        sbiNeVxlanInterface.setDot1qVlanBitmap("1");
+        List<SbiNeVxlanInterface> vxlanInterfaceList = new ArrayList<>();
+        vxlanInterfaceList.add(sbiNeVxlanInterface);
+        sbiNeVxlanInstance.setKeepAlive("null");
+        sbiNeVxlanInstance.setVni("0465");
+        sbiNeVxlanInstance.setExternalId("1772783");
+        List<SbiNeVxlanTunnel> tunnelList = new ArrayList<>();
+        SbiNeVxlanTunnel tunnel = new SbiNeVxlanTunnel();
+        tunnel.setSourceAddress("1.2.2.3");
+
+        tunnelList.add(tunnel);
+        sbiNeVxlanInstance.setVxlanTunnelList(tunnelList);
+        sbiNeVxlanInstance.setDeviceId("546757");
+        sbiNeVxlanInstance.setVxlanInterfaceList(vxlanInterfaceList);
+        List<SbiNeVxlanInstance> sbiNeVxLanList = new ArrayList<>();
+        sbiNeVxLanList.add(sbiNeVxlanInstance);
+
+        Map<String, List<VxLanDeviceModel>> convertVxlanInsToNetVxlanDeviceModel =
+                VxlanConvert.convertVxlanInsToNetVxlanDeviceModel(sbiNeVxLanList);
+        assertEquals("1.2.2.3", convertVxlanInsToNetVxlanDeviceModel.get("546757").get(0).getLocalAddress());
+    }
+
+    @Test
+    public void testConvertVxlanInsToNetVxlanDeviceModel_Interface_dot1q() {
+
+        SbiNeVxlanInterface sbiNeVxlanInterface = new SbiNeVxlanInterface();
+        sbiNeVxlanInterface.setConnectionId("connectionId");
+        sbiNeVxlanInterface.setAccessType("dot1q");
+        sbiNeVxlanInterface.setDot1qVlanBitmap("1");
+        sbiNeVxlanInterface.setPortNativeId("1");
+        List<SbiNeVxlanInterface> vxlanInterfaceList = new ArrayList<>();
+        vxlanInterfaceList.add(sbiNeVxlanInterface);
+        sbiNeVxlanInstance.setKeepAlive("null");
+        sbiNeVxlanInstance.setVni("0465");
+        sbiNeVxlanInstance.setExternalId("1772783");
+        List<SbiNeVxlanTunnel> tunnelList = new ArrayList<>();
+        SbiNeVxlanTunnel tunnel = new SbiNeVxlanTunnel();
+        tunnel.setSourceAddress("1.2.2.3");
+
+        tunnelList.add(tunnel);
+        sbiNeVxlanInstance.setVxlanTunnelList(tunnelList);
+        sbiNeVxlanInstance.setDeviceId("546757");
+        sbiNeVxlanInstance.setVxlanInterfaceList(vxlanInterfaceList);
+        List<SbiNeVxlanInstance> sbiNeVxLanList = new ArrayList<>();
+        sbiNeVxLanList.add(sbiNeVxlanInstance);
+
+        Map<String, List<VxLanDeviceModel>> convertVxlanInsToNetVxlanDeviceModel =
+                VxlanConvert.convertVxlanInsToNetVxlanDeviceModel(sbiNeVxLanList);
+        assertEquals("1.2.2.3", convertVxlanInsToNetVxlanDeviceModel.get("546757").get(0).getLocalAddress());
+    }
+
+    @Test(expected = Exception.class)
+    public void testCheckInputCreateVxlan_EmptyInterfaceList() throws ServiceException {
+
+        new MockUp<ValidationUtil>() {
+
             @Mock
             public void validateModel(Object obj) throws ServiceException {
                 return;
             }
         };
-        
-		List<SbiNeVxlanInstance> list = new ArrayList<>();
-		SbiNeVxlanInstance vxLanInstance = new SbiNeVxlanInstance();
 
-		vxLanInstance.getArpProxy();
-		vxLanInstance.getKeepAlive();
-		vxLanInstance.setVni("huih");
-		List<SbiNeVxlanInterface> vxlanInterfaceList = new LinkedList<>();
-		SbiNeVxlanInterface sbiNeVxlanInterface = new SbiNeVxlanInterface();
-		sbiNeVxlanInterface.setControllerId("Controller123");
-		vxlanInterfaceList.add(sbiNeVxlanInterface);
-		
-		List<SbiNeVxlanTunnel> tunnelList = new ArrayList<>();
-		SbiNeVxlanTunnel tunnel = new SbiNeVxlanTunnel();
-		tunnel.setSourceAddress("1.2.2.3");
-		tunnelList.add(tunnel);
-		
-		vxLanInstance.setVxlanTunnelList(tunnelList);
-		vxLanInstance.setDeviceId("546757");
-		vxLanInstance.setVxlanInterfaceList(vxlanInterfaceList);
-		vxLanInstance.getVxlanTunnelList();
-		
-		list.add(vxLanInstance);
+        List<SbiNeVxlanInstance> list = new ArrayList<>();
+        List<SbiNeVxlanInterface> vxlanInterfaceList = new ArrayList<>();
+        sbiNeVxlanInstance.setVxlanInterfaceList(vxlanInterfaceList);
+        list.add(sbiNeVxlanInstance);
 
-		List<SbiNeVxlanInstance> checkInputCreateVxlan = VxlanConvert.checkInputCreateVxlan(list);		
-		assertEquals("huih",checkInputCreateVxlan.get(0).getVni());
+        SbiNeVxlanInstance vxLanInstance = new SbiNeVxlanInstance();
+        vxLanInstance.getArpProxy();
+        vxLanInstance.getKeepAlive();
+        vxLanInstance.getVni();
 
-	}
+        VxlanConvert.checkInputCreateVxlan(list);
+    }
 
-	@Test
-	public void testDivideVxlanInsByDeviceId() {
+    @Test(expected = Exception.class)
+    public void testCheckInputCreateVxlan_EmptyTunnelList() throws ServiceException {
 
-		List<SbiNeVxlanInstance> list = new ArrayList<>();
+        new MockUp<ValidationUtil>() {
 
-		SbiNeVxlanInstance vxLanInstanceList = new SbiNeVxlanInstance();
-		vxLanInstanceList.getArpProxy();
-		vxLanInstanceList.setKeepAlive("123");
-		vxLanInstanceList.setVni("0465");
-		vxLanInstanceList.setVxlanTunnelList(new ArrayList<>());
-		vxLanInstanceList.getVxlanInterfaceList();
-		list.add(vxLanInstanceList);
-		Map<String, List<SbiNeVxlanInstance>> divideVxlanInsByDeviceId = VxlanConvert.divideVxlanInsByDeviceId(list);		
-		assertEquals("0465",divideVxlanInsByDeviceId.get(null).get(0).getVni());
-	}
+            @Mock
+            public void validateModel(Object obj) throws ServiceException {
+                return;
+            }
+        };
+
+        List<SbiNeVxlanInstance> list = new ArrayList<>();
+        List<SbiNeVxlanTunnel> tunnelList = new ArrayList<>();
+        sbiNeVxlanInstance.setVxlanTunnelList(tunnelList);
+        list.add(sbiNeVxlanInstance);
+
+        VxlanConvert.checkInputCreateVxlan(list);
+    }
+
+    @Test(expected = Exception.class)
+    public void testCheckInputCreateVxlan_EmptyList() throws ServiceException {
+
+        SbiNeVxlanInstance vxLanInstance = new SbiNeVxlanInstance();
+        vxLanInstance.getArpProxy();
+        vxLanInstance.getKeepAlive();
+        vxLanInstance.getVni();
+        vxLanInstance.setVxlanTunnelList(new ArrayList<>());
+        vxLanInstance.getVxlanInterfaceList();
+
+        List<SbiNeVxlanInstance> list = new ArrayList<>();
+        VxlanConvert.checkInputCreateVxlan(list);
+    }
+
+    @Test
+    public void testCheckInputCreateVxlan2() throws ServiceException {
+
+        new MockUp<ValidationUtil>() {
+
+            @Mock
+            public void validateModel(Object obj) throws ServiceException {
+                return;
+            }
+        };
+
+        SbiNeVxlanInstance vxLanInstance = new SbiNeVxlanInstance();
+
+        vxLanInstance.getArpProxy();
+        vxLanInstance.getKeepAlive();
+        vxLanInstance.setVni("huih");
+        List<SbiNeVxlanInterface> vxlanInterfaceList = new LinkedList<>();
+        SbiNeVxlanInterface sbiNeVxlanInterface = new SbiNeVxlanInterface();
+        sbiNeVxlanInterface.setControllerId("Controller123");
+        vxlanInterfaceList.add(sbiNeVxlanInterface);
+
+        List<SbiNeVxlanTunnel> tunnelList = new ArrayList<>();
+        SbiNeVxlanTunnel tunnel = new SbiNeVxlanTunnel();
+        tunnel.setSourceAddress("1.2.2.3");
+        tunnelList.add(tunnel);
+
+        vxLanInstance.setVxlanTunnelList(tunnelList);
+        vxLanInstance.setDeviceId("546757");
+        vxLanInstance.setVxlanInterfaceList(vxlanInterfaceList);
+        vxLanInstance.getVxlanTunnelList();
+        List<SbiNeVxlanInstance> list = new ArrayList<>();
+        list.add(vxLanInstance);
+
+        List<SbiNeVxlanInstance> checkInputCreateVxlan = VxlanConvert.checkInputCreateVxlan(list);
+        assertEquals("huih", checkInputCreateVxlan.get(0).getVni());
+    }
+
+    @Test
+    public void testDivideVxlanInsByDeviceId() {
+
+        SbiNeVxlanInstance vxLanInstanceList = new SbiNeVxlanInstance();
+        vxLanInstanceList.getArpProxy();
+        vxLanInstanceList.setKeepAlive("123");
+        vxLanInstanceList.setVni("0465");
+        vxLanInstanceList.setVxlanTunnelList(new ArrayList<>());
+        vxLanInstanceList.getVxlanInterfaceList();
+        List<SbiNeVxlanInstance> list = new ArrayList<>();
+        list.add(vxLanInstanceList);
+        Map<String, List<SbiNeVxlanInstance>> divideVxlanInsByDeviceId = VxlanConvert.divideVxlanInsByDeviceId(list);
+        assertEquals("0465", divideVxlanInsByDeviceId.get(null).get(0).getVni());
+    }
+
+    @Test
+    public void testDivideVxlanInsByDeviceIdList() {
+
+        SbiNeVxlanInstance vxLanInstanceList = new SbiNeVxlanInstance();
+        vxLanInstanceList.getArpProxy();
+        vxLanInstanceList.setKeepAlive("123");
+        vxLanInstanceList.setVni("0465");
+        vxLanInstanceList.setVxlanTunnelList(new ArrayList<>());
+        vxLanInstanceList.getVxlanInterfaceList();
+        List<SbiNeVxlanInstance> list = new ArrayList<>();
+        list.add(vxLanInstanceList);
+        list.add(sbiNeVxlanInstance);
+        Map<String, List<SbiNeVxlanInstance>> divideVxlanInsByDeviceId = VxlanConvert.divideVxlanInsByDeviceId(list);
+        assertEquals("0465", divideVxlanInsByDeviceId.get(null).get(0).getVni());
+    }
 
 }

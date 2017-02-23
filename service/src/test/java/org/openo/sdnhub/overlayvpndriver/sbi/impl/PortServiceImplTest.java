@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.openo.sdnhub.overlayvpndriver.sbi.impl;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-import java.util.List;
+import mockit.Mock;
+import mockit.MockUp;
 
 import org.junit.Test;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
@@ -28,82 +30,113 @@ import org.openo.sdno.framework.container.util.JsonUtil;
 import org.openo.sdno.overlayvpn.result.ResultRsp;
 import org.openo.sdno.util.http.HTTPReturnMessage;
 
-import mockit.Mock;
-import mockit.MockUp;
-
 public class PortServiceImplTest {
 
-	String queryResJson = "{\"errcode\":\"0\",\"errmsg\":null,\"pageIndex\":0,\"pageSize\":0,\"totalRecords\":0,\"data\":{\"ipv4\":\"192.168.1.2\",\"ipv6\":\"\",\"ipMask\":\"\",\"prefixLength\":\"\",\"id\":\"\"},\"success\":[],\"fail\":[],\"sucess\":true}";
+    String queryResJson =
+            "{\"errcode\":\"0\",\"errmsg\":null,\"pageIndex\":0,\"pageSize\":0,\"totalRecords\":0,"
+            + "\"data\":{\"ipv4\":\"192.168.1.2\",\"ipv6\":\"\",\"ipMask\":\"\",\"prefixLength\":\"\","
+            + "\"id\":\"\"},\"success\":[],\"fail\":[],\"sucess\":true}";
 
-	@Test
-	public void queryPorts() throws ServiceException {
+    @Test
+    public void queryPorts() throws ServiceException {
 
-		PortServiceImpl portServiceImpl = new PortServiceImpl();
-		String deviceId = "device";
-		String ctrlUuid = "ctrlUuid";
+        PortServiceImpl portServiceImpl = new PortServiceImpl();
+        String deviceId = "device";
+        String ctrlUuid = "ctrlUuid";
 
-		new MockUp<OverlayVpnDriverProxy>() {
-			@Mock
-			public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
+        new MockUp<OverlayVpnDriverProxy>() {
 
-				HTTPReturnMessage msg = new HTTPReturnMessage();
-				OverlayVpnDriverResponse<SbiIp> response = new OverlayVpnDriverResponse<>();
-				SbiIp data = new SbiIp();
-				data.setIpv4("192.168.2.1");
-				response.setErrcode("0");
-				response.setData(data);
-				msg.setBody(JsonUtil.toJson(response));
-				msg.setStatus(200);
-				return msg;
-			}
-		};
+            @Mock
+            public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
 
-		ResultRsp<SbiIp> queryPorts = portServiceImpl.queryPorts(deviceId, ctrlUuid);		
-		String errorCode = queryPorts.getErrorCode();		
-		assertEquals(true,errorCode.contains("192.168.2.1"));
-	}
+                OverlayVpnDriverResponse<SbiIp> response = new OverlayVpnDriverResponse<>();
+                SbiIp data = new SbiIp();
+                data.setIpv4("192.168.2.1");
+                response.setErrcode("0");
+                response.setData(data);
 
-	@Test(expected = ServiceException.class)
-	public void queryPortsFailure() throws ServiceException {
+                HTTPReturnMessage msg = new HTTPReturnMessage();
+                msg.setBody(JsonUtil.toJson(response));
+                msg.setStatus(200);
+                return msg;
+            }
+        };
 
-		PortServiceImpl portServiceImpl = new PortServiceImpl();
-		String deviceId = "device";
-		String ctrlUuid = "ctrlUuid";
+        ResultRsp<SbiIp> queryPorts = portServiceImpl.queryPorts(deviceId, ctrlUuid);
+        String errorCode = queryPorts.getErrorCode();
+        assertEquals(true, errorCode.contains("192.168.2.1"));
+    }
 
-		new MockUp<OverlayVpnDriverProxy>() {
-			@Mock
-			public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
+    @Test(expected = ServiceException.class)
+    public void queryPortsFailure() throws ServiceException {
 
-				HTTPReturnMessage msg = new HTTPReturnMessage();
-				msg.setBody("");
-				msg.setStatus(500);
-				return msg;
-			}
-		};
+        PortServiceImpl portServiceImpl = new PortServiceImpl();
+        String deviceId = "device";
+        String ctrlUuid = "ctrlUuid";
 
-		portServiceImpl.queryPorts(deviceId, ctrlUuid);
+        new MockUp<OverlayVpnDriverProxy>() {
 
-	}
+            @Mock
+            public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
 
-	@Test(expected = ServiceException.class)
-	public void queryPortsAcResponseFailure() throws ServiceException {
+                HTTPReturnMessage msg = new HTTPReturnMessage();
+                msg.setBody("");
+                msg.setStatus(200);
+                return msg;
+            }
+        };
 
-		PortServiceImpl portServiceImpl = new PortServiceImpl();
-		String deviceId = "device";
-		String ctrlUuid = "ctrlUuid";
+        portServiceImpl.queryPorts(deviceId, ctrlUuid);
 
-		new MockUp<OverlayVpnDriverProxy>() {
-			@Mock
-			public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
+    }
 
-				HTTPReturnMessage msg = new HTTPReturnMessage();
-				msg.setBody(queryResJson);
-				msg.setStatus(500);
-				return msg;
-			}
-		};
+    @Test(expected = ServiceException.class)
+    public void queryPortsAcResponseFailure() throws ServiceException {
 
-		portServiceImpl.queryPorts(deviceId, ctrlUuid);
+        PortServiceImpl portServiceImpl = new PortServiceImpl();
+        String deviceId = "device";
+        String ctrlUuid = "ctrlUuid";
 
-	}
+        new MockUp<OverlayVpnDriverProxy>() {
+
+            @Mock
+            public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
+
+                HTTPReturnMessage msg = new HTTPReturnMessage();
+                msg.setBody(queryResJson);
+                msg.setStatus(500);
+                return msg;
+            }
+        };
+
+        portServiceImpl.queryPorts(deviceId, ctrlUuid);
+
+    }
+
+    @Test(expected = ServiceException.class)
+    public void queryPortsFail() throws ServiceException {
+
+        PortServiceImpl portServiceImpl = new PortServiceImpl();
+        String deviceId = "device";
+        String ctrlUuid = "ctrlUuid";
+
+        new MockUp<OverlayVpnDriverProxy>() {
+
+            @Mock
+            public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
+                OverlayVpnDriverResponse<SbiIp> response = new OverlayVpnDriverResponse<>();
+                SbiIp data = new SbiIp();
+                data.setIpv4("192.168.2.1");
+                response.setErrcode("01");
+                response.setData(data);
+
+                HTTPReturnMessage msg = new HTTPReturnMessage();
+                msg.setBody(JsonUtil.toJson(response));
+                msg.setStatus(200);
+                return msg;
+            }
+        };
+
+        portServiceImpl.queryPorts(deviceId, ctrlUuid);
+    }
 }

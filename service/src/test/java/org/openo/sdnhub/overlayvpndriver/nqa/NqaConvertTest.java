@@ -16,8 +16,11 @@
 
 package org.openo.sdnhub.overlayvpndriver.nqa;
 
+import static org.junit.Assert.assertEquals;
+
 import mockit.Mock;
 import mockit.MockUp;
+
 import org.junit.Test;
 import org.openo.sdnhub.overlayvpndriver.result.OverlayVpnDriverResponse;
 import org.openo.sdnhub.overlayvpndriver.service.model.ControllerNbiNqa;
@@ -27,12 +30,11 @@ import org.openo.sdno.overlayvpn.model.v2.route.SbiNqa;
 import org.openo.sdno.overlayvpn.result.ResultRsp;
 import org.openo.sdno.util.http.HTTPReturnMessage;
 
-import static org.junit.Assert.*;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 
 public class NqaConvertTest {
 
@@ -40,15 +42,15 @@ public class NqaConvertTest {
     public void testParseResponse() {
         HTTPReturnMessage httpMsg = new HTTPReturnMessage();
         httpMsg.setStatus(200);
-        OverlayVpnDriverResponse<SbiNqa> obj = new OverlayVpnDriverResponse<SbiNqa>();
 
-        SbiNqa nQADeviceModel = new SbiNqa();
-        nQADeviceModel.setDstIp("10.10.12.12");
-        nQADeviceModel.setNeId("123");
-        nQADeviceModel.setSrcIp("10.10.12.11");
-        nQADeviceModel.setTestType("trunk");
+        SbiNqa nqaDeviceModel = new SbiNqa();
+        nqaDeviceModel.setDstIp("10.10.12.12");
+        nqaDeviceModel.setNeId("123");
+        nqaDeviceModel.setSrcIp("10.10.12.11");
+        nqaDeviceModel.setTestType("trunk");
+        OverlayVpnDriverResponse<SbiNqa> obj = new OverlayVpnDriverResponse<SbiNqa>();
         obj.setErrcode("0");
-        obj.setData(nQADeviceModel);
+        obj.setData(nqaDeviceModel);
         String actionDesc = "actionDesc";
         ResultRsp<SbiNqa> result = NqaConvert.parseResponse(httpMsg, actionDesc);
         assertEquals(result.getErrorCode(), "cloudvpn.failed");
@@ -58,13 +60,13 @@ public class NqaConvertTest {
     public void testParseResponse1() {
         HTTPReturnMessage httpMsg = new HTTPReturnMessage();
         httpMsg.setStatus(200);
+        SbiNqa nqaDeviceModel = new SbiNqa();
+        nqaDeviceModel.setDstIp("10.10.12.12");
+        nqaDeviceModel.setNeId("123");
+        nqaDeviceModel.setSrcIp("10.10.12.11");
+        nqaDeviceModel.setTestType("trunk");
         OverlayVpnDriverResponse<SbiNqa> obj = new OverlayVpnDriverResponse<SbiNqa>();
-        SbiNqa nQADeviceModel = new SbiNqa();
-        nQADeviceModel.setDstIp("10.10.12.12");
-        nQADeviceModel.setNeId("123");
-        nQADeviceModel.setSrcIp("10.10.12.11");
-        nQADeviceModel.setTestType("trunk");
-        obj.setData(nQADeviceModel);
+        obj.setData(nqaDeviceModel);
         String actionDesc = "actionDesc";
         obj.setErrcode("123");
         ResultRsp<SbiNqa> result = NqaConvert.parseResponse(httpMsg, actionDesc);
@@ -75,15 +77,15 @@ public class NqaConvertTest {
     public void testParseResponse2() {
         HTTPReturnMessage httpMsg = new HTTPReturnMessage();
         httpMsg.setStatus(200);
+
+        SbiNqa nqaDeviceModel = new SbiNqa();
+        nqaDeviceModel.setDstIp("10.10.12.12");
+        nqaDeviceModel.setNeId("123");
+        nqaDeviceModel.setSrcIp("10.10.12.11");
+        nqaDeviceModel.setTestType("trunk");
+
         OverlayVpnDriverResponse<SbiNqa> obj = new OverlayVpnDriverResponse<SbiNqa>();
-
-        SbiNqa nQADeviceModel = new SbiNqa();
-        nQADeviceModel.setDstIp("10.10.12.12");
-        nQADeviceModel.setNeId("123");
-        nQADeviceModel.setSrcIp("10.10.12.11");
-        nQADeviceModel.setTestType("trunk");
-
-        obj.setData(nQADeviceModel);
+        obj.setData(nqaDeviceModel);
 
         obj.setErrcode("123");
 
@@ -115,66 +117,66 @@ public class NqaConvertTest {
 
         HTTPReturnMessage httpMsg = new HTTPReturnMessage();
         ResultRsp<SbiNqa> result = NqaConvert.parseResponse(httpMsg, "actionDesc");
-        assertEquals(result.getErrorCode(),"cloudvpn.failed");
+        assertEquals(result.getErrorCode(), "cloudvpn.failed");
     }
 
     @Test
     public void testParseDeleteResponse5() {
         HTTPReturnMessage httpMsg = new HTTPReturnMessage();
         httpMsg.setStatus(200);
-        OverlayVpnDriverResponse<SbiNqa> obj = new OverlayVpnDriverResponse<SbiNqa>();
 
-        SbiNqa nQADeviceModel = new SbiNqa();
-        nQADeviceModel.setDstIp("10.10.12.12");
-        nQADeviceModel.setNeId("123");
-        nQADeviceModel.setSrcIp("10.10.12.11");
-        nQADeviceModel.setTestType("trunk");
+        SbiNqa nqaDeviceModel = new SbiNqa();
+        nqaDeviceModel.setDstIp("10.10.12.12");
+        nqaDeviceModel.setNeId("123");
+        nqaDeviceModel.setSrcIp("10.10.12.11");
+        nqaDeviceModel.setTestType("trunk");
+        OverlayVpnDriverResponse<SbiNqa> obj = new OverlayVpnDriverResponse<SbiNqa>();
         obj.setErrcode("0");
-        obj.setData(nQADeviceModel);
+        obj.setData(nqaDeviceModel);
         String actionDesc = "actionDesc";
         ResultRsp<String> response = NqaConvert.parseDeleteResponse(httpMsg, actionDesc);
-        assertEquals(response.getMessage(),"actionDesc");
+        assertEquals(response.getMessage(), "actionDesc");
     }
 
     @Test
     public void testParseDeleteResponse1() {
         HTTPReturnMessage httpMsg = new HTTPReturnMessage();
         httpMsg.setStatus(200);
+
+        SbiNqa nqaDeviceModel = new SbiNqa();
+        nqaDeviceModel.setDstIp("10.10.12.12");
+        nqaDeviceModel.setNeId("123");
+        nqaDeviceModel.setSrcIp("10.10.12.11");
+        nqaDeviceModel.setTestType("trunk");
+
         OverlayVpnDriverResponse<SbiNqa> obj = new OverlayVpnDriverResponse<SbiNqa>();
-
-        SbiNqa nQADeviceModel = new SbiNqa();
-        nQADeviceModel.setDstIp("10.10.12.12");
-        nQADeviceModel.setNeId("123");
-        nQADeviceModel.setSrcIp("10.10.12.11");
-        nQADeviceModel.setTestType("trunk");
-
-        obj.setData(nQADeviceModel);
+        obj.setData(nqaDeviceModel);
         String actionDesc = "actionDesc";
         obj.setErrcode("123");
 
         ResultRsp<String> response = NqaConvert.parseDeleteResponse(httpMsg, actionDesc);
-        assertEquals(response.getHttpCode(),200);
+        assertEquals(response.getHttpCode(), 200);
     }
 
     @Test
     public void testParseDeleteResponse2() {
         HTTPReturnMessage httpMsg = new HTTPReturnMessage();
         httpMsg.setStatus(200);
+
+        SbiNqa nqaDeviceModel = new SbiNqa();
+        nqaDeviceModel.setDstIp("10.10.12.12");
+        nqaDeviceModel.setNeId("123");
+        nqaDeviceModel.setSrcIp("10.10.12.11");
+        nqaDeviceModel.setTestType("trunk");
+
         OverlayVpnDriverResponse<SbiNqa> obj = new OverlayVpnDriverResponse<SbiNqa>();
-
-        SbiNqa nQADeviceModel = new SbiNqa();
-        nQADeviceModel.setDstIp("10.10.12.12");
-        nQADeviceModel.setNeId("123");
-        nQADeviceModel.setSrcIp("10.10.12.11");
-        nQADeviceModel.setTestType("trunk");
-
-        obj.setData(nQADeviceModel);
+        obj.setData(nqaDeviceModel);
         String actionDesc = "actionDesc";
         obj.setErrcode("123");
         httpMsg.setBody(JsonUtil.toJson(obj));
 
         ResultRsp<String> response = NqaConvert.parseDeleteResponse(httpMsg, actionDesc);
-        assertEquals(response.getSuccessed().size(),0);
+        assertEquals(response.getSuccessed().size(), 0);
     }
 
     @Test
@@ -184,8 +186,8 @@ public class NqaConvertTest {
         Map<String, String> obj = new HashMap<>();
         obj.put("12", "value");
         String actionDesc = "actionDesc";
-        ResultRsp<String> response =  NqaConvert.parseDeleteResponse(httpMsg, actionDesc);
-        assertEquals(response.getErrorCode(),"cloudvpn.failed");
+        ResultRsp<String> response = NqaConvert.parseDeleteResponse(httpMsg, actionDesc);
+        assertEquals(response.getErrorCode(), "cloudvpn.failed");
     }
 
     @Test
@@ -200,8 +202,8 @@ public class NqaConvertTest {
 
         HTTPReturnMessage httpMsg = new HTTPReturnMessage();
         NqaConvert.parseResponse(httpMsg, "actionDesc");
-        ResultRsp<String> response =  NqaConvert.parseDeleteResponse(httpMsg, "actionDesc");
-        assertEquals(response.isSuccess(),false);
+        ResultRsp<String> response = NqaConvert.parseDeleteResponse(httpMsg, "actionDesc");
+        assertEquals(response.isSuccess(), false);
     }
 
     @Test
@@ -211,9 +213,10 @@ public class NqaConvertTest {
         sbiNqa.setNeId("1234");
         sbiNqaIdList.add(sbiNqa);
         List<ControllerNbiNqa> result = NqaConvert.convert2Sbi(sbiNqaIdList);
-        assertEquals(result.get(0).toString(),"ClassPojo [testType = null, srcPort = null, sequency = null," +
-                " frequency = null, ttl = null, id = null, tos = null, srcIp6 = null, dstIp6 = null," +
-                " probeCount = null, srcIp = null, timeout = null, dstIp = null]");
+        assertEquals(result.get(0).toString(),
+                "ClassPojo [testType = null, srcPort = null, sequency = null,"
+                        + " frequency = null, ttl = null, id = null, tos = null, srcIp6 = null, dstIp6 = null,"
+                        + " probeCount = null, srcIp = null, timeout = null, dstIp = null]");
     }
 
     @Test

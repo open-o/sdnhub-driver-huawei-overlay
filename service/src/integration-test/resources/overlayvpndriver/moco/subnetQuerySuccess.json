@@ -1,0 +1,61 @@
+{
+	"request": {
+		"uri": "/controller/cloud/v2/northbound/config/[a-zA-Z0-9\\-\\_]{1,36}/device/network",
+		"method": "get",
+		"headers": {
+			"Content-Type": "application/json;charset=UTF-8"
+		},
+		"json": {
+
+		}
+	},
+	"response": {
+		"status": 200,
+		"json": {
+			"errcode": "overlayvpn.operation.success",
+			"errmsg": "",
+			"data": {
+				"id": "1234",
+				"name": "Subnet model",
+				"use": "terminal",
+				"vni": 0,
+				"vlanId": 0,
+				"ipAddress": null,
+				"maskAddress": null,
+				"ipv6Address": null,
+				"prefixLength": null,
+				"description": null,
+				"subnetList": null,
+				"dhcpEnable": false,
+				"dhcp6Enable": false,
+				"dhcp6Config": {
+					"dhcpMode": "server",
+					"dnsServer": "systemsetting",
+					"excludedAddresses6": null
+				},
+				"dhcpConfig": {
+					"dhcpMode": "srever",
+					"masterWins": null,
+					"slaveWins": null,
+					"dnsConfig": {
+						"dnsServerMode": "systemsetting",
+						"priorDnsServer": null,
+						"standbyDnsServer": null
+					},
+					"timeConfig": {
+						"unlimit": true,
+						"day": 0,
+						"hour": 0,
+						"minute": 0
+					},
+					"excludedAddresses": null,
+					"staticBindings": null,
+					"relayServerIps": null,
+					"dhcpServerOptions": null
+				},
+				"isChangedMode": false
+			}
+		}
+
+	}
+}

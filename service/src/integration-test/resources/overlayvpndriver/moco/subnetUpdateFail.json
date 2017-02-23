@@ -1,0 +1,37 @@
+{
+	"request": {
+		"uri": "/controller/cloud/v2/northbound/config/[a-zA-Z0-9\\-\\_]{1,36}/device/network",
+		"method": "put",
+		"headers": {
+			"Content-Type": "application/json;charset=UTF-8"
+		},
+		"json": {
+			"id": "1234",
+			"name": "Subnet model",
+			"use": "true",
+			"vni": 1123,
+			"vlanId": 123,
+			"ipAddress": null,
+			"maskAddress": null,
+			"ipv6Address": "10.12.13.14.15.16",
+			"prefixLength": 2,
+			"description": "description",
+			"subnetList": [],
+			"dhcpEnable": false,
+			"dhcp6Enable": false,
+			"dhcp6Config": {
+				"dhcpMode": "dhcp6Mode",
+				"dnsServer": "10.11.12.13",
+				"excludedAddresses6": null
+			},
+			"dhcpConfig": null,
+			"isChangedMode": false
+		}
+
+
+	},
+	"response": {
+		"status": 500,
+		"json": null
+	}
+}
