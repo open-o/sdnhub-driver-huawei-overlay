@@ -1,7 +1,7 @@
 {
     "driverInfo": {
-        "driverName": "sdnooverlaydriver-0-1",
-        "instanceID": "sdnooverlaydriver-0-1",
+        "driverName": "sdnhuboverlaydriver-0-1",
+        "instanceID": "sdnhuboverlaydriver-0-1",
         "ip": "",
         "port": "8536",
         "protocol": "http",
