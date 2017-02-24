@@ -1,0 +1,17 @@
+{
+    "request": {
+        "uri": "/controller/cloud/v2/northbound/config/[a-zA-Z0-9\\-\\_]{1,36}/device/acl",
+        "method": "delete",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "json": {
+"ids": ["53dfcfe29acd4d41b645afe3fcf230f7","c52688686663409dafaafbc08e6f6443"]
+}
+
+    },
+"response": {
+        "status": 500,
+        "json": null
+    }
+}

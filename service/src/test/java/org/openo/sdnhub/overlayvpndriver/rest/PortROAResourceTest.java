@@ -42,7 +42,7 @@ public class PortROAResourceTest {
 
     String queryResJson =
             "{\"errcode\":\"0\",\"errmsg\":null,\"pageIndex\":0," + "\"pageSize\":0,\"totalRecords\":0,\"data\":"
-                    + "{\"ipv4\":\"192.168.1.2\",\"ipv6\":\"\",\"ipMask\":\"\",\"prefixLength\":" + "\"\",\"id\":\"\"},"
+                    + "[{\"ipAddr\":\"192.168.1.2\",\"ipv6Addr\":\"\",\"ipMask\":\"\",\"prefixLength\":" + "\"\",\"id\":\"\"}],"
                     + "\"success\":[],\"fail\":[],\"sucess\":true}";
 
     @Test
@@ -61,7 +61,7 @@ public class PortROAResourceTest {
         };
 
         ResultRsp<SbiIp> result = portRoAResource.queryPortIpByPortName(null, "extSysID=ctrlid1024", "123", "test_port");
-        assertEquals(result.getErrorCode(), "0");
+        assertEquals(result.getErrorCode(), "success");
     }
 
     @Test(expected = ServiceException.class)

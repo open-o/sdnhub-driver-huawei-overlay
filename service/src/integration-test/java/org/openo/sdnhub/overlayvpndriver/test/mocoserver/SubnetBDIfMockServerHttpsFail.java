@@ -7,34 +7,34 @@ import org.slf4j.LoggerFactory;
 
 public class SubnetBDIfMockServerHttpsFail extends MocoHttpsServer{
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(SubnetBDIfMockServerHttpsFail.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SubnetBDIfMockServerHttpsFail.class);
 
     public SubnetBDIfMockServerHttpsFail() {
         super();
     }
-	@Override
+    @Override
     public void addRequestResponsePairs()  {
 
         this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/subnetBDIfQueryFail.json",
                 new MocoResponseHandler());
-        
+
       /*  this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/localSnatUpdateFail.json",
                 new MocoResponseHandler());
-        
-        
+
+
         this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/localSnatQueryFail.json",
                 new MocoResponseHandler());
-        
+
         this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/localSnatDeleteFail.json",
                 new MocoResponseHandler());
-        
+
         this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/aclCreateFail.json",
                 new MocoResponseHandler());
         this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/aclDeleteFail.json",
                 new MocoResponseHandler());
         this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/aclQueryFail.json",
                 new MocoResponseHandler());*/
-       
+
     }
 
 }

@@ -28,7 +28,7 @@ public class SubnetConvertTest {
     @Test(expected = ServiceException.class)
     public void buildUpdateAcNetworkNetworkNull() throws ServiceException {
         SbiSubnetNetModel sbi = new SbiSubnetNetModel();
-        SubnetConvert.buildUpdateAcNetwork(sbi, "CtrlId", "deviceId");
+        SubnetConvert.buildUpdateAcNetwork(sbi, "CtrlId", "deviceid");
     }
 
     @Test

@@ -1,0 +1,20 @@
+{
+    "request": {
+        "uri": "http://localhost:8080/openoapi/sbi-localsite/v1/device/abc123/snat",
+        "method": "post",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "json":   [{
+                "id": "123",
+                "aclId": "1234",
+                "interfaceName": "interfaceName",
+                "qosPreNat": "qosPreNat",
+                "aclNumber": 11111
+            }]
+    },
+    "response": {
+        "status": 500,
+        "json": null
+    }
+}

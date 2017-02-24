@@ -159,7 +159,5 @@ public class NqaConfigUtilTest {
         String actionDesc = "actionDesc";
         ResultRsp<String> rsp = NqaConfigUtil.parseDeleteResponse(msg, msg.getBody(), actionDesc);
         assertEquals("overlayvpn.operation.failed", rsp.getErrorCode());
-
     }
-
 }

@@ -306,7 +306,7 @@ public class NqaROAResourceTest {
         List<SbiNqa> sbiNqaList = new ArrayList<SbiNqa>();
         sbiNqaList.add(sbiNqa);
         sbiNqaList.add(sbiNqa1);
-        nqaRoaResource.createNQA(null, "extSysID=ctrlid1024", "deviceId", sbiNqaList);
+        nqaRoaResource.createNQA(null, "extSysID=ctrlid1024", "deviceid", sbiNqaList);
     }
 
     @Test(expected = ServiceException.class)
@@ -338,7 +338,7 @@ public class NqaROAResourceTest {
         List<SbiNqa> sbiNqaList = new ArrayList<SbiNqa>();
         sbiNqaList.add(sbiNqa);
         sbiNqaList.add(sbiNqa1);
-        nqaRoaResource.createNQA(null, "extSysID=ctrlid1024", "deviceId", sbiNqaList);
+        nqaRoaResource.createNQA(null, "extSysID=ctrlid1024", "deviceid", sbiNqaList);
     }
 
     @Test(expected = ServiceException.class)
@@ -360,7 +360,7 @@ public class NqaROAResourceTest {
 
         sbiNqaList.add(sbiNqa);
         sbiNqaList.add(sbiNqa1);
-        nqaRoaResource.createNQA(null, "extSysID=ctrlid1024", "deviceId", sbiNqaList);
+        nqaRoaResource.createNQA(null, "extSysID=ctrlid1024", "deviceid", sbiNqaList);
     }
 
     @Test(expected = ServiceException.class)
@@ -392,7 +392,7 @@ public class NqaROAResourceTest {
         List<SbiNqa> sbiNqaList = new ArrayList<SbiNqa>();
         sbiNqaList.add(sbiNqa);
         sbiNqaList.add(sbiNqa1);
-        nqaRoaResource.createNQA(null, "", "deviceId", sbiNqaList);
+        nqaRoaResource.createNQA(null, "", "deviceid", sbiNqaList);
     }
 
     @Test

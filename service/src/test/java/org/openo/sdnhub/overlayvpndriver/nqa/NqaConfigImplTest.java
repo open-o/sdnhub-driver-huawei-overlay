@@ -43,5 +43,4 @@ public class NqaConfigImplTest {
     public void testDeleteNqaConfigExceptionCase() throws ServiceException {
         nqaConfigImpl.deleteNqaConfig("", "deleteUrl", "nqaListJson");
     }
-
 }

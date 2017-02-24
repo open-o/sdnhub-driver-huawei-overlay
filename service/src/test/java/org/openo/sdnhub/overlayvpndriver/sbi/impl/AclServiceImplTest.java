@@ -45,7 +45,7 @@ public class AclServiceImplTest {
 
     @Test(expected = ServiceException.class)
     public void createAclCtrlUuidNull() throws ServiceException {
-        String deviceId = "deviceId";
+        String deviceId = "deviceid";
         impl.createAcl(null, null, deviceId);
     }
 
@@ -57,7 +57,7 @@ public class AclServiceImplTest {
 
     @Test(expected = ServiceException.class)
     public void deleteAclCtrlUuidNull() throws ServiceException {
-        String deviceId = "deviceId";
+        String deviceId = "deviceid";
         impl.deleteAcl(null, null, deviceId);
     }
 
@@ -179,7 +179,7 @@ public class AclServiceImplTest {
     @Test(expected = ServiceException.class)
     public void queryAclCtrlNull() throws ServiceException {
 
-        String deviceId = "deviceId";
+        String deviceId = "deviceid";
         impl.queryAcl(null, null, deviceId);
     }
 
@@ -215,7 +215,7 @@ public class AclServiceImplTest {
 
         String aclId = "aclId";
         String ctrlUuid = "CtrlUuid";
-        String deviceId = "deviceId";
+        String deviceId = "deviceid";
         ResultRsp<AcAcl> rsp = impl.queryAcl(aclId, ctrlUuid, deviceId);
 
         assertEquals("overlayvpn.operation.failed", rsp.getErrorCode());
@@ -308,7 +308,7 @@ public class AclServiceImplTest {
         };
 
         String ctrlUuid = "CtrlUuid";
-        String deviceId = "deviceId";
+        String deviceId = "deviceid";
         AcAcl acl = new AcAcl();
         acl.setAclName("name");
         ResultRsp<AcAcl> rsp = impl.updateAcl(acl, ctrlUuid, deviceId);
@@ -318,7 +318,7 @@ public class AclServiceImplTest {
     @Test(expected = ServiceException.class)
     public void updateAclCtrluuid() throws ServiceException {
 
-        String deviceId = "deviceId";
+        String deviceId = "deviceid";
         AcAcl acl = new AcAcl();
         acl.setAclName("name");
         impl.updateAcl(acl, "", deviceId);

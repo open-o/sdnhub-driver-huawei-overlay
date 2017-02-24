@@ -1,0 +1,16 @@
+{
+    "request": {
+        "uri": "/controller/cloud/v2/northbound/config/[a-zA-Z0-9\\-\\_]{1,36}/device/nat",
+        "method": "delete",
+        "headers": {
+            "Content-Type": "application/json;charset=UTF-8"
+        },
+        "json": {
+"ids": ["2467a068795b41ee9676bc79168da7a6","e8b578b4528e47c4bbda517166a38161"]
+}
+    },
+    "response": {
+        "status": 500,
+        "json": null
+    }
+}

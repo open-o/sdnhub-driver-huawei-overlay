@@ -66,11 +66,11 @@ public class VlanROAResource {
      * @since SDNHUB 0.5
      */
     @POST
-    @Path("/device/{deviceid}/localsite/vlan")
+    @Path("/device/{deviceuuid}/vlan")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ResultRsp<List<SbiIfVlan>> createVlan(@Context HttpServletRequest request,
-            @PathParam(CommonConst.DEVICE_ID_PATH_PARAM) String deviceId,
+            @PathParam(CommonConst.DEVICE_UUID_PATH_PARAM) String deviceId,
             @HeaderParam(CommonConst.CTRL_HEADER_PARAM) String ctrlUuidParam,
             List<SbiIfVlan> ifVlanList) throws ServiceException {
 
@@ -110,11 +110,11 @@ public class VlanROAResource {
      * @since SDNHUB 0.5
      */
     @PUT
-    @Path("/device/{deviceid}/localsite/vlan")
+    @Path("/device/{deviceuuid}/vlan")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ResultRsp<List<SbiIfVlan>> updateVlan(@Context HttpServletRequest request,
-            @PathParam(CommonConst.DEVICE_ID_PATH_PARAM) String deviceId,
+            @PathParam(CommonConst.DEVICE_UUID_PATH_PARAM) String deviceId,
             @HeaderParam(CommonConst.CTRL_HEADER_PARAM) String ctrlUuidParam,
             List<SbiIfVlan> ifVlanList) throws ServiceException {
 
@@ -150,11 +150,11 @@ public class VlanROAResource {
      * @since SDNHUB 0.5
      */
     @GET
-    @Path("/device/{deviceid}/localsite/vlan/{ids}")
+    @Path("/device/{deviceuuid}/vlan/{ids}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ResultRsp<List<SbiIfVlan>> queryVlan(@Context HttpServletRequest request,
-            @PathParam(CommonConst.DEVICE_ID_PATH_PARAM) String deviceId,
+            @PathParam(CommonConst.DEVICE_UUID_PATH_PARAM) String deviceId,
             @PathParam(CommonConst.IDS_PATH_PARAM) String ids,
             @HeaderParam(CommonConst.CTRL_HEADER_PARAM) String ctrlUuidParam) throws ServiceException {
 

@@ -29,20 +29,20 @@ import org.openo.sdno.testframework.testmanager.TestManager;
 import org.openo.sdno.testframework.util.file.FileUtils;
 
 public class ITSubnetBDIfServiceFail {
-    
+
     private SubnetBDIfMockServerFail subnetMockServer = new SubnetBDIfMockServerFail();
     private SubnetBDIfMockServerHttpsFail subnetMockServerHttps = new SubnetBDIfMockServerHttpsFail();
 
     @Before
     public void setup() throws ServiceException {
-    	subnetMockServer.start();
-    	subnetMockServerHttps.start();
+        subnetMockServer.start();
+        subnetMockServerHttps.start();
     }
 
     @After
     public void tearDown() throws ServiceException {
-    	subnetMockServer.stop();
-    	subnetMockServerHttps.stop();
+        subnetMockServer.stop();
+        subnetMockServerHttps.stop();
     }
 
 
@@ -62,8 +62,8 @@ public class ITSubnetBDIfServiceFail {
         HttpResponse createResponse = new TestManager().execTestCase(createFile, new SuccessChecker());
         String response = createResponse.getData();
     }
-   
- 
+
+
     private class SuccessChecker implements IChecker {
 
         @Override

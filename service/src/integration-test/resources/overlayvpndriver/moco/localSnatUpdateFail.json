@@ -1,0 +1,22 @@
+{
+    "request": {
+        "uri": "/controller/cloud/v2/northbound/config/[a-zA-Z0-9\\-\\_]{1,36}/device/nat",
+        "method": "put",
+        "headers": {
+            "Content-Type": "application/json;charset=UTF-8"
+        },
+        "json":{
+    "natList" : [{
+        "id": "2467a068795b41ee9676bc79168da7a6",
+            "interfaceName" : "GigabitEthernet0/0/2",
+            "aclId" : "7db47412f2b44164a16ef18b16a81c1c",
+            "qosPreNat":true
+        }
+    ]
+}
+    },
+    "response": {
+        "status": 500,
+        "json": null
+    }
+}

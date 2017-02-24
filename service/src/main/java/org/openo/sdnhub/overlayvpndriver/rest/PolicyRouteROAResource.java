@@ -199,11 +199,11 @@ public class PolicyRouteROAResource {
      * @since SDNHUB 0.5
      */
     @POST
-    @Path("/device/{deviceId}/batch-delete-policy-routes")
+    @Path("/device/{deviceid}/batch-delete-policy-routes")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ResultRsp<String> routeBatchDelete(@Context HttpServletRequest request,
-            @HeaderParam(CommonConst.CTRL_HEADER_PARAM) String ctrlUuidParam, @PathParam("deviceId") String deviceId,
+            @HeaderParam(CommonConst.CTRL_HEADER_PARAM) String ctrlUuidParam, @PathParam("deviceid") String deviceId,
             List<String> routeIds) throws ServiceException {
 
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);

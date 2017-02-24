@@ -1,0 +1,18 @@
+{
+  "request" : {
+    "uri" : "/controller/cloud/v2/northbound/config/[a-zA-Z0-9\\-\\_]{1,36}/device/interfacesip",
+    "method" : "get",
+    "headers" : {
+        "X-Auth-Token": "junk"
+    },
+    "json" : null
+  },
+  "response" : {
+    "status" : "200",
+    "json" : {
+         "errcode": "overlayvpn.operation.success",
+         "errmsg": "",
+         "data": [{"interfaceName":"interfaceOne","mode":"manual","ip":"1.5.6.7","netMask":null,"mode6":"manual","ipv6Address":null,"prefixLength":null}]
+      }
+  }
+}

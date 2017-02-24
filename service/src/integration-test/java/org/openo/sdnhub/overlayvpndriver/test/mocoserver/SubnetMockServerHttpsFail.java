@@ -23,27 +23,27 @@ import org.slf4j.LoggerFactory;
 
 public class SubnetMockServerHttpsFail extends MocoHttpsServer{
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(SubnetMockServerHttpsFail.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SubnetMockServerHttpsFail.class);
 
     public SubnetMockServerHttpsFail() {
         super();
     }
-	@Override
+    @Override
     public void addRequestResponsePairs()  {
 
         this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/subnetCreateFail.json",
                 new MocoResponseHandler());
-        
+
         this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/subnetUpdateFail.json",
                 new MocoResponseHandler());
-        
-        
+
+
         this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/subnetQueryFail.json",
                 new MocoResponseHandler());
-        
+
         this.addRequestResponsePair("src/integration-test/resources/overlayvpndriver/moco/subnetDeleteFail.json",
                 new MocoResponseHandler());
-       
+
     }
 
 }

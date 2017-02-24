@@ -1,140 +1,139 @@
 {
-	"request": {
-		"uri": "http://localhost:8080/overlayvpndriverservice/openoapi/sbi-localsite/v1/device/abc132/subnet",
-		"method": "post",
-		"headers": {
-			"Content-Type": "application/json",
-			"X-Driver-Parameter": "extSysID=ctrlid123"
-		},
-		"json": {
-			"tenantId": "acd123",
-			"name": "Subnet model",
-			"description": "description",
-			"additionalInfo": [{
-				"name": "subnet nv string",
-				"value": "value",
-				"firstParentUuid": "1234a",
-				"id": "1234ab"
-			}],
-			"operStatus": "none",
-			"adminStatus": "active",
-			"actionState": "Normal",
-			"createTime": "60",
-			"neId": "123",
-			"controllerId": "ctrlid1024",
-			"networkId": "1234",
-			"serviceSubnetId": "abcdd123",
-			"vni": "123",
-			"vlanId": "123",
-			"cidrIpAddress": "12.12.15.16",
-			"cidrMask": "255.3.5.4",
-			"gatewayIp": "10.11.12.13",
-			"enableDhcp": "enableDhcp",
-			"ipRangeStartIp": "10.10.10.1",
-			"ipRangeEndIp": "255.255.255.254",
-			"useMode": "terminal",
-			"changedMode": "changedMode",
-			"dhcpMode": "server",
-			"dnsServerMode": "systemsetting",
-			"unlimit": "true",
-			"ipv6Address": "10.12.13.14.15.16",
-			"prefixLength": "2",
-			"dhcp6Enable": "true",
-			"dhcp6Mode": "server",
-			"priorDnsServer": "priorDnsServer",
-			"standbyDnsServer": "standbyDnsServer",
-			"id": "1234a"
-		}
+    "request": {
+        "uri": "http://localhost:8080/openoapi/sbi-localsite/v1/device/abc132/subnet",
+        "method": "post",
+        "headers": {
+            "Content-Type": "application/json",
+            "X-Driver-Parameter": "extSysID=ctrlid123"
+        },
+        "json": {
+            "tenantId": "acd123",
+            "name": "Subnet model",
+            "description": "description",
+            "additionalInfo": [{
+                "name": "subnet nv string",
+                "value": "value",
+                "firstParentUuid": "1234a",
+                "id": "1234ab"
+            }],
+            "operStatus": "none",
+            "adminStatus": "active",
+            "actionState": "Normal",
+            "createTime": "60",
+            "neId": "123",
+            "controllerId": "ctrlid1024",
+            "networkId": "1234",
+            "serviceSubnetId": "abcdd123",
+            "vni": "123",
+            "vlanId": "123",
+            "cidrIpAddress": "12.12.15.16",
+            "cidrMask": "255.3.5.4",
+            "gatewayIp": "10.11.12.13",
+            "enableDhcp": "enableDhcp",
+            "ipRangeStartIp": "10.10.10.1",
+            "ipRangeEndIp": "255.255.255.254",
+            "useMode": "terminal",
+            "changedMode": "changedMode",
+            "dhcpMode": "server",
+            "dnsServerMode": "systemsetting",
+            "unlimit": "true",
+            "ipv6Address": "10.12.13.14.15.16",
+            "prefixLength": "2",
+            "dhcp6Enable": "true",
+            "dhcp6Mode": "server",
+            "priorDnsServer": "priorDnsServer",
+            "standbyDnsServer": "standbyDnsServer",
+            "id": "1234a"
+        }
 
-	},
-	"response": {
-		"status": 200,
-		"json": {
-			"request": {
-				"uri": "/controller/cloud/v2/northbound/config/[a-zA-Z0-9\\-\\_]{1,36}/device/network",
-				"method": "put",
-				"headers": {
-					"Content-Type": "application/json"
-				},
-				"json": {
-					"id": "1234",
-					"name": "Subnet model",
-					"use": "terminal",
-					"vni": 123,
-					"vlanId": 123,
-					"ipAddress": null,
-					"maskAddress": null,
-					"ipv6Address": "10.12.13.14.15.16",
-					"prefixLength": 2,
-					"description": "description",
-					"subnetList": [],
-					"dhcpEnable": false,
-					"dhcp6Enable": true,
-					"dhcp6Config": {
-						"dhcpMode": "server",
-						"dnsServer": "10.11.12.13",
-						"excludedAddresses6": null
-					},
-					"dhcpConfig": null,
-					"isChangedMode": false
-				}
+    },
+    "response": {
+        "status": 200,
+        "json": {
+            "request": {
+                "uri": "/controller/cloud/v2/northbound/config/[a-zA-Z0-9\\-\\_]{1,36}/device/network",
+                "method": "put",
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "json": {
+                    "id": "1234",
+                    "name": "Subnet model",
+                    "use": "terminal",
+                    "vni": 123,
+                    "vlanId": 123,
+                    "ipAddress": null,
+                    "maskAddress": null,
+                    "ipv6Address": "10.12.13.14.15.16",
+                    "prefixLength": 2,
+                    "description": "description",
+                    "subnetList": [],
+                    "dhcpEnable": false,
+                    "dhcp6Enable": true,
+                    "dhcp6Config": {
+                        "dhcpMode": "server",
+                        "dnsServer": "10.11.12.13",
+                        "excludedAddresses6": null
+                    },
+                    "dhcpConfig": null,
+                    "isChangedMode": false
+                }
 
-			},
-			"response": {
-				"status": 200,
-				"json": {
-					"errorCode": "overlayvpn.operation.success",
-					"data": {
-						"tenantId": "acd123",
-						"name": "Subnet model",
-						"description": "description",
-						"additionalInfo": [{
-							"name": "subnet nv string",
-							"value": "value",
-							"firstParentUuid": "1234a",
-							"id": "1234ab"
-						}],
-						"operStatus": "none",
-						"adminStatus": "active",
-						"actionState": "Normal",
-						"createTime": "60",
-						"neId": "123",
-						"controllerId": "ctrlid1024",
-						"networkId": null,
-						"serviceSubnetId": "abcdd123",
-						"vni": "123",
-						"vlanId": "123",
-						"cidrIpAddress": "12.12.15.16",
-						"cidrMask": "255.3.5.4",
-						"gatewayIp": "10.11.12.13",
-						"enableDhcp": "enableDhcp",
-						"ipRangeStartIp": "10.10.10.1",
-						"ipRangeEndIp": "255.255.255.254",
-						"useMode": "terminal",
-						"changedMode": "changedMode",
-						"dhcpMode": "server",
-						"unlimit": "true",
-						"ipv6Address": "10.12.13.14.15.16",
-						"prefixLength": "2",
-						"dhcp6Enable": "true",
-						"dhcp6Mode": "server",
-						"priorDnsServer": "priorDnsServer",
-						"standbyDnsServer": "standbyDnsServer",
-						"id": "1234a",
-						"dnsServerMode": "systemsetting"
-					},
-					"descArg": "",
-					"reasonArg": "",
-					"detailArg": "",
-					"adviceArg": "",
-					"httpCode": 200,
-					"message": "",
-					"smallErrorCodeList": null,
-					"successed": [],
-					"fail": []
-				}
-			}
-		}
-	}
-
+            },
+            "response": {
+                "status": 200,
+                "json": {
+                    "errorCode": "overlayvpn.operation.success",
+                    "data": {
+                        "tenantId": "acd123",
+                        "name": "Subnet model",
+                        "description": "description",
+                        "additionalInfo": [{
+                            "name": "subnet nv string",
+                            "value": "value",
+                            "firstParentUuid": "1234a",
+                            "id": "1234ab"
+                        }],
+                        "operStatus": "none",
+                        "adminStatus": "active",
+                        "actionState": "Normal",
+                        "createTime": "60",
+                        "neId": "123",
+                        "controllerId": "ctrlid1024",
+                        "networkId": null,
+                        "serviceSubnetId": "abcdd123",
+                        "vni": "123",
+                        "vlanId": "123",
+                        "cidrIpAddress": "12.12.15.16",
+                        "cidrMask": "255.3.5.4",
+                        "gatewayIp": "10.11.12.13",
+                        "enableDhcp": "enableDhcp",
+                        "ipRangeStartIp": "10.10.10.1",
+                        "ipRangeEndIp": "255.255.255.254",
+                        "useMode": "terminal",
+                        "changedMode": "changedMode",
+                        "dhcpMode": "server",
+                        "unlimit": "true",
+                        "ipv6Address": "10.12.13.14.15.16",
+                        "prefixLength": "2",
+                        "dhcp6Enable": "true",
+                        "dhcp6Mode": "server",
+                        "priorDnsServer": "priorDnsServer",
+                        "standbyDnsServer": "standbyDnsServer",
+                        "id": "1234a",
+                        "dnsServerMode": "systemsetting"
+                    },
+                    "descArg": "",
+                    "reasonArg": "",
+                    "detailArg": "",
+                    "adviceArg": "",
+                    "httpCode": 200,
+                    "message": "",
+                    "smallErrorCodeList": null,
+                    "successed": [],
+                    "fail": []
+                }
+            }
+        }
+    }
 }

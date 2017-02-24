@@ -46,9 +46,9 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IpSecRoaResourceTest {
+public class IpSecROAResourceTest {
 
-    IpSecRoaResource ipSecRoaResource = new IpSecRoaResource();
+    IpSecROAResource ipSecROAResource = new IpSecROAResource();
 
     List<SbiNeIpSec> ipSecNeConnectionList = null;
 
@@ -61,14 +61,14 @@ public class IpSecRoaResourceTest {
     @Before
     public void setup() throws Exception {
         IpsecImpl service = new IpsecImpl();
-        Class<?> clazz = IpSecRoaResource.class;
+        Class<?> clazz = IpSecROAResource.class;
 
         Object cc = clazz.newInstance();
 
         Field f1 = cc.getClass().getDeclaredField("ipsecService");
         f1.setAccessible(true);
         f1.set(cc, service);
-        ipSecRoaResource = (IpSecRoaResource)cc;
+        ipSecROAResource = (IpSecROAResource)cc;
 
         ipSecNeConnectionList = new ArrayList<>();
         SbiNeIpSec sbiNeIpSec = new SbiNeIpSec();
@@ -247,18 +247,18 @@ public class IpSecRoaResourceTest {
                 return httpReturnMessage;
             }
         };
-        ResultRsp<SbiNeIpSec> res = ipSecRoaResource.ipsecCreate(null, "extSysID=ctrlid1024", ipSecNeConnectionList);
+        ResultRsp<SbiNeIpSec> res = ipSecROAResource.ipsecCreate(null, "extSysID=ctrlid1024", ipSecNeConnectionList);
         assertEquals("overlayvpn.operation.success", res.getErrorCode());
     }
 
     @Test(expected = ServiceException.class)
     public void testIpsecCreateInvalidCtrlUuid() throws ServiceException {
-        ipSecRoaResource.ipsecCreate(null, "extSysID=", ipSecNeConnectionList);
+        ipSecROAResource.ipsecCreate(null, "extSysID=", ipSecNeConnectionList);
     }
 
     @Test(expected = ServiceException.class)
     public void testIpsecCreateInvalidEmptyBody() throws ServiceException {
-        ipSecRoaResource.ipsecCreate(null, "extSysID=18294", null);
+        ipSecROAResource.ipsecCreate(null, "extSysID=18294", null);
     }
 
     @Test
@@ -375,18 +375,18 @@ public class IpSecRoaResourceTest {
                 return httpReturnMessage;
             }
         };
-        ResultRsp<SbiNeIpSec> resp = ipSecRoaResource.ipsecUpdate(null, "extSysID=ctrlid1024", ipSecNeConnectionList);
+        ResultRsp<SbiNeIpSec> resp = ipSecROAResource.ipsecUpdate(null, "extSysID=ctrlid1024", ipSecNeConnectionList);
         assertEquals("overlayvpn.operation.success", resp.getErrorCode());
     }
 
     @Test(expected = ServiceException.class)
     public void testIpsecUpdateInvalidUuid() throws ServiceException {
-        ipSecRoaResource.ipsecUpdate(null, "extSysID=", ipSecNeConnectionList);
+        ipSecROAResource.ipsecUpdate(null, "extSysID=", ipSecNeConnectionList);
     }
 
     @Test(expected = ServiceException.class)
     public void testIpsecUpdateNullBody() throws ServiceException {
-        ipSecRoaResource.ipsecUpdate(null, "extSysID=ctrlid1024", null);
+        ipSecROAResource.ipsecUpdate(null, "extSysID=ctrlid1024", null);
     }
 
     @Test
@@ -464,18 +464,18 @@ public class IpSecRoaResourceTest {
             }
         };
         ResultRsp<String> resp =
-                ipSecRoaResource.deleteIpSec(null, "extSysID=ctrlid1024", "123", ipSecNeConnectionList);
+                ipSecROAResource.deleteIpSec(null, "extSysID=ctrlid1024", "123", ipSecNeConnectionList);
         assertEquals("overlayvpn.operation.success", resp.getErrorCode());
     }
 
     @Test(expected = ServiceException.class)
     public void testDeleteIpSecInvalidUuid() throws ServiceException {
-        ipSecRoaResource.deleteIpSec(null, "extSysID=", "123", ipSecNeConnectionList);
+        ipSecROAResource.deleteIpSec(null, "extSysID=", "123", ipSecNeConnectionList);
     }
 
     @Test(expected = ServiceException.class)
     public void testDeleteIpSecNullBody() throws ServiceException {
-        ipSecRoaResource.deleteIpSec(null, "extSysID=ctrlid1024", "123", null);
+        ipSecROAResource.deleteIpSec(null, "extSysID=ctrlid1024", "123", null);
     }
 
     @Test
@@ -538,18 +538,18 @@ public class IpSecRoaResourceTest {
                 return httpReturnMessage;
             }
         };
-        ResultRsp<SbiNeIpSec> resp = ipSecRoaResource.query(null, "extSysID=ctrlid1024", ipSecNeConnectionList);
+        ResultRsp<SbiNeIpSec> resp = ipSecROAResource.query(null, "extSysID=ctrlid1024", ipSecNeConnectionList);
         assertEquals("overlayvpn.operation.success", resp.getErrorCode());
     }
 
     @Test(expected = ServiceException.class)
     public void testQueryInvalidUuid() throws ServiceException {
-        ipSecRoaResource.query(null, "extSysID=", ipSecNeConnectionList);
+        ipSecROAResource.query(null, "extSysID=", ipSecNeConnectionList);
     }
 
     @Test(expected = ServiceException.class)
     public void testQueryNullBody() throws ServiceException {
-        ipSecRoaResource.query(null, "extSysID=ctrlid1024", null);
+        ipSecROAResource.query(null, "extSysID=ctrlid1024", null);
     }
 
 }

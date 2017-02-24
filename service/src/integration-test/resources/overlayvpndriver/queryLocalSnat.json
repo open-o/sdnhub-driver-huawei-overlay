@@ -1,0 +1,57 @@
+{
+    "request": {
+        "uri": "http://localhost:8080/openoapi/sbi-localsite/v1/device/123/snat/2467a068795b41ee9676bc79168da7a6/acl/7db47412f2b44164a16ef18b16a81c0c",
+        "method": "get",
+        "headers": {
+            "Content-Type": "application/json",
+            "X-Driver-Parameter": "extSysID=ctrlid123"
+        },
+        "json": {}
+    },
+    "response":  {
+        "status": 200,
+        "json": {
+            "errorCode": "cloudvpn.operation.success",
+            "data": {},
+            "descArg": "",
+            "reasonArg": "",
+            "detailArg": "",
+            "adviceArg": "",
+            "httpCode": 200,
+            "message": "",
+            "successed": {
+                "tenantId": "1111",
+                "name": "name",
+                "description": "description",
+                "additionalInfo":  [{
+        "name": "info name",
+        "value": "value",
+        "firstParentUuid": "856-2845-2341",
+        "id": "856-2845-2341-1"
+    }],
+                "operStatus": "operStatus",
+                "adminStatus": "adminStatus",
+                "actionState": "actionState",
+                "createTime": "12:00:00",
+                "neId": "123",
+                "deviceId": "123455",
+                "controllerId": "1234",
+                "natId": "123544",
+                "internetGatewayId": "12354",
+                "subnetId": "123456",
+                "ifName": "ifName",
+                "privatePrefix": "11",
+                "aclNumber": "12345",
+                "aclId": "1234",
+                "startPublicIpAddress": "10.12.13.14",
+                "endPublicIpAddress": "10.2.03.5",
+                "qosPreNat": "qosPreNat",
+                "createtime": null,
+                "updatetime": "05:30",
+                "type": "type",
+                "id": "856-2845-2341",
+                "privateCidr": "10.10.10.10"
+            }
+        }
+    }
+}

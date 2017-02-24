@@ -1,0 +1,46 @@
+{
+  "request" : {
+    "uri" : "/controller/cloud/v2/northbound/config/[a-zA-Z0-9\\-\\_]{1,36}/device/staticroutes",
+    "method" : "put",
+    "headers" : {
+        "X-Auth-Token": "junk"
+    },
+    "json" : {
+        "staticRouteConfigs": [{
+            "id" : "c3ebcbc532e3439499a9a15e52d49526",
+            "ip":"192.168.1.1",
+            "mask" : "255.255.0.0",
+            "vpnId":"c3ebcbc532e3439499a9a15e52d49527",
+            "vpnName":"test",
+            "nextHop":"1.1.1.1",
+            "dhcp" : false,
+            "nqaId":"d8f13fdb21b14c4f9dd574bd83961bef",
+            "description":"create static route"
+        }]
+    }
+  },
+  "response" : {
+    "status" : "500",
+    "json" : {
+         "errcode": "overlayvpn.operation.fail",
+         "errmsg": "",
+         "data": [
+             {
+                 "id": "c3ebcbc532e3439499a9a15e52d49526",
+                  "ip": "192.168.1.1",
+                  "mask": "255.255.0.0",
+                  "ipv6Address": null,
+                  "prefixLength": null,
+                  "vpnId": "c3ebcbc532e3439499a9a15e52d49526",
+                  "vpnName": "test",
+                  "nextHop": "1.1.1.1",
+                  "outInterface": null,
+                  "description": "create static route",
+                  "dhcp": false,
+                  "bfdName": null,
+                  "nqaId": "d8f13fdb21b14c4f9dd574bd83961bef"
+             }
+        ]
+      }
+  }
+}

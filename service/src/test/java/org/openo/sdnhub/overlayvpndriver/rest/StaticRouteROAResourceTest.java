@@ -292,7 +292,7 @@ public class StaticRouteROAResourceTest {
         route.setDeviceId("111");
         List<SbiNeStaticRoute> routes = new ArrayList<>();
         routes.add(route);
-        ResultRsp<List<SbiNeStaticRoute>> result = roa.createRoute("123", routes);
+        ResultRsp<SbiNeStaticRoute> result = roa.createRoute("123", routes);
         assertEquals(200, result.getHttpCode());
     }
 
@@ -340,7 +340,7 @@ public class StaticRouteROAResourceTest {
         route.setDeviceId("111");
         List<SbiNeStaticRoute> routes = new ArrayList<>();
         routes.add(route);
-        ResultRsp<List<SbiNeStaticRoute>> result = roa.createRoute("123", routes);
+        ResultRsp<SbiNeStaticRoute> result = roa.createRoute("123", routes);
         assertEquals("overlayvpn.operation.failed", result.getErrorCode());
     }
 

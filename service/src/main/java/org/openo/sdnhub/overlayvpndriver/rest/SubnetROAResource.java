@@ -78,7 +78,7 @@ public class SubnetROAResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ResultRsp<SbiSubnetNetModel> createSubnet(@Context HttpServletRequest request,
-            @PathParam("deviceid") String deviceId, @HeaderParam("X-Driver-Parameter") String ctrlUuidParam,
+            @PathParam("deviceuuid") String deviceId, @HeaderParam("X-Driver-Parameter") String ctrlUuidParam,
             SbiSubnetNetModel subnet) throws ServiceException {
 
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
@@ -94,11 +94,7 @@ public class SubnetROAResource {
         ResultRsp<SbiSubnetNetModel> acResult = subnetService.createSubnet(network, ctrlUuid, deviceId);
         LOGGER.debug("create subnet cost {} ms.", System.currentTimeMillis() - beginTime);
 
-        if (!acResult.isValid()) {
-            LOGGER.error("Create subnet: controller operation error.");
-            SvcExcptUtil.throwBadRequestException("Create subnet: controller operation error.");
-        }
-
+        // Failed case already checked in SubnetServiceImpl.createSubnet() and thrown exception.
         subnet.setNetworkId(acResult.getData().getNetworkId());
         return new ResultRsp<SbiSubnetNetModel>(ErrorCode.OVERLAYVPN_SUCCESS, subnet);
     }
@@ -132,7 +128,7 @@ public class SubnetROAResource {
         long beginTime = System.currentTimeMillis();
         ACNetwork network = SubnetConvert.buildUpdateAcNetwork(subnet, ctrlUuid, deviceId);
 
-        ResultRsp<ACNetwork> acResult = subnetService.updateSubnet(subnet, ctrlUuid, deviceId);
+        ResultRsp<ACNetwork> acResult = subnetService.updateSubnet(network, ctrlUuid, deviceId);
         LOGGER.debug("Update subnet cost {} ms.", System.currentTimeMillis() - beginTime);
 
         if (!acResult.isValid())
@@ -159,7 +155,7 @@ public class SubnetROAResource {
     @Path("device/{deviceuuid}/subnet/{networkid}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ResultRsp<String> deleteSubnet(@Context HttpServletRequest request, @PathParam("deviceid") String deviceId,
+    public ResultRsp<String> deleteSubnet(@Context HttpServletRequest request, @PathParam("deviceuuid") String deviceId,
             @PathParam("networkid") String networkId, @HeaderParam("X-Driver-Parameter") String ctrlUuidParam)
             throws ServiceException {
 
@@ -197,7 +193,7 @@ public class SubnetROAResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ResultRsp<SbiSubnetNetModel> getSubnet(@Context HttpServletRequest request,
-            @PathParam("deviceid") String deviceId, @PathParam("networkid") String networkId,
+            @PathParam("deviceuuid") String deviceId, @PathParam("networkid") String networkId,
             @HeaderParam("X-Driver-Parameter") String ctrlUuidParam) throws ServiceException {
 
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);

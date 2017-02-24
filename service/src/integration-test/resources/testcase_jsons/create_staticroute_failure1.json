@@ -1,0 +1,27 @@
+{
+    "request": {
+        "uri": "/openoapi/sbi-route/v1/batch-create-static-routes",
+        "method": "post",
+        "headers": {
+            "Content-Type": "application/json;charset=UTF-8",
+            "X-Driver-Parameter": "extSysID=test123"
+        },
+        "json": [{}]
+    },
+    "response": {
+        "status": 500,
+        "json": {
+            "errorCode": "overlayvpn.operation.fail",
+            "data": [{}],
+            "descArg": "",
+            "reasonArg": "",
+            "detailArg": "",
+            "adviceArg": "",
+            "httpCode": 500,
+            "message": "",
+            "smallErrorCodeList": null,
+            "successed": null,
+            "fail": null
+        }
+    }
+}

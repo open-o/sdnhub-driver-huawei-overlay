@@ -14,7 +14,7 @@
         "json": {
             "sdnControllerId": "a6c42529-cd6b-4c01-b149-03eb54b20a03",
             "name": "sdn",
-            "url": "http://127.0.0.1:12307",
+            "url": "http://127.0.0.1:12306",
             "userName": "admin",
             "password": "admin",
             "version": "v1.0",

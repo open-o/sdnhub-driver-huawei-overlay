@@ -1,31 +1,31 @@
 {
-	"request": {
-		"uri": "/controller/cloud/v2/northbound/config/[a-zA-Z0-9\\-\\_]{1,36}/device/bdinfo",
-		"method": "get",
-		"headers": {
-			"Content-Type": "application/json"
-		},
-		"json": {
+    "request": {
+        "uri": "/controller/cloud/v2/northbound/config/[a-zA-Z0-9\\-\\_]{1,36}/device/bdinfo",
+        "method": "get",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "json": {
 
-		}
-	},
-	"response": {
-		"status": 200,
-		"json": {
-			"errcode": "0",
-			"errmsg": "",
-			"data": [{
-				"vni": 3,
-				"bdId": 2,
-				"vbdifName": "vbdif2"
-			}, {
-				"vni": 6,
-				"bdId": 1,
-				"vbdifName": "vbdif1"
-			}]
-		},
-		"success": null,
-		"fail": null,
-		"sucess": true
-	}
+        }
+    },
+    "response": {
+        "status": 200,
+        "json": {
+            "errcode": "0",
+            "errmsg": "",
+            "data": [{
+                "vni": 3,
+                "bdId": 2,
+                "vbdifName": "vbdif2"
+            }, {
+                "vni": 6,
+                "bdId": 1,
+                "vbdifName": "vbdif1"
+            }]
+        },
+        "success": null,
+        "fail": null,
+        "sucess": true
+    }
 }

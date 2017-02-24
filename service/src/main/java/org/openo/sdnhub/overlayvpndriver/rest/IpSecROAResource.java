@@ -16,9 +16,7 @@
 
 package org.openo.sdnhub.overlayvpndriver.rest;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -38,9 +36,7 @@ import javax.ws.rs.core.MediaType;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Transformer;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
-import org.openo.sdnhub.overlayvpndriver.common.consts.CommonConst;
 import org.openo.sdnhub.overlayvpndriver.common.util.RequestHeaderUtil;
-import org.openo.sdnhub.overlayvpndriver.controller.consts.ControllerUrlConst;
 import org.openo.sdnhub.overlayvpndriver.controller.model.IpsecConnList;
 import org.openo.sdnhub.overlayvpndriver.sbi.impl.IpsecImpl;
 import org.openo.sdnhub.overlayvpndriver.service.model.SbiNeIpSec;
@@ -69,9 +65,9 @@ import static org.openo.sdnhub.overlayvpndriver.common.consts.CommonConst.CTRL_H
  */
 @Service
 @Path("/sbi-ipsec/v1")
-public class IpSecRoaResource {
+public class IpSecROAResource {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(IpSecRoaResource.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(IpSecROAResource.class);
 
     @Autowired
     private IpsecImpl ipsecService;
@@ -153,12 +149,12 @@ public class IpSecRoaResource {
      * @since SDNHUB 0.5
      */
     @POST
-    @Path("/device/{deviceId}/ipsecs/{extipsecid}/batch-delete-ipsec")
+    @Path("/device/{deviceid}/ipsecs/{extipsecid}/batch-delete-ipsec")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @SuppressWarnings("unchecked")
     public ResultRsp<String> deleteIpSec(@Context HttpServletRequest request,
-            @HeaderParam(CTRL_HEADER_PARAM) String ctrlUuidParam, @PathParam("deviceId") String deviceId,
+            @HeaderParam(CTRL_HEADER_PARAM) String ctrlUuidParam, @PathParam("deviceid") String deviceId,
             List<SbiNeIpSec> ipsecList) throws ServiceException {
 
         long beginTime = System.currentTimeMillis();
@@ -187,25 +183,6 @@ public class IpSecRoaResource {
         }));
 
         ipsecService.checkSeqNumber(externalIds);
-        List<String> nqaIdList = new ArrayList<String>();
-        for(SbiNeIpSec SbiNeIpSec : ipsecList) {
-            if(SbiNeIpSec.getNqa() != null) {
-                nqaIdList.add(SbiNeIpSec.getNqa());
-            }
-        }
-
-        if(!CollectionUtils.isEmpty(nqaIdList)) {
-            final String deleteUrl = MessageFormat.format(ControllerUrlConst.NQA_CONFIG_URL, deviceId);
-            final Map<String, List<String>> crtInfoMap = new HashMap<>();
-            crtInfoMap.put(CommonConst.NQA_ID_LIST, nqaIdList);
-            ResultRsp<String> rsp =
-                    ipsecService.deleteNqaConfigForIpSec(ctrlUuid, deleteUrl, JsonUtil.toJson(crtInfoMap));
-
-            if(!rsp.isSuccess()) {
-                LOGGER.error("delete nqa failed! info is " + JsonUtil.toJson(rsp));
-                throw new ServiceException(rsp.getErrorCode(), rsp.getMessage());
-            }
-        }
         ResultRsp<String> response = ipsecService.batchDeleteIpsecConn(ctrlUuid, deviceId, externalIds);
         LOGGER.debug("delete Ipsec cost time = " + (System.currentTimeMillis() - beginTime));
         return response;

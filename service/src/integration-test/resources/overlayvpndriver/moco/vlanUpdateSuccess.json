@@ -1,0 +1,49 @@
+{
+    "request": {
+        "uri": "/controller/cloud/v2/northbound/config/[a-zA-Z0-9\\-\\_]{1,36}/device/ethinterfaces",
+        "method": "put",
+        "headers": {
+            "Content-Type": "application/json;charset=UTF-8"
+        },
+        "json": {
+    "ethInterfaceConfig" :
+    [{
+        "id": "4b8a2551332a4016aef56692a53bb188",
+            "name" : "GigabitEthernet0/0/2",
+            "enable" : true,
+            "ifAttr" : "1",
+            "defaultVlan" : "1",
+            "trunkVlan" : "1",
+            "description" : "Ethernet0/0/0 config",
+            "autoNegotiationEnable" : false,
+            "speed" : "10",
+            "duplex" : "half",
+            "nacType" : "1"
+        }
+    ]
+}
+    },
+    "response": {
+        "status": 200,
+        "json": {
+  "errcode": "0",
+  "errmsg": "",
+  "data": [
+    {
+      "id": "4b8a2551332a4016aef56692a53bb188",
+      "name": "GigabitEthernet0/0/2",
+      "enable": true,
+      "description": "Ethernet0/0/0 config",
+      "autoNegotiationEnable": false,
+      "speed": "10",
+      "duplex": "half",
+      "ifAttr": "1",
+      "linkType": null,
+      "defaultVlan": 1,
+      "trunkVlan": "1",
+      "nacType": "1"
+    }
+  ]
+}
+    }
+}

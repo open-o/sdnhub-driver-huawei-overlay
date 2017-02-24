@@ -1,6 +1,6 @@
 {
     "request": {
-        "uri": "http://localhost:8088/overlayvpndriverservice/openoapi/healthcheck",
+        "uri": "http://localhost:8088/openoapi/healthcheck",
         "method": "get",
         "headers": {
             "Content-Type": "application/json"

@@ -52,7 +52,7 @@ public class PolicyRouteImplTest {
         TrafficPolicyList policy = new TrafficPolicyList();
         policy.setId("123");
         list.add(policy);
-        ResultRsp<List<TrafficPolicyList>> rsp = impl.configMqc(null, "deviceId", list);
+        ResultRsp<List<TrafficPolicyList>> rsp = impl.configMqc(null, "deviceid", list);
         assertEquals("overlayvpn.operation.failed", rsp.getErrorCode());
     }
 
@@ -163,7 +163,7 @@ public class PolicyRouteImplTest {
         PolicyRouteImpl impl = new PolicyRouteImpl();
         List<String> list = new ArrayList<>();
         list.add("Value");
-        impl.deleteMqc(null, "deviceId", list);
+        impl.deleteMqc(null, "deviceid", list);
     }
 
     @Test(expected = ServiceException.class)

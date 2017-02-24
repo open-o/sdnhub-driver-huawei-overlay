@@ -1,0 +1,36 @@
+{
+    "request": {
+        "uri": "/controller/cloud/v2/northbound/config/[a-zA-Z0-9\\-\\_]{1,36}/device/acl",
+        "method": "delete",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "json": {
+"ids": ["53dfcfe29acd4d41b645afe3fcf230f7","c52688686663409dafaafbc08e6f6443"]
+}
+
+    },
+    "response": {
+        "status": 200,
+        "json": {
+  "errcode": "0",
+  "errmsg": "",
+  "success": [
+    {
+      "id": "53dfcfe29acd4d41b645afe3fcf230f7",
+      "name": null,
+      "description": null
+    },
+    {
+      "id": "c52688686663409dafaafbc08e6f6443",
+      "name": null,
+      "description": "ACL configuration no more exists"
+    }
+  ]
+}
+,
+        "success": null,
+        "fail": null,
+        "sucess": true
+    }
+}

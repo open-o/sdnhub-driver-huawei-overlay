@@ -12,7 +12,7 @@
     "json" : {
          "errcode": "0",
          "errmsg": "",
-         "data": [
+         "data":
                  {
                 "name":"deviceOne",
                 "esn":"esn",
@@ -36,8 +36,6 @@
                 "modifier":null,
                 "modifyTime":null
             }
-
-        ]
       }
 
   }

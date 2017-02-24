@@ -52,7 +52,7 @@ public class SubnetBDIfImplTest {
     @Test(expected = ServiceException.class)
     public void parseResponseCtrlNull() throws ServiceException {
 
-        String deviceId = "deviceId";
+        String deviceId = "deviceid";
         SubnetBDIfImpl impl = new SubnetBDIfImpl();
         impl.queryBDInfo(null, null, deviceId);
 
@@ -90,7 +90,7 @@ public class SubnetBDIfImplTest {
             }
         };
 
-        String deviceId = "deviceId";
+        String deviceId = "deviceid";
         SubnetBDIfImpl impl = new SubnetBDIfImpl();
 
         SbiSubnetBdInfoModel model = new SbiSubnetBdInfoModel();

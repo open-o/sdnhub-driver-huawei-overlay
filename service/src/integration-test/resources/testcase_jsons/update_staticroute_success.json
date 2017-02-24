@@ -1,0 +1,75 @@
+{
+    "request": {
+        "uri": "/openoapi/sbi-route/v1/batch-update-static-routes",
+        "method": "put",
+        "headers": {
+            "Content-Type": "application/json;charset=UTF-8",
+            "X-Driver-Parameter": "extSysID=81244ad0-b4ea-41ed-969e-d5588b32fd4c"
+        },
+        "json": [
+            {
+            "name": "staticRoute01",
+            "tenantId": "71244ad0-b4ea-41ed-969e-d5588b32fd5f",
+            "description": "create static route",
+            "deployStatus": null,
+            "activeStatus": "none",
+            "runningStatus": "none",
+            "additionalInfo": null,
+            "deviceId": "81244ad0-b4ea-41ed-969e-d5588b32fd5d",
+            "controllerId": "81244ad0-b4ea-41ed-969e-d5588b32fd4c",
+            "externalId": "81244ad0-b4ea-41ed-969e-d5588b32fd5f",
+            "nbiNeRouteId": null,
+            "destIp": "192.168.1.1",
+            "enableDhcp": "false",
+            "nextHop": null,
+            "outInterface": null,
+            "priority": null,
+            "nqa": "81244ad0-b4ea-41ed-969e-d5588b32fd5a",
+            "id": "81244ad0-b4ea-41ed-969e-d5588b32fd5f",
+            "actionState": "Normal",
+            "createTime": 0,
+            "updateTime": 0
+            }
+        ]
+    },
+    "response": {
+        "status": 201,
+        "json": {
+            "errorCode": "overlayvpn.operation.success",
+            "data": [
+                {
+                    "name": "staticRoute01",
+            "tenantId": "71244ad0-b4ea-41ed-969e-d5588b32fd5f",
+            "description": "create static route",
+            "deployStatus": null,
+            "activeStatus": "none",
+            "runningStatus": "none",
+            "additionalInfo": null,
+            "deviceId": "81244ad0-b4ea-41ed-969e-d5588b32fd5d",
+            "controllerId": "81244ad0-b4ea-41ed-969e-d5588b32fd4c",
+            "externalId": "81244ad0-b4ea-41ed-969e-d5588b32fd5f",
+            "nbiNeRouteId": null,
+            "destIp": "192.168.1.1",
+            "enableDhcp": "false",
+            "nextHop": null,
+            "outInterface": null,
+            "priority": null,
+            "nqa": "81244ad0-b4ea-41ed-969e-d5588b32fd5a",
+            "id": "81244ad0-b4ea-41ed-969e-d5588b32fd5f",
+            "actionState": "Normal",
+            "createTime": 0,
+            "updateTime": 0
+                }
+            ],
+            "descArg": "",
+            "reasonArg": "",
+            "detailArg": "",
+            "adviceArg": "",
+            "httpCode": 201,
+            "message": "",
+            "smallErrorCodeList": null,
+            "successed": null,
+            "fail": null
+        }
+    }
+}

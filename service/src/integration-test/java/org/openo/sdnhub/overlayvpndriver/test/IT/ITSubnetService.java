@@ -31,22 +31,28 @@ import org.openo.sdno.testframework.http.model.HttpRquestResponse;
 import org.openo.sdno.testframework.testmanager.TestManager;
 import org.openo.sdno.testframework.util.file.FileUtils;
 
+/**
+ * IT cases for Subnet service.<br/>
+ *
+ * @author
+ * @version SDNHUB 0.5 03-Feb-2017
+ */
 public class ITSubnetService {
 
     private SubnetMockServer subnetMockServer = new SubnetMockServer();
-    
+
     SubnetMockServerHttps subnetMockServerHttps = new SubnetMockServerHttps();
 
     @Before
     public void setup() throws ServiceException {
-    	subnetMockServer.start();
-    	subnetMockServerHttps.start();
+        subnetMockServer.start();
+        subnetMockServerHttps.start();
     }
 
     @After
     public void tearDown() throws ServiceException {
-    	subnetMockServer.stop();
-    	subnetMockServerHttps.stop();
+        subnetMockServer.stop();
+        subnetMockServerHttps.stop();
     }
 
     @Test
@@ -81,7 +87,7 @@ public class ITSubnetService {
         HttpResponse createResponse = new TestManager().execTestCase(createFile, new SuccessChecker());
         String response = createResponse.getData();
     }
- 
+
     private class SuccessChecker implements IChecker {
 
         @Override

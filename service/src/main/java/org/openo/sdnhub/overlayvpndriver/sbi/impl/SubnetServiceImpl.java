@@ -110,10 +110,10 @@ public class SubnetServiceImpl {
      * @throws ServiceException In case of update operation fails
      * @since SDNHUB 0.5
      */
-    public ResultRsp<ACNetwork> updateSubnet(SbiSubnetNetModel network, String ctrlUuid, String deviceId)
+    public ResultRsp<ACNetwork> updateSubnet(ACNetwork network, String ctrlUuid, String deviceId)
             throws ServiceException {
 
-        if(!StringUtils.hasLength(ctrlUuid) || !StringUtils.hasLength(deviceId) || null == network.getNeId()) {
+        if(!StringUtils.hasLength(ctrlUuid) || !StringUtils.hasLength(deviceId) || null == network.getId()) {
             LOGGER.error("Invalid parameters.");
             throw new ParameterServiceException("Invalid parameters.");
         }

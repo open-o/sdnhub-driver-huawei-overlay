@@ -62,7 +62,7 @@ public class ITDeviceSuccess extends TestManager {
     public static void setup() throws ServiceException {
         mocoServer.addMockJsons(mockJsonsEsrs);
         mocoServer.addMockJsons(mockJsonsBrs);
-        mocoServerHttps.addMockJsons(mockJsonsController);
+        mocoServer.addMockJsons(mockJsonsController);
 
         mocoServer.start();
         mocoServerHttps.start();
@@ -71,7 +71,6 @@ public class ITDeviceSuccess extends TestManager {
     @AfterClass
     public static void tearDown() throws ServiceException {
         mocoServer.stop();
-        mocoServerHttps.stop();
     }
 
     @Test

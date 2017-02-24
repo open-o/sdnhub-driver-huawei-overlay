@@ -218,4 +218,57 @@ public class StaticRouteConvert {
         }
         neId2Tunnels.get(neId).add(staticRoute);
     }
+
+    public static void backWriteId2NeStaticRoute(List<ControllerNbiStaticRoute> dataList, List<SbiNeStaticRoute> neRouteList, String deviceId,
+                                                 List<SbiNeStaticRoute> successedDatas)
+    {
+        if(CollectionUtils.isEmpty(dataList))
+        {
+            return;
+        }
+
+        for(ControllerNbiStaticRoute tempRoute : dataList)
+        {
+            if(!StringUtils.hasLength(tempRoute.getId()))
+            {
+                LOGGER.warn("do not get static router id, outInfer = " + tempRoute.getOutInterface());
+                continue;
+            }
+
+            for(SbiNeStaticRoute tempNeRouter : neRouteList)
+            {
+                if(tempRoute.getId().equals(tempNeRouter.getExternalId()))
+                {
+                    successedDatas.add(tempNeRouter);
+                }
+            }
+        }
+    }
+
+    public static void fillFailDataInfo(List<FailData<SbiNeStaticRoute>> failedNbiDatas, List<SbiNeStaticRoute> totalNbiRoutes,
+                                  ResultRsp<List<ControllerNbiStaticRoute>> resultRsp)
+    {
+        for(ControllerNbiStaticRoute staticRoute : resultRsp.getData())
+        {
+            SbiNeStaticRoute nbiRoute = findCorrespondNbiModel(staticRoute, totalNbiRoutes);
+            if(null != nbiRoute)
+            {
+                FailData<SbiNeStaticRoute> failData = new FailData<SbiNeStaticRoute>(resultRsp.getErrorCode(),resultRsp.getMessage(),nbiRoute);
+                failedNbiDatas.add(failData);
+            }
+        }
+    }
+
+    private static SbiNeStaticRoute findCorrespondNbiModel(ControllerNbiStaticRoute sbiStaticRoute, List<SbiNeStaticRoute> nbiRoutes)
+    {
+        for(SbiNeStaticRoute nbiRoute : nbiRoutes)
+        {
+            if(nbiRoute.getUuid().equals(sbiStaticRoute.getId()))
+            {
+                return nbiRoute;
+            }
+        }
+
+        return null;
+    }
 }

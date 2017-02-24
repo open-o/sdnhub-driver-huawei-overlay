@@ -1,0 +1,79 @@
+{
+    "request": {
+        "uri": "http://localhost:8080/openoapi/sbi-localsite/v1/device/123/snat",
+        "method": "post",
+        "headers": {
+            "Content-Type": "application/json",
+            "X-Driver-Parameter": "extSysID=ctrlid123"
+        },
+        "json": {
+            "tenantId":"1234",
+            "name":"snatOne",
+            "description":"tests",
+            "additionalInfo":null,
+            "operStatus":"none",
+            "adminStatus":"none",
+            "actionState":"Normal",
+            "createTime":null,
+            "neId":"388493",
+            "controllerId":"488394",
+            "natId":"488394",
+            "internetGatewayId":"599340",
+            "subnetId":"299102",
+            "ifName":"eth01",
+            "privatePrefix":null,
+            "aclNumber":"29312",
+            "aclId":"59930",
+            "startPublicIpAddress":null,
+            "endPublicIpAddress":null,
+            "qosPreNat":"false",
+            "createtime":null,
+            "updatetime":null,
+            "type":"create",
+            "id":"399403",
+            "deviceid":"123",
+            "privateCidr":null
+        }
+    },
+    "response": {
+        "status": 200,
+        "json": {
+            "errorCode": "cloudvpn.operation.success",
+            "data": {},
+            "descArg": "",
+            "reasonArg": "",
+            "detailArg": "",
+            "adviceArg": "",
+            "httpCode": 200,
+            "message": "",
+            "successed": {
+            "tenantId":"1234",
+            "name":"snatOne",
+            "description":"tests",
+            "additionalInfo":null,
+            "operStatus":"none",
+            "adminStatus":"none",
+            "actionState":"Normal",
+            "createTime":null,
+            "neId":"388493",
+            "controllerId":"488394",
+            "natId":"488394",
+            "internetGatewayId":"599340",
+            "subnetId":"299102",
+            "ifName":"eth01",
+            "privatePrefix":null,
+            "aclNumber":"29312",
+            "aclId":"59930",
+            "startPublicIpAddress":null,
+            "endPublicIpAddress":null,
+            "qosPreNat":"false",
+            "createtime":null,
+            "updatetime":null,
+            "type":"create",
+            "id":"399403",
+            "deviceid":"123",
+            "privateCidr":null
+        }
+        }
+    }
+}

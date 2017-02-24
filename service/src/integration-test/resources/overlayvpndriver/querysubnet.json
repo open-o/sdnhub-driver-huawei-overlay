@@ -1,60 +1,60 @@
 {
-	"request": {
-		"uri": "http://localhost:8080/overlayvpndriverservice/openoapi/sbi-localsite/v1/device/abc132/subnet/1234",
-		"method": "get",
-		"headers": {
-			"Content-Type": "application/json",
-			"X-Driver-Parameter": "extSysID=ctrlid1024"
-		},
-		"json": {}
-	},
-	"response": {
-		"status": 200,
-		"json": {
-			"errorCode": "overlayvpn.operation.success",
-			"data": {
-				"tenantId": null,
-				"name": null,
-				"description": null,
-				"additionalInfo": null,
-				"operStatus": "none",
-				"adminStatus": "none",
-				"actionState": "Normal",
-				"createTime": null,
-				"neId": "abc132",
-				"controllerId": "ctrlid1024",
-				"networkId": "1234",
-				"serviceSubnetId": null,
-				"vni": null,
-				"vlanId": null,
-				"cidrIpAddress": null,
-				"cidrMask": null,
-				"gatewayIp": null,
-				"enableDhcp": null,
-				"ipRangeStartIp": null,
-				"ipRangeEndIp": null,
-				"useMode": null,
-				"changedMode": "false",
-				"dhcpMode": "server",
-				"unlimit": "true",
-				"ipv6Address": null,
-				"prefixLength": null,
-				"dhcp6Enable": "false",
-				"dhcp6Mode": "server",
-				"priorDnsServer": null,
-				"standbyDnsServer": null,
-				"id": null,
-				"dnsServerMode": "custom"
-			},
-			"descArg": "",
-			"reasonArg": "",
-			"detailArg": "",
-			"adviceArg": "",
-			"httpCode": 200,
-			"message": "",
-			"smallErrorCodeList": null,
-			"successed": [],
-			"fail": []
-		}
-	}
+    "request": {
+        "uri": "http://localhost:8080/openoapi/sbi-localsite/v1/device/abc132/subnet/1234",
+        "method": "get",
+        "headers": {
+            "Content-Type": "application/json",
+            "X-Driver-Parameter": "extSysID=ctrlid1024"
+        },
+        "json": {}
+    },
+    "response": {
+        "status": 200,
+        "json": {
+            "errorCode": "overlayvpn.operation.success",
+            "data": {
+                "tenantId": null,
+                "name": null,
+                "description": null,
+                "additionalInfo": null,
+                "operStatus": "none",
+                "adminStatus": "none",
+                "actionState": "Normal",
+                "createTime": null,
+                "neId": "abc132",
+                "controllerId": "ctrlid1024",
+                "networkId": "1234",
+                "serviceSubnetId": null,
+                "vni": null,
+                "vlanId": null,
+                "cidrIpAddress": null,
+                "cidrMask": null,
+                "gatewayIp": null,
+                "enableDhcp": null,
+                "ipRangeStartIp": null,
+                "ipRangeEndIp": null,
+                "useMode": null,
+                "changedMode": "false",
+                "dhcpMode": "server",
+                "unlimit": "true",
+                "ipv6Address": null,
+                "prefixLength": null,
+                "dhcp6Enable": "false",
+                "dhcp6Mode": "server",
+                "priorDnsServer": null,
+                "standbyDnsServer": null,
+                "id": null,
+                "dnsServerMode": "custom"
+            },
+            "descArg": "",
+            "reasonArg": "",
+            "detailArg": "",
+            "adviceArg": "",
+            "httpCode": 200,
+            "message": "",
+            "smallErrorCodeList": null,
+            "successed": [],
+            "fail": []
+        }
+    }
 }

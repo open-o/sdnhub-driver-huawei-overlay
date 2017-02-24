@@ -39,7 +39,7 @@ public class SbiIfVlan extends UuidModel {
     /**
      * Config Id return by AC
      */
-    @AUuid(require = true)
+    @AUuid(require = false)
     private String ethInterfaceConfigId;
 
     /**

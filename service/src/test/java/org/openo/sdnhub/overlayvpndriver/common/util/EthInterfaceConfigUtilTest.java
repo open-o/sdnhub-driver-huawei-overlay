@@ -48,7 +48,5 @@ public class EthInterfaceConfigUtilTest {
 
         ResultRsp<List<EthInterfaceConfig>> rsp = EthInterfaceConfigUtil.parseResponse(msg, msg.getBody(), actionDesc);
         assertEquals("overlayvpn.operation.success", rsp.getErrorCode());
-
     }
-
 }

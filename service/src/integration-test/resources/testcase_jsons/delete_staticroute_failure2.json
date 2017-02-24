@@ -1,0 +1,27 @@
+{
+    "request": {
+        "uri": "/openoapi/sbi-route/v1/[a-zA-Z0-9\\-\\_]{1,36}/batch-delete-static-routes",
+        "method": "post",
+        "headers": {
+            "Content-Type": "application/json;charset=UTF-8",
+            "X-Driver-Parameter": "extSysID=81244ad0-b4ea-41ed-969e-d5588b32fd4c"
+        },
+        "json": null
+    },
+    "response": {
+        "status": 500,
+        "json": {
+            "errorCode": "overlayvpn.operation.fail",
+            "data": {},
+            "descArg": "",
+            "reasonArg": "",
+            "detailArg": "",
+            "adviceArg": "",
+            "httpCode": 500,
+            "message": "",
+            "smallErrorCodeList": null,
+            "successed": null,
+            "fail": null
+        }
+    }
+}

@@ -126,22 +126,22 @@ public class StaticRouteROAResource {
     @Path("/batch-create-static-routes")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ResultRsp<List<SbiNeStaticRoute>> createRoute(@HeaderParam("X-Driver-Parameter") String ctrlUuidParam,
+    public ResultRsp<SbiNeStaticRoute> createRoute(@HeaderParam("X-Driver-Parameter") String ctrlUuidParam,
             List<SbiNeStaticRoute> neStaticRoutes) throws ServiceException {
-
+        long beginTime = System.currentTimeMillis();
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
 
         if (!UuidUtil.validate(ctrlUuid)) {
             LOGGER.error("invalid controller UUID");
             throw new ParameterServiceException("invalid controller UUID.");
         }
-        ResultRsp<List<SbiNeStaticRoute>> totalResult = new ResultRsp<>();
+        ResultRsp<SbiNeStaticRoute> totalResult = new ResultRsp<>();
         if(CollectionUtils.isEmpty(neStaticRoutes)) {
             throw new ParameterServiceException("Empty list of static routes recieved");
         }
 
-        List<List<SbiNeStaticRoute>> successData = new ArrayList<>();
-        List<FailData<List<SbiNeStaticRoute>>> failDatas = new ArrayList<>();
+        List<SbiNeStaticRoute> successData = new ArrayList<>();
+        List<FailData<SbiNeStaticRoute>> failDatas = new ArrayList<>();
 
         for(SbiNeStaticRoute neStaticRoute : neStaticRoutes) {
             ValidationUtil.validateModel(neStaticRoute);
@@ -154,11 +154,10 @@ public class StaticRouteROAResource {
                     staticRouteService.configStaticRoute(ctrlUuid, entry.getKey(), entry.getValue(), true);
 
             if(resultRsp.isSuccess()) {
-                successData.add(neStaticRoutes);
+                StaticRouteConvert.backWriteId2NeStaticRoute(resultRsp.getData(), neStaticRoutes, entry.getKey(), successData);
             } else {
-                FailData<List<SbiNeStaticRoute>> failedData = new FailData<>();
-                failedData.setData(neStaticRoutes);
-                failDatas.add(failedData);
+                resultRsp.setData(entry.getValue());
+                StaticRouteConvert.fillFailDataInfo(failDatas, neStaticRoutes, resultRsp);
             }
         }
         totalResult.setSuccessed(successData);
@@ -167,7 +166,7 @@ public class StaticRouteROAResource {
             totalResult.setErrorCode(ErrorCode.OVERLAYVPN_FAILED);
         }
 
-        totalResult.setData(neStaticRoutes);
+        LOGGER.info("Static route create end. cost:{}", (System.currentTimeMillis() - beginTime));
         return totalResult;
     }
 

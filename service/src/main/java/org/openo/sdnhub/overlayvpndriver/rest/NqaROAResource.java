@@ -76,11 +76,11 @@ public class NqaROAResource {
      * @since SDNHUB 0.5
      */
     @POST
-    @Path("/device/{deviceId}/batch-query-nqa")
+    @Path("/device/{deviceid}/batch-query-nqa")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ResultRsp<SbiNqa> queryNQA(@Context HttpServletRequest request,
-                                      @HeaderParam("X-Driver-Parameter") String ctrlUuidParam, @PathParam("deviceId") String deviceId,
+                                      @HeaderParam("X-Driver-Parameter") String ctrlUuidParam, @PathParam("deviceid") String deviceId,
                                       List<SbiNqa> sbiNqaList) throws ServiceException {
         String ctrlUuid = ctrlUuidParam.substring(ctrlUuidParam.indexOf('=') + 1);
         if (!UuidUtil.validate(ctrlUuid)) {
@@ -106,11 +106,11 @@ public class NqaROAResource {
      * @since SDNHUB 0.5
      */
     @POST
-    @Path("/device/{deviceId}/batch-create-nqa")
+    @Path("/device/{deviceid}/batch-create-nqa")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ResultRsp<SbiNqa> createNQA(@Context HttpServletRequest request,
-                                       @HeaderParam("X-Driver-Parameter") String ctrlUuidParam, @PathParam("deviceId") String deviceId,
+                                       @HeaderParam("X-Driver-Parameter") String ctrlUuidParam, @PathParam("deviceid") String deviceId,
                                        List<SbiNqa> sbiNqaList) throws ServiceException {
         String ctrlUuid = ctrlUuidParam.substring(ctrlUuidParam.indexOf('=') + 1);
         if (!UuidUtil.validate(ctrlUuid)) {
@@ -156,11 +156,11 @@ public class NqaROAResource {
      * @since SDNHUB 0.5
      */
     @PUT
-    @Path("/device/{deviceId}/batch-update-nqa")
+    @Path("/device/{deviceid}/batch-update-nqa")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ResultRsp<SbiNqa> updateNQA(@Context HttpServletRequest request,
-                                       @HeaderParam("X-Driver-Parameter") String ctrlUuidParam, @PathParam("deviceId") String deviceId,
+                                       @HeaderParam("X-Driver-Parameter") String ctrlUuidParam, @PathParam("deviceid") String deviceId,
                                        List<SbiNqa> sbiNqaList) throws ServiceException {
         String ctrlUuid = ctrlUuidParam.substring(ctrlUuidParam.indexOf('=') + 1);
         if (!UuidUtil.validate(ctrlUuid)) {
@@ -204,11 +204,11 @@ public class NqaROAResource {
      * @since SDNHUB 0.5
      */
     @POST
-    @Path("/device/{deviceId}/batch-delete-nqa")
+    @Path("/device/{deviceid}/batch-delete-nqa")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ResultRsp<String> deleteNQA(@Context HttpServletRequest request,
-                                       @HeaderParam("X-Driver-Parameter") String ctrlUuidParam, @PathParam("deviceId") String deviceId,
+                                       @HeaderParam("X-Driver-Parameter") String ctrlUuidParam, @PathParam("deviceid") String deviceId,
                                        List<String> nqaIdList) throws ServiceException {
         String ctrlUuid = ctrlUuidParam.substring(ctrlUuidParam.indexOf('=') + 1);
         if (!UuidUtil.validate(ctrlUuid)) {

@@ -44,12 +44,10 @@ public class OverlayVpnDriverProxyTest {
         new MockUp<RestfulProxy>() {
 
             @Mock
-
             RestfulResponse get(String url, RestfulParametes restParametes)
                     throws ServiceException, MalformedURLException {
                 RestfulResponse res = new RestfulResponse();
                 res.setStatus(200);
-
                 Map<String, Object> driverInfoMap = new HashMap<>();
                 driverInfoMap.put("instanceID", "usb12345");
                 driverInfoMap.put("ip", "12.32.30");
@@ -58,7 +56,6 @@ public class OverlayVpnDriverProxyTest {
                 driverInfoMap.put("password", "raju");
                 res.setResponseJson(JsonUtil.toJson(driverInfoMap));
                 return res;
-
             }
         };
 
@@ -72,12 +69,10 @@ public class OverlayVpnDriverProxyTest {
         new MockUp<RestfulProxy>() {
 
             @Mock
-
             RestfulResponse get(String url, RestfulParametes restParametes)
                     throws ServiceException, MalformedURLException {
                 RestfulResponse res = new RestfulResponse();
                 res.setStatus(200);
-
                 Map<String, Object> driverInfoMap = new HashMap<>();
                 driverInfoMap.put("instanceID", "usb12345");
                 driverInfoMap.put("ip", "12.32.30");
@@ -86,7 +81,6 @@ public class OverlayVpnDriverProxyTest {
                 driverInfoMap.put("password", "raju");
                 res.setResponseJson(JsonUtil.toJson(driverInfoMap));
                 return res;
-
             }
         };
 
@@ -100,12 +94,10 @@ public class OverlayVpnDriverProxyTest {
         new MockUp<RestfulProxy>() {
 
             @Mock
-
             RestfulResponse get(String url, RestfulParametes restParametes)
                     throws ServiceException, MalformedURLException {
                 RestfulResponse res = new RestfulResponse();
                 res.setStatus(200);
-
                 Map<String, Object> driverInfoMap = new HashMap<>();
                 driverInfoMap.put("instanceID", "usb12345");
                 driverInfoMap.put("ip", "12.32.30");
@@ -114,7 +106,6 @@ public class OverlayVpnDriverProxyTest {
                 driverInfoMap.put("password", "raju");
                 res.setResponseJson(JsonUtil.toJson(driverInfoMap));
                 return res;
-
             }
         };
 
@@ -128,12 +119,10 @@ public class OverlayVpnDriverProxyTest {
         new MockUp<RestfulProxy>() {
 
             @Mock
-
             RestfulResponse get(String url, RestfulParametes restParametes)
                     throws ServiceException, MalformedURLException {
                 RestfulResponse res = new RestfulResponse();
                 res.setStatus(200);
-
                 Map<String, Object> driverInfoMap = new HashMap<>();
                 driverInfoMap.put("instanceID", "usb12345");
                 driverInfoMap.put("ip", "12.32.30");
@@ -142,7 +131,6 @@ public class OverlayVpnDriverProxyTest {
                 driverInfoMap.put("password", "raju");
                 res.setResponseJson(JsonUtil.toJson(driverInfoMap));
                 return res;
-
             }
         };
 
@@ -156,12 +144,10 @@ public class OverlayVpnDriverProxyTest {
         new MockUp<RestfulProxy>() {
 
             @Mock
-
             RestfulResponse get(String url, RestfulParametes restParametes)
                     throws ServiceException, MalformedURLException {
                 RestfulResponse res = new RestfulResponse();
                 res.setStatus(200);
-
                 Map<String, Object> driverInfoMap = new HashMap<>();
                 driverInfoMap.put("instanceID", "usb12345");
                 driverInfoMap.put("ip", "12.32.30");
@@ -170,7 +156,6 @@ public class OverlayVpnDriverProxyTest {
                 driverInfoMap.put("password", "raju");
                 res.setResponseJson(JsonUtil.toJson(driverInfoMap));
                 return res;
-
             }
         };
 
@@ -184,12 +169,10 @@ public class OverlayVpnDriverProxyTest {
         new MockUp<RestfulProxy>() {
 
             @Mock
-
             RestfulResponse get(String url, RestfulParametes restParametes)
                     throws ServiceException, MalformedURLException {
                 RestfulResponse res = new RestfulResponse();
                 res.setStatus(200);
-
                 Map<String, Object> driverInfoMap = new HashMap<>();
                 driverInfoMap.put("instanceID", "usb12345");
                 driverInfoMap.put("ip", "12.32.30");
@@ -198,7 +181,6 @@ public class OverlayVpnDriverProxyTest {
                 driverInfoMap.put("password", "raju");
                 res.setResponseJson(JsonUtil.toJson(driverInfoMap));
                 return res;
-
             }
         };
 
@@ -212,12 +194,10 @@ public class OverlayVpnDriverProxyTest {
         new MockUp<RestfulProxy>() {
 
             @Mock
-
             RestfulResponse get(String url, RestfulParametes restParametes)
                     throws ServiceException, MalformedURLException {
                 RestfulResponse res = new RestfulResponse();
                 res.setStatus(200);
-
                 Map<String, Object> driverInfoMap = new HashMap<>();
                 driverInfoMap.put("instanceID", "usb12345");
                 driverInfoMap.put("ip", "12.32.30");
@@ -226,10 +206,8 @@ public class OverlayVpnDriverProxyTest {
                 driverInfoMap.put("password", "raju");
                 res.setResponseJson(JsonUtil.toJson(driverInfoMap));
                 return res;
-
             }
         };
-
         HTTPReturnMessage message = OverlayVpnDriverProxy.getInstance().sendPutMsg("http://test", null, "test123");
         assertEquals(404, message.getStatus());
     }
@@ -240,12 +218,10 @@ public class OverlayVpnDriverProxyTest {
         new MockUp<RestfulProxy>() {
 
             @Mock
-
             RestfulResponse get(String url, RestfulParametes restParametes)
                     throws ServiceException, MalformedURLException {
                 RestfulResponse res = new RestfulResponse();
                 res.setStatus(200);
-
                 Map<String, Object> driverInfoMap = new HashMap<>();
                 driverInfoMap.put("instanceID", "usb12345");
                 driverInfoMap.put("ip", "12.32.30");
@@ -254,12 +230,10 @@ public class OverlayVpnDriverProxyTest {
                 driverInfoMap.put("password", "raju");
                 res.setResponseJson(JsonUtil.toJson(driverInfoMap));
                 return res;
-
             }
         };
 
         HTTPReturnMessage message = OverlayVpnDriverProxy.getInstance().sendDeleteMsg("http://test", null, "test123");
         assertEquals(404, message.getStatus());
     }
-
 }

@@ -28,7 +28,7 @@ import org.openo.baseservice.remoteservice.exception.ServiceException;
 import org.openo.sdnhub.overlayvpndriver.controller.model.PortVlan;
 import org.openo.sdnhub.overlayvpndriver.controller.model.Vni;
 import org.openo.sdnhub.overlayvpndriver.controller.model.VxLanDeviceModel;
-import org.openo.sdnhub.overlayvpndriver.rest.VxLanRoaResource;
+import org.openo.sdnhub.overlayvpndriver.rest.VxLanROAResource;
 import org.openo.sdno.overlayvpn.model.common.enums.vxlan.VxlanAccessType;
 import org.openo.sdno.overlayvpn.model.v2.vxlan.SbiNeVxlanInstance;
 import org.openo.sdno.overlayvpn.model.v2.vxlan.SbiNeVxlanInterface;
@@ -47,7 +47,7 @@ import org.springframework.util.CollectionUtils;
  */
 public class VxlanConvert {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(VxLanRoaResource.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(VxLanROAResource.class);
 
     private static final String CONTROL = "control";
 

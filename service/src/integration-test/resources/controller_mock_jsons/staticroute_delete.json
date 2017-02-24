@@ -1,0 +1,24 @@
+{
+  "request" : {
+    "uri" : "/controller/cloud/v2/northbound/config/[a-zA-Z0-9\\-\\_]{1,36}/device/staticroutes",
+    "method" : "delete",
+    "headers" : {
+        "X-Auth-Token": "junk"
+    },
+    "json" : {"ids":["c3ebcbc532e3439499a9a15e52d49526"]}
+  },
+  "response" : {
+    "status" : "200",
+    "json" : {
+         "errcode": "0",
+         "errmsg": "",
+         "success": [
+             {
+                 "id": "c3ebcbc532e3439499a9a15e52d49526",
+                 "name": "static-route1",
+                 "description": "deleted static route"
+             }
+        ]
+      }
+  }
+}

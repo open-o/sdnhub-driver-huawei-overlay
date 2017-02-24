@@ -1,0 +1,27 @@
+{
+    "request": {
+        "uri": "/openoapi/sbi-route/v1/batch-query-static-routes",
+        "method": "post",
+        "headers": {
+            "Content-Type": "application/json;charset=UTF-8",
+            "X-Driver-Parameter": "extSysID=81244ad0-b4ea-41ed-969e-d5588b32fd4c"
+        },
+        "json": null
+    },
+    "response": {
+        "status": 201,
+        "json": {
+            "errorCode": "overlayvpn.operation.success",
+            "data": {},
+            "descArg": "",
+            "reasonArg": "",
+            "detailArg": "",
+            "adviceArg": "",
+            "httpCode": 201,
+            "message": "",
+            "smallErrorCodeList": null,
+            "successed": null,
+            "fail": null
+        }
+    }
+}

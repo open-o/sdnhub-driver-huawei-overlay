@@ -1,16 +1,16 @@
 {
-	"request": {
-		"uri": "/controller/cloud/v2/northbound/config/[a-zA-Z0-9\\-\\_]{1,36}/device/network",
-		"method": "get",
-		"headers": {
-			"Content-Type": "application/json;charset=UTF-8"
-		},
-		"json": {
+    "request": {
+        "uri": "/controller/cloud/v2/northbound/config/[a-zA-Z0-9\\-\\_]{1,36}/device/network",
+        "method": "get",
+        "headers": {
+            "Content-Type": "application/json;charset=UTF-8"
+        },
+        "json": {
 
-		}
-	},
-	"response": {
-		"status": 500,
-		"json":null
-	}
+        }
+    },
+    "response": {
+        "status": 500,
+        "json":null
+    }
 }

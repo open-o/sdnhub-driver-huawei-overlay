@@ -1,0 +1,18 @@
+{
+  "request" : {
+    "uri" : "/controller/cloud/v2/northbound/config/[a-zA-Z0-9\\-\\_]{1,36}/device/interfacesip",
+    "method" : "get",
+    "headers" : {
+        "X-Auth-Token": "junk"
+    },
+    "json" : null
+  },
+  "response" : {
+    "status" : "500",
+    "json" : {
+         "errcode": "overlayvpn.operation.fail",
+         "errmsg": "",
+         "data": null
+      }
+  }
+}

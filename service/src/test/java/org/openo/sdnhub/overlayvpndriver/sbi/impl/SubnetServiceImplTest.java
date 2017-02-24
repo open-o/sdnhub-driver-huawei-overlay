@@ -35,7 +35,7 @@ public class SubnetServiceImplTest {
         SubnetServiceImpl impl = new SubnetServiceImpl();
         ACNetwork network = new ACNetwork();
         network.setId("id");
-        impl.createSubnet(network, null, "deviceId");
+        impl.createSubnet(network, null, "deviceid");
     }
 
     @Test(expected = ServiceException.class)
@@ -57,24 +57,24 @@ public class SubnetServiceImplTest {
     @Test(expected = ServiceException.class)
     public void updateSubnetCrtlNull() throws ServiceException {
         SubnetServiceImpl impl = new SubnetServiceImpl();
-        SbiSubnetNetModel network = new SbiSubnetNetModel();
-        network.setNeId("id");
-        impl.updateSubnet(network, null, "deviceId");
+        ACNetwork network = new ACNetwork();
+        network.setId("id");
+        impl.updateSubnet(network, null, "deviceid");
     }
 
     @Test(expected = ServiceException.class)
     public void updateSubnetDeviceNull() throws ServiceException {
         SubnetServiceImpl impl = new SubnetServiceImpl();
-        SbiSubnetNetModel network = new SbiSubnetNetModel();
-        network.setNeId("id");
+        ACNetwork network = new ACNetwork();
+        network.setId("id");
         impl.updateSubnet(network, "CtrlId", null);
     }
 
     @Test(expected = ServiceException.class)
     public void updateSubnetNetworkNull() throws ServiceException {
         SubnetServiceImpl impl = new SubnetServiceImpl();
-        SbiSubnetNetModel network = new SbiSubnetNetModel();
-        network.setNeId(null);
+        ACNetwork network = new ACNetwork();
+        network.setId(null);
         impl.updateSubnet(network, "CtrlId", "DeviceId");
     }
 
@@ -82,7 +82,7 @@ public class SubnetServiceImplTest {
     public void deleteSubnetCrtlNull() throws ServiceException {
         SubnetServiceImpl impl = new SubnetServiceImpl();
 
-        impl.deleteSubnet("NetWork", null, "deviceId");
+        impl.deleteSubnet("NetWork", null, "deviceid");
     }
 
     @Test(expected = ServiceException.class)
@@ -217,8 +217,8 @@ public class SubnetServiceImplTest {
         };
 
         SubnetServiceImpl impl = new SubnetServiceImpl();
-        SbiSubnetNetModel sbi = new SbiSubnetNetModel();
-        sbi.setNeId("Id");
+        ACNetwork sbi = new ACNetwork();
+        sbi.setId("Id");
         impl.updateSubnet(sbi, "CtrlId", "DeviceId");
     }
 
@@ -243,8 +243,8 @@ public class SubnetServiceImplTest {
         };
 
         SubnetServiceImpl impl = new SubnetServiceImpl();
-        SbiSubnetNetModel sbi = new SbiSubnetNetModel();
-        sbi.setNeId("Id");
+        ACNetwork sbi = new ACNetwork();
+        sbi.setId("Id");
         impl.updateSubnet(sbi, "CtrlId", "DeviceId");
     }
 
@@ -269,8 +269,8 @@ public class SubnetServiceImplTest {
         };
 
         SubnetServiceImpl impl = new SubnetServiceImpl();
-        SbiSubnetNetModel sbi = new SbiSubnetNetModel();
-        sbi.setNeId("Id");
+        ACNetwork sbi = new ACNetwork();
+        sbi.setId("Id");
         impl.updateSubnet(sbi, "CtrlId", "DeviceId");
     }
 

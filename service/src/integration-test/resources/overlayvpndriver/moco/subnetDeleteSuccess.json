@@ -1,27 +1,27 @@
 {
-	"request": {
-		"uri": "/controller/cloud/v2/northbound/config/[a-zA-Z0-9\\-\\_]{1,36}/device/network",
-		"method": "delete",
-		"headers": {
-			"Content-Type": "application/json;charset=UTF-8"
-		},
-		"json": {}
-	},
-	"response": {
-		"status": 200,
-		"json": {
-			"errcode": "overlayvpn.operation.success",
-			"errmsg": "",
-			"success": [{
-				"id": "bc856ae5ffeb4768a89bb47ca7c196f1",
-				"name": null,
-				"description": null
-			}, {
-				"id": "e8b578b4528e47c4bbda517166a38161",
-				"name": null,
-				"description": "id not exist"
-			}]
-		}
+    "request": {
+        "uri": "/controller/cloud/v2/northbound/config/[a-zA-Z0-9\\-\\_]{1,36}/device/network",
+        "method": "delete",
+        "headers": {
+            "Content-Type": "application/json;charset=UTF-8"
+        },
+        "json": {}
+    },
+    "response": {
+        "status": 200,
+        "json": {
+            "errcode": "0",
+            "errmsg": "",
+            "success": [{
+                "id": "bc856ae5ffeb4768a89bb47ca7c196f1",
+                "name": null,
+                "description": null
+            }, {
+                "id": "e8b578b4528e47c4bbda517166a38161",
+                "name": null,
+                "description": "id not exist"
+            }]
+        }
 
-	}
+    }
 }

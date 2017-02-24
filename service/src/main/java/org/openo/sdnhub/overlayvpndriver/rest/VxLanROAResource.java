@@ -17,7 +17,6 @@
 package org.openo.sdnhub.overlayvpndriver.rest;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,9 +35,7 @@ import org.openo.sdnhub.overlayvpndriver.common.consts.CommonConst;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Transformer;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
-import org.openo.sdnhub.overlayvpndriver.common.consts.CommonConst;
 import org.openo.sdnhub.overlayvpndriver.common.util.RequestHeaderUtil;
-import org.openo.sdnhub.overlayvpndriver.controller.model.Vni;
 import org.openo.sdnhub.overlayvpndriver.controller.model.VxLanDeviceModel;
 import org.openo.sdnhub.overlayvpndriver.result.ACDelResponse;
 import org.openo.sdnhub.overlayvpndriver.sbi.impl.VxLanSvcImpl;
@@ -53,7 +50,6 @@ import org.openo.sdno.overlayvpn.util.check.UuidUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 
 /**
@@ -64,9 +60,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @Path("/sbi-vxlan/v1")
-public class VxLanRoaResource {
+public class VxLanROAResource {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(VxLanRoaResource.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(VxLanROAResource.class);
 
     @Autowired
     private VxLanSvcImpl vxlanService = null;
@@ -277,6 +273,8 @@ public class VxLanRoaResource {
 
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
         long beginTime = System.currentTimeMillis();
+
+        // Input validation
         if(CollectionUtils.isEmpty(vxLanInstanceList)) {
             throw new ServiceException(ErrorCode.OVERLAYVPN_PARAMETER_INVALID);
         }

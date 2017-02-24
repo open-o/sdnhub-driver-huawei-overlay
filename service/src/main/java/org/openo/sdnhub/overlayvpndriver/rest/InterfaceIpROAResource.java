@@ -67,11 +67,11 @@ public class InterfaceIpROAResource {
      * @since SDNHUB 0.5
      */
     @PUT
-    @Path("/deviceid/{deviceid}/interfaces")
+    @Path("/device/{deviceuuid}/interfaces")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ResultRsp<List<SbiInterfaceIpConfig>> updateInterfaceIp(@Context HttpServletRequest request,
-            @HeaderParam("X-Driver-Parameter") String ctrlUuidParam, @PathParam("deviceid") String deviceId,
+            @HeaderParam("X-Driver-Parameter") String ctrlUuidParam, @PathParam("deviceuuid") String deviceId,
             List<SbiInterfaceIpConfig> interfaceIpConfigList) throws ServiceException {
 
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
@@ -108,7 +108,7 @@ public class InterfaceIpROAResource {
      * @since SDNHUB 0.5
      */
     @GET
-    @Path("/deviceid/{deviceuuid}/interfaces")
+    @Path("/device/{deviceuuid}/interfaces")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ResultRsp<List<SbiInterfaceIpConfig>> queryInterfaceIp(@Context HttpServletRequest request,

@@ -42,7 +42,7 @@ public class SbiSnatNetModel extends BaseServiceModel {
     /**
      * AC Device Id
      */
-    @JsonProperty(value = "deviceId")
+    @JsonProperty(value = "deviceid")
     @AUuid(require = true)
     private String deviceId;
 
@@ -275,5 +275,4 @@ public class SbiSnatNetModel extends BaseServiceModel {
     public void setType(String type) {
         this.type = type;
     }
-
 }
