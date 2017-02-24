@@ -46,9 +46,29 @@ public class CommonConst {
 
     public static final String VNI_PATH_PARAM = "vni";
 
-    public static final String STATIC_ROUTE_CONFIGS = "staticRouteConfigs";
-
     public static final String NQA_LIST = "nqaList";
 
     public static final String NQA_ID_LIST = "ids";
+
+    public static final String STATIC_ROUTE_CONFIGS = "staticRouteConfigs";
+
+    // Device Restful interface URL Path Constants
+    public static final String DEVICE_RESTFUL_PATH = "/sbi-localsite/v1";
+    public static final String DEVICE_RESTFUL_OPERATION_PATH = "/devices";
+    public static final String DEVICE_RESTFUL_UPDATE_OPERATION_PATH = "/deviceid/{deviceuuid}";
+
+    // VxLan Restful interface URL Path constants
+    public static final String VXLAN_RESTFUL_PATH = "/sbi-vxlan/v1";
+    public static final String VXLAN_BATCH_CREATE_OPERATION_PATH = "/batch-create-vxlan";
+    public static final String VXLAN_BATCH_DELETE_OPERATION_PATH = "/device/{deviceid}/batch-delete-vxlan";
+    public static final String VXLAN_BATCH_QUERY_OPERATION_PATH = "/batch-query-vxlan";
+    public static final String VXLAN_BATCH_UPDATE_OPERATION_PATH = "/batch-update-vxlan";
+
+    public static final String LOOP_BACK_PORT = "LoopBack";
+
+    public static final String WAN_DEFAULT_IP = "0.0.0.0";
+
+    public static final int QUERY_TIME = 10;
+
+    public static final int GET_WAN_IP_WAIT_TIME = 2000;
 }

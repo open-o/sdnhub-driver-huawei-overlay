@@ -138,6 +138,7 @@ public class ControllerUrlConst {
     public static final String DEVICE_NAT_URL = "/controller/cloud/v2/northbound/config/{0}/device/nat";
 
     public static final String DEVICE_NETWORK_URL = "/controller/cloud/v2/northbound/config/{0}/device/network";
+    public static final String  QUERY_LOOP_BACK_ERROR = "acadapter.query_loopback_interface_error";
 
     private ControllerUrlConst(){
     }

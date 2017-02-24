@@ -18,6 +18,8 @@ package org.openo.sdnhub.overlayvpndriver.service.model;
 
 import java.util.Objects;
 
+import org.openo.sdnhub.overlayvpndriver.controller.model.AcDevicePort;
+import org.openo.sdnhub.overlayvpndriver.controller.model.LoopBackPort;
 import org.openo.sdno.overlayvpn.inventory.sdk.model.annotation.MOResType;
 import org.openo.sdno.overlayvpn.model.v2.uuid.UuidModel;
 import org.openo.sdno.overlayvpn.verify.annotation.AInt;
@@ -51,6 +53,22 @@ public class SbiIp extends UuidModel {
         this();
         this.ipv4 = ipv4;
         this.ipMask = ipMask;
+    }
+
+    public SbiIp (LoopBackPort loopBackPort) {
+        this.setUuid(loopBackPort.getId());
+        this.ipv4 = loopBackPort.getIpv4Address();
+        this.ipMask = loopBackPort.getIpv4Mask();
+        this.ipv6 = loopBackPort.getIpv6Address();
+        this.prefixLength = loopBackPort.getPrefixLength();
+    }
+
+    public SbiIp (AcDevicePort acDevicePort) {
+        this.setUuid(acDevicePort.getId());
+        this.ipv4 = acDevicePort.getIpAddr();
+        this.ipMask = acDevicePort.getMask();
+        this.ipv6 = acDevicePort.getIpv6Addr();
+        this.prefixLength = acDevicePort.getPrefixLength();
     }
 
     /**
