@@ -23,16 +23,16 @@ import org.openo.sdno.overlayvpn.verify.annotation.AString;
 public class SbiNePolicyRoute extends SbiRouteNetModel {
 
     @AString(require = true, min = 1, max = 26)
-    private String trafficPolicyName = null;
+    private String trafficPolicyName;
 
     @AString(require = true, min = 1, max = 255)
-    private String interfaceName = null;
+    private String interfaceName;
 
     @AString(require = true, scope = "inbound,outbound,all")
-    private String direction = null;
+    private String direction;
 
-    @AString(require = true, min = 1, max = 10000)
-    private String filterAction = null;
+    @AString(require = true, min = 1, max = 1024)
+    private String filterAction;
 
     @AString(require = true, scope = "policy")
     private String type = "policy";
