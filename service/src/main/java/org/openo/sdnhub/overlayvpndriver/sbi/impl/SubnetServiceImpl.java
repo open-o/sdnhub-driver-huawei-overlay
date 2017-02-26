@@ -22,6 +22,7 @@ import org.openo.sdnhub.overlayvpndriver.common.consts.DriverErrorCode;
 import org.openo.sdnhub.overlayvpndriver.controller.consts.ControllerErrorRsp;
 import org.openo.sdnhub.overlayvpndriver.controller.consts.ControllerUrlConst;
 import org.openo.sdnhub.overlayvpndriver.controller.model.ACNetwork;
+import org.openo.sdnhub.overlayvpndriver.controller.model.ACNetworkResponse;
 import org.openo.sdnhub.overlayvpndriver.http.OverlayVpnDriverProxy;
 import org.openo.sdnhub.overlayvpndriver.service.model.ACResponse;
 import org.openo.sdnhub.overlayvpndriver.service.model.SbiSubnetNetModel;
@@ -190,11 +191,10 @@ public class SubnetServiceImpl {
      * @throws ServiceException In case of query operation fails
      * @since SDNHUB 0.5
      */
-    public static ResultRsp<List<ACNetwork>> queryNetwork(String ctrlUuid, String deviceId)//NOPMD
+    public static ResultRsp<List<ACNetwork>> queryNetwork(String ctrlUuid, String deviceId)
             throws ServiceException
     {
-        if (!StringUtils.hasLength(ctrlUuid) || !StringUtils.hasLength(deviceId))
-        {
+        if (!StringUtils.hasLength(ctrlUuid) || !StringUtils.hasLength(deviceId)) {
             LOGGER.error("Invalid parameters.");
             throw new ParameterServiceException("Invalid parameters.");
         }
@@ -214,24 +214,20 @@ public class SubnetServiceImpl {
 
         LOGGER.error("AcBranch subnet query. Return Body={} ", body);
 
-        if ((!httpMsg.isSuccess()) || (!StringUtils.hasLength(body)))
-        {
+        if ((!httpMsg.isSuccess()) || (!StringUtils.hasLength(body))) {
             LOGGER.error("Query Subnet: httpMsg return error.");
             throw new ServiceException(DriverErrorCode.ADAPTER_SITE_SUBNET_QUERY_ERROR, "Subnet query: httpMsg return error.");
         }
 
-        @SuppressWarnings("rawtypes")
-        ACResponse<ACNetwork> acResponse =
-                JsonUtil.fromJson(body, new TypeReference<ACResponse<ACNetwork>>() {
-                });
+        ACNetworkResponse acResponse = JsonUtil.fromJson(body, new TypeReference<ACNetworkResponse>() {});
 
-        if (!acResponse.isSucceed())
-        {
+        if (!acResponse.isSucess() || (acResponse.getData() == null)) {
             LOGGER.error("AcBranch subnet query: acresponse return error, errMsg: " + acResponse.getErrmsg());
-            throw new ServiceException(DriverErrorCode.ADAPTER_SITE_SUBNET_NOT_EXIST_ON_CONTROLLER, acResponse.getErrmsg());
+            throw new ServiceException(DriverErrorCode.ADAPTER_SITE_SUBNET_NOT_EXIST_ON_CONTROLLER,
+                    acResponse.getErrcode() + "," + acResponse.getErrmsg());
         }
 
-        resultRsp.setData(Arrays.asList(acResponse.getData()));
+        resultRsp.setData(acResponse.getData().getNetworkConfigList());
         return resultRsp;
     }
 }
