@@ -63,7 +63,7 @@ public class InterfaceIpServiceImpl {
         LOGGER.debug("body:{}", modifyRsp);
         if(!modifyRsp.isSuccess()) {
             LOGGER.error("update interface ip error,status:{}", modifyRsp.getStatus());
-            return new ResultRsp<>(DriverErrorCode.CLOUDVPN_FAILED);
+            return new ResultRsp<>(DriverErrorCode.CLOUDVPN_FAILED, null, null,  modifyRsp.toString(), null);
         }
         ACResponse<List<SbiInterfaceIpConfig>> response =
                 JsonUtil.fromJson(modifyRsp.getBody(), new TypeReference<ACResponse<List<SbiInterfaceIpConfig>>>() {});
