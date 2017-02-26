@@ -30,10 +30,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
 /**
- *
- * <br/>
- * <p>
- * </p>
+ * EthInterfaceConfig utility class.<br/>
  *
  * @author
  * @version     SDNHUB 0.5  06-Feb-2017
@@ -48,44 +45,31 @@ public final class EthInterfaceConfigUtil
     }
 
     /**
+     * Parse Response.<br/>
      *
-     * <br/>
-     *
-     * @param httpMsg
-     * @param retBody
-     * @param actionDesc
-     * @return
+     * @param httpMsg Http message
+     * @param retBody Body of message
+     * @param actionDesc Action description
+     * @return ResultRsp object
      * @since  SDNHUB 0.5
      */
     public static ResultRsp<List<EthInterfaceConfig>> parseResponse(final HTTPReturnMessage httpMsg,
             final String retBody, final String actionDesc) {
         if(httpMsg.isSuccess() && StringUtils.hasLength(retBody)) {
             final ACResponse<List<EthInterfaceConfig>> response =
-                    JsonUtil.fromJson(retBody, new TypeReference<ACResponse<List<EthInterfaceConfig>>>()
-                    {
-                    });
-            if(response.isSucceed())
-            {
-                return new ResultRsp<>
-                (org.openo.sdno.overlayvpn.errorcode.ErrorCode.OVERLAYVPN_SUCCESS, response.getData());
-            }
-            else
-            {
-                //probably CLOUDVPN_SUCCESS should be CLOUDVPN_FAIL
+                    JsonUtil.fromJson(retBody, new TypeReference<ACResponse<List<EthInterfaceConfig>>>() {});
+            if(response.isSucceed()) {
+                return new ResultRsp<>(org.openo.sdno.overlayvpn.errorcode.ErrorCode.OVERLAYVPN_SUCCESS,
+                        response.getData());
+            } else {
                 return new ResultRsp<>(org.openo.sdno.overlayvpn.errorcode.ErrorCode.OVERLAYVPN_SUCCESS,response.getData());
             }
         }
-        if(StringUtils.hasLength(retBody))
-        {
-            final Map<String, String> errorMap = JsonUtil.fromJson(retBody, new TypeReference<Map<String,String>>()
-            {
-            });
-            return new ResultRsp<>
-            (ErrorCode.OVERLAYVPN_SUCCESS, errorMap.get("errmsg"),null,null,null);
+        if(StringUtils.hasLength(retBody)) {
+            final Map<String, String> errorMap = JsonUtil.fromJson(retBody, new TypeReference<Map<String,String>>() {});
+            return new ResultRsp<List<EthInterfaceConfig>>(ErrorCode.OVERLAYVPN_FAILED, errorMap.get("errmsg"), null, null, null);
         }
-
         LOGGER.error(actionDesc + ": parser msg to ACResponse error, msg:" + retBody);
-
-        return new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS);
+        return new ResultRsp<List<EthInterfaceConfig>>(ErrorCode.OVERLAYVPN_FAILED, retBody, null, null, null);
     }
 }

@@ -110,9 +110,13 @@ public class VlanServiceImpl {
         final String configUrl = MessageFormat.format(ControllerUrlConst.ETH_CONFIG_URL, deviceId);
         ResultRsp<List<EthInterfaceConfig>> response =
                 EthInterfaceConfigImpl.configEthInterface(ctrlUuid, configUrl, JsonUtil.toJson(crtInfoMap));
-        if(!response.isValid()) {
+        if(!response.isSuccess()) {
             LOGGER.error("config eth fail, info: " + response.toString());
             throw new ServiceException("localsite.vlan.ac.error", "eth config fail in ac");
+        }
+
+        if (response.getData() == null) {
+            return new ArrayList<EthInterfaceConfig>();
         }
         return response.getData();
     }
@@ -198,9 +202,13 @@ public class VlanServiceImpl {
         }
 
         ResultRsp<List<EthInterfaceConfig>> response = EthInterfaceConfigImpl.queryEthConfig(ctrlUuid, queryUrl);
-        if(!response.isValid()) {
+        if(!response.isSuccess()) {
             LOGGER.error("query eth failed, info :" + response.toString());
             throw new ServiceException("localsite.vlan.ac.error", "query eth config fail in ac");
+        }
+
+        if ( response.getData() == null) {
+            return new ArrayList<EthInterfaceConfig>();
         }
         return response.getData();
     }
