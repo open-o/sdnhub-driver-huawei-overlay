@@ -20,6 +20,7 @@ import javax.validation.constraints.NotNull;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.openo.sdno.framework.container.util.JsonUtil;
 import org.openo.sdno.overlayvpn.inventory.sdk.model.annotation.MOResType;
 import org.openo.sdno.overlayvpn.inventory.sdk.model.annotation.NONInvField;
 import org.openo.sdno.overlayvpn.verify.annotation.AIp;
@@ -247,6 +248,16 @@ public class SbiNeIpSec extends SbiIpSecNetModel {
 
     public void setLocalNeRole(String localNeRole) {
         this.localNeRole = localNeRole;
+    }
+
+    public String buildSourceIp() {
+        Ip ip = JsonUtil.fromJson(sourceAddress, Ip.class);
+        return ip.getIpv4();
+    }
+
+    public String buildPeerIp() {
+        Ip ip = JsonUtil.fromJson(peerAddress, Ip.class);
+        return ip.getIpv4();
     }
 
     /**

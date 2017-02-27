@@ -30,6 +30,17 @@ public class LocalId {
 
     private String type;
 
+    public LocalId()
+    {
+    }
+
+    public LocalId(String type, String value)
+    {
+        super();
+        this.type = type;
+        this.value = value;
+    }
+
     public String getValue() {
         return value;
     }

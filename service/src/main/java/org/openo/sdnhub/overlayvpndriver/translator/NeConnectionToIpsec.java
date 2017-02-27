@@ -25,15 +25,21 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.type.TypeReference;
 import org.openo.sdnhub.overlayvpndriver.common.consts.IKEVersion;
 import org.openo.sdnhub.overlayvpndriver.controller.model.Ike;
 import org.openo.sdnhub.overlayvpndriver.controller.model.IpSec;
 import org.openo.sdnhub.overlayvpndriver.controller.model.IpsecConnList;
 import org.openo.sdnhub.overlayvpndriver.controller.model.IpsecConnection;
+import org.openo.sdnhub.overlayvpndriver.controller.model.LocalId;
+import org.openo.sdnhub.overlayvpndriver.controller.model.RuleList;
 import org.openo.sdnhub.overlayvpndriver.service.model.IpSecConnectionType;
+import org.openo.sdnhub.overlayvpndriver.service.model.NeRoleType;
 import org.openo.sdnhub.overlayvpndriver.service.model.SbiNeIpSec;
-import org.openo.sdno.framework.container.util.UuidUtils;
+import org.openo.sdnhub.overlayvpndriver.service.model.Ip;
+import org.openo.sdno.framework.container.util.JsonUtil;
 import org.openo.sdno.ssl.EncryptionUtil;
+import org.openo.sdno.util.ip.IpUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,8 +55,13 @@ public class NeConnectionToIpsec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(NeConnectionToIpsec.class);
 
-    private NeConnectionToIpsec() {
+    private static final String TRUE = "true";
 
+    private static final String FALSE = "false";
+
+    private static final int CONST_MASK_32 = 32;
+
+    private NeConnectionToIpsec() {
     }
 
     /**
@@ -65,7 +76,7 @@ public class NeConnectionToIpsec {
     public static Map<String, List<IpsecConnList>>
             convert2Model(final Map<String, List<SbiNeIpSec>> deviceIdToTpsecConnListMap, final String ctrlUuid) {
 
-        Map<String, List<IpsecConnList>> neToIpsecModelMap = new ConcurrentHashMap<>();
+        Map<String, List<IpsecConnList>> neIdToIpsecModelMap = new ConcurrentHashMap<>();
         for(Entry<String, List<SbiNeIpSec>> entry : deviceIdToTpsecConnListMap.entrySet()) {
             List<IpsecConnList> ipsecModelList = new ArrayList<>();
             List<SbiNeIpSec> ipSecNeConnectionList = entry.getValue();
@@ -86,51 +97,122 @@ public class NeConnectionToIpsec {
                         }
                     }));
 
-            if(!CollectionUtils.isEmpty(workIpSecConnections)) {
-                List<IpsecConnList> workIpSecModel = convertWorkIpsecModel(workIpSecConnections);
-                ipsecModelList.addAll(workIpSecModel);
-            }
+            IpsecConnList workIpsecModel = convertWorkIpsecModel(workIpSecConnections);
+            ipsecModelList.add(workIpsecModel);
             if(!CollectionUtils.isEmpty(projectIpSecConnections)) {
-                List<IpsecConnList> projectIpSecModel = convertProtectIpsecModel(projectIpSecConnections);
-                ipsecModelList.addAll(projectIpSecModel);
+                IpsecConnList protectIpsecModel = convertProtectIpsecModel(projectIpSecConnections);
+                ipsecModelList.add(protectIpsecModel);
             }
-            neToIpsecModelMap.put(entry.getKey(), ipsecModelList);
+
+            neIdToIpsecModelMap.put(entry.getKey(), ipsecModelList);
         }
-        return neToIpsecModelMap;
+        return neIdToIpsecModelMap;
     }
 
-    private static List<IpsecConnList> convertWorkIpsecModel(List<SbiNeIpSec> workIpSecConnections) {
-        if(CollectionUtils.isEmpty(workIpSecConnections)) {
-            return new ArrayList<>();
+    private static IpsecConnList convertWorkIpsecModel(List<SbiNeIpSec> workIpSecConnections) {
+        if(CollectionUtils.isEmpty(workIpSecConnections))
+        {
+            return new IpsecConnList();
         }
-        List<IpsecConnList> sbiNeIpSecs = new ArrayList<>();
-        for(SbiNeIpSec ipSecaNeConnection : workIpSecConnections) {
-            IpsecConnList sbiNeIpSec = new IpsecConnList();
-            sbiNeIpSec.setName(UuidUtils.createUuid().substring(0, 8));
-            IpsecConnection ipsecConn = new IpsecConnection();
-            Ike ike = buildIke(ipSecaNeConnection, ipSecaNeConnection.getPeerAddress());
-            IpSec ipSec = buildIpsec(ipSecaNeConnection);
-            ipsecConn.setIke(ike);
-            ipsecConn.setIpsec(ipSec);
-            sbiNeIpSecs.add(sbiNeIpSec);
+
+        String wanSunIfName = workIpSecConnections.get(0).getSoureIfName();
+        IpsecConnList ipsecModel = new IpsecConnList(wanSunIfName);
+
+        ipsecModel.setUuid(workIpSecConnections.get(0).getExternalIpSecId());
+        ipsecModel.setName(ipsecModel.getUuid().substring(0, 8));
+
+        List<IpsecConnection> connList= new ArrayList<IpsecConnection>();
+
+        for (SbiNeIpSec ipSecNeConnection : workIpSecConnections)
+        {
+            IpsecConnection ipsecConnection = new IpsecConnection(ipSecNeConnection.getNeId());
+
+            ipsecConnection.setSeqNumber(Integer.valueOf(ipSecNeConnection.getExternalId()));
+            Ike ike = buildIke(ipSecNeConnection, ipSecNeConnection.buildPeerIp());
+
+
+            IpSec ipSec = buildIpsec(ipSecNeConnection);
+            if(FALSE.equals(ipSecNeConnection.getIsTemplateType()))
+            {
+                ipsecConnection.setType(FALSE);
+                ipsecConnection.setRuleList(buildRuleList(ipSecNeConnection));
+            }
+            else
+            {
+                ipsecConnection.setType(TRUE);
+            }
+
+            ipsecConnection.setIke(ike);
+            ipsecConnection.setIpSec(ipSec);
+
+            if((!StringUtils.isEmpty(ipSecNeConnection.getNqa())) && NeRoleType.LOCALCPE.getName()
+                    .equals(ipSecNeConnection.getLocalNeRole()))
+            {
+                ipsecConnection.setNqaId(ipSecNeConnection.getNqa());
+                ipsecConnection.setNqaState("up");
+            }
+
+            ipsecConnection.setQosPreClassify(ipSecNeConnection.getQosPreClassify());
+
+            connList.add(ipsecConnection);
+
+            if(TRUE.equals(ipSecNeConnection.getIsTemplateType()))
+            {
+                break;
+            }
         }
-        return sbiNeIpSecs;
+
+        ipsecModel.setIpsecConnection(connList);
+        return ipsecModel;
     }
 
-    private static List<IpsecConnList> convertProtectIpsecModel(List<SbiNeIpSec> projectIpSecConnections) {
-        List<IpsecConnList> sbiNeIpSecs = new ArrayList<>();
+    private static IpsecConnList convertProtectIpsecModel(List<SbiNeIpSec> projectIpSecConnections) {
+        String lteName = projectIpSecConnections.get(0).getSoureIfName();
+        IpsecConnList ipsecModel = new IpsecConnList(lteName);
 
-        for(SbiNeIpSec ipSecaNeConnection : projectIpSecConnections) {
-            ipSecaNeConnection.setName(UuidUtils.createUuid().substring(0, 8));
-            IpsecConnList sbiNeIpSec = new IpsecConnList();
-            Ike ike = buildIke(ipSecaNeConnection, ipSecaNeConnection.getPeerAddress());
-            IpSec ipSec = buildIpsec(ipSecaNeConnection);
-            IpsecConnection conn = new IpsecConnection();
-            conn.setIke(ike);
-            conn.setIpsec(ipSec);
-            sbiNeIpSecs.add(sbiNeIpSec);
+        ipsecModel.setUuid(projectIpSecConnections.get(0).getExternalIpSecId());
+        ipsecModel.setName(ipsecModel.getUuid().substring(0, 8));
+
+        List<IpsecConnection> connList= new ArrayList<IpsecConnection>();
+
+        for (SbiNeIpSec ipSecNeConnection : projectIpSecConnections)
+        {
+            IpsecConnection ipsecConnection = new IpsecConnection(ipSecNeConnection.getNeId());
+            ipsecConnection.setSeqNumber(Integer.valueOf(ipSecNeConnection.getExternalId()));
+
+            Ike ike = buildIke(ipSecNeConnection, ipSecNeConnection.buildPeerIp());
+
+            LocalId localIdInfo = new LocalId("fqdn",ipSecNeConnection.getTenantName());
+            ike.setLocalId(localIdInfo);
+
+            IpSec ipSec = buildIpsec(ipSecNeConnection);
+
+            if(FALSE.equals(ipSecNeConnection.getIsTemplateType()))
+            {
+                ipsecConnection.setType(FALSE);
+                ipsecConnection.setRuleList(buildRuleList(ipSecNeConnection));
+            }
+            else
+            {
+                ipsecConnection.setType(TRUE);
+            }
+
+            ipsecConnection.setIpSec(ipSec);
+            ipsecConnection.setIke(ike);
+
+            if((!StringUtils.isEmpty(ipSecNeConnection.getNqa())) && NeRoleType.LOCALCPE.getName()
+                    .equals(ipSecNeConnection.getLocalNeRole()))
+            {
+                ipsecConnection.setNqaId(ipSecNeConnection.getNqa());
+                ipsecConnection.setNqaState("down");
+            }
+
+            ipsecConnection.setQosPreClassify(ipSecNeConnection.getQosPreClassify());
+            connList.add(ipsecConnection);
         }
-        return sbiNeIpSecs;
+
+        ipsecModel.setIpsecConnection(connList);
+        return ipsecModel;
     }
 
     private static Ike buildIke(final SbiNeIpSec ipSecaNeConnection, String peerIp) {
@@ -138,7 +220,7 @@ public class NeConnectionToIpsec {
         try {
             psk = EncryptionUtil.decode(ipSecaNeConnection.getIkePolicy().getPsk().toCharArray());
         } catch(Exception e) {
-            LOGGER.error("decode psk failed", e);
+            LOGGER.error("decode psk failed");
         }
 
         Ike ike = new Ike();
@@ -165,11 +247,49 @@ public class NeConnectionToIpsec {
     private static IpSec buildIpsec(SbiNeIpSec ipSecaNeConnection) {
         IpSec ipsec = new IpSec();
 
-        if(ipSecaNeConnection.getIpSecPolicy() != null && ipSecaNeConnection.getIpSecPolicy().getAuthAlgorithm() != null) {
-
+        if(ipSecaNeConnection.getIpSecPolicy() != null) {
+            if(ipSecaNeConnection.getIpSecPolicy().getAuthAlgorithm() != null) {
                 ipsec.setEspAuthAlgorithm(ipSecaNeConnection.getIpSecPolicy().getAuthAlgorithm());
-
+            }
         }
         return ipsec;
+    }
+
+    private static List<RuleList> buildRuleList(final SbiNeIpSec ipSecNeConnection)
+    {
+        List<RuleList> ruleList = new ArrayList<RuleList>();
+
+        List<Ip> sourceLanIps = JsonUtil.fromJson(ipSecNeConnection.getSourceLanCidrs(), new TypeReference<List<Ip>>(){});
+        List<Ip> peerLanIps = JsonUtil.fromJson(ipSecNeConnection.getPeerLanCidrs(), new TypeReference<List<Ip>>(){});
+
+        for(Ip sourceLanIp : sourceLanIps)
+        {
+            for(Ip peerLanIp : peerLanIps)
+            {
+                RuleList rule = buildRule(ipSecNeConnection);
+                rule.setSrcIp(sourceLanIp.getIpv4());
+                rule.setDesIp(peerLanIp.getIpv4());
+
+                rule.setSrcNetMask(IpUtils.prefixToMask(Integer.valueOf(sourceLanIp.getIpMask())));
+                rule.setDesNetMask(IpUtils.prefixToMask(Integer.valueOf(peerLanIp.getIpMask())));
+
+                ruleList.add(rule);
+            }
+        }
+
+        return ruleList;
+    }
+
+    private static RuleList buildRule(final SbiNeIpSec ipSecNeConnection)
+    {
+        String srcIp = ipSecNeConnection.buildSourceIp();
+        //String srcIpMask = IpUtils.prefixToMask(IpUtils.getIPMaskFromCIDR(ipSecNeConnection.getSourceAddress()));
+        String srcIpMask = IpUtils.prefixToMask(CONST_MASK_32);
+
+        String destIp = ipSecNeConnection.buildPeerIp();
+        //String destIpMask = IpUtils.prefixToMask(IpUtils.getIPMaskFromCIDR(ipSecNeConnection.getPeerAddress()));
+        String destIpMask = IpUtils.prefixToMask(CONST_MASK_32);
+
+        return new RuleList("permit", srcIp, srcIpMask, destIp, destIpMask);
     }
 }

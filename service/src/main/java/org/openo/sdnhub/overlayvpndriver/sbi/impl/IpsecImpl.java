@@ -25,11 +25,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.ctc.wstx.util.StringUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.type.TypeReference;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
 import org.openo.sdnhub.overlayvpndriver.common.consts.CommonConst;
+import org.openo.sdnhub.overlayvpndriver.common.consts.HttpCode;
 import org.openo.sdnhub.overlayvpndriver.common.util.NqaConfigUtil;
 import org.openo.sdnhub.overlayvpndriver.controller.consts.ControllerUrlConst;
 import org.openo.sdnhub.overlayvpndriver.controller.model.Ip;
@@ -38,6 +40,8 @@ import org.openo.sdnhub.overlayvpndriver.controller.model.IpsecConnection;
 import org.openo.sdnhub.overlayvpndriver.http.OverlayVpnDriverProxy;
 import org.openo.sdnhub.overlayvpndriver.result.ACDelResponse;
 import org.openo.sdnhub.overlayvpndriver.result.OverlayVpnDriverResponse;
+import org.openo.sdnhub.overlayvpndriver.service.model.ACResponse;
+import org.openo.sdnhub.overlayvpndriver.service.model.IpSecConnectionType;
 import org.openo.sdnhub.overlayvpndriver.service.model.NQADeviceModel;
 import org.openo.sdnhub.overlayvpndriver.service.model.NeRoleType;
 import org.openo.sdnhub.overlayvpndriver.service.model.SbiNeIpSec;
@@ -48,6 +52,7 @@ import org.openo.sdno.framework.container.util.JsonUtil;
 import org.openo.sdno.overlayvpn.consts.CommConst;
 import org.openo.sdno.overlayvpn.errorcode.ErrorCode;
 import org.openo.sdno.overlayvpn.errorcode.ErrorCodeInfo;
+import org.openo.sdno.overlayvpn.result.FailData;
 import org.openo.sdno.overlayvpn.result.ResultRsp;
 import org.openo.sdno.overlayvpn.result.SvcExcptUtil;
 import org.openo.sdno.util.http.HTTPReturnMessage;
@@ -64,33 +69,34 @@ public class IpsecImpl {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IpsecImpl.class);
 
-    private static final String DEVICEIDNULL = "Device id is null or empty.";
+    private static final String FALSE = "false";
 
     /**
      * Deletes IPSec VPN configuration using a specific controller.<br>
      *
      * @param ctrlUuid Controller UUID
-     * @param deviceId device id
-     * @param seqNumberList collection of sequence number
+     * @param ipSecList collection of sequence number
      * @return ResultRsp object with IPSec VPN deleted configuration status data
      * @throws ServiceException when input validation fails
      * @since SDNHUB 0.5
      */
-    public ResultRsp<String> batchDeleteIpsecConn(String ctrlUuid, String deviceId, List<String> seqNumberList)
+    public ResultRsp<SbiNeIpSec> batchDeleteIpsecConn(String ctrlUuid, List<SbiNeIpSec> ipSecList)
             throws ServiceException {
 
-        ResultRsp<String> resultRsp = new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS);
-        for(String enternalId : seqNumberList) {
-            ResultRsp<List<IpsecConnList>> result = queryIpsecByDevice(ctrlUuid, deviceId, null);
+        ResultRsp<SbiNeIpSec> resultRsp = new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS);
+        for(SbiNeIpSec neIpSec : ipSecList) {
+            String deviceId = neIpSec.getDeviceId();
+            ResultRsp<List<IpsecConnList>> result = queryIpsecByDevice(ctrlUuid, deviceId, neIpSec.getSoureIfName());
             if(CollectionUtils.isEmpty(result.getData())) {
+                resultRsp.getSuccessed().add(neIpSec);
                 continue;
             }
 
             for(IpsecConnList ipsecModel : result.getData()) {
-                if(enternalId.equals(ipsecModel.getId())) {
-                    List<IpsecConnection> connList = new ArrayList<>();
+                if(neIpSec.getExternalIpSecId().equals(ipsecModel.getUuid())) {
+                    List<IpsecConnection> connList = new ArrayList<IpsecConnection>();
                     for(IpsecConnection ipsecConn : ipsecModel.getIpsecConnection()) {
-                        if(enternalId.equals(String.valueOf(ipsecConn.getSeqNumber()))) {
+                        if(neIpSec.getExternalId().equals(String.valueOf(ipsecConn.getSeqNumber()))) {
                             connList.add(ipsecConn);
                             break;
                         }
@@ -98,17 +104,17 @@ public class IpsecImpl {
 
                     ipsecModel.setIpsecConnection(new ArrayList<IpsecConnection>());
                     ipsecModel.getIpsecConnection().addAll(connList);
-                    ResultRsp<IpsecConnList> rsp = deleteIpsecConn(ctrlUuid, deviceId, ipsecModel);
+                    ResultRsp<IpsecConnList> rsp = handleIpsecByDevice(ctrlUuid, deviceId, ipsecModel, true);
                     if(!rsp.isSuccess()) {
-                        resultRsp.setErrorCode(rsp.getErrorCode());
-                        resultRsp.setMessage(rsp.getMessage());
-                        return resultRsp;
+                        FailData<SbiNeIpSec> failData = new FailData<>(rsp.getErrorCode(), rsp.getMessage(), neIpSec);
+                        resultRsp.getFail().add(failData);
+                    } else {
+                        resultRsp.getSuccessed().add(neIpSec);
                     }
                 }
             }
         }
 
-        LOGGER.warn("deleteIpsecConn: the ipsecid is not equal with the acbranch existed ones.");
         return resultRsp;
     }
 
@@ -122,39 +128,78 @@ public class IpsecImpl {
      * @throws ServiceException when input validation fails
      * @since SDNHUB 0.5
      */
-    public ResultRsp<List<IpsecConnList>> queryIpsecByDevice(String ctrlUuid, String deviceId, String interfaceName)
+    public static ResultRsp<List<IpsecConnList>> queryIpsecByDevice(String ctrlUuid, String deviceId, String interfaceName)
             throws ServiceException {
 
-        ResultRsp<List<IpsecConnList>> resultRsp = new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS);
-
-        if(StringUtils.isEmpty(deviceId)) {
-            LOGGER.error(DEVICEIDNULL);
-            throw new ParameterServiceException(DEVICEIDNULL);
+        ResultRsp<List<IpsecConnList>> resultRsp = new ResultRsp<List<IpsecConnList>>(ErrorCode.OVERLAYVPN_SUCCESS);
+        if ((StringUtils.isEmpty(ctrlUuid)) || (StringUtils.isEmpty(deviceId)))
+        {
+            LOGGER.error("queryIpsecByDevice: parameter error.");
+            throw new ServiceException(ErrorCode.OVERLAYVPN_PARAMETER_INVALID, "queryIpsecByDevice: parameter error.");
         }
 
         String queryUrl = MessageFormat.format(ControllerUrlConst.CONST_CONFIG_IPSEC, deviceId);
-        if(StringUtils.isNotEmpty(interfaceName)) {
-            StringBuilder strbuilder = new StringBuilder();
-            strbuilder.append(queryUrl + "?interfaceName=" + interfaceName);
-            queryUrl = strbuilder.toString();
+        if (StringUtils.isNotEmpty(interfaceName))
+        {
+            StringBuilder strBuidler = new StringBuilder();
+            strBuidler.append(queryUrl + "?interfaceName=" + interfaceName);
+            queryUrl = strBuidler.toString();
         }
+
+        long beginTime = System.currentTimeMillis();
+        LOGGER.debug("Ipsec query begin time = " + beginTime);
 
         HTTPReturnMessage httpMsg = OverlayVpnDriverProxy.getInstance().sendGetMsg(queryUrl, null, ctrlUuid);
-        String body = httpMsg.getBody();
-        LOGGER.debug("ipsec create return body : " + body);
 
-        if((!httpMsg.isSuccess()) && (StringUtils.isEmpty(body))) {
-            LOGGER.error("queryIpsecByDevice: httpMsg return error");
-            throw new ServiceException(ErrorCode.OVERLAYVPN_FAILED, "queryIpsecByDevice: httpMsg return error");
+        LOGGER.debug("Ipsec query cost time = " + (System.currentTimeMillis() - beginTime));
+
+        String body = httpMsg.getBody();
+
+        if ((!httpMsg.isSuccess()) || (StringUtils.isEmpty(body)))
+        {
+            LOGGER.error("queryIpsecByDevice: httpMsg return error. body is " + body);
+            throw new ServiceException(ErrorCode.OVERLAYVPN_FAILED,
+                    "queryIpsecByDevice: httpMsg return error.");
         }
 
-        OverlayVpnDriverResponse<List<IpsecConnList>> acresponse =
-                JsonUtil.fromJson(body, new TypeReference<OverlayVpnDriverResponse<List<IpsecConnList>>>() {});
-        if(acresponse.isSucess()) {
-            resultRsp.setData((List<IpsecConnList>)acresponse.getData());
+        ACResponse acresponse = JsonUtil.fromJson(body, new TypeReference<ACResponse<List<IpsecConnList>>>()
+        {
+        });
+
+        if (acresponse.isSucceed())
+        {
+            List<IpsecConnList> queryDatas = (List<IpsecConnList>) acresponse.getData();
+
+            resultRsp.setData(new ArrayList<IpsecConnList>());
+            if(CollectionUtils.isNotEmpty(queryDatas))
+            {
+                if (StringUtils.isNotEmpty(interfaceName))
+                {
+                    for(IpsecConnList ipsecModel : queryDatas)
+                    {
+                        if(interfaceName.equalsIgnoreCase(ipsecModel.getInterfaceName()))
+                        {
+                            resultRsp.getData().add(ipsecModel);
+                        }
+                    }
+                }
+                else
+                {
+                    resultRsp.setData(queryDatas);
+                }
+            }
+
             return resultRsp;
         }
-        LOGGER.error("queryIpsecByDevice: acresponse return error" + acresponse.getErrmsg());
+
+        LOGGER.error("queryIpsecByDevice: acresponse return error. errMsg: " + acresponse.getErrmsg());
+        LOGGER.error("queryIpsecByDevice: acresponse body is " + body);
+
+        if(HttpCode.TIMEOUT == httpMsg.getStatus())
+        {
+            // Need to throw error as controller timeout
+        }
+
         throw new ServiceException(ErrorCode.OVERLAYVPN_FAILED, acresponse.getErrmsg());
     }
 
@@ -173,36 +218,42 @@ public class IpsecImpl {
 
         ResultRsp<List<IpsecConnList>> resultRsp =
                 new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS, new ArrayList<IpsecConnList>());
-
         if(StringUtils.isEmpty(deviceId)) {
-            LOGGER.error(DEVICEIDNULL);
-            throw new ParameterServiceException(DEVICEIDNULL);
+            LOGGER.error("Device id is null or empty.");
+            throw new ParameterServiceException("Device id is null or empty.");
         }
+
         for(IpsecConnList ipSecModel : list) {
             ResultRsp<List<IpsecConnList>> result =
                     queryIpsecByDevice(ctrlUuid, deviceId, ipSecModel.getInterfaceName());
 
-            ResultRsp<IpsecConnList> rsp = new ResultRsp<IpsecConnList>();
             if(CollectionUtils.isEmpty(result.getData())) {
-                rsp = handleIpsecByDevice(ctrlUuid, deviceId, ipSecModel, false);
-
-                if(!rsp.isSuccess()) {
-                    resultRsp.setErrorCode(ErrorCode.OVERLAYVPN_FAILED);
-                    return resultRsp;
+                ipSecModel.setName(result.getData().get(0).getName());
+                IpsecConnection ipsecConn = ipSecModel.getIpsecConnection().get(0);
+                if ("true".equals(ipsecConn.getType())) {
+                    continue;
+                }
+            } else {
+                int randomNumber = (int) Math.round(Math.random() * (99-1)+1);
+                String hexTime = Long.toHexString(System.nanoTime());
+                int length = hexTime.length();
+                if (length > 13) {
+                    hexTime = hexTime.substring(length - 13, length);
                 }
 
-                resultRsp.getData().add(rsp.getData());
-                continue;
+                ipSecModel.setName(hexTime + randomNumber);
             }
 
-            IpsecConnList existIpSecModel = result.getData().get(0);
-            rsp = handleIpsecByDevice(ctrlUuid, deviceId, compareData4Create(existIpSecModel, ipSecModel), false);
+            ResultRsp<IpsecConnList> rsp = handleIpsecByDevice(ctrlUuid, deviceId, ipSecModel, false);
             if(!rsp.isSuccess()) {
                 resultRsp.setErrorCode(ErrorCode.OVERLAYVPN_FAILED);
                 return resultRsp;
             }
-
             resultRsp.getData().add(rsp.getData());
+
+            if (CollectionUtils.isNotEmpty(ipSecModel.getIpsecConnection()) && "true".equals(ipSecModel.getIpsecConnection().get(0).getType())) {
+                break;
+            }
         }
         return resultRsp;
     }
@@ -234,41 +285,67 @@ public class IpsecImpl {
      * @param ctrlUuid Controller UUID
      * @param deviceId device id
      * @param sbiNeIpSec IPSec VPN configuration
+     * @param updateRsp updated response from controller
      * @return ResultRsp object with IPSec VPN updated connection status data
      * @throws ServiceException when input validation fails
      * @since SDNHUB 0.5
      */
-    public ResultRsp<IpsecConnList> update(String ctrlUuid, String deviceId, SbiNeIpSec sbiNeIpSec)
+    public static void update(String ctrlUuid, String deviceId, SbiNeIpSec sbiNeIpSec, ResultRsp<SbiNeIpSec> updateRsp)
             throws ServiceException {
 
-        ResultRsp<List<IpsecConnList>> result = queryIpsecByDevice(ctrlUuid, deviceId, sbiNeIpSec.getSoureIfName());
-        if(CollectionUtils.isEmpty(result.getData())) {
-            return new ResultRsp<>(ErrorCode.OVERLAYVPN_FAILED, "ip sec connection doesnt exist", null,
-                    null, null);
+        ResultRsp<List<IpsecConnList>> result = IpsecImpl.queryIpsecByDevice(ctrlUuid, deviceId, sbiNeIpSec.getSoureIfName());
+
+        if(CollectionUtils.isEmpty(result.getData()))
+        {
+            FailData<SbiNeIpSec> failData = new FailData<SbiNeIpSec>();
+            failData.setData(sbiNeIpSec);
+            updateRsp.getFail().add(failData);
+            return;
         }
 
         IpsecConnList existIpsecModel = result.getData().get(0);
+
         IpsecConnection tempIpsecConn = null;
-        for(IpsecConnection ipsecConn : existIpsecModel.getIpsecConnection()) {
-            if(ipsecConn.getSeqNumber().equals(sbiNeIpSec.getExternalId())) {
+        for(IpsecConnection ipsecConn : existIpsecModel.getIpsecConnection())
+        {
+            if(ipsecConn.getSeqNumber() == Integer.valueOf(sbiNeIpSec.getExternalId()))
+            {
                 tempIpsecConn = ipsecConn;
                 break;
             }
         }
 
-        if(null == tempIpsecConn) {
-            return new ResultRsp<>(ErrorCode.OVERLAYVPN_FAILED, "ip sec connection doesnt exist", null,
-                    null, null);
+        if(null == tempIpsecConn)
+        {
+            FailData<SbiNeIpSec> failData = new FailData<SbiNeIpSec>();
+            failData.setData(sbiNeIpSec);
+            updateRsp.getFail().add(failData);
+            return;
         }
 
-        if("false".equals(sbiNeIpSec.getIsTemplateType())) {
-            tempIpsecConn.getIke().setLocalAddress(sbiNeIpSec.getSourceAddress());
+        tempIpsecConn.setDeleteMode(false);
+
+        if(FALSE.equals(sbiNeIpSec.getIsTemplateType()))
+        {
+            tempIpsecConn.getIke().setLocalAddress(sbiNeIpSec.buildSourceIp());
 
             Ip ip = JsonUtil.fromJson(sbiNeIpSec.getPeerAddress(), Ip.class);
             tempIpsecConn.getIke().setPeerAddress(ip.getIpv4());
         }
+
         existIpsecModel.setIpsecConnection(Arrays.asList(tempIpsecConn));
-        return handleIpsecByDevice(ctrlUuid, deviceId, existIpsecModel, false);
+
+        ResultRsp<IpsecConnList> rsp = IpsecImpl.handleIpsecByDevice(ctrlUuid, deviceId, existIpsecModel, false);
+
+        if(rsp.isSuccess())
+        {
+            updateRsp.getSuccessed().add(sbiNeIpSec);
+        }
+        else
+        {
+            FailData<SbiNeIpSec> failData = new FailData<SbiNeIpSec>(rsp.getErrorCode(), rsp.getMessage(), sbiNeIpSec);
+            updateRsp.getFail().add(failData);
+        }
     }
 
     /**
@@ -283,7 +360,7 @@ public class IpsecImpl {
             throws ServiceException {
 
         for(Map.Entry<String, List<SbiNeIpSec>> entry : deviceIdToTpsecConnListMap.entrySet()) {
-            List<SbiNqa> nqaList = new ArrayList<>();
+            List<SbiNqa> nqaList = new ArrayList<SbiNqa>();
             for(SbiNeIpSec SbiNeIpSec : entry.getValue()) {
                 if("nqa".equals(SbiNeIpSec.getProtectionPolicy())
                         && NeRoleType.LOCALCPE.getName().equals(SbiNeIpSec.getLocalNeRole())) {
@@ -293,7 +370,7 @@ public class IpsecImpl {
 
             List<NQADeviceModel> nqlDeviceModelList = NqaIpSecTranslate.convertDeviceMode(nqaList);
             if(!CollectionUtils.isEmpty(nqlDeviceModelList)) {
-                final Map<String, List<NQADeviceModel>> crtInfoMap = new HashMap<>();
+                final Map<String, List<NQADeviceModel>> crtInfoMap = new HashMap<String, List<NQADeviceModel>>();
                 crtInfoMap.put(CommonConst.NQA_LIST, nqlDeviceModelList);
                 final String createUrl = MessageFormat.format(ControllerUrlConst.NQA_CONFIG_URL, entry.getKey());
 
@@ -318,7 +395,7 @@ public class IpsecImpl {
             if(deviceIdToIpsecConnMap.containsKey(ipSecConn.getDeviceId())) {
                 deviceIdToIpsecConnMap.get(ipSecConn.getDeviceId()).add(ipSecConn);
             } else {
-                List<SbiNeIpSec> dataList = new ArrayList<>();
+                List<SbiNeIpSec> dataList = new ArrayList<SbiNeIpSec>();
                 dataList.add(ipSecConn);
                 deviceIdToIpsecConnMap.put(ipSecConn.getDeviceId(), dataList);
             }
@@ -388,13 +465,17 @@ public class IpsecImpl {
         }
     }
 
-    private ResultRsp<IpsecConnList> handleIpsecByDevice(String ctrlUuid, String deviceId, IpsecConnList ipsecModel,
+    private static ResultRsp<IpsecConnList> handleIpsecByDevice(String ctrlUuid, String deviceId, IpsecConnList ipsecModel,
             boolean deleteMode) throws ServiceException {
 
         ResultRsp<IpsecConnList> resultRsp = new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS);
         if(CollectionUtils.isEmpty(ipsecModel.getIpsecConnection())) {
             LOGGER.error("handleIpsecByDevice : ipsecConnection null");
             return new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS, ipsecModel);
+        }
+
+        for (IpsecConnection ipsecConnection : ipsecModel.getIpsecConnection()) {
+            ipsecConnection.setDeleteMode(deleteMode);
         }
 
         List<IpsecConnList> ipsecModelList = new ArrayList();
@@ -414,15 +495,22 @@ public class IpsecImpl {
             OverlayVpnDriverResponse acresponse =
                     JsonUtil.fromJson(body, new TypeReference<OverlayVpnDriverResponse<List<IpsecConnList>>>() {});
             if(acresponse.isSucess()) {
+                ipsecModel.setUuid(((List<IpsecConnList>)acresponse.getData()).get(0).getUuid());
                 resultRsp.setData(ipsecModel);
                 return resultRsp;
             }
 
             LOGGER.error("createIpSecByDevice: asresponse return error");
-            return new ResultRsp<>(ErrorCode.OVERLAYVPN_FAILED + acresponse.getErrmsg());
+            return new ResultRsp<IpsecConnList>(ErrorCode.OVERLAYVPN_FAILED + acresponse.getErrmsg());
         }
+
         LOGGER.error("createIpSecByDevice: httpMsg return error");
-        return new ResultRsp<>(ErrorCode.OVERLAYVPN_FAILED + " createIpSecByDevice: httpMsg return error");
+
+        if (HttpCode.TIMEOUT == httpMsg.getStatus()) {
+            // Need to return specific time out message
+        }
+
+        return new ResultRsp<IpsecConnList>(ErrorCode.OVERLAYVPN_FAILED + " createIpSecByDevice: httpMsg return error");
     }
 
     private ResultRsp<IpsecConnList> deleteIpsecConn(String ctrlUuid, String deviceId, IpsecConnList ipSecModel)
@@ -457,10 +545,10 @@ public class IpsecImpl {
 
     private IpsecConnList compareData4Create(IpsecConnList existIpSecModel, IpsecConnList ipSecModel) {
 
-        ipSecModel.setId(existIpSecModel.getId());
+        ipSecModel.setUuid(existIpSecModel.getUuid());
         IpsecConnList newIpSecModel = new IpsecConnList();
         newIpSecModel.setName(existIpSecModel.getName());
-        newIpSecModel.setId(existIpSecModel.getId());
+        newIpSecModel.setUuid(existIpSecModel.getUuid());
         newIpSecModel.setIpsecConnection(ipSecModel.getIpsecConnection());
         return newIpSecModel;
     }
@@ -473,5 +561,14 @@ public class IpsecImpl {
         final String retBody = createRsp.getBody();
         final String actionDesc = "create nqa config";
         return NqaConfigUtil.parseResponse(createRsp, retBody, actionDesc);
+    }
+
+    public static void checkRuleDataForLte(SbiNeIpSec neIpSecConnection) throws ServiceException {
+        if (IpSecConnectionType.PROJECT.getName().equals(neIpSecConnection.getWorkType())
+                && (StringUtils.isEmpty(neIpSecConnection.getSourceLanCidrs())
+                || StringUtils.isEmpty(neIpSecConnection.getPeerLanCidrs()))) {
+            LOGGER.error("param error for protect ipsec.");
+            SvcExcptUtil.throwBadRequestException("null lan cidrs.");
+        }
     }
 }

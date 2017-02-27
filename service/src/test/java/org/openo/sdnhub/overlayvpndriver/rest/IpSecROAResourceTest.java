@@ -135,7 +135,7 @@ public class IpSecROAResourceTest {
     public void testIpsecCreate() throws ServiceException {
         new MockUp<OverlayVpnDriverProxy>() {
 
-            private RuleList[] ruleList;
+            private List<RuleList> ruleList;
 
             @Mock
             public HTTPReturnMessage sendPutMsg(String url, String body, String ctrlUuid) throws ServiceException {
@@ -143,7 +143,7 @@ public class IpSecROAResourceTest {
                 HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
                 httpReturnMessage.setStatus(200);
                 IpsecConnList element = new IpsecConnList();
-                element.setId("123");
+                element.setUuid("123");
                 element.setInterfaceName("interfaceName");
                 Ike ike = new Ike();
                 ike.setAuthAlgorithm("authAlgorithm");
@@ -166,13 +166,13 @@ public class IpSecROAResourceTest {
                 IpSec ipsec = new IpSec();
                 ipsec.setEspAuthAlgorithm("espAuthAlgorithm");
                 ipsec.setEspEncryptionAlgorithm("espEncryptionAlgorithm");
-                ipsecConn.setIpsec(ipsec);
+                ipsecConn.setIpSec(ipsec);
                 ipsecConn.setNqaId("123");
                 ipsecConn.setNqaState("nqaState");
                 ipsecConn.setQosPreClassify("qosPreClassify");
 
                 ipsecConn.setRuleList(ruleList);
-                ipsecConn.setSeqNumber("123");
+                ipsecConn.setSeqNumber(123);
                 ipsecConn.setType("type");
 
                 List<IpsecConnection> ipsecConnection = new ArrayList<>();
@@ -198,7 +198,7 @@ public class IpSecROAResourceTest {
                 HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
                 httpReturnMessage.setStatus(200);
                 IpsecConnList element = new IpsecConnList();
-                element.setId("123");
+                element.setUuid("123");
                 element.setInterfaceName("interfaceName");
                 Ike ike = new Ike();
                 ike.setAuthAlgorithm("authAlgorithm");
@@ -221,13 +221,13 @@ public class IpSecROAResourceTest {
                 IpSec ipsec = new IpSec();
                 ipsec.setEspAuthAlgorithm("espAuthAlgorithm");
                 ipsec.setEspEncryptionAlgorithm("espEncryptionAlgorithm");
-                ipsecConn.setIpsec(ipsec);
+                ipsecConn.setIpSec(ipsec);
                 ipsecConn.setNqaId("123");
                 ipsecConn.setNqaState("nqaState");
                 ipsecConn.setQosPreClassify("qosPreClassify");
 
                 ipsecConn.setRuleList(ruleList);
-                ipsecConn.setSeqNumber("123");
+                ipsecConn.setSeqNumber(123);
                 ipsecConn.setType("type");
 
                 List<IpsecConnection> ipsecConnection = new ArrayList<>();
@@ -265,7 +265,7 @@ public class IpSecROAResourceTest {
     public void testIpsecUpdate() throws ServiceException {
         new MockUp<OverlayVpnDriverProxy>() {
 
-            private RuleList[] ruleList;
+            private List<RuleList> ruleList;
 
             @Mock
             public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
@@ -273,7 +273,7 @@ public class IpSecROAResourceTest {
                 HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
                 httpReturnMessage.setStatus(200);
                 IpsecConnList element = new IpsecConnList();
-                element.setId("123");
+                element.setUuid("123");
                 element.setInterfaceName("interfaceName");
                 Ike ike = new Ike();
                 ike.setAuthAlgorithm("authAlgorithm");
@@ -296,13 +296,13 @@ public class IpSecROAResourceTest {
                 IpSec ipsec = new IpSec();
                 ipsec.setEspAuthAlgorithm("espAuthAlgorithm");
                 ipsec.setEspEncryptionAlgorithm("espEncryptionAlgorithm");
-                ipsecConn.setIpsec(ipsec);
+                ipsecConn.setIpSec(ipsec);
                 ipsecConn.setNqaId("123");
                 ipsecConn.setNqaState("nqaState");
                 ipsecConn.setQosPreClassify("qosPreClassify");
 
                 ipsecConn.setRuleList(ruleList);
-                ipsecConn.setSeqNumber("123");
+                ipsecConn.setSeqNumber(123);
                 ipsecConn.setType("type");
 
                 List<IpsecConnection> ipsecConnection = new ArrayList<>();
@@ -328,7 +328,7 @@ public class IpSecROAResourceTest {
                 HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
                 httpReturnMessage.setStatus(200);
                 IpsecConnList element = new IpsecConnList();
-                element.setId("123");
+                element.setUuid("123");
                 element.setInterfaceName("interfaceName");
                 Ike ike = new Ike();
                 ike.setAuthAlgorithm("authAlgorithm");
@@ -351,13 +351,13 @@ public class IpSecROAResourceTest {
                 IpSec ipsec = new IpSec();
                 ipsec.setEspAuthAlgorithm("espAuthAlgorithm");
                 ipsec.setEspEncryptionAlgorithm("espEncryptionAlgorithm");
-                ipsecConn.setIpsec(ipsec);
+                ipsecConn.setIpSec(ipsec);
                 ipsecConn.setNqaId("123");
                 ipsecConn.setNqaState("nqaState");
                 ipsecConn.setQosPreClassify("qosPreClassify");
 
                 ipsecConn.setRuleList(ruleList);
-                ipsecConn.setSeqNumber("123");
+                ipsecConn.setSeqNumber(123);
                 ipsecConn.setType("type");
 
                 List<IpsecConnection> ipsecConnection = new ArrayList<>();
@@ -393,7 +393,7 @@ public class IpSecROAResourceTest {
     public void testDeleteIpSec() throws ServiceException {
         new MockUp<OverlayVpnDriverProxy>() {
 
-            private RuleList[] ruleList;
+            private List<RuleList> ruleList;
 
             @Mock
             public HTTPReturnMessage sendDeleteMsg(String url, String body, String ctrlUuid) throws ServiceException {
@@ -414,7 +414,7 @@ public class IpSecROAResourceTest {
                 HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
                 httpReturnMessage.setStatus(200);
                 IpsecConnList element = new IpsecConnList();
-                element.setId("123");
+                element.setUuid("123");
                 element.setInterfaceName("interfaceName");
                 Ike ike = new Ike();
                 ike.setAuthAlgorithm("authAlgorithm");
@@ -437,13 +437,13 @@ public class IpSecROAResourceTest {
                 IpSec ipsec = new IpSec();
                 ipsec.setEspAuthAlgorithm("espAuthAlgorithm");
                 ipsec.setEspEncryptionAlgorithm("espEncryptionAlgorithm");
-                ipsecConn.setIpsec(ipsec);
+                ipsecConn.setIpSec(ipsec);
                 ipsecConn.setNqaId("123");
                 ipsecConn.setNqaState("nqaState");
                 ipsecConn.setQosPreClassify("qosPreClassify");
 
                 ipsecConn.setRuleList(ruleList);
-                ipsecConn.setSeqNumber("123");
+                ipsecConn.setSeqNumber(123);
                 ipsecConn.setType("type");
 
                 List<IpsecConnection> ipsecConnection = new ArrayList<>();
@@ -463,7 +463,7 @@ public class IpSecROAResourceTest {
                 return httpReturnMessage;
             }
         };
-        ResultRsp<String> resp =
+        ResultRsp<SbiNeIpSec> resp =
                 ipSecROAResource.deleteIpSec(null, "extSysID=ctrlid1024", "123", ipSecNeConnectionList);
         assertEquals("overlayvpn.operation.success", resp.getErrorCode());
     }
@@ -482,7 +482,7 @@ public class IpSecROAResourceTest {
     public void testQuery() throws ServiceException {
         new MockUp<OverlayVpnDriverProxy>() {
 
-            private RuleList[] ruleList;
+            private List<RuleList> ruleList;
 
             @Mock
             public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
@@ -490,7 +490,7 @@ public class IpSecROAResourceTest {
                 HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
                 httpReturnMessage.setStatus(200);
                 IpsecConnList element = new IpsecConnList();
-                element.setId("123");
+                element.setUuid("123");
                 element.setInterfaceName("interfaceName");
                 Ike ike = new Ike();
                 ike.setAuthAlgorithm("authAlgorithm");
@@ -513,13 +513,13 @@ public class IpSecROAResourceTest {
                 IpSec ipsec = new IpSec();
                 ipsec.setEspAuthAlgorithm("espAuthAlgorithm");
                 ipsec.setEspEncryptionAlgorithm("espEncryptionAlgorithm");
-                ipsecConn.setIpsec(ipsec);
+                ipsecConn.setIpSec(ipsec);
                 ipsecConn.setNqaId("123");
                 ipsecConn.setNqaState("nqaState");
                 ipsecConn.setQosPreClassify("qosPreClassify");
 
                 ipsecConn.setRuleList(ruleList);
-                ipsecConn.setSeqNumber("123");
+                ipsecConn.setSeqNumber(123);
                 ipsecConn.setType("type");
 
                 List<IpsecConnection> ipsecConnection = new ArrayList<>();

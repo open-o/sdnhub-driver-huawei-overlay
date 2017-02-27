@@ -16,6 +16,9 @@
 
 package org.openo.sdnhub.overlayvpndriver.controller.model;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.openo.sdno.overlayvpn.model.v2.uuid.UuidModel;
+
 import java.util.List;
 
 /**
@@ -26,46 +29,113 @@ import java.util.List;
  * @author
  * @version SDNHUB 0.5 02-Feb-2017
  */
-public class IpsecConnList {
+public class IpsecConnList extends UuidModel {
 
-    private String id;
-
-    private String interfaceName;
+    @JsonIgnore
+    private boolean createFlag = true;
 
     private String name;
 
+    private String interfaceName;
+
     private List<IpsecConnection> ipsecConnection;
 
-    public String getId() {
-        return id;
+    @JsonIgnore
+    private String serviceId;
+
+    /**
+     * Initialization by default values.
+     */
+    public IpsecConnList()
+    {
+        super();
     }
 
-    public void setId(String id) {
-        this.id = id;
+    /**
+     * Initialization by interface name.
+     */
+    public IpsecConnList(String subInterfaceName)
+    {
+        super();
+        setInterfaceName(subInterfaceName);
     }
 
-    public String getInterfaceName() {
-        return interfaceName;
+    /**
+     * @return Returns the create flag.
+     */
+    public boolean isCreateFlag()
+    {
+        return createFlag;
     }
 
-    public void setInterfaceName(String interfaceName) {
-        this.interfaceName = interfaceName;
+    /**
+     * @param createFlag create flag.
+     */
+    public void setCreateFlag(boolean createFlag)
+    {
+        this.createFlag = createFlag;
     }
 
-    public String getName() {
+    /**
+     * @return Returns ip-sec name.
+     */
+    public String getName()
+    {
         return name;
     }
 
-    public void setName(String name) {
+    /**
+     * @param name ip-sec name.
+     */
+    public void setName(String name)
+    {
         this.name = name;
     }
 
-    public List<IpsecConnection> getIpsecConnection() {
+    /**
+     * @return Returns the interface name.
+     */
+    public String getInterfaceName()
+    {
+        return interfaceName;
+    }
+
+    /**
+     * @param interfaceName interface name.
+     */
+    public void setInterfaceName(String interfaceName)
+    {
+        this.interfaceName = interfaceName;
+    }
+
+    /**
+     * @return Returns ip-sec connection.
+     */
+    public List<IpsecConnection> getIpsecConnection()
+    {
         return ipsecConnection;
     }
 
-    public void setIpsecConnection(List<IpsecConnection> ipsecConnection) {
+    /**
+     * @param ipsecConnection ip-sec connection.
+     */
+    public void setIpsecConnection(List<IpsecConnection> ipsecConnection)
+    {
         this.ipsecConnection = ipsecConnection;
+    }
+
+    /**
+     * @return Returns the service id..
+     */
+    public String getServiceId() {
+        return serviceId;
+    }
+
+    /**
+     * @param serviceId service id.
+     */
+    public void setServiceId(String serviceId) {
+        this.serviceId = serviceId;
     }
 
     @Override

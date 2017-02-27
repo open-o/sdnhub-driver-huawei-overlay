@@ -16,6 +16,8 @@
 
 package org.openo.sdnhub.overlayvpndriver.controller.model;
 
+import org.springframework.util.StringUtils;
+
 /**
  * <br/>
  * <p>
@@ -35,6 +37,15 @@ public class RuleList {
     private String policy;
 
     private String srcIp;
+
+    public RuleList(String policy, String srcIp, String srcNetMask, String desIp, String desNetMask) {
+        super();
+        this.setPolicy(policy);
+        this.setSrcIp(srcIp);
+        this.setSrcNetMask(srcNetMask);
+        this.setDesIp(desIp);
+        this.setDesNetMask(desNetMask);
+    }
 
     public String getDesIp() {
         return desIp;
