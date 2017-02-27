@@ -31,11 +31,6 @@ import org.openo.sdno.overlayvpn.verify.annotation.AString;
 public class VxLanDeviceModel extends AbstUuidModel {
 
     /**
-     * vxlan tunnel id.
-     */
-    private String id;
-
-    /**
      * vne id.
      */
     private int vneId;
@@ -57,22 +52,6 @@ public class VxLanDeviceModel extends AbstUuidModel {
      * Collection of vni.
      */
     private List<Vni> vniList;
-
-    /**
-     * @return Returns vxlan tunnel id.
-     */
-    public String getId()
-    {
-        return id;
-    }
-
-    /**
-     * @param id vxlan tunnel id.
-     */
-    public void setId(String id)
-    {
-        this.id = id;
-    }
 
     /**
      * @return Returns vne id.
