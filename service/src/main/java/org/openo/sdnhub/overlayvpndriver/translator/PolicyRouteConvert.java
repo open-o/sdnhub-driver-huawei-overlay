@@ -86,7 +86,7 @@ public class PolicyRouteConvert {
 
             FilterAction filterAction = new FilterAction();
             Filter filter = new Filter();
-            List<AclPolicy> aclPolicies = new ArrayList<AclPolicy>();
+            List<AclPolicy> aclPolicies = new ArrayList<>();
             Iterator<AclRule> iterator = nbiFilterAction.getRuleList().iterator();
 
             while(iterator.hasNext()) {

@@ -122,8 +122,6 @@ public class SubnetConvert {
 
     private static DnsServerConfig buildDnsConfig(SbiSubnetNetModel subnet) {
         DnsServerConfig dnsConfig = new DnsServerConfig();
-
-        // dnsConfig.setDnsServerMode(subnet.getdnsMode());
         dnsConfig.setPriorDnsServer(subnet.getPriorDnsServer());
         dnsConfig.setStandbyDnsServer(subnet.getStandbyDnsServer());
 

@@ -52,7 +52,7 @@ public class NqaIpSecTranslate {
 
     public static List<NQADeviceModel> convertDeviceMode(List<SbiNqa> nqaList)
     {
-        List<NQADeviceModel> nqaDeviceModelList = new ArrayList<NQADeviceModel>();
+        List<NQADeviceModel> nqaDeviceModelList = new ArrayList<>();
         for(SbiNqa nqa : nqaList)
         {
             NQADeviceModel nqaDeviceModel = new NQADeviceModel();

@@ -62,7 +62,7 @@ public class NqaROAResource {
 
     private static final String NQA_ID_LIST = "ids";
 
-    private String INVALID_CONTROLLER_UUID = "invalid controller UUID.";
+    private static final String INVALID_CONTROLLER_UUID = "invalid controller UUID.";
 
     /**
      * Retrieves a NQA configuration using a specific Controller.<br>
@@ -84,7 +84,7 @@ public class NqaROAResource {
                                       List<SbiNqa> sbiNqaList) throws ServiceException {
         String ctrlUuid = ctrlUuidParam.substring(ctrlUuidParam.indexOf('=') + 1);
         if (!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error("invalid controller UUID");
+            LOGGER.error(INVALID_CONTROLLER_UUID);
             throw new ParameterServiceException(INVALID_CONTROLLER_UUID);
         }
 
@@ -126,7 +126,7 @@ public class NqaROAResource {
         for (final SbiNqa sbiNqa : sbiNqaList) {
             if ((null == sbiNqa) || !StringUtils.hasLength(sbiNqa.getTestType())
                     || !StringUtils.hasLength(sbiNqa.getDstIp())) {
-                LOGGER.error("invalid controller UUID");
+                LOGGER.error(INVALID_CONTROLLER_UUID);
                 throw new ParameterServiceException("create NQA nqaList param error");
             }
         }
@@ -167,7 +167,7 @@ public class NqaROAResource {
                                        List<SbiNqa> sbiNqaList) throws ServiceException {
         String ctrlUuid = ctrlUuidParam.substring(ctrlUuidParam.indexOf('=') + 1);
         if (!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error("invalid controller UUID");
+            LOGGER.error(INVALID_CONTROLLER_UUID);
             throw new ParameterServiceException(INVALID_CONTROLLER_UUID);
         }
 
@@ -215,7 +215,7 @@ public class NqaROAResource {
                                        List<String> nqaIdList) throws ServiceException {
         String ctrlUuid = ctrlUuidParam.substring(ctrlUuidParam.indexOf('=') + 1);
         if (!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error("invalid controller UUID");
+            LOGGER.error(INVALID_CONTROLLER_UUID);
             throw new ParameterServiceException(INVALID_CONTROLLER_UUID);
         }
 

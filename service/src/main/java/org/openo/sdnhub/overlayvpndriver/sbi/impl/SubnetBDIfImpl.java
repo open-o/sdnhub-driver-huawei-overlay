@@ -87,6 +87,6 @@ public class SubnetBDIfImpl {
         ACBDInfo bdInfo = acResponse.getData().get(0);
         model.setBdId(bdInfo.getBdId());
         model.setVbdifName(bdInfo.getVbdifName());
-        return new ResultRsp<SbiSubnetBdInfoModel>(ErrorCode.OVERLAYVPN_SUCCESS, model);
+        return new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS, model);
     }
 }

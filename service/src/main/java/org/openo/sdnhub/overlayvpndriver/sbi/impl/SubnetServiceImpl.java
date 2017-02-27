@@ -50,6 +50,7 @@ import java.util.Map;
 public class SubnetServiceImpl {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SubnetServiceImpl.class);
+    private static final String SINVALIDPARAM="Invalid parameters.";
 
     /**
      * Subnet create operation implementation.<br/>
@@ -65,11 +66,11 @@ public class SubnetServiceImpl {
             throws ServiceException {
 
         if(!StringUtils.hasLength(ctrlUuid) || !StringUtils.hasLength(deviceId) || null == network.getId()) {
-            LOGGER.error("Invalid parameters.");
-            throw new ParameterServiceException("Invalid parameters.");
+            LOGGER.error(SINVALIDPARAM);
+            throw new ParameterServiceException(SINVALIDPARAM);
         }
 
-        ResultRsp<SbiSubnetNetModel> resultRsp = new ResultRsp<SbiSubnetNetModel>(DriverErrorCode.OVERLAYVPN_SUCCESS);
+        ResultRsp<SbiSubnetNetModel> resultRsp = new ResultRsp<>(DriverErrorCode.OVERLAYVPN_SUCCESS);
         String createUrl = MessageFormat.format(ControllerUrlConst.DEVICE_NETWORK_URL, deviceId);
         HTTPReturnMessage httpMsg =
                 OverlayVpnDriverProxy.getInstance().sendPutMsg(createUrl, JsonUtil.toJson(network), ctrlUuid);
@@ -115,8 +116,8 @@ public class SubnetServiceImpl {
             throws ServiceException {
 
         if(!StringUtils.hasLength(ctrlUuid) || !StringUtils.hasLength(deviceId) || null == network.getId()) {
-            LOGGER.error("Invalid parameters.");
-            throw new ParameterServiceException("Invalid parameters.");
+            LOGGER.error(SINVALIDPARAM);
+            throw new ParameterServiceException(SINVALIDPARAM);
         }
 
         ResultRsp<ACNetwork> resultRsp = new ResultRsp<>(DriverErrorCode.OVERLAYVPN_SUCCESS);
@@ -154,15 +155,15 @@ public class SubnetServiceImpl {
     public ResultRsp<String> deleteSubnet(String networkId, String ctrlUuid, String deviceId) throws ServiceException {
 
         if(!StringUtils.hasLength(ctrlUuid) || !StringUtils.hasLength(deviceId) || null == networkId) {
-            LOGGER.error("Invalid parameters.");
-            throw new ParameterServiceException("Invalid parameters.");
+            LOGGER.error(SINVALIDPARAM);
+            throw new ParameterServiceException(SINVALIDPARAM);
         }
 
-        ResultRsp<String> resultRsp = new ResultRsp<String>(DriverErrorCode.OVERLAYVPN_SUCCESS);
+        ResultRsp<String> resultRsp = new ResultRsp<>(DriverErrorCode.OVERLAYVPN_SUCCESS);
         String deleteUrl = MessageFormat.format(ControllerUrlConst.DEVICE_NETWORK_URL, deviceId);
-        List<String> ids = new ArrayList<String>();
+        List<String> ids = new ArrayList<>();
         ids.add(networkId);
-        Map<String, Object> params = new HashMap<String, Object>();
+        Map<String, Object> params = new HashMap<>();
         params.put("ids", ids);
         HTTPReturnMessage httpMsg =
                 OverlayVpnDriverProxy.getInstance().sendDeleteMsg(deleteUrl, JsonUtil.toJson(params), ctrlUuid);
@@ -194,12 +195,13 @@ public class SubnetServiceImpl {
     public static ResultRsp<List<ACNetwork>> queryNetwork(String ctrlUuid, String deviceId)
             throws ServiceException
     {
-        if (!StringUtils.hasLength(ctrlUuid) || !StringUtils.hasLength(deviceId)) {
-            LOGGER.error("Invalid parameters.");
-            throw new ParameterServiceException("Invalid parameters.");
+        if (!StringUtils.hasLength(ctrlUuid) || !StringUtils.hasLength(deviceId))
+        {
+            LOGGER.error(SINVALIDPARAM);
+            throw new ParameterServiceException(SINVALIDPARAM);
         }
 
-        ResultRsp<List<ACNetwork>> resultRsp = new ResultRsp<List<ACNetwork>>(DriverErrorCode.CLOUDVPN_SUCCESS);
+        ResultRsp<List<ACNetwork>> resultRsp = new ResultRsp<>(DriverErrorCode.CLOUDVPN_SUCCESS);
 
         String getUrl = MessageFormat.format(ControllerUrlConst.DEVICE_NETWORK_URL, deviceId);
 

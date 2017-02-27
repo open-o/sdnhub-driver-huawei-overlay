@@ -52,9 +52,9 @@ public class InterfaceIpROAResource {
     @Autowired
     private InterfaceIpServiceImpl interfaceIpService;
 
-    private String INVALID_CONTROLLER_UUID = "Invalid controller UUID.";
+    private static final String INVALID_CONTROLLER_UUID = "Invalid controller UUID.";
 
-    private String DEVICE_ID_IS_NULL = "deviceId is null";
+    private static final String DEVICE_ID_IS_NULL = "deviceId is null";
     /**
      * Update IP related configuration for interface.<br/>
      *

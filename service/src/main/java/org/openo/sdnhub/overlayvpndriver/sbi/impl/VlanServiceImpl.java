@@ -43,6 +43,7 @@ import org.springframework.util.StringUtils;
 public class VlanServiceImpl {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(VlanServiceImpl.class);
+    private static final String SLOCALSITEERROR="localsite.vlan.ac.error";
 
     /**
      * Queries device ethernet configuration by if-name using a specific Controller.<br>
@@ -85,7 +86,7 @@ public class VlanServiceImpl {
     public List<EthInterfaceConfig> combineCreateLanEthConfig(final String ctrlUuid, final String deviceId,
             final List<SbiIfVlan> ifVlan) throws ServiceException {
 
-        final List<EthInterfaceConfig> lanEthConfig = new ArrayList<EthInterfaceConfig>();
+        final List<EthInterfaceConfig> lanEthConfig = new ArrayList<>();
         for(SbiIfVlan inf : ifVlan) {
             lanEthConfig.add(getCreateSingleLanConfig(ctrlUuid, deviceId, inf));
         }
@@ -104,7 +105,7 @@ public class VlanServiceImpl {
      */
     public List<EthInterfaceConfig> configEth(final String ctrlUuid, final String deviceId,
             final List<EthInterfaceConfig> interfacesConfig) throws ServiceException {
-        final Map<String, List<EthInterfaceConfig>> crtInfoMap = new HashMap<String, List<EthInterfaceConfig>>();
+        final Map<String, List<EthInterfaceConfig>> crtInfoMap = new HashMap<>();
         crtInfoMap.put(CommonConst.ETHCONFIG_LIST, interfacesConfig);
 
         final String configUrl = MessageFormat.format(ControllerUrlConst.ETH_CONFIG_URL, deviceId);
@@ -123,7 +124,7 @@ public class VlanServiceImpl {
 
     private EthInterfaceConfig getCreateSingleLanConfig(final String ctrlUuid, final String deviceId,
             final SbiIfVlan inf) throws ServiceException {
-        List<EthInterfaceConfig> ethConfigList = new ArrayList<EthInterfaceConfig>();
+        List<EthInterfaceConfig> ethConfigList = new ArrayList<>();
         try {
             ethConfigList = queryEthByName(ctrlUuid, deviceId, inf.getIfName());
         } catch(ServiceException e) {
@@ -162,7 +163,7 @@ public class VlanServiceImpl {
     public List<EthInterfaceConfig> combineLanEthConfig(final String ctrlUuid, final String deviceId,
             final List<SbiIfVlan> ifVlanList) throws ServiceException {
 
-        List<EthInterfaceConfig> lanEthConfig = new ArrayList<EthInterfaceConfig>();
+        List<EthInterfaceConfig> lanEthConfig = new ArrayList<>();
         for(SbiIfVlan inf : ifVlanList) {
             lanEthConfig.add(getSingleLanConfig(ctrlUuid, deviceId, inf));
         }
@@ -223,7 +224,7 @@ public class VlanServiceImpl {
      */
     public List<SbiIfVlan> buildCreateIfVlanRsp(final List<EthInterfaceConfig> configRsp,
             final List<SbiIfVlan> ifVlanReq) {
-        List<SbiIfVlan> ifVlans = new ArrayList<SbiIfVlan>();
+        List<SbiIfVlan> ifVlans = new ArrayList<>();
         if(CollectionUtils.isEmpty(ifVlanReq)) {
             return ifVlans;
         }
@@ -247,7 +248,7 @@ public class VlanServiceImpl {
      * @since SDNHUB 0.5
      */
     public List<SbiIfVlan> buildIfVlanRsp(final List<EthInterfaceConfig> configRsp) {
-        List<SbiIfVlan> ifVlans = new ArrayList<SbiIfVlan>();
+        List<SbiIfVlan> ifVlans = new ArrayList<>();
         if(CollectionUtils.isEmpty(configRsp)) {
             return ifVlans;
         }

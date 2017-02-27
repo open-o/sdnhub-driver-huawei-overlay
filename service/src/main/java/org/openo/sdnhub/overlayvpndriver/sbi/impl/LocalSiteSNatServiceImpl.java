@@ -210,9 +210,9 @@ public class LocalSiteSNatServiceImpl {
         List<AcSNat> acSNats = acResponse.getData();
         for(AcSNat acSNat : acSNats) {
             if(natId.equals(acSNat.getId())) {
-                return new ResultRsp<AcSNat>(ErrorCode.OVERLAYVPN_SUCCESS, acSNat);
+                return new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS, acSNat);
             }
         }
-        return new ResultRsp<AcSNat>(ErrorCode.OVERLAYVPN_FAILED);
+        return new ResultRsp<>(ErrorCode.OVERLAYVPN_FAILED);
     }
 }

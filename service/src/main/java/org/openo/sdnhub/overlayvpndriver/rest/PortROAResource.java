@@ -64,6 +64,8 @@ public class PortROAResource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PortROAResource.class);
 
+    private static final String INVALIDCTRLUUID = "Invalid controller UUID.";
+
     /**
      * Query interface information of the current device using a specific controller.<br>
      *
@@ -86,8 +88,8 @@ public class PortROAResource {
 
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
         if(!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error("Invalid controller UUID.");
-            throw new ParameterServiceException("Invalid controller UUID.");
+            LOGGER.error(INVALIDCTRLUUID);
+            throw new ParameterServiceException(INVALIDCTRLUUID);
         }
 
         if(null == deviceId || deviceId.isEmpty()) {

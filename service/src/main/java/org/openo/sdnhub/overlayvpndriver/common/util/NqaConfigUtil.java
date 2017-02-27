@@ -41,12 +41,12 @@ public class NqaConfigUtil {
     public static ResultRsp<List<NQADeviceModel>> parseResponse(HTTPReturnMessage httpMsg, String retBody,
             String actionDesc) {
         if (httpMsg.isSuccess() && StringUtils.isNotEmpty(retBody)) {
-            OverlayVpnDriverResponse acresponse = JsonUtil.fromJson(retBody,
+            OverlayVpnDriverResponse<List<NQADeviceModel>> acresponse = JsonUtil.fromJson(retBody,
                     new TypeReference<OverlayVpnDriverResponse<List<NQADeviceModel>>>() {
             });
             if (acresponse.isSucess()) {
 
-                return new ResultRsp<List<NQADeviceModel>>(acresponse.getErrcode() + acresponse.getErrmsg() +
+                return new ResultRsp<>(acresponse.getErrcode() + acresponse.getErrmsg() +
                         acresponse.getData());
             }
 
@@ -57,12 +57,12 @@ public class NqaConfigUtil {
         if (StringUtils.isNotEmpty(retBody)) {
             final Map<String, String> errorMap = JsonUtil.fromJson(retBody, new TypeReference<Map<String, String>>() {
             });
-            return new ResultRsp<List<NQADeviceModel>>(errorMap.get("errcode") + errorMap.get("errmsg"));
+            return new ResultRsp<>(errorMap.get("errcode") + errorMap.get("errmsg"));
         }
 
         LOGGER.error(actionDesc + ": parser msg to ACResponse error, msg : " + retBody);
 
-        return new ResultRsp<List<NQADeviceModel>>(ErrorCode.OVERLAYVPN_FAILED);
+        return new ResultRsp<>(ErrorCode.OVERLAYVPN_FAILED);
 
     }
 

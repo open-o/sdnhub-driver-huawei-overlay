@@ -26,14 +26,6 @@ public class DriverErrorCode {
 
     public static final String SUCCESS = "0";
 
-    private DriverErrorCode() {
-
-    }
-
-    public static boolean isSucess(String code) {
-        return SUCCESS.equals(code);
-    }
-
     public static final String ADAPTER_VXLAN_PLUGIN_WORKING_ERROR = "ccadapter.vxlan.plugin_working_error";
 
     public static final String ADAPTER_VXLAN_CTRL_RETURN_ERROR = "ccadapter.vxlan.controller_return_error";
@@ -131,4 +123,12 @@ public class DriverErrorCode {
     public static final String ADAPTER_CTRL_TIMEOUT = "adapter.controller.timeout";
 
     public static final String OVERLAYVPN_SUCCESS = "overlayvpn.operation.success";
-};
+
+    private DriverErrorCode() {
+
+    }
+
+    public static boolean isSucess(String code) {
+        return SUCCESS.equals(code);
+    }
+}

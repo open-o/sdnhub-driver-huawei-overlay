@@ -69,6 +69,8 @@ public class PolicyRouteROAResource {
     @Autowired
     private PolicyRouteImpl policyRouteService = null;
 
+    private static final String INVALIDCTRLUUID = "Invalid controller UUID.";
+
     /**
      * Adds new QOS MQC Configuration using a specific Controller.<br>
      *
@@ -89,8 +91,8 @@ public class PolicyRouteROAResource {
 
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
         if(!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error("Invalid controller UUID.");
-            throw new ParameterServiceException("Invalid controller UUID.");
+            LOGGER.error(INVALIDCTRLUUID);
+            throw new ParameterServiceException(INVALIDCTRLUUID);
         }
 
         if(CollectionUtils.isEmpty(sbiNePolicyRouteList)) {
@@ -101,7 +103,7 @@ public class PolicyRouteROAResource {
         long beginTime = System.currentTimeMillis();
         LOGGER.debug("Route create begin time = " + beginTime);
 
-        ResultRsp<SbiNePolicyRoute> totalResult = new ResultRsp<SbiNePolicyRoute>(DriverErrorCode.CLOUDVPN_SUCCESS);
+        ResultRsp<SbiNePolicyRoute> totalResult = new ResultRsp<>(DriverErrorCode.CLOUDVPN_SUCCESS);
         List<SbiNePolicyRoute> successedDatas = new ArrayList<>();
 
         List<FailData<SbiNePolicyRoute>> failedDatas = new ArrayList<>();
@@ -147,22 +149,22 @@ public class PolicyRouteROAResource {
     @Produces(MediaType.APPLICATION_JSON)
     public ResultRsp<SbiNePolicyRoute> routeUpdate(@Context HttpServletRequest request,
             @HeaderParam(CommonConst.CTRL_HEADER_PARAM) String ctrlUuidParam,
-            List<SbiNePolicyRoute> SbiNePolicyRouteList) throws ServiceException {
+            List<SbiNePolicyRoute> sbiNePolicyRouteList) throws ServiceException {
 
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
         if(!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error("Invalid controller UUID.");
-            throw new ParameterServiceException("Invalid controller UUID.");
+            LOGGER.error(INVALIDCTRLUUID);
+            throw new ParameterServiceException(INVALIDCTRLUUID);
         }
 
         long beginTime = System.currentTimeMillis();
         LOGGER.debug("Route update begin time = " + beginTime);
 
-        ResultRsp<SbiNePolicyRoute> totalResult = new ResultRsp<SbiNePolicyRoute>(DriverErrorCode.CLOUDVPN_SUCCESS  );
+        ResultRsp<SbiNePolicyRoute> totalResult = new ResultRsp<>(DriverErrorCode.CLOUDVPN_SUCCESS  );
         List<SbiNePolicyRoute> successedDatas = new ArrayList<>();
         List<FailData<SbiNePolicyRoute>> failedDatas = new ArrayList<>();
         List<SbiNePolicyRoute> checkOkroutelist = new ArrayList<>();
-        PolicyRouteImpl.checkInputData(SbiNePolicyRouteList, failedDatas, checkOkroutelist);
+        PolicyRouteImpl.checkInputData(sbiNePolicyRouteList, failedDatas, checkOkroutelist);
         Map<String, List<TrafficPolicyList>> deviceIdToMqcMap =
                 PolicyRouteConvert.convert2Route(checkOkroutelist);
 
@@ -208,8 +210,8 @@ public class PolicyRouteROAResource {
 
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
         if(!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error("Invalid controller UUID.");
-            throw new ParameterServiceException("Invalid controller UUID.");
+            LOGGER.error(INVALIDCTRLUUID);
+            throw new ParameterServiceException(INVALIDCTRLUUID);
         }
 
         LOGGER.debug(" routeBatchDelete cltuuid:" + ctrlUuidParam);
@@ -246,23 +248,23 @@ public class PolicyRouteROAResource {
     @Produces(MediaType.APPLICATION_JSON)
     public ResultRsp<SbiNePolicyRoute> routeQuery(@Context HttpServletRequest request,
             @HeaderParam(CommonConst.CTRL_HEADER_PARAM) String ctrlUuidParam,
-            List<SbiNePolicyRoute> SbiNePolicyRouteList) throws ServiceException {
+            List<SbiNePolicyRoute> sbiNePolicyRouteList) throws ServiceException {
 
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
         if(!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error("Invalid controller UUID.");
-            throw new ParameterServiceException("Invalid controller UUID.");
+            LOGGER.error(INVALIDCTRLUUID);
+            throw new ParameterServiceException(INVALIDCTRLUUID);
         }
 
         long beginTime = System.currentTimeMillis();
         LOGGER.debug("route query begin time = " + beginTime);
 
-        ResultRsp<SbiNePolicyRoute> totalResult = new ResultRsp<SbiNePolicyRoute>(DriverErrorCode.CLOUDVPN_SUCCESS);
-        List<SbiNePolicyRoute> successedDatas = new ArrayList<SbiNePolicyRoute>();
-        List<FailData<SbiNePolicyRoute>> failedDatas = new ArrayList<FailData<SbiNePolicyRoute>>();
-        List<SbiNePolicyRoute> checkOkRouteList = new ArrayList<SbiNePolicyRoute>();
+        ResultRsp<SbiNePolicyRoute> totalResult = new ResultRsp<>(DriverErrorCode.CLOUDVPN_SUCCESS);
+        List<SbiNePolicyRoute> successedDatas = new ArrayList<>();
+        List<FailData<SbiNePolicyRoute>> failedDatas = new ArrayList<>();
+        List<SbiNePolicyRoute> checkOkRouteList = new ArrayList<>();
 
-        PolicyRouteImpl.checkInputData(SbiNePolicyRouteList, failedDatas, checkOkRouteList);
+        PolicyRouteImpl.checkInputData(sbiNePolicyRouteList, failedDatas, checkOkRouteList);
         Map<String, List<SbiNePolicyRoute>> deviceIdToRouteListMap =
                 PolicyRouteImpl.deriveByDeviceId(ctrlUuid, checkOkRouteList);
         for(Map.Entry<String, List<SbiNePolicyRoute>> entry : deviceIdToRouteListMap.entrySet()) {
@@ -271,7 +273,7 @@ public class PolicyRouteROAResource {
 
             if(CollectionUtils.isNotEmpty(queryRsp.getData())) {
 
-                Set<String> queryIdSet = new HashSet<String>();
+                Set<String> queryIdSet = new HashSet<>();
                 for(TrafficPolicyList trafficPolicy : queryRsp.getData()) {
                     queryIdSet.add(trafficPolicy.getId());
                 }
@@ -280,7 +282,7 @@ public class PolicyRouteROAResource {
                     if(queryIdSet.contains(nbiNeTunnel.getExternalId())) {
                         successedDatas.add(nbiNeTunnel);
                     } else {
-                        FailData<SbiNePolicyRoute> failData = new FailData<SbiNePolicyRoute>(
+                        FailData<SbiNePolicyRoute> failData = new FailData<>(
                                 DriverErrorCode.CLOUDVPN_FAILED, "can't find", nbiNeTunnel);
                         failedDatas.add(failData);
                     }
@@ -288,7 +290,7 @@ public class PolicyRouteROAResource {
             } else {
                 for(SbiNePolicyRoute nbiNeTunnel : entry.getValue()) {
                     FailData<SbiNePolicyRoute> failData =
-                            new FailData<SbiNePolicyRoute>(DriverErrorCode.CLOUDVPN_FAILED, "can't find", nbiNeTunnel);
+                            new FailData<>(DriverErrorCode.CLOUDVPN_FAILED, "can't find", nbiNeTunnel);
                     failedDatas.add(failData);
                 }
             }

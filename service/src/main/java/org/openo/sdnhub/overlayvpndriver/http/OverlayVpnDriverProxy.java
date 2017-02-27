@@ -60,6 +60,8 @@ public class OverlayVpnDriverProxy {
     private static final String JSON_ACCEPT="Accept";
 
     private static final String LOG_SEND_POST_MSG="@sendpostmsg";
+    private static final String LOG_SEND_DELETE_MSG="@senddeletemsg";
+    private static final String LOG_SEND_PUT_MSG="@sendputmsg";
 
     private OverlayVpnDriverProxy() {
         this.initHttpClient();
@@ -207,9 +209,9 @@ public class OverlayVpnDriverProxy {
                 httpput.setEntity(reqEntity);
             }
 
-            LOGGER.debug(LOG_SEND_POST_MSG + finalurl);
+            LOGGER.debug(LOG_SEND_PUT_MSG + finalurl);
             HttpResponse response = httpClient.execute(httpput);
-            LOGGER.debug(LOG_SEND_POST_MSG + finalurl + response);
+            LOGGER.debug(LOG_SEND_PUT_MSG + finalurl + response);
 
             HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
             ContentType contentType = ContentType.get(response.getEntity());
@@ -252,9 +254,9 @@ public class OverlayVpnDriverProxy {
                 //Do Nothing
             }
 
-            LOGGER.debug(LOG_SEND_POST_MSG + finalurl);
+            LOGGER.debug(LOG_SEND_DELETE_MSG + finalurl);
             HttpResponse response = httpClient.execute(httpdelete);
-            LOGGER.debug(LOG_SEND_POST_MSG + finalurl + response);
+            LOGGER.debug(LOG_SEND_DELETE_MSG + finalurl + response);
 
             HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
             ContentType contentType = ContentType.get(response.getEntity());

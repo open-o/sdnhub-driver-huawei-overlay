@@ -64,6 +64,8 @@ public class IpsecImpl {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IpsecImpl.class);
 
+    private static final String DEVICEIDNULL = "Device id is null or empty.";
+
     /**
      * Deletes IPSec VPN configuration using a specific controller.<br>
      *
@@ -86,7 +88,7 @@ public class IpsecImpl {
 
             for(IpsecConnList ipsecModel : result.getData()) {
                 if(enternalId.equals(ipsecModel.getId())) {
-                    List<IpsecConnection> connList = new ArrayList<IpsecConnection>();
+                    List<IpsecConnection> connList = new ArrayList<>();
                     for(IpsecConnection ipsecConn : ipsecModel.getIpsecConnection()) {
                         if(enternalId.equals(String.valueOf(ipsecConn.getSeqNumber()))) {
                             connList.add(ipsecConn);
@@ -126,8 +128,8 @@ public class IpsecImpl {
         ResultRsp<List<IpsecConnList>> resultRsp = new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS);
 
         if(StringUtils.isEmpty(deviceId)) {
-            LOGGER.error("Device id is null or empty.");
-            throw new ParameterServiceException("Device id is null or empty.");
+            LOGGER.error(DEVICEIDNULL);
+            throw new ParameterServiceException(DEVICEIDNULL);
         }
 
         String queryUrl = MessageFormat.format(ControllerUrlConst.CONST_CONFIG_IPSEC, deviceId);
@@ -173,8 +175,8 @@ public class IpsecImpl {
                 new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS, new ArrayList<IpsecConnList>());
 
         if(StringUtils.isEmpty(deviceId)) {
-            LOGGER.error("Device id is null or empty.");
-            throw new ParameterServiceException("Device id is null or empty.");
+            LOGGER.error(DEVICEIDNULL);
+            throw new ParameterServiceException(DEVICEIDNULL);
         }
         for(IpsecConnList ipSecModel : list) {
             ResultRsp<List<IpsecConnList>> result =
@@ -255,7 +257,7 @@ public class IpsecImpl {
         }
 
         if(null == tempIpsecConn) {
-            return new ResultRsp<IpsecConnList>(ErrorCode.OVERLAYVPN_FAILED, "ip sec connection doesnt exist", null,
+            return new ResultRsp<>(ErrorCode.OVERLAYVPN_FAILED, "ip sec connection doesnt exist", null,
                     null, null);
         }
 
@@ -281,7 +283,7 @@ public class IpsecImpl {
             throws ServiceException {
 
         for(Map.Entry<String, List<SbiNeIpSec>> entry : deviceIdToTpsecConnListMap.entrySet()) {
-            List<SbiNqa> nqaList = new ArrayList<SbiNqa>();
+            List<SbiNqa> nqaList = new ArrayList<>();
             for(SbiNeIpSec SbiNeIpSec : entry.getValue()) {
                 if("nqa".equals(SbiNeIpSec.getProtectionPolicy())
                         && NeRoleType.LOCALCPE.getName().equals(SbiNeIpSec.getLocalNeRole())) {
@@ -291,7 +293,7 @@ public class IpsecImpl {
 
             List<NQADeviceModel> nqlDeviceModelList = NqaIpSecTranslate.convertDeviceMode(nqaList);
             if(!CollectionUtils.isEmpty(nqlDeviceModelList)) {
-                final Map<String, List<NQADeviceModel>> crtInfoMap = new HashMap<String, List<NQADeviceModel>>();
+                final Map<String, List<NQADeviceModel>> crtInfoMap = new HashMap<>();
                 crtInfoMap.put(CommonConst.NQA_LIST, nqlDeviceModelList);
                 final String createUrl = MessageFormat.format(ControllerUrlConst.NQA_CONFIG_URL, entry.getKey());
 
@@ -316,7 +318,7 @@ public class IpsecImpl {
             if(deviceIdToIpsecConnMap.containsKey(ipSecConn.getDeviceId())) {
                 deviceIdToIpsecConnMap.get(ipSecConn.getDeviceId()).add(ipSecConn);
             } else {
-                List<SbiNeIpSec> dataList = new ArrayList<SbiNeIpSec>();
+                List<SbiNeIpSec> dataList = new ArrayList<>();
                 dataList.add(ipSecConn);
                 deviceIdToIpsecConnMap.put(ipSecConn.getDeviceId(), dataList);
             }
@@ -417,10 +419,10 @@ public class IpsecImpl {
             }
 
             LOGGER.error("createIpSecByDevice: asresponse return error");
-            return new ResultRsp<IpsecConnList>(ErrorCode.OVERLAYVPN_FAILED + acresponse.getErrmsg());
+            return new ResultRsp<>(ErrorCode.OVERLAYVPN_FAILED + acresponse.getErrmsg());
         }
         LOGGER.error("createIpSecByDevice: httpMsg return error");
-        return new ResultRsp<IpsecConnList>(ErrorCode.OVERLAYVPN_FAILED + " createIpSecByDevice: httpMsg return error");
+        return new ResultRsp<>(ErrorCode.OVERLAYVPN_FAILED + " createIpSecByDevice: httpMsg return error");
     }
 
     private ResultRsp<IpsecConnList> deleteIpsecConn(String ctrlUuid, String deviceId, IpsecConnList ipSecModel)

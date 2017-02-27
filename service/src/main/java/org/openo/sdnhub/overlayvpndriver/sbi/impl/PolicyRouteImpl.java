@@ -75,10 +75,10 @@ public class PolicyRouteImpl {
             throws ServiceException {
 
         ResultRsp<List<TrafficPolicyList>> resultRsp =
-                new ResultRsp<List<TrafficPolicyList>>(ErrorCode.OVERLAYVPN_SUCCESS);
+                new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS);
         if((StringUtils.isEmpty(ctrlUuid)) || (StringUtils.isEmpty(deviceId)) || CollectionUtils.isEmpty(list)) {
             LOGGER.error("configMqc : parameter error");
-            return new ResultRsp<List<TrafficPolicyList>>(ErrorCode.OVERLAYVPN_FAILED);
+            return new ResultRsp<>(ErrorCode.OVERLAYVPN_FAILED);
         }
 
         String mqccUrl = MessageFormat.format(ControllerUrlConst.CONFIG_QOS_MQC, deviceId);
@@ -94,11 +94,11 @@ public class PolicyRouteImpl {
                     new TypeReference<OverlayVpnDriverResponse<Map<String, List<TrafficPolicyList>>>>() {});
 
             if(acresponse.isSucess()) {
-                return new ResultRsp<List<TrafficPolicyList>>(ErrorCode.OVERLAYVPN_SUCCESS,
+                return new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS,
                         acresponse.getData().get(TRAFIC_POLICY_LIST));
             }
             LOGGER.error("qos policy create: acresponse return error: " + acresponse.getErrmsg());
-            return new ResultRsp<List<TrafficPolicyList>>(DriverErrorCode.ADAPTER_QOS_CREATE_ERROR);
+            return new ResultRsp<>(DriverErrorCode.ADAPTER_QOS_CREATE_ERROR);
         }
 
         LOGGER.error("createIpSecByDevice: httpMsg return error" + httpMsg.getStatus());
@@ -119,7 +119,7 @@ public class PolicyRouteImpl {
      */
     public ResultRsp<String> deleteMqc(String ctrlUuid, String deviceId, List<String> idList) throws ServiceException {
 
-        ResultRsp<String> resultRsp = new ResultRsp<String>(ErrorCode.OVERLAYVPN_SUCCESS);
+        ResultRsp<String> resultRsp = new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS);
         if((StringUtils.isEmpty(ctrlUuid)) || (StringUtils.isEmpty(deviceId))) {
             LOGGER.error("Invalid controller UUID or deviceId.");
             throw new ParameterServiceException("Invalid controller UUID  or deviceId.");
@@ -170,11 +170,11 @@ public class PolicyRouteImpl {
     public ResultRsp<List<TrafficPolicyList>> queryRouteByDevice(String ctrlUuid, String deviceId)
             throws ServiceException {
         ResultRsp<List<TrafficPolicyList>> resultRsp =
-                new ResultRsp<List<TrafficPolicyList>>(ErrorCode.OVERLAYVPN_SUCCESS);
+                new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS);
 
         if((StringUtils.isEmpty(ctrlUuid)) || (StringUtils.isEmpty(deviceId))) {
             LOGGER.error("configMqc: parameter error.");
-            return new ResultRsp<List<TrafficPolicyList>>(ErrorCode.OVERLAYVPN_FAILED);
+            return new ResultRsp<>(ErrorCode.OVERLAYVPN_FAILED);
         }
 
         String mqcUrl = MessageFormat.format(ControllerUrlConst.CONFIG_QOS_MQC, deviceId);
@@ -187,11 +187,11 @@ public class PolicyRouteImpl {
                     JsonUtil.fromJson(body, new TypeReference<ACResponse<List<TrafficPolicyList>>>() {});
 
             if(acresponse.isSucceed()) {
-                return new ResultRsp<List<TrafficPolicyList>>(ErrorCode.OVERLAYVPN_SUCCESS, acresponse.getData());
+                return new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS, acresponse.getData());
             }
             LOGGER.error("AcBranch qos policy create: acresponse return error: " + acresponse.getErrmsg());
 
-            return new ResultRsp<List<TrafficPolicyList>>(DriverErrorCode.ADAPTER_QOS_CREATE_ERROR);
+            return new ResultRsp<>(DriverErrorCode.ADAPTER_QOS_CREATE_ERROR);
         }
 
         LOGGER.error("qos policy create: httpMsg return error, http status: " + httpMsg.getStatus());
@@ -225,7 +225,8 @@ public class PolicyRouteImpl {
                 ValidationUtil.validateModel(route);
                 checkOkRouteList.add(route);
             } catch(ServiceException e) {
-                FailData<SbiNePolicyRoute> failData = new FailData<SbiNePolicyRoute>(
+                LOGGER.error("route create, ServiceException" + e);
+                FailData<SbiNePolicyRoute> failData = new FailData<>(
                         DriverErrorCode.CLOUDVPN_PARAMETER_INVALID, e.getMessage(), route);
                 failedDatas.add(failData);
             }
@@ -246,7 +247,7 @@ public class PolicyRouteImpl {
             SbiNePolicyRoute nbiRoute = findCorrespondNbiModel(staticRoute, totalNbiRoutes);
             if(null != nbiRoute) {
                 FailData<SbiNePolicyRoute> failData =
-                        new FailData<SbiNePolicyRoute>(resultRsp.getErrorCode(), resultRsp.getMessage(), nbiRoute);
+                        new FailData<>(resultRsp.getErrorCode(), resultRsp.getMessage(), nbiRoute);
                 failedNbiDatas.add(failData);
             }
         }

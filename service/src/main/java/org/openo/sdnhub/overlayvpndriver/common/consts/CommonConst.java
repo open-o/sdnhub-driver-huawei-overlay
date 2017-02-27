@@ -71,7 +71,4 @@ public class CommonConst {
     public static final int QUERY_TIME = 10;
 
     public static final int GET_WAN_IP_WAIT_TIME = 2000;
-
-    private CommonConst() {
-    }
 }

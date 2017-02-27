@@ -56,6 +56,8 @@ public class StaticRouteROAResource {
     @Autowired
     private StaticRouteImpl staticRouteService = null;
 
+    private static final String INVALIDCTRLUUID = "invalid controller UUID.";
+
     /**
      * Query static routes<br/>
      *
@@ -81,8 +83,8 @@ public class StaticRouteROAResource {
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
 
         if (!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error("invalid controller UUID");
-            throw new ParameterServiceException("invalid controller UUID.");
+            LOGGER.error(INVALIDCTRLUUID);
+            throw new ParameterServiceException(INVALIDCTRLUUID);
         }
         if(CollectionUtils.isEmpty(staticRouteList)) {
             throw new ParameterServiceException("query static route : request body is null or empty");
@@ -131,8 +133,8 @@ public class StaticRouteROAResource {
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
 
         if (!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error("invalid controller UUID");
-            throw new ParameterServiceException("invalid controller UUID.");
+            LOGGER.error(INVALIDCTRLUUID);
+            throw new ParameterServiceException(INVALIDCTRLUUID);
         }
         ResultRsp<SbiNeStaticRoute> totalResult = new ResultRsp<>();
         if(CollectionUtils.isEmpty(neStaticRoutes)) {
@@ -189,8 +191,8 @@ public class StaticRouteROAResource {
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
 
         if (!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error("invalid controller UUID");
-            throw new ParameterServiceException("invalid controller UUID.");
+            LOGGER.error(INVALIDCTRLUUID);
+            throw new ParameterServiceException(INVALIDCTRLUUID);
         }
 
         UuidUtil.validate(deviceId);
@@ -229,8 +231,8 @@ public class StaticRouteROAResource {
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
 
         if (!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error("invalid controller UUID");
-            throw new ParameterServiceException("invalid controller UUID.");
+            LOGGER.error(INVALIDCTRLUUID);
+            throw new ParameterServiceException(INVALIDCTRLUUID);
         }
 
         ResultRsp<SbiNeStaticRoute> totalResult = new ResultRsp<>();

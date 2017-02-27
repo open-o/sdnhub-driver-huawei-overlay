@@ -67,9 +67,9 @@ public final class EthInterfaceConfigUtil
         }
         if(StringUtils.hasLength(retBody)) {
             final Map<String, String> errorMap = JsonUtil.fromJson(retBody, new TypeReference<Map<String,String>>() {});
-            return new ResultRsp<List<EthInterfaceConfig>>(ErrorCode.OVERLAYVPN_FAILED, errorMap.get("errmsg"), null, null, null);
+            return new ResultRsp<>(ErrorCode.OVERLAYVPN_FAILED, errorMap.get("errmsg"), null, null, null);
         }
         LOGGER.error(actionDesc + ": parser msg to ACResponse error, msg:" + retBody);
-        return new ResultRsp<List<EthInterfaceConfig>>(ErrorCode.OVERLAYVPN_FAILED, retBody, null, null, null);
+        return new ResultRsp<>(ErrorCode.OVERLAYVPN_FAILED, retBody, null, null, null);
     }
 }

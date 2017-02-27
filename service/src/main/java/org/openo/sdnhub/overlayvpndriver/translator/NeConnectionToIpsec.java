@@ -138,7 +138,7 @@ public class NeConnectionToIpsec {
         try {
             psk = EncryptionUtil.decode(ipSecaNeConnection.getIkePolicy().getPsk().toCharArray());
         } catch(Exception e) {
-            LOGGER.error("decode psk failed");
+            LOGGER.error("decode psk failed", e);
         }
 
         Ike ike = new Ike();
@@ -165,10 +165,10 @@ public class NeConnectionToIpsec {
     private static IpSec buildIpsec(SbiNeIpSec ipSecaNeConnection) {
         IpSec ipsec = new IpSec();
 
-        if(ipSecaNeConnection.getIpSecPolicy() != null) {
-            if(ipSecaNeConnection.getIpSecPolicy().getAuthAlgorithm() != null) {
+        if(ipSecaNeConnection.getIpSecPolicy() != null && ipSecaNeConnection.getIpSecPolicy().getAuthAlgorithm() != null) {
+
                 ipsec.setEspAuthAlgorithm(ipSecaNeConnection.getIpSecPolicy().getAuthAlgorithm());
-            }
+
         }
         return ipsec;
     }

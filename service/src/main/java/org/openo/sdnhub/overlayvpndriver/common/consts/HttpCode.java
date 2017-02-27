@@ -24,10 +24,6 @@ package org.openo.sdnhub.overlayvpndriver.common.consts;
  */
 public class HttpCode {
 
-    private HttpCode() {
-
-    }
-
     public static final int ERR_FAILED = 500;
 
     public static final int RESPOND_OK = 200;
@@ -45,6 +41,10 @@ public class HttpCode {
     public static final int TIMEOUT = 408;
 
     public static final int SC_ACCEPTED = 202;
+
+    private HttpCode() {
+
+    }
 
     public static boolean isSucess(int httpCode) {
         return httpCode / 100 == 2;

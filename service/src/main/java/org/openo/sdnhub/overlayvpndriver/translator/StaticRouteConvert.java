@@ -54,7 +54,7 @@ public class StaticRouteConvert {
             List<ControllerNbiStaticRoute> list) {
 
         Map<String, List<ControllerNbiStaticRoute>> sameInfo2RouteMap =
-                new HashMap<String, List<ControllerNbiStaticRoute>>();
+                new HashMap<>();
         Iterator<ControllerNbiStaticRoute> iterator = list.iterator();
 
         while(iterator.hasNext()) {
@@ -80,7 +80,7 @@ public class StaticRouteConvert {
 
         for(Map.Entry<String, List<ControllerNbiStaticRoute>> entry : sameInfo2RouteMap.entrySet()) {
             ControllerNbiStaticRoute temp = entry.getValue().get(0);
-            List<ControllerNbiStaticRoute> ignoreList = new ArrayList<ControllerNbiStaticRoute>();
+            List<ControllerNbiStaticRoute> ignoreList = new ArrayList<>();
 
             for(ControllerNbiStaticRoute route : list) {
                 String key = IpAddressUtil.calcSubnet(route.getIp(), IpUtils.maskToPrefix(route.getMask()))
@@ -172,7 +172,7 @@ public class StaticRouteConvert {
                                                                             boolean createOrUpdate) {
 
         Map<String, List<ControllerNbiStaticRoute>> neId2Tunnels =
-                new ConcurrentHashMap<String, List<ControllerNbiStaticRoute>>();
+                new ConcurrentHashMap<>();
 
         for(SbiNeStaticRoute neStaticRoute : neStaticRoutes) {
             String destIp = neStaticRoute.getDestIp();

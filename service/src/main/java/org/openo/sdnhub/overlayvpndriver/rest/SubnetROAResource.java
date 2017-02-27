@@ -62,6 +62,7 @@ public class SubnetROAResource {
     @Autowired
     private SubnetServiceImpl subnetService;
 
+    private static final String INVALIDCTRLUUID = "Invalid controller UUID.";
     /**
      * Creates subnet.<br/>
      *
@@ -83,8 +84,8 @@ public class SubnetROAResource {
 
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
         if(!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error("Invalid controller UUID.");
-            throw new ParameterServiceException("Invalid controller UUID.");
+            LOGGER.error(INVALIDCTRLUUID);
+            throw new ParameterServiceException(INVALIDCTRLUUID);
         }
 
         ValidationUtil.validateModel(subnet);
@@ -96,7 +97,7 @@ public class SubnetROAResource {
 
         // Failed case already checked in SubnetServiceImpl.createSubnet() and thrown exception.
         subnet.setNetworkId(acResult.getData().getNetworkId());
-        return new ResultRsp<SbiSubnetNetModel>(ErrorCode.OVERLAYVPN_SUCCESS, subnet);
+        return new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS, subnet);
     }
 
     /**
@@ -120,8 +121,8 @@ public class SubnetROAResource {
 
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
         if(!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error("Invalid controller UUID.");
-            throw new ParameterServiceException("Invalid controller UUID.");
+            LOGGER.error(INVALIDCTRLUUID);
+            throw new ParameterServiceException(INVALIDCTRLUUID);
         }
 
         ValidationUtil.validateModel(subnet);
@@ -137,7 +138,7 @@ public class SubnetROAResource {
             SvcExcptUtil.throwBadRequestException("Update subnet: controller operation error.");
         }
 
-        return new ResultRsp<SbiSubnetNetModel>(ErrorCode.OVERLAYVPN_SUCCESS, subnet);
+        return new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS, subnet);
     }
 
     /**
@@ -161,8 +162,8 @@ public class SubnetROAResource {
 
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
         if(!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error("Invalid controller UUID.");
-            throw new ParameterServiceException("Invalid controller UUID.");
+            LOGGER.error(INVALIDCTRLUUID);
+            throw new ParameterServiceException(INVALIDCTRLUUID);
         }
 
         LOGGER.error("AC delete subnet.networkId={}", networkId);
@@ -174,7 +175,7 @@ public class SubnetROAResource {
             LOGGER.error("Delete subnet: controller operation error.");
             SvcExcptUtil.throwBadRequestException("Delete subnet: controller operation error.");
         }
-        return new ResultRsp<String>(ErrorCode.OVERLAYVPN_SUCCESS);
+        return new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS);
     }
 
     /**
@@ -198,8 +199,8 @@ public class SubnetROAResource {
 
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
         if(!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error("Invalid controller UUID.");
-            throw new ParameterServiceException("Invalid controller UUID.");
+            LOGGER.error(INVALIDCTRLUUID);
+            throw new ParameterServiceException(INVALIDCTRLUUID);
         }
 
         LOGGER.debug("get subnet.networkId={}", networkId);
@@ -210,12 +211,12 @@ public class SubnetROAResource {
         if (acNetwork == null)
         {
             LOGGER.info("Query subnet cost {} ms,body is :null.", System.currentTimeMillis() - beginTime);
-            return new ResultRsp<SbiSubnetNetModel>(ErrorCode.OVERLAYVPN_SUCCESS, subnetNetModel);
+            return new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS, subnetNetModel);
         }
         subnetNetModel.setDescription(acNetwork.getDescription());
         LOGGER.info("Query subnet cost {} ms,body is :{}.", System.currentTimeMillis() - beginTime,
                 acNetwork.toString());
 
-        return new ResultRsp<SbiSubnetNetModel>(DriverErrorCode.OVERLAYVPN_SUCCESS, subnetNetModel);
+        return new ResultRsp<>(DriverErrorCode.OVERLAYVPN_SUCCESS, subnetNetModel);
     }
 }

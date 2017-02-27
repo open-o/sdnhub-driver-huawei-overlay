@@ -74,11 +74,11 @@ public class VxLanSvcImpl {
             List<VxLanDeviceModel> netVxLanDeviceModelList) throws ServiceException {
 
         ResultRsp<List<VxLanDeviceModel>> resultRsp =
-                new ResultRsp<List<VxLanDeviceModel>>(ErrorCode.OVERLAYVPN_SUCCESS);
+                new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS);
 
         String createVxlanUrl = MessageFormat.format(ControllerUrlConst.CONST_CONFIG_VXLAN, deviceId);
 
-        Map<String, List<VxLanDeviceModel>> ctrlInfoMap = new ConcurrentHashMap<String, List<VxLanDeviceModel>>();
+        Map<String, List<VxLanDeviceModel>> ctrlInfoMap = new ConcurrentHashMap<>();
         ctrlInfoMap.put(CommConst.VXLAN_LIST, netVxLanDeviceModelList);
         HTTPReturnMessage httpMsg =
                 OverlayVpnDriverProxy.getInstance().sendPutMsg(createVxlanUrl, JsonUtil.toJson(ctrlInfoMap), ctrlUuid);
@@ -93,10 +93,10 @@ public class VxLanSvcImpl {
                 return resultRsp;
             } else {
 
-                return new ResultRsp<List<VxLanDeviceModel>>(ErrorCode.OVERLAYVPN_FAILED, overlayVpnResponse.getData());
+                return new ResultRsp<>(ErrorCode.OVERLAYVPN_FAILED, overlayVpnResponse.getData());
             }
         } else {
-            return new ResultRsp<List<VxLanDeviceModel>>(ErrorCode.OVERLAYVPN_FAILED);
+            return new ResultRsp<>(ErrorCode.OVERLAYVPN_FAILED);
         }
     }
 
@@ -112,7 +112,7 @@ public class VxLanSvcImpl {
     public static ResultRsp<List<VxLanDeviceModel>> queryVxlanByDevice(String ctrlUuid, String deviceId)
             throws ServiceException {
         ResultRsp<List<VxLanDeviceModel>> resultRsp =
-                new ResultRsp<List<VxLanDeviceModel>>(ErrorCode.OVERLAYVPN_SUCCESS);
+                new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS);
 
         String queryUrl = MessageFormat.format(ControllerUrlConst.CONST_CONFIG_VXLAN, deviceId);
         HTTPReturnMessage httpMsg = OverlayVpnDriverProxy.getInstance().sendGetMsg(queryUrl, null, ctrlUuid);
@@ -149,7 +149,7 @@ public class VxLanSvcImpl {
     public static ResultRsp<ACDelResponse> deleteVxlanByDevice(String ctrlUuid, String deviceId, List<String> idList)
             throws ServiceException {
 
-        ResultRsp<ACDelResponse> resultRsp = new ResultRsp<ACDelResponse>(ErrorCode.OVERLAYVPN_SUCCESS);
+        ResultRsp<ACDelResponse> resultRsp = new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS);
 
         if(CollectionUtils.isEmpty(idList)) {
             LOGGER.debug("id list is null");
@@ -232,7 +232,7 @@ public class VxLanSvcImpl {
                 }
             }
             if(!isFind) {
-                FailData<SbiNeVxlanInstance> failData = new FailData<SbiNeVxlanInstance>(ErrorCode.OVERLAYVPN_FAILED,
+                FailData<SbiNeVxlanInstance> failData = new FailData<>(ErrorCode.OVERLAYVPN_FAILED,
                         ErrorCode.COMMON_CONFIG_NOT_EXIST, sbiNeVxlanInstance);
                 if(totalResult.getFail() == null) {
                     totalResult.setFail(new ArrayList<>());
@@ -250,7 +250,7 @@ public class VxLanSvcImpl {
      * @since SDNHUB 0.5
      */
     public static Map<String, List<SbiNeVxlanInstance>> groupByDeviceId(List<SbiNeVxlanInstance> vxlanInstanceList) {
-        Map<String, List<SbiNeVxlanInstance>> map = new HashMap<String, List<SbiNeVxlanInstance>>();
+        Map<String, List<SbiNeVxlanInstance>> map = new HashMap<>();
         for(SbiNeVxlanInstance sbiNeVxlanInstance : vxlanInstanceList) {
             if(null == map.get(sbiNeVxlanInstance.getDeviceId())) {
                 map.put(sbiNeVxlanInstance.getDeviceId(), new ArrayList<SbiNeVxlanInstance>());

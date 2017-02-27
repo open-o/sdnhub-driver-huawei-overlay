@@ -69,6 +69,9 @@ public class IpSecROAResource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IpSecROAResource.class);
 
+    private static final String INVALIDCTRLUUID = "invalid controller UUID.";
+    private static final String NULLBODYPARAMETER = "Request body parameter is null or empty.";
+
     @Autowired
     private IpsecImpl ipsecService;
 
@@ -99,13 +102,13 @@ public class IpSecROAResource {
         totalResult.setFail(new ArrayList<FailData<SbiNeIpSec>>());
 
         if(!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error("Invalid controller UUID.");
-            throw new ParameterServiceException("Invalid controller UUID.");
+            LOGGER.error(INVALIDCTRLUUID);
+            throw new ParameterServiceException(INVALIDCTRLUUID);
         }
 
         if(CollectionUtils.isEmpty(ipSecNeConnectionList)) {
-            LOGGER.error("Request body parameter is null or empty.");
-            throw new ParameterServiceException("Request body parameter is null or empty.");
+            LOGGER.error(NULLBODYPARAMETER);
+            throw new ParameterServiceException(NULLBODYPARAMETER);
         }
         for(SbiNeIpSec ipsecModel : ipSecNeConnectionList){
             ValidationUtil.validateModel(ipsecModel);
@@ -128,7 +131,7 @@ public class IpSecROAResource {
                 ipsecService.fillSmallErrorInfo(errorCodeInfoLst, entry, resultRsp);
                 for(SbiNeIpSec SbiNeIpSec : deviceIdToTpsecConnListMap.get(entry.getKey())) {
                     FailData<SbiNeIpSec> failData =
-                            new FailData<SbiNeIpSec>(resultRsp.getErrorCode(), resultRsp.getMessage(), SbiNeIpSec);
+                            new FailData<>(resultRsp.getErrorCode(), resultRsp.getMessage(), SbiNeIpSec);
                     totalResult.getFail().add(failData);
                 }
             }
@@ -162,13 +165,13 @@ public class IpSecROAResource {
 
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
         if(!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error("Invalid controller UUID.");
-            throw new ParameterServiceException("Invalid controller UUID.");
+            LOGGER.error(INVALIDCTRLUUID);
+            throw new ParameterServiceException(INVALIDCTRLUUID);
         }
 
         if(CollectionUtils.isEmpty(ipsecList)) {
-            LOGGER.error("Request body parameter is null or empty.");
-            throw new ParameterServiceException("Request body parameter is null or empty.");
+            LOGGER.error(NULLBODYPARAMETER);
+            throw new ParameterServiceException(NULLBODYPARAMETER);
         }
 
         ValidationUtil.validateModel(ipsecList);
@@ -211,17 +214,17 @@ public class IpSecROAResource {
 
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
         if(!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error("Invalid controller UUID.");
-            throw new ParameterServiceException("Invalid controller UUID.");
+            LOGGER.error(INVALIDCTRLUUID);
+            throw new ParameterServiceException(INVALIDCTRLUUID);
         }
 
         if(CollectionUtils.isEmpty(ipSecNeConnectionList)) {
-            LOGGER.error("Request body parameter is null or empty.");
-            throw new ParameterServiceException("Request body parameter is null or empty.");
+            LOGGER.error(NULLBODYPARAMETER);
+            throw new ParameterServiceException(NULLBODYPARAMETER);
         }
         ValidationUtil.validateModel(ipSecNeConnectionList);
 
-        ResultRsp<SbiNeIpSec> totalResult = new ResultRsp<SbiNeIpSec>(ErrorCode.OVERLAYVPN_SUCCESS);
+        ResultRsp<SbiNeIpSec> totalResult = new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS);
         for(SbiNeIpSec SbiNeIpSec : ipSecNeConnectionList) {
             try {
                 ResultRsp<List<IpsecConnList>> rsp = ipsecService.queryIpsecByDevice(ctrlUuid, SbiNeIpSec.getDeviceId(),
@@ -237,7 +240,7 @@ public class IpSecROAResource {
             } catch(ServiceException e) {
                 LOGGER.error("query failed!", e);
                 FailData<SbiNeIpSec> failData =
-                        new FailData<SbiNeIpSec>(ErrorCode.OVERLAYVPN_FAILED, "query failed", SbiNeIpSec);
+                        new FailData<>(ErrorCode.OVERLAYVPN_FAILED, "query failed", SbiNeIpSec);
                 totalResult.getFail().add(failData);
             }
         }
@@ -274,8 +277,8 @@ public class IpSecROAResource {
         }
 
         if(CollectionUtils.isEmpty(ipSecNeConnectionList)) {
-            LOGGER.error("Request body parameter is null or empty.");
-            throw new ParameterServiceException("Request body parameter is null or empty.");
+            LOGGER.error(NULLBODYPARAMETER);
+            throw new ParameterServiceException(NULLBODYPARAMETER);
         }
         ValidationUtil.validateModel(ipSecNeConnectionList);
 

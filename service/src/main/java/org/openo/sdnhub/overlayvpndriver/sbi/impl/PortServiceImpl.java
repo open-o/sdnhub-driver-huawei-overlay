@@ -66,7 +66,7 @@ public class PortServiceImpl {
 
         LOGGER.debug("qury ports return body : " + body);
         if(httpMsg.isSuccess() && StringUtils.isNotEmpty(body)) {
-            OverlayVpnDriverResponse acresponse =
+            OverlayVpnDriverResponse<SbiIp> acresponse =
                     JsonUtil.fromJson(body, new TypeReference<OverlayVpnDriverResponse<SbiIp>>() {});
             if(acresponse.isSucess()) {
                 return new ResultRsp<>(acresponse.getErrcode() + acresponse.getErrmsg() + acresponse.getData());
