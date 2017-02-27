@@ -19,6 +19,7 @@ package org.openo.sdnhub.overlayvpndriver.common.util;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -58,12 +59,16 @@ public class CheckIpV6Util {
         return checkIpIllegalChar(ip) && checkIpField(ip);
     }
 
-    private static boolean checkIpIllegalChar(String ip) {
-        HashSet<String> match = new HashSet<>(Arrays.asList("//", "..", ":::"));
+    private static boolean checkStringContainItemFromSet(String string, Set<String> set) {
+        return set.stream().parallel().anyMatch(string::contains);
+    }
 
-        if( !match.contains(ip)
-                || (ip.replaceFirst("::", "").indexOf("::") != -1)
-                || ((ip.replaceFirst("/", "").indexOf("/") != -1) && ip.endsWith("::"))) {
+    private static boolean checkIpIllegalChar(String ip) {
+        HashSet<String> validChar = new HashSet<>(Arrays.asList("//", "..", ":::"));
+
+        if( checkStringContainItemFromSet(ip, validChar)
+                || StringUtils.countMatches(ip, "::") > 1
+                || (StringUtils.countMatches(ip, "/") > 1 && ip.endsWith("::"))) {
             LOGGER.error("checkIpIllegalChar ip is invalid.");
             return false;
         } else {
