@@ -106,6 +106,12 @@ public class DeviceROAResource {
             ValidationUtil.validateModel(adapter);
         }
 
+        for (AdapterDeviceCreateBasicInfo device : aDevCrtInfos) {
+            if (!StringUtils.hasLength(device.getUuid())) {
+                device.allocateUuid();
+            }
+        }
+
         Map<String, List<AdapterDeviceCreateBasicInfo>> crtInfoMap =
                 new ConcurrentHashMap<>();
         crtInfoMap.put(CommConst.CREATE_DEVICE_PARAMETER, aDevCrtInfos);

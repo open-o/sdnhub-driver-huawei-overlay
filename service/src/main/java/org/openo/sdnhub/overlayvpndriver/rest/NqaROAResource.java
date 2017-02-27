@@ -17,7 +17,6 @@
 package org.openo.sdnhub.overlayvpndriver.rest;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
 import org.openo.sdnhub.overlayvpndriver.controller.consts.ControllerUrlConst;
 import org.openo.sdnhub.overlayvpndriver.sbi.impl.NqaConfigImpl;
@@ -33,6 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
@@ -90,7 +90,10 @@ public class NqaROAResource {
 
         CheckStrUtil.checkUuidStr(deviceId);
 
-        final String queryUrl = MessageFormat.format(ControllerUrlConst.NQA_CONFIG_URL, deviceId);
+        String queryUrl = MessageFormat.format(ControllerUrlConst.NQA_CONFIG_URL, deviceId);
+        if (CollectionUtils.isNotEmpty(sbiNqaList) && StringUtils.hasLength(sbiNqaList.get(0).getExternalId())) {
+            queryUrl = queryUrl + "?ids=" + sbiNqaList.get(0).getExternalId();
+        }
         return nqaConfigService.queryNqaConfig(ctrlUuid, queryUrl);
     }
 
@@ -121,8 +124,8 @@ public class NqaROAResource {
         CheckStrUtil.checkUuidStr(deviceId);
 
         for (final SbiNqa sbiNqa : sbiNqaList) {
-            if ((null == sbiNqa) || StringUtils.isEmpty(sbiNqa.getTestType())
-                    || StringUtils.isEmpty(sbiNqa.getDstIp())) {
+            if ((null == sbiNqa) || !StringUtils.hasLength(sbiNqa.getTestType())
+                    || !StringUtils.hasLength(sbiNqa.getDstIp())) {
                 LOGGER.error("invalid controller UUID");
                 throw new ParameterServiceException("create NQA nqaList param error");
             }
@@ -171,7 +174,7 @@ public class NqaROAResource {
         CheckStrUtil.checkUuidStr(deviceId);
 
         for (final SbiNqa nqa : sbiNqaList) {
-            if ((null == nqa) || StringUtils.isEmpty(nqa.getTestType()) || StringUtils.isEmpty(nqa.getDstIp())) {
+            if ((null == nqa) || !StringUtils.hasLength(nqa.getTestType()) || !StringUtils.hasLength(nqa.getDstIp())) {
                 LOGGER.error("updateNQA nqaList param error");
                 throw new ParameterServiceException("update NQA nqaList param error");
             }

@@ -80,7 +80,6 @@ public class NqaConvert {
         LOGGER.error(actionDesc + ": parser msg to ACResponse error, msg : " + httpMsg.getBody());
 
         return new ResultRsp<>(DriverErrorCode.CLOUDVPN_FAILED);
-
     }
 
     /**
@@ -96,14 +95,12 @@ public class NqaConvert {
         if(httpMsg.isSuccess() && StringUtils.isNotEmpty(httpMsg.getBody())) {
             ACDelResponse acresponse = JsonUtil.fromJson(httpMsg.getBody(), new TypeReference<ACDelResponse>() {});
             if(!acresponse.isSucess()) {
-
                 LOGGER.error(actionDesc + ": " + "response return error, eerMsg : " + acresponse.getAllErrmsg());
                 resultRsp.setErrorCode(DriverErrorCode.CLOUDVPN_FAILED);
                 resultRsp.setMessage(acresponse.getAllErrmsg());
             }
 
             return resultRsp;
-
         }
 
         LOGGER.error(actionDesc + "parse msg to  ACDelResponse error, msg: " + httpMsg.getBody());

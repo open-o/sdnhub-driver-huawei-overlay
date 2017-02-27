@@ -181,13 +181,10 @@ public class StaticRouteConvert {
             ControllerNbiStaticRoute staticRoute = new ControllerNbiStaticRoute();
 
             staticRoute.setIp(destIp);
-            /* staticRoute.setIpMask(destIp.getIpMask()); */
             staticRoute.setOutInterface(neStaticRoute.getOutInterface());
             staticRoute.setDhcp(Boolean.valueOf(neStaticRoute.getEnableDhcp()));
             staticRoute.setPriority(neStaticRoute.getPriority());
             staticRoute.setId(neStaticRoute.getUuid());
-            // staticRoute.setIpv6Address(neStaticRoute.get)
-            // staticRoute.setBfdName(neStaticRoute.get);
 
             if(null != nextHopData) {
                 staticRoute.setNextHop(nextHopData);
@@ -203,8 +200,6 @@ public class StaticRouteConvert {
 
             staticRoute.setNqaId(neStaticRoute.getNqa());
             staticRoute.setOutInterface(neStaticRoute.getOutInterface());
-            // staticRoute.setVpnId(neStaticRoute.set);
-            // staticRoute.setVpnName(neStaticRoute.get);
             groupByNe(neId2Tunnels, neStaticRoute, staticRoute);
         }
         return neId2Tunnels;

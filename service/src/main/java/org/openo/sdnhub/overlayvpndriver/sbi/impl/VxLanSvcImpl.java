@@ -24,8 +24,10 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.codehaus.jackson.type.TypeReference;
+import org.apache.commons.collections.CollectionUtils;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
 import org.openo.sdnhub.overlayvpndriver.controller.consts.ControllerUrlConst;
+import org.openo.sdnhub.overlayvpndriver.controller.model.PortVlan;
 import org.openo.sdnhub.overlayvpndriver.controller.model.Vni;
 import org.openo.sdnhub.overlayvpndriver.controller.model.VxLanDeviceModel;
 import org.openo.sdnhub.overlayvpndriver.http.OverlayVpnDriverProxy;
@@ -41,7 +43,6 @@ import org.openo.sdno.util.http.HTTPReturnMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.ws.rs.WebApplicationException;
@@ -257,5 +258,102 @@ public class VxLanSvcImpl {
             map.get(sbiNeVxlanInstance.getDeviceId()).add(sbiNeVxlanInstance);
         }
         return map;
+    }
+
+    public static VxLanDeviceModel mergeVxlanDeviceModels(List<VxLanDeviceModel> createVxlanDeviceModels,
+                                                          List<VxLanDeviceModel> acVxlanDeviceModels)
+    {
+        VxLanDeviceModel retDeviceModel = createVxlanDeviceModels.get(0);
+
+        for(int i=1; i<createVxlanDeviceModels.size(); i++)
+        {
+            VxLanDeviceModel createVxlanDeviceModel = createVxlanDeviceModels.get(i);
+            mergeVxlanDeviceModel(retDeviceModel, createVxlanDeviceModel);
+        }
+
+        if(CollectionUtils.isNotEmpty(acVxlanDeviceModels))
+        {
+            mergeVxlanDeviceModel(retDeviceModel, acVxlanDeviceModels.get(0));
+        }
+
+        return retDeviceModel;
+    }
+
+    private static void mergeVxlanDeviceModel(VxLanDeviceModel createVxlanDeviceModel, VxLanDeviceModel mergeVxlanDeviceModel)
+    {
+        if(null == mergeVxlanDeviceModel || CollectionUtils.isEmpty(mergeVxlanDeviceModel.getVniList()))
+        {
+            return;
+        }
+
+        List<Vni> createVniList = new ArrayList<Vni>();
+        createVniList.addAll(createVxlanDeviceModel.getVniList());
+        for(Vni acVni : mergeVxlanDeviceModel.getVniList())
+        {
+            for(Vni createVni : createVniList)
+            {
+                if(createVni.getVni() == acVni.getVni())
+                {
+                    if(CollectionUtils.isNotEmpty(acVni.getPeerAddresslist()))
+                    {
+                        createVni.getPeerAddresslist().addAll(acVni.getPeerAddresslist());
+                    }
+                    if(CollectionUtils.isNotEmpty(acVni.getPortlist()))
+                    {
+                        createVni.getPortlist().addAll(acVni.getPortlist());
+                    }
+                    if(CollectionUtils.isNotEmpty(acVni.getVlanlist()))
+                    {
+                        createVni.getVlanlist().addAll(acVni.getVlanlist());
+                    }
+                    if(CollectionUtils.isNotEmpty(acVni.getPortvlanlist()))
+                    {
+                        createVni.getPortvlanlist().addAll(acVni.getPortvlanlist());
+                    }
+                }
+            }
+        }
+
+        createVxlanDeviceModel.setVniList(createVniList);
+    }
+
+    public static void mergeDelVxlanDeviceModel(VxLanDeviceModel acExistVxlanModel, VxLanDeviceModel delVxLanDeviceModel) {
+        for (Vni acExistVni : acExistVxlanModel.getVniList()) {
+            for (Vni delVni : delVxLanDeviceModel.getVniList()) {
+                if (acExistVni.getVni() == delVni.getVni()) {
+                    mergeDelVni(acExistVni, delVni);
+                    break;
+                }
+            }
+        }
+    }
+
+    private static void mergeDelVni(Vni acExistVni, Vni delVni) {
+        List<String> acExistPeerAddrList = acExistVni.getPeerAddresslist();
+        if (CollectionUtils.isNotEmpty(acExistPeerAddrList)) {
+            acExistPeerAddrList.removeAll(delVni.getPeerAddresslist());
+        }
+
+        if (CollectionUtils.isEmpty(acExistPeerAddrList)) {
+            acExistVni.setDeleteMode(true);
+        } else {
+            List<String> acExistPortList = acExistVni.getPortlist();
+            List<String> delPortList = delVni.getPortlist();
+            if (CollectionUtils.isNotEmpty(acExistPortList) && CollectionUtils.isNotEmpty(delPortList)) {
+                acExistPortList.removeAll(delPortList);
+            }
+
+            List<Integer> acExistVlanList = acExistVni.getVlanlist();
+            List<Integer> delVlanList = delVni.getVlanlist();
+            if (CollectionUtils.isNotEmpty(acExistVlanList) && CollectionUtils.isNotEmpty(delVlanList)) {
+                acExistVlanList.removeAll(delVlanList);
+            }
+
+            List<PortVlan> acExistPortVlanList = acExistVni.getPortvlanlist();
+            List<PortVlan> delPortVlanList = delVni.getPortvlanlist();
+            if (CollectionUtils.isNotEmpty(acExistPortVlanList) && CollectionUtils.isNotEmpty(delPortVlanList)) {
+                acExistPortVlanList.removeAll(delPortVlanList);
+            }
+        }
     }
 }

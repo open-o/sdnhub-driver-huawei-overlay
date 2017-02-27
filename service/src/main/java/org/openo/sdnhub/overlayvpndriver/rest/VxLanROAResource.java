@@ -17,6 +17,7 @@
 package org.openo.sdnhub.overlayvpndriver.rest;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -30,8 +31,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.xml.transform.Result;
 
 import org.openo.sdnhub.overlayvpndriver.common.consts.CommonConst;
+import org.openo.sdnhub.overlayvpndriver.controller.model.Vni;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Transformer;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
@@ -39,7 +42,6 @@ import org.openo.sdnhub.overlayvpndriver.common.util.RequestHeaderUtil;
 import org.openo.sdnhub.overlayvpndriver.controller.model.VxLanDeviceModel;
 import org.openo.sdnhub.overlayvpndriver.result.ACDelResponse;
 import org.openo.sdnhub.overlayvpndriver.sbi.impl.VxLanSvcImpl;
-import org.openo.sdnhub.overlayvpndriver.translator.TranslateVxlanResponse;
 import org.openo.sdnhub.overlayvpndriver.translator.VxlanConvert;
 import org.openo.sdno.framework.container.util.JsonUtil;
 import org.openo.sdno.overlayvpn.errorcode.ErrorCode;
@@ -104,20 +106,29 @@ public class VxLanROAResource {
 
         List<SbiNeVxlanInstance> succVxlanInstances = new ArrayList<>();
         List<FailData<SbiNeVxlanInstance>> faildata = new ArrayList<>();
-        for(Map.Entry<String, List<VxLanDeviceModel>> entry : netVxlanDeviceModelMap.entrySet()) {
+        for (Map.Entry<String, List<VxLanDeviceModel>> entry : netVxlanDeviceModelMap.entrySet())
+        {
             String deviceId = entry.getKey();
-            ResultRsp<List<VxLanDeviceModel>> createResult =
-                    VxLanSvcImpl.createVxLanByDevice(ctrlUuid, deviceId, entry.getValue());
+            List<VxLanDeviceModel> createVxlanDeviceModels = entry.getValue();
+            List<VxLanDeviceModel> acExistVxlanModels = VxLanSvcImpl.queryVxlanByDevice(ctrlUuid, deviceId).getData();
+            VxLanDeviceModel createVxlanDeviceModel = VxLanSvcImpl.mergeVxlanDeviceModels(createVxlanDeviceModels, acExistVxlanModels);
 
-            List<SbiNeVxlanInstance> correNbiVxlanInsList = deviceIdToVxlaninsMap.get(deviceId);
-            if(createResult.isSuccess()) {
-                TranslateVxlanResponse.translateVxlanId(vxLanInstanceList, deviceId, createResult.getData());
-                succVxlanInstances.addAll(correNbiVxlanInsList);
-            } else {
-                LOGGER.error("create vxlan for deviceId:" + deviceId + " failed.");
-                for(SbiNeVxlanInstance failIns : correNbiVxlanInsList) {
+            ResultRsp<List<VxLanDeviceModel>> createResult = VxLanSvcImpl.createVxLanByDevice(ctrlUuid,
+                    deviceId, Arrays.asList(createVxlanDeviceModel));
+
+            List<SbiNeVxlanInstance> currNbiVxlanInsList = deviceIdToVxlaninsMap.get(deviceId);
+            if (createResult.isSuccess())
+            {
+                LOGGER.warn("deviceId:" + deviceId + " success");
+                succVxlanInstances.addAll(currNbiVxlanInsList);
+            }
+            else
+            {
+                LOGGER.warn("create vxlan for deviceId:" + deviceId + " failed");
+                for(SbiNeVxlanInstance failVxlanIns : currNbiVxlanInsList)
+                {
                     faildata.add(new FailData<SbiNeVxlanInstance>(createResult.getErrorCode(),
-                            createResult.getMessage(), failIns));
+                            createResult.getMessage(), failVxlanIns));
                 }
                 totalResult.setErrorCode(ErrorCode.OVERLAYVPN_FAILED);
             }
@@ -133,7 +144,7 @@ public class VxLanROAResource {
      * Deletes Vxlan configuration using a specific Controller.<br/>
      *
      * @param request HTTP request
-     * @param deviceId specific device id
+     * @param currDeviceId specific device id
      * @param ctrlUuidParam Controller UUID
      * @param vxlanInstanceList collection of VxLan configuration
      * @return ResultRsp object with deleted VxLan configuration status data
@@ -146,7 +157,7 @@ public class VxLanROAResource {
     @Produces(MediaType.APPLICATION_JSON)
     @SuppressWarnings("unchecked")
     public ResultRsp<SbiNeVxlanInstance> batchDeleteVxlan(@Context HttpServletRequest request,
-                                                          @PathParam(CommonConst.DEVICE_ID_PATH_PARAM) String deviceId,
+                                                          @PathParam(CommonConst.DEVICE_ID_PATH_PARAM) String currDeviceId,
                                                           @HeaderParam(CommonConst.CTRL_HEADER_PARAM) String ctrlUuidParam,
                                                           List<SbiNeVxlanInstance> vxlanInstanceList) throws ServiceException {
 
@@ -158,45 +169,65 @@ public class VxLanROAResource {
 
         long beginTime = System.currentTimeMillis();
         UuidUtil.validate(ctrlUuid);
-        ResultRsp<SbiNeVxlanInstance> totalResult = new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS);
-        Map<String, List<VxLanDeviceModel>> deviceIdToDeviceModelMap =
-                VxlanConvert.convertVxlanInsToNetVxlanDeviceModel(vxlanInstanceList);
 
-        LOGGER.debug("vxlanDeviceModelMap:" + JsonUtil.toJson(deviceIdToDeviceModelMap));
-        Map<String, List<SbiNeVxlanInstance>> deviceIdToVxlanInsMap =
-                VxlanConvert.divideVxlanInsByDeviceId(vxlanInstanceList);
-        LOGGER.debug("deviceIdToVxlanInsMap:" + JsonUtil.toJson(deviceIdToVxlanInsMap));
+        ResultRsp<SbiNeVxlanInstance> totalResult = new ResultRsp<SbiNeVxlanInstance>(ErrorCode.OVERLAYVPN_SUCCESS);
+        Map<String, List<VxLanDeviceModel>> deviceIdToDeviceModelMap = VxlanConvert.convertVxlanInsToNetVxlanDeviceModel(vxlanInstanceList);
+        LOGGER.warn("vxlanDeviceModelMap:" + JsonUtil.toJson(deviceIdToDeviceModelMap));
+        Map<String, List<SbiNeVxlanInstance>> deviceIdToVxlanInsMap = VxlanConvert.divideVxlanInsByDeviceId(vxlanInstanceList);
+        LOGGER.warn("deviceIdToVxlanInsMap:" + JsonUtil.toJson(deviceIdToVxlanInsMap));
 
-        List<SbiNeVxlanInstance> succVxlanInstances = new ArrayList<>();
-        List<FailData<SbiNeVxlanInstance>> failDatas = new ArrayList<>();
-        for(Map.Entry<String, List<VxLanDeviceModel>> entry : deviceIdToDeviceModelMap.entrySet()) {
+        List<SbiNeVxlanInstance> succVxlanInstances = new ArrayList<SbiNeVxlanInstance>();
+        List<FailData<SbiNeVxlanInstance>> failDatas = new ArrayList<FailData<SbiNeVxlanInstance>>();
+        for (Map.Entry<String, List<VxLanDeviceModel>> entry : deviceIdToDeviceModelMap.entrySet())
+        {
+            String deviceId = entry.getKey();
             List<VxLanDeviceModel> delVxlanDeviceModels = entry.getValue();
-            List<String> ids = new ArrayList<>(CollectionUtils.collect(delVxlanDeviceModels, new Transformer() {
 
-                @Override
-                public Object transform(Object input) {
-                    return ((VxLanDeviceModel)input).getUuid();
+            VxLanDeviceModel delVxlanDeviceModel = VxLanSvcImpl.mergeVxlanDeviceModels(delVxlanDeviceModels, null);
+
+            ResultRsp<List<VxLanDeviceModel>> createResult = new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS);
+            List<VxLanDeviceModel> acExistVxlanModels = VxLanSvcImpl.queryVxlanByDevice(ctrlUuid, deviceId).getData();
+            if (CollectionUtils.isEmpty(acExistVxlanModels))
+            {
+                for(Vni delVni : delVxlanDeviceModel.getVniList())
+                {
+                    delVni.setDeleteMode(true);
                 }
-            }));
 
-            ResultRsp<ACDelResponse> delResult = VxLanSvcImpl.deleteVxlanByDevice(ctrlUuid, deviceId, ids);
-            List<SbiNeVxlanInstance> vxlanInstances = deviceIdToVxlanInsMap.get(deviceId);
-            if(delResult.isSuccess()) {
-                succVxlanInstances.addAll(vxlanInstances);
+                createResult = VxLanSvcImpl.updateVxlanByDevice(ctrlUuid, deviceId, Arrays.asList(delVxlanDeviceModel));
             } else {
-                for(SbiNeVxlanInstance ins : vxlanInstances) {
-                    failDatas.add(
-                            new FailData<SbiNeVxlanInstance>(delResult.getErrorCode(), delResult.getMessage(), ins));
+                VxLanDeviceModel acExistVxlanModel = acExistVxlanModels.get(0);
+                VxLanSvcImpl.mergeDelVxlanDeviceModel(acExistVxlanModel, delVxlanDeviceModel);
+
+                createResult = VxLanSvcImpl.updateVxlanByDevice(ctrlUuid, deviceId, Arrays.asList(acExistVxlanModel));
+            }
+
+            List<SbiNeVxlanInstance> currNbiVxlanInsList = deviceIdToVxlanInsMap.get(deviceId);
+            if (createResult.isSuccess())
+            {
+                LOGGER.warn("deviceId:" + deviceId + " success");
+                succVxlanInstances.addAll(currNbiVxlanInsList);
+            }
+            else
+            {
+                LOGGER.warn("deviceId:" + deviceId + " fail");
+                for(SbiNeVxlanInstance failVxlanIns : currNbiVxlanInsList)
+                {
+                    failDatas.add(new FailData<SbiNeVxlanInstance>(createResult.getErrorCode(),
+                            createResult.getMessage(), failVxlanIns));
                 }
             }
         }
+
         totalResult.setSuccessed(succVxlanInstances);
         totalResult.setFail(failDatas);
 
-        if(CollectionUtils.isNotEmpty(failDatas)) {
+        if (CollectionUtils.isNotEmpty(failDatas))
+        {
             totalResult.setErrorCode(ErrorCode.OVERLAYVPN_FAILED);
         }
-        LOGGER.warn("vxlan delete cost time = " + (System.currentTimeMillis() - beginTime));
+
+        LOGGER.warn("VxLan delete cost time = " + (System.currentTimeMillis() - beginTime));
         return totalResult;
     }
 
@@ -291,8 +322,11 @@ public class VxLanROAResource {
         List<FailData<SbiNeVxlanInstance>> failDatas = new ArrayList<>();
         for(Map.Entry<String, List<VxLanDeviceModel>> entry : deviceIdToDeviceModelMap.entrySet()) {
             String deviceId = entry.getKey();
+            List<VxLanDeviceModel> updateVXlanDeviceModels = entry.getValue();
+
+            VxLanDeviceModel updateVxlanDeviceModel = VxLanSvcImpl.mergeVxlanDeviceModels(updateVXlanDeviceModels, null);
             ResultRsp<List<VxLanDeviceModel>> createResult =
-                    VxLanSvcImpl.updateVxlanByDevice(ctrlUuid, deviceId, entry.getValue());
+                    VxLanSvcImpl.updateVxlanByDevice(ctrlUuid, deviceId, Arrays.asList(updateVxlanDeviceModel));
             List<SbiNeVxlanInstance> currNbiVxlanInsList = deviceIdToVxlanInsMap.get(deviceId);
             if(createResult.isSuccess()) {
                 LOGGER.debug("deviceId:" + deviceId + " success");

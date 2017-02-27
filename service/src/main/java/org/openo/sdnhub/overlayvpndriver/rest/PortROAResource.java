@@ -76,7 +76,7 @@ public class PortROAResource {
      * @since SDNHUB 0.5
      */
     @GET
-    @Path("/device/{deviceId}/ports")
+    @Path("/device/{deviceid}/ports")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ResultRsp<SbiIp> queryPortIpByPortName(@Context HttpServletRequest request,

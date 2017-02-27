@@ -143,6 +143,7 @@ public class VxlanConvert {
         netVni.setPortlist(portList);
         netVni.setVlanlist(vlanList);
         netVni.setPortvlanlist(portvlanlist);
+        // qosPreClassify is unavailable to set
 
         return netVni;
     }

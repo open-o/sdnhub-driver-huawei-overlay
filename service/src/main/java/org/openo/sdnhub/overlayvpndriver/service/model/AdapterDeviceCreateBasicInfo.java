@@ -16,6 +16,7 @@
 
 package org.openo.sdnhub.overlayvpndriver.service.model;
 
+import org.openo.sdno.overlayvpn.model.uuid.AbstUuidModel;
 import org.openo.sdno.overlayvpn.verify.annotation.AString;
 
 /**
@@ -26,7 +27,7 @@ import org.openo.sdno.overlayvpn.verify.annotation.AString;
  * @author
  * @version SDNO 0.5 June 6, 2016
  */
-public class AdapterDeviceCreateBasicInfo {
+public class AdapterDeviceCreateBasicInfo extends AbstUuidModel {
 
     /**
      * name

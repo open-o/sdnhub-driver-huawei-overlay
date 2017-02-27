@@ -33,7 +33,7 @@ public class Vni extends AbstUuidModel {
     private boolean deleteMode;
 
     @AInt
-    private int virtualNetworkInterface;
+    private int vni;
 
     @AString(require = true)
     private String macLearingMode;
@@ -46,89 +46,232 @@ public class Vni extends AbstUuidModel {
 
     private List<String> peerAddresslist;
 
+    private boolean broadCastManager;
+
+    private List<VniFilter> filterList;
+
     private List<String> portlist;
 
     private List<Integer> vlanlist;
 
     private List<PortVlan> portvlanlist;
 
-    public int getVni() {
-        return virtualNetworkInterface;
+    private boolean qosPreClassify;
+
+    /**
+     * Initialize default values.
+     */
+    public Vni() {
+        super();
+        deleteMode = false;
+        qosPreClassify = false;
     }
 
-    public void setVni(int vni) {
-        this.virtualNetworkInterface = vni;
-    }
-
-    public boolean isDeleteMode() {
+    /**
+     * @return Returns mode of delete.
+     */
+    public boolean isDeleteMode()
+    {
         return deleteMode;
     }
 
-    public void setDeleteMode(boolean deleteMode) {
+    /**
+     * @param deleteMode mode of delete.
+     */
+    public void setDeleteMode(boolean deleteMode)
+    {
         this.deleteMode = deleteMode;
     }
 
-    public String getMacLearingMode() {
+    /**
+     * @return Returns the vni.
+     */
+    public int getVni()
+    {
+        return vni;
+    }
+
+    /**
+     * @param vni vni.
+     */
+    public void setVni(int vni)
+    {
+        this.vni = vni;
+    }
+
+    /**
+     * @return Returns mac learning mode.
+     */
+    public String getMacLearingMode()
+    {
         return macLearingMode;
     }
 
-    public void setMacLearingMode(String macLearingMode) {
+    /**
+     * @param macLearingMode mac learning mode.
+     */
+    public void setMacLearingMode(String macLearingMode)
+    {
         this.macLearingMode = macLearingMode;
     }
 
-    public String getEvpnRtMode() {
+    /**
+     * @return Returns evpn rt mode.
+     */
+    public String getEvpnRtMode()
+    {
         return evpnRtMode;
     }
 
-    public void setEvpnRtMode(String evpnRtMode) {
+    /**
+     * @param evpnRtMode evpn rt mode.
+     */
+    public void setEvpnRtMode(String evpnRtMode)
+    {
         this.evpnRtMode = evpnRtMode;
     }
 
-    public String getEvpnRtExport() {
+    /**
+     * @return Returns evpn rt export.
+     */
+    public String getEvpnRtExport()
+    {
         return evpnRtExport;
     }
 
-    public void setEvpnRtExport(String evpnRtExport) {
+    /**
+     * @param evpnRtExport evpn rt export.
+     */
+    public void setEvpnRtExport(String evpnRtExport)
+    {
         this.evpnRtExport = evpnRtExport;
     }
 
-    public String getEvpnRtImport() {
+    /**
+     * @return Returns evpn rt import.
+     */
+    public String getEvpnRtImport()
+    {
         return evpnRtImport;
     }
 
-    public void setEvpnRtImport(String evpnRtImport) {
+    /**
+     * @param evpnRtImport evpn rt import.
+     */
+    public void setEvpnRtImport(String evpnRtImport)
+    {
         this.evpnRtImport = evpnRtImport;
     }
 
-    public List<String> getPeerAddresslist() {
+    /**
+     * @return Returns peer address list.
+     */
+    public List<String> getPeerAddresslist()
+    {
         return peerAddresslist;
     }
 
-    public void setPeerAddresslist(List<String> peerAddresslist) {
+    /**
+     * @param peerAddresslist peer address list.
+     */
+    public void setPeerAddresslist(List<String> peerAddresslist)
+    {
         this.peerAddresslist = peerAddresslist;
     }
 
-    public List<String> getPortlist() {
+    /**
+     * @return Returns broadcast manager.
+     */
+    public boolean isBroadCastManager()
+    {
+        return broadCastManager;
+    }
+
+    /**
+     * @param broadCastManager broadcast manager.
+     */
+    public void setBroadCastManager(boolean broadCastManager)
+    {
+        this.broadCastManager = broadCastManager;
+    }
+
+    /**
+     * @return Returns the filter list.
+     */
+    public List<VniFilter> getFilterList()
+    {
+        return filterList;
+    }
+
+    /**
+     * @param filterList filter list.
+     */
+    public void setFilterList(List<VniFilter> filterList)
+    {
+        this.filterList = filterList;
+    }
+
+    /**
+     * @return Returns the port list.
+     */
+    public List<String> getPortlist()
+    {
         return portlist;
     }
 
-    public void setPortlist(List<String> portlist) {
+    /**
+     * @param portlist port list.
+     */
+    public void setPortlist(List<String> portlist)
+    {
         this.portlist = portlist;
     }
 
-    public List<Integer> getVlanlist() {
+    /**
+     * @return Returns the collection of vlan id.
+     */
+    public List<Integer> getVlanlist()
+    {
         return vlanlist;
     }
 
-    public void setVlanlist(List<Integer> vlanlist) {
+    /**
+     * @param vlanlist collection of vlan id.
+     */
+    public void setVlanlist(List<Integer> vlanlist)
+    {
         this.vlanlist = vlanlist;
     }
 
-    public List<PortVlan> getPortvlanlist() {
+    /**
+     * @return Returns the collection of port vlan id.
+     */
+    public List<PortVlan> getPortvlanlist()
+    {
         return portvlanlist;
     }
 
-    public void setPortvlanlist(List<PortVlan> portvlanlist) {
+    /**
+     * @param portvlanlist collection of port vlan id.
+     */
+    public void setPortvlanlist(List<PortVlan> portvlanlist)
+    {
         this.portvlanlist = portvlanlist;
+    }
+
+    /**
+     * @return Returns true if quality of service pre classification enabled.
+     */
+    public boolean isQosPreClassify()
+    {
+        return qosPreClassify;
+    }
+
+    /**
+     * @param qosPreClassify quality of service pre classification.
+     */
+    public void setQosPreClassify(boolean qosPreClassify)
+    {
+        this.qosPreClassify = qosPreClassify;
     }
 }

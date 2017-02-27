@@ -30,47 +30,111 @@ import org.openo.sdno.overlayvpn.verify.annotation.AString;
  */
 public class VxLanDeviceModel extends AbstUuidModel {
 
+    /**
+     * vxlan tunnel id.
+     */
+    private String id;
+
+    /**
+     * vne id.
+     */
     private int vneId;
 
+    /**
+     * vxlan tunnel name.
+     */
     @AString(require = true)
     private String name;
 
+    /**
+     * local address
+     */
     @AIp
     @AString(require = true)
     private String localAddress;
 
+    /**
+     * Collection of vni.
+     */
     private List<Vni> vniList;
 
-    public int getVneId() {
+    /**
+     * @return Returns vxlan tunnel id.
+     */
+    public String getId()
+    {
+        return id;
+    }
+
+    /**
+     * @param id vxlan tunnel id.
+     */
+    public void setId(String id)
+    {
+        this.id = id;
+    }
+
+    /**
+     * @return Returns vne id.
+     */
+    public int getVneId()
+    {
         return vneId;
     }
 
-    public void setVneId(int vneId) {
+    /**
+     * @return vneId vne id.
+     */
+    public void setVneId(int vneId)
+    {
         this.vneId = vneId;
     }
 
-    public String getName() {
+    /**
+     * @return Returns vxlan tunnel name.
+     */
+    public String getName()
+    {
         return name;
     }
 
-    public void setName(String name) {
+    /**
+     * @param name vxlan tunnel name.
+     */
+    public void setName(String name)
+    {
         this.name = name;
     }
 
-    public String getLocalAddress() {
+    /**
+     * @return Returns the local address.
+     */
+    public String getLocalAddress()
+    {
         return localAddress;
     }
 
-    public void setLocalAddress(String localAddress) {
+    /**
+     * @param localAddress local address.
+     */
+    public void setLocalAddress(String localAddress)
+    {
         this.localAddress = localAddress;
     }
 
-    public List<Vni> getVniList() {
+    /**
+     * @return Returns the collection of vni.
+     */
+    public List<Vni> getVniList()
+    {
         return vniList;
     }
 
-    public void setVniList(List<Vni> vniList) {
+    /**
+     * @param vniList collection of vni.
+     */
+    public void setVniList(List<Vni> vniList)
+    {
         this.vniList = vniList;
     }
-
 }

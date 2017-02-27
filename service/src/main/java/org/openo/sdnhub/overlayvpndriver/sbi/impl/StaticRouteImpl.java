@@ -18,6 +18,7 @@ package org.openo.sdnhub.overlayvpndriver.sbi.impl;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -90,17 +91,17 @@ public class StaticRouteImpl {
             url = strBuidler.toString();
         }
 
-
-
         HTTPReturnMessage httpMsg = OverlayVpnDriverProxy.getInstance().sendGetMsg(url, null, ctrlUuid);
         String body = httpMsg.getBody();
 
         if(httpMsg.isSuccess() && StringUtils.hasLength(body)) {
-            OverlayVpnDriverResponse<List<ControllerNbiStaticRoute>> response = JsonUtil.fromJson(body,
-                    new TypeReference<OverlayVpnDriverResponse<List<ControllerNbiStaticRoute>>>() {});
+            OverlayVpnDriverResponse<ControllerNbiStaticRoute> response = JsonUtil.fromJson(body,
+                    new TypeReference<OverlayVpnDriverResponse<ControllerNbiStaticRoute>>() {});
 
             if(response != null && response.isSucess()) {
-                resultRsp.setData(response.getData());
+                if (null != response.getData()) {
+                    resultRsp.setData(Arrays.asList(response.getData()));
+                }
                 return resultRsp;
             }
 
@@ -110,7 +111,6 @@ public class StaticRouteImpl {
 
         LOGGER.error(LOG_STATIC_ROUTE_CONFIG_FAILED);
         return new ResultRsp<>(ErrorCode.ADAPTER_ROUTER_RESPONSE_FAIL);
-
     }
 
     /**

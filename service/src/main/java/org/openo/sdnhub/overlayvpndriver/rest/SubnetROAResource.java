@@ -94,6 +94,7 @@ public class SubnetROAResource {
         ResultRsp<SbiSubnetNetModel> acResult = subnetService.createSubnet(network, ctrlUuid, deviceId);
         LOGGER.debug("create subnet cost {} ms.", System.currentTimeMillis() - beginTime);
 
+        // Failed case already checked in SubnetServiceImpl.createSubnet() and thrown exception.
         subnet.setNetworkId(acResult.getData().getNetworkId());
         return new ResultRsp<SbiSubnetNetModel>(ErrorCode.OVERLAYVPN_SUCCESS, subnet);
     }
