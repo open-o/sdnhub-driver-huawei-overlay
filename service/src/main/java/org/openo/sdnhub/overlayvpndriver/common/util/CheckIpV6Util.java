@@ -16,6 +16,8 @@
 
 package org.openo.sdnhub.overlayvpndriver.common.util;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
@@ -57,7 +59,9 @@ public class CheckIpV6Util {
     }
 
     private static boolean checkIpIllegalChar(String ip) {
-        if((ip.indexOf("//") != -1) || (ip.indexOf("..") != -1) || (ip.indexOf(":::") != -1)
+        HashSet<String> match = new HashSet<>(Arrays.asList("//", "..", ":::"));
+
+        if( !match.contains(ip)
                 || (ip.replaceFirst("::", "").indexOf("::") != -1)
                 || ((ip.replaceFirst("/", "").indexOf("/") != -1) && ip.endsWith("::"))) {
             LOGGER.error("checkIpIllegalChar ip is invalid.");
@@ -72,11 +76,11 @@ public class CheckIpV6Util {
 
     private static boolean checkIpField(String ip) {
         StringTokenizer stringtokenizer = new StringTokenizer(ip, ":");
-        if(((ip.indexOf("::") == -1) && (stringtokenizer.countTokens() != 8))
-                || ((ip.indexOf("::") != -1) && (stringtokenizer.countTokens() >= 7))) {
-            LOGGER.error("checkIpField ip is invalid.");
+
+        if (!checkIpFieldValid(ip, stringtokenizer)) {
             return false;
         }
+
         while(stringtokenizer.hasMoreTokens()) {
             String s = stringtokenizer.nextToken();
             if((s.trim().length() != s.trim().replaceAll(" ", "").length()) || (s.trim().length() > 4)) {
@@ -88,6 +92,15 @@ public class CheckIpV6Util {
             }
         }
 
+        return true;
+    }
+
+    private static boolean checkIpFieldValid(String ip, StringTokenizer stringtokenizer) {
+        if(((ip.indexOf("::") == -1) && (stringtokenizer.countTokens() != 8))
+                || ((ip.indexOf("::") != -1) && (stringtokenizer.countTokens() >= 7))) {
+            LOGGER.error("checkIpField ip is invalid.");
+            return false;
+        }
         return true;
     }
 }
