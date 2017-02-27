@@ -15,6 +15,7 @@
             "errcode": "0",
             "errmsg": "",
             "data": {
+                "networkConfigList" : [{
                 "id": "1234",
                 "name": "Subnet model",
                 "use": "terminal",
@@ -54,8 +55,14 @@
                     "dhcpServerOptions": null
                 },
                 "isChangedMode": false
-            }
+                }],
+                "mode" : null,
+                "pageIndex" : 1,
+                "pageSize" : 1,
+                "totalRecords" : 1,
+                "data" : null
         }
 
     }
+}
 }

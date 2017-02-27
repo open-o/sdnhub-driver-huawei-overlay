@@ -25,6 +25,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
 import org.openo.sdnhub.overlayvpndriver.common.consts.DriverErrorCode;
+import org.openo.sdnhub.overlayvpndriver.controller.model.ACNetwork;
+import org.openo.sdnhub.overlayvpndriver.controller.model.ACNetworkData;
+import org.openo.sdnhub.overlayvpndriver.controller.model.ACNetworkResponse;
 import org.openo.sdnhub.overlayvpndriver.http.OverlayVpnDriverProxy;
 import org.openo.sdnhub.overlayvpndriver.sbi.impl.SubnetServiceImpl;
 import org.openo.sdnhub.overlayvpndriver.service.model.ACResponse;
@@ -35,6 +38,8 @@ import org.openo.sdno.overlayvpn.util.check.ValidationUtil;
 import org.openo.sdno.util.http.HTTPReturnMessage;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SubnetROAResourceTest {
 
@@ -197,7 +202,7 @@ public class SubnetROAResourceTest {
     }
 
     @Test
-    public void testgetSubnet() throws ServiceException {
+    public void testGetSubnet() throws ServiceException {
 
         new MockUp<OverlayVpnDriverProxy>() {
 
@@ -205,12 +210,19 @@ public class SubnetROAResourceTest {
             public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
                 HTTPReturnMessage msg = new HTTPReturnMessage();
                 msg.setStatus(200);
-                ACResponse<SbiSubnetNetModel> acResponse = new ACResponse<SbiSubnetNetModel>();
-                SbiSubnetNetModel sbiSubnetNetModel = new SbiSubnetNetModel();
-                sbiSubnetNetModel.setUuid("uuid00");
-                sbiSubnetNetModel.setName("subnet");
-                acResponse.setData(sbiSubnetNetModel);
-                acResponse.setErrcode("0");
+
+                ACNetworkResponse<ACNetworkData> acResponse = new ACNetworkResponse<>();
+                ACNetworkData acNetworkData = new ACNetworkData();
+
+                List<ACNetwork> networkConfigList = new ArrayList<>();
+                ACNetwork acNetwork = new ACNetwork();
+                acNetwork.setId(NETWORK_ID);
+                acNetwork.setIpAddress("3.6.8.3");
+                networkConfigList.add(acNetwork);
+                acNetworkData.setNetworkConfigList(networkConfigList);
+
+                acResponse.setData(acNetworkData);
+                acResponse.setErrcode(DriverErrorCode.SUCCESS);
                 msg.setBody(JsonUtil.toJson(acResponse));
                 return msg;
             }
@@ -218,7 +230,7 @@ public class SubnetROAResourceTest {
 
         ResultRsp<SbiSubnetNetModel> acResult = subnetRoAResource.getSubnet(null, DEVICE_ID, NETWORK_ID, CTRL_UUID);
         assertEquals(DriverErrorCode.OVERLAYVPN_SUCCESS, acResult.getErrorCode());
-        assertEquals(null, acResult.getData().getUuid());
+        assertEquals("9244-58349-67-890", acResult.getData().getNetworkId());
     }
 
     @Test
@@ -230,12 +242,18 @@ public class SubnetROAResourceTest {
             public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
                 HTTPReturnMessage msg = new HTTPReturnMessage();
                 msg.setStatus(200);
-                ACResponse<SbiSubnetNetModel> acResponse = new ACResponse<SbiSubnetNetModel>();
-                SbiSubnetNetModel sbiSubnetNetModel = new SbiSubnetNetModel();
-                sbiSubnetNetModel.setUuid("9244-58349-67-890");
-                sbiSubnetNetModel.setName("subnet");
-                acResponse.setData(sbiSubnetNetModel);
-                acResponse.setErrcode("0");
+                ACNetworkResponse<ACNetworkData> acResponse = new ACNetworkResponse<>();
+                ACNetworkData acNetworkData = new ACNetworkData();
+
+                List<ACNetwork> networkConfigList = new ArrayList<>();
+                ACNetwork acNetwork = new ACNetwork();
+                acNetwork.setId(NETWORK_ID);
+                acNetwork.setIpAddress("3.6.8.3");
+                networkConfigList.add(acNetwork);
+                acNetworkData.setNetworkConfigList(networkConfigList);
+
+                acResponse.setData(acNetworkData);
+                acResponse.setErrcode(DriverErrorCode.SUCCESS);
                 msg.setBody(JsonUtil.toJson(acResponse));
                 return msg;
             }
@@ -308,12 +326,18 @@ public class SubnetROAResourceTest {
             public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
                 HTTPReturnMessage msg = new HTTPReturnMessage();
                 msg.setStatus(200);
-                ACResponse<SbiSubnetNetModel> acResponse = new ACResponse<SbiSubnetNetModel>();
-                SbiSubnetNetModel sbiSubnetNetModel = new SbiSubnetNetModel();
-                sbiSubnetNetModel.setUuid("7895");
-                sbiSubnetNetModel.setName("subnet");
-                acResponse.setData(sbiSubnetNetModel);
-                acResponse.setErrcode("0");
+                ACNetworkResponse<ACNetworkData> acResponse = new ACNetworkResponse<>();
+                ACNetworkData acNetworkData = new ACNetworkData();
+
+                List<ACNetwork> networkConfigList = new ArrayList<>();
+                ACNetwork acNetwork = new ACNetwork();
+                acNetwork.setId("7895");
+                acNetwork.setIpAddress("3.6.8.3");
+                networkConfigList.add(acNetwork);
+                acNetworkData.setNetworkConfigList(networkConfigList);
+
+                acResponse.setData(acNetworkData);
+                acResponse.setErrcode(DriverErrorCode.SUCCESS);
                 msg.setBody(JsonUtil.toJson(acResponse));
                 return msg;
             }
@@ -355,12 +379,18 @@ public class SubnetROAResourceTest {
             public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
                 HTTPReturnMessage msg = new HTTPReturnMessage();
                 msg.setStatus(200);
-                ACResponse<SbiSubnetNetModel> acResponse = new ACResponse<SbiSubnetNetModel>();
-                SbiSubnetNetModel sbiSubnetNetModel = new SbiSubnetNetModel();
-                sbiSubnetNetModel.setUuid("uuid00");
-                sbiSubnetNetModel.setName("subnet");
-                acResponse.setData(sbiSubnetNetModel);
-                acResponse.setErrcode("0");
+                ACNetworkResponse<ACNetworkData> acResponse = new ACNetworkResponse<>();
+                ACNetworkData acNetworkData = new ACNetworkData();
+
+                List<ACNetwork> networkConfigList = new ArrayList<>();
+                ACNetwork acNetwork = new ACNetwork();
+                acNetwork.setId(NETWORK_ID);
+                acNetwork.setIpAddress("3.6.8.3");
+                networkConfigList.add(acNetwork);
+                acNetworkData.setNetworkConfigList(networkConfigList);
+
+                acResponse.setData(acNetworkData);
+                acResponse.setErrcode(DriverErrorCode.SUCCESS);
                 msg.setBody(JsonUtil.toJson(acResponse));
                 return msg;
             }
@@ -394,14 +424,21 @@ public class SubnetROAResourceTest {
             public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
                 HTTPReturnMessage msg = new HTTPReturnMessage();
                 msg.setStatus(200);
-                ACResponse<SbiSubnetNetModel> acResponse = new ACResponse<SbiSubnetNetModel>();
-                SbiSubnetNetModel sbiSubnetNetModel = new SbiSubnetNetModel();
-                sbiSubnetNetModel.setUuid("uuid00");
-                sbiSubnetNetModel.setName("subnet");
-                acResponse.setData(sbiSubnetNetModel);
-                acResponse.setErrcode("0");
+                ACNetworkResponse<ACNetworkData> acResponse = new ACNetworkResponse<>();
+                ACNetworkData acNetworkData = new ACNetworkData();
+
+                List<ACNetwork> networkConfigList = new ArrayList<>();
+                ACNetwork acNetwork = new ACNetwork();
+                acNetwork.setId(NETWORK_ID);
+                acNetwork.setIpAddress("3.6.8.3");
+                networkConfigList.add(acNetwork);
+                acNetworkData.setNetworkConfigList(networkConfigList);
+
+                acResponse.setData(acNetworkData);
+                acResponse.setErrcode(DriverErrorCode.SUCCESS);
                 msg.setBody(JsonUtil.toJson(acResponse));
                 return msg;
+
             }
 
             @Mock
