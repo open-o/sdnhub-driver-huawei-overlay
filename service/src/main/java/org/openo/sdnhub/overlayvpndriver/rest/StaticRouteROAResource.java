@@ -167,7 +167,7 @@ public class StaticRouteROAResource {
             totalResult.setErrorCode(ErrorCode.OVERLAYVPN_FAILED);
         }
 
-        LOGGER.info("Static route create end. cost:{}", (System.currentTimeMillis() - beginTime));
+        LOGGER.info("Static route create end. cost:{}", System.currentTimeMillis() - beginTime);
         return totalResult;
     }
 
@@ -250,7 +250,7 @@ public class StaticRouteROAResource {
                 // If List<ControllerNbiStaticRoute processed correctly
                 // then fill the successData with corresponding SbiNeStaticRoute.
                 // Else populate failedData.
-                for(SbiNeStaticRoute route : staticRouteList) {
+            	for(SbiNeStaticRoute route : staticRouteList) {
                     for(ControllerNbiStaticRoute cNbiStaticRoute : entry.getValue()) {
                         if(route.getExternalId().equals(cNbiStaticRoute.getId())) {
                             successData.add(route);
@@ -258,7 +258,7 @@ public class StaticRouteROAResource {
                     }
                 }
             } else {
-                for(SbiNeStaticRoute route : staticRouteList) {
+            	for(SbiNeStaticRoute route : staticRouteList) {
                     for(ControllerNbiStaticRoute cNbiStaticRoute : entry.getValue()) {
                         if(route.getExternalId().equals(cNbiStaticRoute.getId())) {
                             FailData<SbiNeStaticRoute> failData = new FailData<>();

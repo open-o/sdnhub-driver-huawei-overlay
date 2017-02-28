@@ -95,7 +95,7 @@ public class InterfaceIpROAResourceTest {
         interfaceIpConfig.setMode6("manual");
         List<SbiInterfaceIpConfig> interfaceIpList = Arrays.asList(interfaceIpConfig);
         ResultRsp<List<SbiInterfaceIpConfig>> expected =
-                interfaceIpRoaResource.updateInterfaceIp(null, ctrlUuidParam, deviceId, interfaceIpList);
+                interfaceIpRoaResource.updateInterfaceIp(ctrlUuidParam, deviceId, interfaceIpList);
         assertEquals(expected.getErrorCode(), ErrorCode.OVERLAYVPN_SUCCESS);
     }
 
@@ -106,7 +106,7 @@ public class InterfaceIpROAResourceTest {
         interfaceIpConfig.setMode("manual");
         interfaceIpConfig.setIpv6Address("manual");
         List<SbiInterfaceIpConfig> interfaceIpList = Arrays.asList(interfaceIpConfig);
-        interfaceIpRoaResource.updateInterfaceIp(null, null, deviceId, interfaceIpList);
+        interfaceIpRoaResource.updateInterfaceIp(null, deviceId, interfaceIpList);
     }
 
     @Test(expected = ServiceException.class)
@@ -117,12 +117,12 @@ public class InterfaceIpROAResourceTest {
         interfaceIpConfig.setMode6("manual");
         interfaceIpConfig.setIpv6Address("manual");
         List<SbiInterfaceIpConfig> interfaceIpList = Arrays.asList(interfaceIpConfig);
-        interfaceIpRoaResource.updateInterfaceIp(null, ctrlUuidParam, null, interfaceIpList);
+        interfaceIpRoaResource.updateInterfaceIp(ctrlUuidParam, null, interfaceIpList);
     }
 
     @Test(expected = ServiceException.class)
     public void updateInterfaceIpTestEmptyBody() throws ServiceException {
-        interfaceIpRoaResource.updateInterfaceIp(null, ctrlUuidParam, deviceId, null);
+        interfaceIpRoaResource.updateInterfaceIp(ctrlUuidParam, deviceId, null);
     }
 
     @Test
@@ -155,7 +155,7 @@ public class InterfaceIpROAResourceTest {
         interfaceIpConfig.setIpv6Address("manual");
         List<SbiInterfaceIpConfig> interfaceIpList = Arrays.asList(interfaceIpConfig);
         ResultRsp<List<SbiInterfaceIpConfig>> expected =
-                interfaceIpRoaResource.updateInterfaceIp(null, ctrlUuidParam, deviceId, interfaceIpList);
+                interfaceIpRoaResource.updateInterfaceIp(ctrlUuidParam, deviceId, interfaceIpList);
         assertEquals(expected.getErrorCode(), "cloudvpn.failed");
     }
 
@@ -186,20 +186,20 @@ public class InterfaceIpROAResourceTest {
         };
 
         ResultRsp<List<SbiInterfaceIpConfig>> result =
-                interfaceIpRoaResource.queryInterfaceIp(null, ctrlUuidParam, deviceId);
+                interfaceIpRoaResource.queryInterfaceIp(ctrlUuidParam, deviceId);
         assertEquals(result.getErrorCode(), ErrorCode.OVERLAYVPN_SUCCESS);
     }
 
     @Test(expected = ServiceException.class)
     public void queryInterfaceIpTestNullCtrlUuid() throws ServiceException {
 
-        interfaceIpRoaResource.queryInterfaceIp(null, null, deviceId);
+        interfaceIpRoaResource.queryInterfaceIp(null, deviceId);
     }
 
     @Test(expected = ServiceException.class)
     public void queryInterfaceIpTestNullDeviceId() throws ServiceException {
 
-        interfaceIpRoaResource.queryInterfaceIp(null, ctrlUuidParam, null);
+        interfaceIpRoaResource.queryInterfaceIp(ctrlUuidParam, null);
     }
 
     @Test
@@ -229,7 +229,7 @@ public class InterfaceIpROAResourceTest {
         };
 
         ResultRsp<List<SbiInterfaceIpConfig>> result =
-                interfaceIpRoaResource.queryInterfaceIp(null, ctrlUuidParam, deviceId);
+                interfaceIpRoaResource.queryInterfaceIp(ctrlUuidParam, deviceId);
         assertEquals(result.getErrorCode(), "cloudvpn.failed");
     }
 

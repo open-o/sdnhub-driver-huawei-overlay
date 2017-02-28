@@ -152,7 +152,7 @@ public class VxLanROAResourceTest {
                 return msg;
             }
         };
-        ResultRsp<SbiNeVxlanInstance> createVxlan = vxLanROAResource.createVxlan(null, CTRL_UUID, sbiVxLanInstanceList);
+        ResultRsp<SbiNeVxlanInstance> createVxlan = vxLanROAResource.createVxlan(CTRL_UUID, sbiVxLanInstanceList);
         List<FailData<SbiNeVxlanInstance>> fail = createVxlan.getFail();
         SbiNeVxlanInstance sbiNeVxlanInstance = fail.get(0).getData();
         sbiNeVxlanInstance.getDeviceId();
@@ -196,7 +196,7 @@ public class VxLanROAResourceTest {
             }
         };
         ResultRsp<SbiNeVxlanInstance> createVxlanResponse =
-                vxLanROAResource.createVxlan(null, CTRL_UUID, sbiVxLanInstanceList);
+                vxLanROAResource.createVxlan(CTRL_UUID, sbiVxLanInstanceList);
         List<SbiNeVxlanInstance> successed = createVxlanResponse.getSuccessed();
 
         assertEquals("overlayvpn.operation.success", createVxlanResponse.getErrorCode());
@@ -239,7 +239,7 @@ public class VxLanROAResourceTest {
             }
         };
 
-        ResultRsp<SbiNeVxlanInstance> result = vxLanROAResource.queryVxlan(null, CTRL_UUID, sbiVxLanInstanceList);
+        ResultRsp<SbiNeVxlanInstance> result = vxLanROAResource.queryVxlan(CTRL_UUID, sbiVxLanInstanceList);
         assertEquals("overlayvpn.operation.success", result.getErrorCode());
         assertEquals("1", result.getSuccessed().get(0).getVni());
     }
@@ -248,7 +248,7 @@ public class VxLanROAResourceTest {
     public void testQueryVxlanEmptyInput() throws ServiceException {
 
         try {
-            vxLanROAResource.queryVxlan(null, CTRL_UUID, null);
+            vxLanROAResource.queryVxlan(CTRL_UUID, null);
             fail("exception not thrown");
         } catch (ServiceException e) {
             assertEquals(e.getMessage(), "overlayvpn.operation.paramter_invalid");
@@ -275,7 +275,7 @@ public class VxLanROAResourceTest {
             }
         };
 
-        ResultRsp<SbiNeVxlanInstance> result = vxLanROAResource.queryVxlan(null, CTRL_UUID, sbiVxLanInstanceList);
+        ResultRsp<SbiNeVxlanInstance> result = vxLanROAResource.queryVxlan(CTRL_UUID, sbiVxLanInstanceList);
         assertEquals("overlayvpn.operation.failed", result.getErrorCode());
     }
 
@@ -315,7 +315,7 @@ public class VxLanROAResourceTest {
             }
         };
 
-        ResultRsp<SbiNeVxlanInstance> result = vxLanROAResource.queryVxlan(null, CTRL_UUID, sbiVxLanInstanceList);
+        ResultRsp<SbiNeVxlanInstance> result = vxLanROAResource.queryVxlan(CTRL_UUID, sbiVxLanInstanceList);
         assertEquals("overlayvpn.operation.failed", result.getErrorCode());
     }
 
@@ -334,7 +334,7 @@ public class VxLanROAResourceTest {
             }
         };
 
-        vxLanROAResource.queryVxlan(null, CTRL_UUID, sbiVxLanInstanceList);
+        vxLanROAResource.queryVxlan(CTRL_UUID, sbiVxLanInstanceList);
 
     }
 
@@ -358,7 +358,7 @@ public class VxLanROAResourceTest {
             }
         };
 
-        vxLanROAResource.queryVxlan(null, CTRL_UUID, sbiVxLanInstanceList);
+        vxLanROAResource.queryVxlan(CTRL_UUID, sbiVxLanInstanceList);
     }
 
     @Test
@@ -386,7 +386,7 @@ public class VxLanROAResourceTest {
                 return msg;
             }
         };
-        ResultRsp<SbiNeVxlanInstance> result = vxLanROAResource.updateVxlan(null, CTRL_UUID, sbiVxLanInstanceList);
+        ResultRsp<SbiNeVxlanInstance> result = vxLanROAResource.updateVxlan(CTRL_UUID, sbiVxLanInstanceList);
 
         assertEquals("overlayvpn.operation.success", result.getErrorCode());
         assertEquals(1, result.getSuccessed().size());
@@ -405,7 +405,7 @@ public class VxLanROAResourceTest {
                 return msg;
             }
         };
-        ResultRsp<SbiNeVxlanInstance> result = vxLanROAResource.updateVxlan(null, CTRL_UUID, sbiVxLanInstanceList);
+        ResultRsp<SbiNeVxlanInstance> result = vxLanROAResource.updateVxlan(CTRL_UUID, sbiVxLanInstanceList);
 
         assertEquals("overlayvpn.operation.failed", result.getErrorCode());
         assertEquals(0, result.getSuccessed().size());
@@ -437,7 +437,7 @@ public class VxLanROAResourceTest {
             }
         };
         ResultRsp<SbiNeVxlanInstance> batchDeleteVxlanResponse =
-                vxLanROAResource.batchDeleteVxlan(null, "device12345", CTRL_UUID, sbiVxLanInstanceList);
+                vxLanROAResource.batchDeleteVxlan("device12345", CTRL_UUID, sbiVxLanInstanceList);
         assertEquals("overlayvpn.operation.failed", batchDeleteVxlanResponse.getErrorCode());
     }
 
@@ -467,7 +467,7 @@ public class VxLanROAResourceTest {
             }
         };
         ResultRsp<SbiNeVxlanInstance> batchDeleteVxlanResponse =
-                vxLanROAResource.batchDeleteVxlan(null, "device12345", CTRL_UUID, sbiVxLanInstanceList);
+                vxLanROAResource.batchDeleteVxlan("device12345", CTRL_UUID, sbiVxLanInstanceList);
         assertEquals("overlayvpn.operation.failed", batchDeleteVxlanResponse.getErrorCode());
     }
 }

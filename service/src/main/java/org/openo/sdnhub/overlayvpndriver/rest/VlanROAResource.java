@@ -18,9 +18,7 @@ package org.openo.sdnhub.overlayvpndriver.rest;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.openo.baseservice.remoteservice.exception.ServiceException;
@@ -58,11 +56,10 @@ public class VlanROAResource {
 
     /**
      * Adds new interface Vlan configuration using a specific Controller.<br>
-     *
-     * @param request HTTP request
      * @param deviceId device id
      * @param ctrlUuidParam Controller UUID
      * @param ifVlanList collection of interface Vlan configuration
+     *
      * @return ResultRsp object with collection of interface Vlan added configuration status data
      * @throws ServiceException when input validation fails
      * @since SDNHUB 0.5
@@ -71,8 +68,7 @@ public class VlanROAResource {
     @Path("/device/{deviceuuid}/vlan")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ResultRsp<List<SbiIfVlan>> createVlan(@Context HttpServletRequest request,
-            @PathParam(CommonConst.DEVICE_UUID_PATH_PARAM) String deviceId,
+    public ResultRsp<List<SbiIfVlan>> createVlan(@PathParam(CommonConst.DEVICE_UUID_PATH_PARAM) String deviceId,
             @HeaderParam(CommonConst.CTRL_HEADER_PARAM) String ctrlUuidParam,
             List<SbiIfVlan> ifVlanList) throws ServiceException {
 
@@ -102,11 +98,10 @@ public class VlanROAResource {
 
     /**
      * Updates interface Vlan configuration using a specific Controller.<br>
-     *
-     * @param request HTTP request
      * @param deviceId device id
      * @param ctrlUuidParam Controller UUID
      * @param ifVlanList collection of interface Vlan configuration
+     *
      * @return ResultRsp object with collection of interface Vlan updated configuration status data
      * @throws ServiceException when input validation fails
      * @since SDNHUB 0.5
@@ -115,8 +110,7 @@ public class VlanROAResource {
     @Path("/device/{deviceuuid}/vlan")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ResultRsp<List<SbiIfVlan>> updateVlan(@Context HttpServletRequest request,
-            @PathParam(CommonConst.DEVICE_UUID_PATH_PARAM) String deviceId,
+    public ResultRsp<List<SbiIfVlan>> updateVlan(@PathParam(CommonConst.DEVICE_UUID_PATH_PARAM) String deviceId,
             @HeaderParam(CommonConst.CTRL_HEADER_PARAM) String ctrlUuidParam,
             List<SbiIfVlan> ifVlanList) throws ServiceException {
 
@@ -142,11 +136,10 @@ public class VlanROAResource {
 
     /**
      * Queries interface Vlan configuration using a specific Controller.<br>
-     *
-     * @param request HTTP request
      * @param deviceId device id
      * @param ids vlan ids
      * @param ctrlUuidParam Controller UUID
+     *
      * @return ResultRsp object with collection of interface Vlan queried configuration status data
      * @throws ServiceException when input validation fails
      * @since SDNHUB 0.5
@@ -155,8 +148,7 @@ public class VlanROAResource {
     @Path("/device/{deviceuuid}/vlan/{ids}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ResultRsp<List<SbiIfVlan>> queryVlan(@Context HttpServletRequest request,
-            @PathParam(CommonConst.DEVICE_UUID_PATH_PARAM) String deviceId,
+    public ResultRsp<List<SbiIfVlan>> queryVlan(@PathParam(CommonConst.DEVICE_UUID_PATH_PARAM) String deviceId,
             @PathParam(CommonConst.IDS_PATH_PARAM) String ids,
             @HeaderParam(CommonConst.CTRL_HEADER_PARAM) String ctrlUuidParam) throws ServiceException {
 

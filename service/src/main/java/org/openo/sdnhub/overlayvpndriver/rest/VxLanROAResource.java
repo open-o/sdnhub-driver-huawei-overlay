@@ -21,26 +21,20 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.xml.transform.Result;
 
-import org.openo.sdnhub.overlayvpndriver.common.consts.CommonConst;
-import org.openo.sdnhub.overlayvpndriver.controller.model.Vni;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.Transformer;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
+import org.openo.sdnhub.overlayvpndriver.common.consts.CommonConst;
 import org.openo.sdnhub.overlayvpndriver.common.util.RequestHeaderUtil;
+import org.openo.sdnhub.overlayvpndriver.controller.model.Vni;
 import org.openo.sdnhub.overlayvpndriver.controller.model.VxLanDeviceModel;
-import org.openo.sdnhub.overlayvpndriver.result.ACDelResponse;
 import org.openo.sdnhub.overlayvpndriver.sbi.impl.VxLanSvcImpl;
 import org.openo.sdnhub.overlayvpndriver.translator.VxlanConvert;
 import org.openo.sdno.framework.container.util.JsonUtil;
@@ -65,18 +59,19 @@ import org.springframework.stereotype.Service;
 public class VxLanROAResource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(VxLanROAResource.class);
+    private static final String SUCCESS = " success";
+	private static final String FAILED = " failed";
+	private static final String DEVICEID = "deviceId:";
 
     @Autowired
     private VxLanSvcImpl vxlanService = null;
 
     /**
      * Adds new Vxlan configuration using a specific Controller.<br>
-     *
-     * @param request HTTP request
      * @param ctrlUuidParam Controller UUID
      * @param vxLanInstanceList collection of VxLan configuration
+     *
      * @return ResultRsp object with VxLan added configuration status data
-     * @throws WebApplicationException when add VxLan configuration fails
      * @throws ServiceException when input validation fails
      * @since SDNHUB 0.5
      */
@@ -84,10 +79,9 @@ public class VxLanROAResource {
     @Path("/batch-create-vxlan")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ResultRsp<SbiNeVxlanInstance> createVxlan(@Context HttpServletRequest request,
-                                                     @HeaderParam(CommonConst.CTRL_HEADER_PARAM) String ctrlUuidParam,
+    public ResultRsp<SbiNeVxlanInstance> createVxlan(@HeaderParam(CommonConst.CTRL_HEADER_PARAM) String ctrlUuidParam,
                                                      List<SbiNeVxlanInstance> vxLanInstanceList)
-            throws WebApplicationException, ServiceException {
+            throws ServiceException {
         long beginTime = System.currentTimeMillis();
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
 
@@ -119,12 +113,12 @@ public class VxLanROAResource {
             List<SbiNeVxlanInstance> currNbiVxlanInsList = deviceIdToVxlaninsMap.get(deviceId);
             if (createResult.isSuccess())
             {
-                LOGGER.warn("deviceId:" + deviceId + " success");
+                LOGGER.warn(DEVICEID + deviceId + SUCCESS);
                 succVxlanInstances.addAll(currNbiVxlanInsList);
             }
             else
             {
-                LOGGER.warn("create vxlan for deviceId:" + deviceId + " failed");
+                LOGGER.warn("create vxlan for deviceId:" + deviceId + FAILED);
                 for(SbiNeVxlanInstance failVxlanIns : currNbiVxlanInsList)
                 {
                     faildata.add(new FailData<SbiNeVxlanInstance>(createResult.getErrorCode(),
@@ -142,11 +136,10 @@ public class VxLanROAResource {
 
     /**
      * Deletes Vxlan configuration using a specific Controller.<br/>
-     *
-     * @param request HTTP request
      * @param currDeviceId specific device id
      * @param ctrlUuidParam Controller UUID
      * @param vxlanInstanceList collection of VxLan configuration
+     *
      * @return ResultRsp object with deleted VxLan configuration status data
      * @throws ServiceException when input validation fails
      * @since SDNHUB 0.5
@@ -156,8 +149,7 @@ public class VxLanROAResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @SuppressWarnings("unchecked")
-    public ResultRsp<SbiNeVxlanInstance> batchDeleteVxlan(@Context HttpServletRequest request,
-                                                          @PathParam(CommonConst.DEVICE_ID_PATH_PARAM) String currDeviceId,
+    public ResultRsp<SbiNeVxlanInstance> batchDeleteVxlan(@PathParam(CommonConst.DEVICE_ID_PATH_PARAM) String currDeviceId,
                                                           @HeaderParam(CommonConst.CTRL_HEADER_PARAM) String ctrlUuidParam,
                                                           List<SbiNeVxlanInstance> vxlanInstanceList) throws ServiceException {
 
@@ -170,14 +162,14 @@ public class VxLanROAResource {
         long beginTime = System.currentTimeMillis();
         UuidUtil.validate(ctrlUuid);
 
-        ResultRsp<SbiNeVxlanInstance> totalResult = new ResultRsp<SbiNeVxlanInstance>(ErrorCode.OVERLAYVPN_SUCCESS);
+        ResultRsp<SbiNeVxlanInstance> totalResult = new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS);
         Map<String, List<VxLanDeviceModel>> deviceIdToDeviceModelMap = VxlanConvert.convertVxlanInsToNetVxlanDeviceModel(vxlanInstanceList);
         LOGGER.warn("vxlanDeviceModelMap:" + JsonUtil.toJson(deviceIdToDeviceModelMap));
         Map<String, List<SbiNeVxlanInstance>> deviceIdToVxlanInsMap = VxlanConvert.divideVxlanInsByDeviceId(vxlanInstanceList);
         LOGGER.warn("deviceIdToVxlanInsMap:" + JsonUtil.toJson(deviceIdToVxlanInsMap));
 
-        List<SbiNeVxlanInstance> succVxlanInstances = new ArrayList<SbiNeVxlanInstance>();
-        List<FailData<SbiNeVxlanInstance>> failDatas = new ArrayList<FailData<SbiNeVxlanInstance>>();
+        List<SbiNeVxlanInstance> succVxlanInstances = new ArrayList<>();
+        List<FailData<SbiNeVxlanInstance>> failDatas = new ArrayList<>();
         for (Map.Entry<String, List<VxLanDeviceModel>> entry : deviceIdToDeviceModelMap.entrySet())
         {
             String deviceId = entry.getKey();
@@ -185,7 +177,7 @@ public class VxLanROAResource {
 
             VxLanDeviceModel delVxlanDeviceModel = VxLanSvcImpl.mergeVxlanDeviceModels(delVxlanDeviceModels, null);
 
-            ResultRsp<List<VxLanDeviceModel>> createResult = new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS);
+            ResultRsp<List<VxLanDeviceModel>> createResult;
             List<VxLanDeviceModel> acExistVxlanModels = VxLanSvcImpl.queryVxlanByDevice(ctrlUuid, deviceId).getData();
             if (CollectionUtils.isEmpty(acExistVxlanModels))
             {
@@ -245,8 +237,7 @@ public class VxLanROAResource {
     @Path("/batch-query-vxlan")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ResultRsp<SbiNeVxlanInstance> queryVxlan(@Context HttpServletRequest request,
-                                                    @HeaderParam(CommonConst.CTRL_HEADER_PARAM) String ctrlUuidParam,
+    public ResultRsp<SbiNeVxlanInstance> queryVxlan(@HeaderParam(CommonConst.CTRL_HEADER_PARAM) String ctrlUuidParam,
                                                     List<SbiNeVxlanInstance> vxlanInstanceList)
             throws ServiceException {
 
@@ -285,10 +276,9 @@ public class VxLanROAResource {
 
     /**
      * Updates Vxlan configuration using a specific Controller.<br/>
-     *
-     * @param request HTTP request
      * @param ctrlUuidParam Controller UUID
      * @param vxLanInstanceList collection of VxLan configuration
+     *
      * @return ResultRsp object with VxLan updated configuration status data
      * @throws ServiceException when input validation fails
      * @since SDNHUB 0.5
@@ -297,8 +287,7 @@ public class VxLanROAResource {
     @Path("/batch-update-vxlan")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ResultRsp<SbiNeVxlanInstance> updateVxlan(@Context HttpServletRequest request,
-                                                     @HeaderParam(CommonConst.CTRL_HEADER_PARAM) String ctrlUuidParam,
+    public ResultRsp<SbiNeVxlanInstance> updateVxlan(@HeaderParam(CommonConst.CTRL_HEADER_PARAM) String ctrlUuidParam,
                                                      List<SbiNeVxlanInstance> vxLanInstanceList)
             throws ServiceException {
 
@@ -329,10 +318,10 @@ public class VxLanROAResource {
                     VxLanSvcImpl.updateVxlanByDevice(ctrlUuid, deviceId, Arrays.asList(updateVxlanDeviceModel));
             List<SbiNeVxlanInstance> currNbiVxlanInsList = deviceIdToVxlanInsMap.get(deviceId);
             if(createResult.isSuccess()) {
-                LOGGER.debug("deviceId:" + deviceId + " success");
+                LOGGER.debug(DEVICEID + deviceId + SUCCESS);
                 succVxlanInstances.addAll(currNbiVxlanInsList);
             } else {
-                LOGGER.debug("deviceId:" + deviceId + " fail");
+                LOGGER.debug(DEVICEID + deviceId + FAILED);
                 for(SbiNeVxlanInstance failVxlanIns : currNbiVxlanInsList) {
                     failDatas.add(new FailData<SbiNeVxlanInstance>(createResult.getErrorCode(),
                             createResult.getMessage(), failVxlanIns));

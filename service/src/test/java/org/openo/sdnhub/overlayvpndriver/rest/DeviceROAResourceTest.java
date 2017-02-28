@@ -91,7 +91,7 @@ public class DeviceROAResourceTest {
                 return msg;
             }
         };
-        ResultRsp<List<AdapterDeviceInfo>> resp = resource.queryDeviceByEsn(null, CTRL_UUID, "123");
+        ResultRsp<List<AdapterDeviceInfo>> resp = resource.queryDeviceByEsn(CTRL_UUID, "123");
         assertTrue("success".equals(resp.getErrorCode())
                 && resp.getData().get(0).getId().equals("81244ad0-b4ea-41ed-969e-d5588b32fd4c"));
     }
@@ -119,7 +119,7 @@ public class DeviceROAResourceTest {
                 return msg;
             }
         };
-        ResultRsp<List<AdapterDeviceInfo>> resp = resource.queryDeviceByEsn(null, CTRL_UUID, "123");
+        ResultRsp<List<AdapterDeviceInfo>> resp = resource.queryDeviceByEsn(CTRL_UUID, "123");
         assertTrue("cloudvpn.failed".equals(resp.getErrorCode()));
     }
 
@@ -146,7 +146,7 @@ public class DeviceROAResourceTest {
                 return msg;
             }
         };
-        ResultRsp<List<AdapterDeviceInfo>> resp = resource.queryDeviceByEsn(null, CTRL_UUID, "123");
+        ResultRsp<List<AdapterDeviceInfo>> resp = resource.queryDeviceByEsn(CTRL_UUID, "123");
         assertTrue("cloudvpn.failed".equals(resp.getErrorCode()));
     }
 
@@ -173,14 +173,14 @@ public class DeviceROAResourceTest {
                 return msg;
             }
         };
-        ResultRsp<List<AdapterDeviceInfo>> resp = resource.queryDeviceByEsn(null, CTRL_UUID, "123");
+        ResultRsp<List<AdapterDeviceInfo>> resp = resource.queryDeviceByEsn(CTRL_UUID, "123");
         assertTrue("cloudvpn.failed".equals(resp.getErrorCode()));
 
     }
 
     @Test(expected = ServiceException.class)
     public void queryDeviceByEsnTestNullUuid() throws ServiceException {
-        resource.queryDeviceByEsn(null, null, "123");
+        resource.queryDeviceByEsn(null, "123");
     }
 
     @Test
@@ -215,7 +215,7 @@ public class DeviceROAResourceTest {
 
         List<AdapterDeviceCreateBasicInfo> adevCrtInfos = new ArrayList<>();
         adevCrtInfos.add(adapterCreateInfo);
-        ResultRsp<AdapterDeviceInfo> resp = resource.createDevices(null, CTRL_UUID, adevCrtInfos);
+        ResultRsp<AdapterDeviceInfo> resp = resource.createDevices(CTRL_UUID, adevCrtInfos);
 
         assertEquals("success", resp.getErrorCode());
         assertEquals(resp.getSuccessed().get(0).getId(), "81244ad0-b4ea-41ed-969e-d5588b32fd4c");
@@ -224,7 +224,7 @@ public class DeviceROAResourceTest {
     @Test(expected = ServiceException.class)
     public void createDevicesTestEmptyDeviceList() throws ServiceException {
         List<AdapterDeviceCreateBasicInfo> adevCrtInfos = new ArrayList<AdapterDeviceCreateBasicInfo>();
-        resource.createDevices(null, CTRL_UUID, adevCrtInfos);
+        resource.createDevices(CTRL_UUID, adevCrtInfos);
     }
 
     @Test(expected = ServiceException.class)
@@ -236,7 +236,7 @@ public class DeviceROAResourceTest {
         adapterCreateInfo.setDescription("test device");
         List<AdapterDeviceCreateBasicInfo> adevCrtInfos = new ArrayList<>();
         adevCrtInfos.add(adapterCreateInfo);
-        resource.createDevices(null, null, adevCrtInfos);
+        resource.createDevices(null, adevCrtInfos);
     }
 
     @Test
@@ -269,7 +269,7 @@ public class DeviceROAResourceTest {
         AdapterDeviceInfo adapterDevInfo = new AdapterDeviceInfo();
 
         adapterDevInfo.setId("81244ad0-b4ea-41ed-969e-d5588b32fd4c");
-        ResultRsp<String> resp = resource.modifyDevice(null, CTRL_UUID, "12345", adapterDevInfo);
+        ResultRsp<String> resp = resource.modifyDevice(CTRL_UUID, "12345", adapterDevInfo);
 
         assertTrue("overlayvpn.operation.success".equals(resp.getErrorCode()));
     }
@@ -300,7 +300,7 @@ public class DeviceROAResourceTest {
         AdapterDeviceInfo adapterDevInfo = new AdapterDeviceInfo();
 
         adapterDevInfo.setId("81244ad0-b4ea-41ed-969e-d5588b32fd4c");
-        ResultRsp<String> resp = resource.modifyDevice(null, CTRL_UUID, "12345", adapterDevInfo);
+        ResultRsp<String> resp = resource.modifyDevice(CTRL_UUID, "12345", adapterDevInfo);
 
         String failData = resp.getFail().get(0).getErrcode();
 
@@ -309,7 +309,7 @@ public class DeviceROAResourceTest {
 
     @Test(expected = ServiceException.class)
     public void modifyDeviceTestNullDeviceInfo() throws ServiceException {
-        resource.modifyDevice(null, CTRL_UUID, "12345", null);
+        resource.modifyDevice(CTRL_UUID, "12345", null);
     }
 
     @Test(expected = ServiceException.class)
@@ -317,14 +317,14 @@ public class DeviceROAResourceTest {
         AdapterDeviceInfo adapterDevInfo = new AdapterDeviceInfo();
 
         adapterDevInfo.setId("81244ad0-b4ea-41ed-969e-d5588b32fd4c");
-        resource.modifyDevice(null, CTRL_UUID, null, adapterDevInfo);
+        resource.modifyDevice(CTRL_UUID, null, adapterDevInfo);
     }
 
     @Test(expected = ServiceException.class)
     public void modifyDeviceTestNullUuid() throws ServiceException {
         AdapterDeviceInfo adapterDevInfo = new AdapterDeviceInfo();
         adapterDevInfo.setId("81244ad0-b4ea-41ed-969e-d5588b32fd4c");
-        resource.modifyDevice(null, null, "12345", adapterDevInfo);
+        resource.modifyDevice(null, "12345", adapterDevInfo);
     }
 
     @Test
@@ -355,7 +355,7 @@ public class DeviceROAResourceTest {
         };
         List<String> idList = new ArrayList<>();
         idList.add("12345");
-        ResultRsp<String> resp = resource.deleteDevices(null, idList, CTRL_UUID);
+        ResultRsp<String> resp = resource.deleteDevices(idList, CTRL_UUID);
         assertTrue("0".equals(resp.getErrorCode()));
     }
 
@@ -383,17 +383,17 @@ public class DeviceROAResourceTest {
         };
         List<String> idList = new ArrayList<>();
         idList.add("12345");
-        ResultRsp<String> resp = resource.deleteDevices(null, idList, CTRL_UUID);
+        ResultRsp<String> resp = resource.deleteDevices(idList, CTRL_UUID);
         assertTrue("500".equals(resp.getErrorCode()));
     }
 
     @Test(expected = ServiceException.class)
     public void deleteDevicesTestNullDeviceId() throws ServiceException {
-        resource.deleteDevices(null, null, CTRL_UUID);
+        resource.deleteDevices(null, CTRL_UUID);
     }
 
     @Test(expected = ServiceException.class)
     public void deleteDevicesTestNullUuid() throws ServiceException {
-        resource.deleteDevices(null, null, "12345");
+        resource.deleteDevices(null, "12345");
     }
 }

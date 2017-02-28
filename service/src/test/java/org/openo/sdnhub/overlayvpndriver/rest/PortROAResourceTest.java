@@ -60,7 +60,7 @@ public class PortROAResourceTest {
             }
         };
 
-        ResultRsp<SbiIp> result = portRoAResource.queryPortIpByPortName(null, "extSysID=ctrlid1024", "123", "test_port");
+        ResultRsp<SbiIp> result = portRoAResource.queryPortIpByPortName("extSysID=ctrlid1024", "123", "test_port");
         assertEquals(result.getErrorCode(), "success");
     }
 
@@ -78,7 +78,7 @@ public class PortROAResourceTest {
                 return msg;
             }
         };
-        portRoAResource.queryPortIpByPortName(null, "extSysID=ctrlid1024", "123", null);
+        portRoAResource.queryPortIpByPortName("extSysID=ctrlid1024", "123", null);
     }
 
     @Test(expected = ServiceException.class)
@@ -96,7 +96,7 @@ public class PortROAResourceTest {
             }
         };
 
-        portRoAResource.queryPortIpByPortName(null, "extSysID=ctrlid1024", "123", null);
+        portRoAResource.queryPortIpByPortName("extSysID=ctrlid1024", "123", null);
     }
 
     @Test(expected = ServiceException.class)
@@ -114,16 +114,16 @@ public class PortROAResourceTest {
             }
         };
 
-        portRoAResource.queryPortIpByPortName(null, "extSysID=ctrlid1024", "123", null);
+        portRoAResource.queryPortIpByPortName("extSysID=ctrlid1024", "123", null);
     }
 
     @Test(expected = ServiceException.class)
     public void testQueryPortInvalidCtrlUuid() throws ServiceException {
-        portRoAResource.queryPortIpByPortName(null, "extSysID=!@#$", "123", null);
+        portRoAResource.queryPortIpByPortName("extSysID=!@#$", "123", null);
     }
 
     @Test(expected = ServiceException.class)
     public void testQueryPortInvalidDeviceId() throws ServiceException {
-        portRoAResource.queryPortIpByPortName(null, "extSysID=ctrlid1024", null, null);
+        portRoAResource.queryPortIpByPortName("extSysID=ctrlid1024", null, null);
     }
 }
