@@ -156,7 +156,7 @@ public class PolicyRouteROAResourceTest {
             }
         };
         ResultRsp<SbiNePolicyRoute> routeCreate =
-                policyRouteRoaResource.routeCreate(CTRL_UUID, sbiNePolicyRouteList);
+                policyRouteRoaResource.routeCreate(null, CTRL_UUID, sbiNePolicyRouteList);
         List<SbiNePolicyRoute> successed = routeCreate.getSuccessed();
         assertEquals("success", routeCreate.getErrorCode());
         assertEquals("self-traffic-policy-1", successed.get(0).getTrafficPolicyName());
@@ -202,7 +202,7 @@ public class PolicyRouteROAResourceTest {
             }
         };
         ResultRsp<SbiNePolicyRoute> routeCreate =
-                policyRouteRoaResource.routeCreate(CTRL_UUID, sbiNePolicyRouteList);
+                policyRouteRoaResource.routeCreate(null, CTRL_UUID, sbiNePolicyRouteList);
         List<FailData<SbiNePolicyRoute>> failData = routeCreate.getFail();
         assertEquals("success", routeCreate.getErrorCode());
         assertTrue(failData.isEmpty());
@@ -230,7 +230,7 @@ public class PolicyRouteROAResourceTest {
             }
         };
         ResultRsp<SbiNePolicyRoute> routeCreate =
-                policyRouteRoaResource.routeCreate(CTRL_UUID, sbiNePolicyRouteList);
+                policyRouteRoaResource.routeCreate(null, CTRL_UUID, sbiNePolicyRouteList);
         List<FailData<SbiNePolicyRoute>> failData = routeCreate.getFail();
         assertEquals("success", routeCreate.getErrorCode());
         assertTrue(failData.isEmpty());
@@ -239,7 +239,7 @@ public class PolicyRouteROAResourceTest {
     @Test(expected = ServiceException.class)
     public void testRouteCreate_EmptyInput() throws ServiceException {
 
-        policyRouteRoaResource.routeCreate(CTRL_UUID, null);
+        policyRouteRoaResource.routeCreate(null, CTRL_UUID, null);
 
     }
 
@@ -284,7 +284,7 @@ public class PolicyRouteROAResourceTest {
             }
         };
         ResultRsp<SbiNePolicyRoute> routeUpdate =
-                policyRouteRoaResource.routeUpdate(CTRL_UUID, sbiNePolicyRouteList);
+                policyRouteRoaResource.routeUpdate(null, CTRL_UUID, sbiNePolicyRouteList);
         List<SbiNePolicyRoute> successed = routeUpdate.getSuccessed();
         assertEquals("success", routeUpdate.getErrorCode());
         String filterActionExpected =
@@ -336,7 +336,7 @@ public class PolicyRouteROAResourceTest {
             }
         };
         ResultRsp<SbiNePolicyRoute> routeUpdate =
-                policyRouteRoaResource.routeUpdate(CTRL_UUID, sbiNePolicyRouteList);
+                policyRouteRoaResource.routeUpdate(null, CTRL_UUID, sbiNePolicyRouteList);
         List<FailData<SbiNePolicyRoute>> failData = routeUpdate.getFail();
         assertEquals("success", routeUpdate.getErrorCode());
         assertEquals(failData.size(), 0);
@@ -378,7 +378,7 @@ public class PolicyRouteROAResourceTest {
             }
         };
         ResultRsp<SbiNePolicyRoute> routeQuery =
-                policyRouteRoaResource.routeQuery(CTRL_UUID, sbiNePolicyRouteList);
+                policyRouteRoaResource.routeQuery(null, CTRL_UUID, sbiNePolicyRouteList);
         assertEquals("success", routeQuery.getErrorCode());
     }
 
@@ -418,7 +418,7 @@ public class PolicyRouteROAResourceTest {
                 return msg;
             }
         };
-        policyRouteRoaResource.routeQuery(null, sbiNePolicyRouteList);
+        policyRouteRoaResource.routeQuery(null, null, sbiNePolicyRouteList);
     }
 
     @Test(expected = ServiceException.class)
@@ -457,7 +457,7 @@ public class PolicyRouteROAResourceTest {
                 return msg;
             }
         };
-        policyRouteRoaResource.routeQuery(CTRL_UUID, new LinkedList<SbiNePolicyRoute>());
+        policyRouteRoaResource.routeQuery(null, CTRL_UUID, new LinkedList<SbiNePolicyRoute>());
 
     }
 
@@ -483,7 +483,7 @@ public class PolicyRouteROAResourceTest {
             }
         };
         ResultRsp<SbiNePolicyRoute> routeQuery =
-                policyRouteRoaResource.routeQuery(CTRL_UUID, sbiNePolicyRouteList);
+                policyRouteRoaResource.routeQuery(null, CTRL_UUID, sbiNePolicyRouteList);
 
         assertEquals("success", routeQuery.getErrorCode()); // Source code needs to be modified
 
@@ -492,7 +492,7 @@ public class PolicyRouteROAResourceTest {
     @Test(expected = ServiceException.class)
     public void testRouteBatchDelete_EmptyDeviceInput() throws ServiceException {
 
-        policyRouteRoaResource.routeBatchDelete(CTRL_UUID, "device6789", null);
+        policyRouteRoaResource.routeBatchDelete(null, CTRL_UUID, "device6789", null);
     }
 
     @Test(expected = ServiceException.class)
@@ -500,7 +500,7 @@ public class PolicyRouteROAResourceTest {
 
         List<String> routeIds = new ArrayList<String>();
 
-        policyRouteRoaResource.routeBatchDelete(CTRL_UUID, null, routeIds);
+        policyRouteRoaResource.routeBatchDelete(null, CTRL_UUID, null, routeIds);
     }
 
     @Test(expected = ServiceException.class)
@@ -511,7 +511,7 @@ public class PolicyRouteROAResourceTest {
         routeIds.add("routeId2");
         routeIds.add("routeId3");
 
-        policyRouteRoaResource.routeBatchDelete(null, "device12345", routeIds);
+        policyRouteRoaResource.routeBatchDelete(null, null, "device12345", routeIds);
     }
 
     @Test
@@ -551,7 +551,7 @@ public class PolicyRouteROAResourceTest {
             }
         };
 
-        ResultRsp<String> resultRsp = policyRouteRoaResource.routeBatchDelete(CTRL_UUID, "device12345", routeIds);
+        ResultRsp<String> resultRsp = policyRouteRoaResource.routeBatchDelete(null, CTRL_UUID, "device12345", routeIds);
         assertEquals("overlayvpn.operation.success", resultRsp.getErrorCode());
     }
 
@@ -582,7 +582,7 @@ public class PolicyRouteROAResourceTest {
             }
         };
 
-        ResultRsp<String> resultRsp = policyRouteRoaResource.routeBatchDelete(CTRL_UUID, "device6789", routeIds);
+        ResultRsp<String> resultRsp = policyRouteRoaResource.routeBatchDelete(null, CTRL_UUID, "device6789", routeIds);
         assertEquals("delete qos policy: httpMsg return error", resultRsp.getMessage());
     }
 
@@ -613,7 +613,7 @@ public class PolicyRouteROAResourceTest {
             }
         };
 
-        ResultRsp<String> resultRsp = policyRouteRoaResource.routeBatchDelete(CTRL_UUID, "device6789", routeIds);
+        ResultRsp<String> resultRsp = policyRouteRoaResource.routeBatchDelete(null, CTRL_UUID, "device6789", routeIds);
         assertEquals("delete qos policy: httpMsg return error", resultRsp.getMessage());
     }
 
@@ -654,7 +654,7 @@ public class PolicyRouteROAResourceTest {
             }
         };
 
-        ResultRsp<String> resultRsp = policyRouteRoaResource.routeBatchDelete(CTRL_UUID, "device6789", routeIds);
+        ResultRsp<String> resultRsp = policyRouteRoaResource.routeBatchDelete(null, CTRL_UUID, "device6789", routeIds);
         assertEquals("Unable to delete route.", resultRsp.getMessage());
     }
 

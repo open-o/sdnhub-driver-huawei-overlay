@@ -81,13 +81,13 @@ public class LocalSiteSNatROAResourceTest {
         snatNet.setAclNumber("3501");
         snatNet.setActionState("active");
 
-        localSiteSnatRoaResource.createSnat("123", null, snatNet);
+        localSiteSnatRoaResource.createSnat(null, "123", null, snatNet);
     }
 
     @Test(expected = ServiceException.class)
     public void testCreateSnat_EmptySbiSnetModel() throws ServiceException {
 
-        localSiteSnatRoaResource.createSnat("123", "extSysID=ctrlid123", null);
+        localSiteSnatRoaResource.createSnat(null, "123", "extSysID=ctrlid123", null);
     }
 
     @Test(expected = ServiceException.class)
@@ -113,7 +113,7 @@ public class LocalSiteSNatROAResourceTest {
         snatNet.setAclId("7db47412f2b44164a16ef18b16a81c0c");
         snatNet.setAclNumber("3501");
         snatNet.setActionState("active");
-        localSiteSnatRoaResource.createSnat("123", "extSysID=ctrlid123", snatNet);
+        localSiteSnatRoaResource.createSnat(null, "123", "extSysID=ctrlid123", snatNet);
     }
 
     @Test(expected = ServiceException.class)
@@ -140,7 +140,7 @@ public class LocalSiteSNatROAResourceTest {
         snatNet.setAclId("7db47412f2b44164a16ef18b16a81c0c");
         snatNet.setAclNumber("3501");
         snatNet.setActionState("active");
-        localSiteSnatRoaResource.createSnat("123", "extSysID=ctrlid123", snatNet);
+        localSiteSnatRoaResource.createSnat(null, "123", "extSysID=ctrlid123", snatNet);
     }
 
     @Test(expected = Exception.class)
@@ -219,7 +219,7 @@ public class LocalSiteSNatROAResourceTest {
         snatNet.setType("create");
         snatNet.setUpdatetime("a0");
         snatNet.setUuid("a12-346");
-        localSiteSnatRoaResource.createSnat("123", "extSysID=ctrlid123", snatNet);
+        localSiteSnatRoaResource.createSnat(null, "123", "extSysID=ctrlid123", snatNet);
     }
 
     @Test(expected = Exception.class)
@@ -298,13 +298,13 @@ public class LocalSiteSNatROAResourceTest {
         snatNet.setType("create");
         snatNet.setUpdatetime("a0");
         snatNet.setUuid("a12-346");
-        localSiteSnatRoaResource.createSnat("123", "extSysID=ctrlid123", snatNet);
+        localSiteSnatRoaResource.createSnat(null, "123", "extSysID=ctrlid123", snatNet);
     }
 
     @Test(expected = ServiceException.class)
     public void testUpdateSnat_EmptySbiSnetModel() throws ServiceException {
 
-        localSiteSnatRoaResource.updateSnat("123", "extSysID=ctrlid123", null);
+        localSiteSnatRoaResource.updateSnat(null, "123", "extSysID=ctrlid123", null);
     }
 
     @Test(expected = ServiceException.class)
@@ -315,7 +315,7 @@ public class LocalSiteSNatROAResourceTest {
         snatNet.setAclNumber("3501");
         snatNet.setActionState("active");
 
-        localSiteSnatRoaResource.updateSnat("123", null, snatNet);
+        localSiteSnatRoaResource.updateSnat(null, "123", null, snatNet);
     }
 
     @Test
@@ -378,33 +378,35 @@ public class LocalSiteSNatROAResourceTest {
         snatNet.setType("create");
         snatNet.setUpdatetime("a0");
         snatNet.setUuid("a12-346");
-        localSiteSnatRoaResource.updateSnat("123", "extSysID=ctrlid123", snatNet);
+        localSiteSnatRoaResource.updateSnat(null, "123", "extSysID=ctrlid123", snatNet);
     }
 
     @Test(expected = ServiceException.class)
     public void testDeleteSnat_EmptyUuid() throws ServiceException {
 
-        localSiteSnatRoaResource.deleteSnat("123", "2467a068795b41ee9676bc79168da7a6", "7db47412f2b44164a16ef18b16a81c0c",
-                null);
+        localSiteSnatRoaResource.deleteSnat(null, "123", "2467a068795b41ee9676bc79168da7a6",
+                "7db47412f2b44164a16ef18b16a81c0c", null);
     }
 
     @Test(expected = ServiceException.class)
     public void testDeleteSnat_EmptyDeviceId() throws ServiceException {
 
-        localSiteSnatRoaResource.deleteSnat(null, "2467a068795b41ee9676bc79168da7a6", "7db47412f2b44164a16ef18b16a81c0c",
-                "extSysID=ctrlid123");
+        localSiteSnatRoaResource.deleteSnat(null, null, "2467a068795b41ee9676bc79168da7a6",
+                "7db47412f2b44164a16ef18b16a81c0c", "extSysID=ctrlid123");
     }
 
     @Test(expected = ServiceException.class)
     public void testDeleteSnat_EmptyNatId() throws ServiceException {
 
-        localSiteSnatRoaResource.deleteSnat("123", null, "7db47412f2b44164a16ef18b16a81c0c", "extSysID=ctrlid123");
+        localSiteSnatRoaResource.deleteSnat(null, "123", null, "7db47412f2b44164a16ef18b16a81c0c",
+                "extSysID=ctrlid123");
     }
 
     @Test(expected = ServiceException.class)
     public void testDeleteSnat_EmptyAclId() throws ServiceException {
 
-        localSiteSnatRoaResource.deleteSnat("123", "2467a068795b41ee9676bc79168da7a6", null, "extSysID=ctrlid123");
+        localSiteSnatRoaResource.deleteSnat(null, "123", "2467a068795b41ee9676bc79168da7a6", null,
+                "extSysID=ctrlid123");
     }
 
     @Test
@@ -460,8 +462,8 @@ public class LocalSiteSNatROAResourceTest {
         snatNet.setType("create");
         snatNet.setUpdatetime("a0");
         snatNet.setUuid("a12-346");
-        ResultRsp<String> r2 = localSiteSnatRoaResource.deleteSnat("123", "2467a068795b41ee9676bc79168da7a6", "7db47412f2b44164a16ef18b16a81c0c",
-                "extSysID=ctrlid123");
+        ResultRsp<String> r2 = localSiteSnatRoaResource.deleteSnat(null, "123", "2467a068795b41ee9676bc79168da7a6",
+                "7db47412f2b44164a16ef18b16a81c0c", "extSysID=ctrlid123");
         assertEquals(r2.getErrorCode().equals("overlayvpn.operation.success"), true);
     }
 
@@ -517,8 +519,8 @@ public class LocalSiteSNatROAResourceTest {
         snatNet.setType("create");
         snatNet.setUpdatetime("a0");
         snatNet.setUuid("a12-346");
-        localSiteSnatRoaResource.deleteSnat("123", "2467a068795b41ee9676bc79168da7a6", "7db47412f2b44164a16ef18b16a81c0c",
-                "extSysID=ctrlid123");
+        localSiteSnatRoaResource.deleteSnat(null, "123", "2467a068795b41ee9676bc79168da7a6",
+                "7db47412f2b44164a16ef18b16a81c0c", "extSysID=ctrlid123");
     }
 
     @Test(expected = ServiceException.class)
@@ -568,8 +570,8 @@ public class LocalSiteSNatROAResourceTest {
         snatNet.setType("create");
         snatNet.setUpdatetime("a0");
         snatNet.setUuid("a12-346");
-        localSiteSnatRoaResource.deleteSnat("123", "2467a068795b41ee9676bc79168da7a6", "7db47412f2b44164a16ef18b16a81c0c",
-                "extSysID=ctrlid123");
+        localSiteSnatRoaResource.deleteSnat(null, "123", "2467a068795b41ee9676bc79168da7a6",
+                "7db47412f2b44164a16ef18b16a81c0c", "extSysID=ctrlid123");
     }
 
     @Test(expected = ServiceException.class)
@@ -624,34 +626,34 @@ public class LocalSiteSNatROAResourceTest {
         snatNet.setType("create");
         snatNet.setUpdatetime("a0");
         snatNet.setUuid("a12-346");
-        localSiteSnatRoaResource.deleteSnat("123", "2467a068795b41ee9676bc79168da7a6", "7db47412f2b44164a16ef18b16a81c0c",
-                "extSysID=ctrlid123");
+        localSiteSnatRoaResource.deleteSnat(null, "123", "2467a068795b41ee9676bc79168da7a6",
+                "7db47412f2b44164a16ef18b16a81c0c", "extSysID=ctrlid123");
     }
 
     @Test(expected = ServiceException.class)
     public void testQuerySnat_EmptyUuid() throws ServiceException {
 
-        localSiteSnatRoaResource.querySnat("123", "2467a068795b41ee9676bc79168da7a6", "7db47412f2b44164a16ef18b16a81c0c",
-                null);
+        localSiteSnatRoaResource.querySnat(null, "123", "2467a068795b41ee9676bc79168da7a6",
+                "7db47412f2b44164a16ef18b16a81c0c", null);
     }
 
     @Test(expected = ServiceException.class)
     public void testQuerySnat_EmptyDeviceId() throws ServiceException {
 
-        localSiteSnatRoaResource.querySnat(null, "2467a068795b41ee9676bc79168da7a6", "7db47412f2b44164a16ef18b16a81c0c",
-                "extSysID=ctrlid123");
+        localSiteSnatRoaResource.querySnat(null, null, "2467a068795b41ee9676bc79168da7a6",
+                "7db47412f2b44164a16ef18b16a81c0c", "extSysID=ctrlid123");
     }
 
     @Test(expected = ServiceException.class)
     public void testQuerySnat_EmptyNatId() throws ServiceException {
 
-        localSiteSnatRoaResource.querySnat("123", null, "7db47412f2b44164a16ef18b16a81c0c", "extSysID=ctrlid123");
+        localSiteSnatRoaResource.querySnat(null, "123", null, "7db47412f2b44164a16ef18b16a81c0c", "extSysID=ctrlid123");
     }
 
     @Test(expected = ServiceException.class)
     public void testQuerySnat_EmptyAclId() throws ServiceException {
 
-        localSiteSnatRoaResource.querySnat("123", "2467a068795b41ee9676bc79168da7a6", null, "extSysID=ctrlid123");
+        localSiteSnatRoaResource.querySnat(null, "123", "2467a068795b41ee9676bc79168da7a6", null, "extSysID=ctrlid123");
     }
 
     @Test
@@ -713,8 +715,8 @@ public class LocalSiteSNatROAResourceTest {
         snatNet.setType("create");
         snatNet.setUpdatetime("a0");
         snatNet.setUuid("a12-346");
-        ResultRsp<String> r2 = localSiteSnatRoaResource.querySnat("123", "2467a068795b41ee9676bc79168da7a6", "7db47412f2b44164a16ef18b16a81c0c",
-                "extSysID=ctrlid123");
+        ResultRsp<String> r2 = localSiteSnatRoaResource.querySnat(null, "123", "2467a068795b41ee9676bc79168da7a6",
+                "7db47412f2b44164a16ef18b16a81c0c", "extSysID=ctrlid123");
         assertEquals(r2.getErrorCode().equals("overlayvpn.operation.success"), true);
     }
 
@@ -777,8 +779,8 @@ public class LocalSiteSNatROAResourceTest {
         snatNet.setType("create");
         snatNet.setUpdatetime("a0");
         snatNet.setUuid("a12-346");
-        localSiteSnatRoaResource.querySnat("123", "2467a068795b41ee9676bc79168da7a6", "7db47412f2b44164a16ef18b16a81c0c",
-                "extSysID=ctrlid123");
+        localSiteSnatRoaResource.querySnat(null, "123", "2467a068795b41ee9676bc79168da7a6",
+                "7db47412f2b44164a16ef18b16a81c0c", "extSysID=ctrlid123");
     }
 
     @Test(expected = ServiceException.class)
@@ -828,8 +830,8 @@ public class LocalSiteSNatROAResourceTest {
         snatNet.setType("create");
         snatNet.setUpdatetime("a0");
         snatNet.setUuid("a12-346");
-        localSiteSnatRoaResource.querySnat("123", "2467a068795b41ee9676bc79168da7a6", "7db47412f2b44164a16ef18b16a81c0c",
-                "extSysID=ctrlid123");
+        localSiteSnatRoaResource.querySnat(null, "123", "2467a068795b41ee9676bc79168da7a6",
+                "7db47412f2b44164a16ef18b16a81c0c", "extSysID=ctrlid123");
     }
 
     @Test(expected = ServiceException.class)
@@ -891,8 +893,8 @@ public class LocalSiteSNatROAResourceTest {
         snatNet.setType("create");
         snatNet.setUpdatetime("a0");
         snatNet.setUuid("a12-346");
-        localSiteSnatRoaResource.querySnat("123", "2467a068795b41ee9676bc79168da7a6", "7db47412f2b44164a16ef18b16a81c0c",
-                "extSysID=ctrlid123");
+        localSiteSnatRoaResource.querySnat(null, "123", "2467a068795b41ee9676bc79168da7a6",
+                "7db47412f2b44164a16ef18b16a81c0c", "extSysID=ctrlid123");
     }
 
     @Test(expected = Exception.class)
@@ -954,7 +956,7 @@ public class LocalSiteSNatROAResourceTest {
         snatNet.setType("create");
         snatNet.setUpdatetime("a0");
         snatNet.setUuid("a12-346");
-        localSiteSnatRoaResource.querySnat("123", "2467a068795b41ee9676bc79168da7a6", "7db47412f2b44164a16ef18b16a81c0c",
-                "extSysID=ctrlid123");
+        localSiteSnatRoaResource.querySnat(null, "123", "2467a068795b41ee9676bc79168da7a6",
+                "7db47412f2b44164a16ef18b16a81c0c", "extSysID=ctrlid123");
     }
 }

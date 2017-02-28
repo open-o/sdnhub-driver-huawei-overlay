@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
@@ -30,6 +31,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -71,9 +73,10 @@ public class PolicyRouteROAResource {
 
     /**
      * Adds new QOS MQC Configuration using a specific Controller.<br>
+     *
+     * @param request HTTP request
      * @param ctrlUuidParam Controller UUID
      * @param sbiNePolicyRouteList collection of Policy Route configuration
-     *
      * @return ResultRsp object with added Policy Route configuration status data
      * @throws ServiceException when input validation fails
      * @since SDNHUB 0.5
@@ -82,7 +85,8 @@ public class PolicyRouteROAResource {
     @Path("/batch-create-policy-routes")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ResultRsp<SbiNePolicyRoute> routeCreate(@HeaderParam(CommonConst.CTRL_HEADER_PARAM) String ctrlUuidParam,
+    public ResultRsp<SbiNePolicyRoute> routeCreate(@Context HttpServletRequest request,
+            @HeaderParam(CommonConst.CTRL_HEADER_PARAM) String ctrlUuidParam,
             List<SbiNePolicyRoute> sbiNePolicyRouteList) throws ServiceException {
 
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
@@ -131,9 +135,10 @@ public class PolicyRouteROAResource {
 
     /**
      * Updates QOS MQC Configuration using a specific Controller.<br>
+     *
+     * @param request HTTP request
      * @param ctrlUuidParam Controller UUID
      * @param SbiNePolicyRouteList collection of Policy Route configuration
-     *
      * @return ResultRsp object with updated Policy Route configuration status data
      * @throws ServiceException when input validation fails
      * @since SDNHUB 0.5
@@ -142,7 +147,8 @@ public class PolicyRouteROAResource {
     @Path("/batch-update-policy-routes")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ResultRsp<SbiNePolicyRoute> routeUpdate(@HeaderParam(CommonConst.CTRL_HEADER_PARAM) String ctrlUuidParam,
+    public ResultRsp<SbiNePolicyRoute> routeUpdate(@Context HttpServletRequest request,
+            @HeaderParam(CommonConst.CTRL_HEADER_PARAM) String ctrlUuidParam,
             List<SbiNePolicyRoute> sbiNePolicyRouteList) throws ServiceException {
 
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
@@ -185,10 +191,11 @@ public class PolicyRouteROAResource {
 
     /**
      * Deletes QOS MQC Configuration using a specific Controller.<br>
+     *
+     * @param request HTTP request
      * @param ctrlUuidParam Controller UUID
      * @param deviceId device id
      * @param routeIds collection of Policy Route Id
-     *
      * @return ResultRsp object with updated Policy Route information status data
      * @throws ServiceException when input validation fails
      * @since SDNHUB 0.5
@@ -197,8 +204,9 @@ public class PolicyRouteROAResource {
     @Path("/device/{deviceid}/batch-delete-policy-routes")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ResultRsp<String> routeBatchDelete(@HeaderParam(CommonConst.CTRL_HEADER_PARAM) String ctrlUuidParam,
-            @PathParam("deviceid") String deviceId, List<String> routeIds) throws ServiceException {
+    public ResultRsp<String> routeBatchDelete(@Context HttpServletRequest request,
+            @HeaderParam(CommonConst.CTRL_HEADER_PARAM) String ctrlUuidParam, @PathParam("deviceid") String deviceId,
+            List<String> routeIds) throws ServiceException {
 
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
         if(!UuidUtil.validate(ctrlUuid)) {
@@ -226,9 +234,10 @@ public class PolicyRouteROAResource {
 
     /**
      * Queries QOS MQC Configuration using a specific Controller.<br>
+     *
+     * @param request HTTP request
      * @param ctrlUuidParam Controller UUID
      * @param SbiNePolicyRouteList collection of Policy Route configuration
-     *
      * @return ResultRsp object with updated Policy Route configuration status data
      * @throws ServiceException when input validation fails
      * @since SDNHUB 0.5
@@ -237,7 +246,8 @@ public class PolicyRouteROAResource {
     @Path("/batch-query-policy-routes")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ResultRsp<SbiNePolicyRoute> routeQuery(@HeaderParam(CommonConst.CTRL_HEADER_PARAM) String ctrlUuidParam,
+    public ResultRsp<SbiNePolicyRoute> routeQuery(@Context HttpServletRequest request,
+            @HeaderParam(CommonConst.CTRL_HEADER_PARAM) String ctrlUuidParam,
             List<SbiNePolicyRoute> sbiNePolicyRouteList) throws ServiceException {
 
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);

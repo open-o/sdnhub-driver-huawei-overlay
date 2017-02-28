@@ -16,12 +16,14 @@
 
 package org.openo.sdnhub.overlayvpndriver.rest;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.openo.baseservice.remoteservice.exception.ServiceException;
@@ -58,10 +60,11 @@ public class SubnetBDIfROAResource {
 
     /**
      * Queries Vni-related BD information using a specific Controller.<br/>
+     *
+     * @param request HTTP request
      * @param deviceId device id
      * @param vni vni information
      * @param ctrlUuidParam Controller UUID
-     *
      * @return ResultRsp object with Vni-related BD queried information status data
      * @throws ServiceException when input validation fails
      * @since SDNHUB 0.5
@@ -70,8 +73,9 @@ public class SubnetBDIfROAResource {
     @Path("/device/{deviceid}/bdinfo/vni/{vni}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ResultRsp<SbiSubnetBdInfoModel> queryBDIf(@PathParam(DEVICE_ID_PATH_PARAM) String deviceId,
-            @PathParam(VNI_PATH_PARAM) String vni, @HeaderParam(CTRL_HEADER_PARAM) String ctrlUuidParam) throws ServiceException {
+    public ResultRsp<SbiSubnetBdInfoModel> queryBDIf(@Context HttpServletRequest request,
+            @PathParam(DEVICE_ID_PATH_PARAM) String deviceId, @PathParam(VNI_PATH_PARAM) String vni,
+            @HeaderParam(CTRL_HEADER_PARAM) String ctrlUuidParam) throws ServiceException {
 
         long startTime = System.currentTimeMillis();
 

@@ -16,6 +16,7 @@
 
 package org.openo.sdnhub.overlayvpndriver.rest;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -25,6 +26,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.openo.baseservice.remoteservice.exception.ServiceException;
@@ -70,10 +72,11 @@ public class LocalSiteSNatROAResource {
     private static final String NETMODEL_AC_OPER_ERROR = "SNatNetModel ac oper err.";
     /**
      * Create SNAT configuration.<br/>
+     *
+     * @param request Http request context
      * @param deviceId Device ID
      * @param ctrlUuidParam Controller UUID
      * @param snatNet SNAT configuration for device
-     *
      * @return RestultRsp object for created SNAT cofigurations
      * @throws ServiceException In case of create operation fails
      * @since SDNHUB 0.5
@@ -82,8 +85,9 @@ public class LocalSiteSNatROAResource {
     @Path("/device/{deviceid}/snat")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ResultRsp<SbiSnatNetModel> createSnat(@PathParam("deviceid") String deviceId,
-            @HeaderParam("X-Driver-Parameter") String ctrlUuidParam, SbiSnatNetModel snatNet) throws ServiceException {
+    public ResultRsp<SbiSnatNetModel> createSnat(@Context HttpServletRequest request,
+            @PathParam("deviceid") String deviceId, @HeaderParam("X-Driver-Parameter") String ctrlUuidParam,
+            SbiSnatNetModel snatNet) throws ServiceException {
 
         long startTime = System.currentTimeMillis();
 
@@ -123,11 +127,12 @@ public class LocalSiteSNatROAResource {
 
     /**
      * Delete SNAT configuration from device.<br/>
+     *
+     * @param request Http request context
      * @param deviceId Device ID
      * @param natId NAT ID
      * @param aclId ACL ID
      * @param ctrlUuidParam Controller UUID
-     *
      * @return ResutlRsp for deleted SNAT
      * @throws ServiceException In case of create operation fails.
      * @since SDNHUB 0.5
@@ -136,8 +141,9 @@ public class LocalSiteSNatROAResource {
     @Path("/device/{deviceid}/snat/{natid}/acl/{aclid}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ResultRsp<String> deleteSnat(@PathParam("deviceid") String deviceId, @PathParam("natid") String natId,
-            @PathParam("aclid") String aclId, @HeaderParam("X-Driver-Parameter") String ctrlUuidParam) throws ServiceException {
+    public ResultRsp<String> deleteSnat(@Context HttpServletRequest request, @PathParam("deviceid") String deviceId,
+            @PathParam("natid") String natId, @PathParam("aclid") String aclId,
+            @HeaderParam("X-Driver-Parameter") String ctrlUuidParam) throws ServiceException {
 
         long startTime = System.currentTimeMillis();
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
@@ -168,11 +174,12 @@ public class LocalSiteSNatROAResource {
 
     /**
      * Query SNAT configuration for device.<br/>
+     *
+     * @param request Http request context
      * @param deviceId Device ID
      * @param natId NAT ID
      * @param aclId ACL ID
      * @param ctrlUuidParam Controller UUID
-     *
      * @return ResultRes for queried SNAT
      * @throws ServiceException In case of create operation fails.
      * @since SDNHUB 0.5
@@ -181,8 +188,9 @@ public class LocalSiteSNatROAResource {
     @Path("/device/{deviceid}/snat/{natid}/acl/{aclid}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ResultRsp<String> querySnat(@PathParam("deviceid") String deviceId, @PathParam("natid") String natId,
-            @PathParam("aclid") String aclId, @HeaderParam("X-Driver-Parameter") String ctrlUuidParam) throws ServiceException {
+    public ResultRsp<String> querySnat(@Context HttpServletRequest request, @PathParam("deviceid") String deviceId,
+            @PathParam("natid") String natId, @PathParam("aclid") String aclId,
+            @HeaderParam("X-Driver-Parameter") String ctrlUuidParam) throws ServiceException {
 
         long startTime = System.currentTimeMillis();
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
@@ -208,10 +216,11 @@ public class LocalSiteSNatROAResource {
 
     /**
      * Update SNAT configuration for device.<br/>
+     *
+     * @param request Http request context
      * @param deviceId Device ID
      * @param ctrlUuidParam Controller UUID
      * @param snatNet
-     *
      * @return ResultRsp for updated SNAT
      * @throws ServiceException In case of create operation fails.
      * @since SDNHUB 0.5
@@ -220,8 +229,9 @@ public class LocalSiteSNatROAResource {
     @Path("/device/{deviceid}/snat")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ResultRsp<SbiSnatNetModel> updateSnat(@PathParam("deviceid") String deviceId,
-            @HeaderParam("X-Driver-Parameter") String ctrlUuidParam, SbiSnatNetModel snatNet) throws ServiceException {
+    public ResultRsp<SbiSnatNetModel> updateSnat(@Context HttpServletRequest request,
+            @PathParam("deviceid") String deviceId, @HeaderParam("X-Driver-Parameter") String ctrlUuidParam,
+            SbiSnatNetModel snatNet) throws ServiceException {
 
         long startTime = System.currentTimeMillis();
 

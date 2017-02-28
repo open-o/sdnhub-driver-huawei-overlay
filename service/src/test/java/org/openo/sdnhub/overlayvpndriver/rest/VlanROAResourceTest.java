@@ -75,7 +75,7 @@ public class VlanROAResourceTest {
         List<SbiIfVlan> ifVlans = new ArrayList<>();
         ifVlans.add(vlan);
 
-        ResultRsp<List<SbiIfVlan>> res = roa.createVlan("111", "123", ifVlans);
+        ResultRsp<List<SbiIfVlan>> res = roa.createVlan(null, "111", "123", ifVlans);
         assertTrue(res.isSuccess());
     }
 
@@ -84,14 +84,14 @@ public class VlanROAResourceTest {
             IllegalArgumentException, IllegalAccessException {
 
         VlanROAResource roa = new VlanROAResource();
-        roa.createVlan("111", "123$$", null);
+        roa.createVlan(null, "111", "123$$", null);
     }
 
     @Test(expected = ServiceException.class)
     public void testCreateVlanInvalidIP2() throws ServiceException, NoSuchFieldException, SecurityException,
             IllegalArgumentException, IllegalAccessException {
         VlanROAResource roa = new VlanROAResource();
-        roa.createVlan("111", "123", new ArrayList<>());
+        roa.createVlan(null, "111", "123", new ArrayList<>());
     }
 
     @Test(expected = ServiceException.class)
@@ -125,7 +125,7 @@ public class VlanROAResourceTest {
         List<SbiIfVlan> ifVlans = new ArrayList<>();
         ifVlans.add(vlan);
 
-        ResultRsp<List<SbiIfVlan>> res = roa.createVlan("111", "123", ifVlans);
+        ResultRsp<List<SbiIfVlan>> res = roa.createVlan(null, "111", "123", ifVlans);
         assertTrue(res.isSuccess());
     }
 
@@ -169,7 +169,7 @@ public class VlanROAResourceTest {
         vlan.setDefaultVlan(123);
         List<SbiIfVlan> ifVlans = new ArrayList<>();
         ifVlans.add(vlan);
-        ResultRsp<List<SbiIfVlan>> res = roa.updateVlan("111", "123", ifVlans);
+        ResultRsp<List<SbiIfVlan>> res = roa.updateVlan(null, "111", "123", ifVlans);
         assertEquals(res.getData().get(0).getEthInterfaceConfigId(), "b6cf7eb4038049dfac86391421f37b7f");
     }
 
@@ -215,7 +215,7 @@ public class VlanROAResourceTest {
         vlan.setDefaultVlan(123);
         List<SbiIfVlan> ifVlans = new ArrayList<>();
         ifVlans.add(vlan);
-        roa.updateVlan("111", "123", ifVlans);
+        roa.updateVlan(null, "111", "123", ifVlans);
     }
 
     @Test(expected = ServiceException.class)
@@ -223,14 +223,14 @@ public class VlanROAResourceTest {
             IllegalArgumentException, IllegalAccessException {
 
         VlanROAResource roa = new VlanROAResource();
-        roa.updateVlan("111", "123$$", null);
+        roa.updateVlan(null, "111", "123$$", null);
     }
 
     @Test(expected = ServiceException.class)
     public void testUpdateVlanInvalidIP2s() throws ServiceException, NoSuchFieldException, SecurityException,
             IllegalArgumentException, IllegalAccessException {
         VlanROAResource roa = new VlanROAResource();
-        roa.createVlan("111", "123", new ArrayList<>());
+        roa.createVlan(null, "111", "123", new ArrayList<>());
     }
 
     @Test
@@ -263,7 +263,7 @@ public class VlanROAResourceTest {
         List<SbiIfVlan> ifVlans = new ArrayList<>();
         ifVlans.add(vlan);
 
-        ResultRsp<List<SbiIfVlan>> res = roa.queryVlan("111", "", "123");
+        ResultRsp<List<SbiIfVlan>> res = roa.queryVlan(null, "111", "", "123");
         assertTrue(res.isSuccess()
                 && res.getData().get(0).getEthInterfaceConfigId().equals("b6cf7eb4038049dfac86391421f37b7f"));
     }
@@ -273,14 +273,14 @@ public class VlanROAResourceTest {
             IllegalArgumentException, IllegalAccessException {
 
         VlanROAResource roa = new VlanROAResource();
-        roa.queryVlan("111", "123$$", "123$$");
+        roa.queryVlan(null, "111", "123$$", "123$$");
     }
 
     @Test(expected = ServiceException.class)
     public void testUpdateVlanInvalidIP2() throws ServiceException, NoSuchFieldException, SecurityException,
             IllegalArgumentException, IllegalAccessException {
         VlanROAResource roa = new VlanROAResource();
-        roa.updateVlan("111", "123", new ArrayList<>());
+        roa.updateVlan(null, "111", "123", new ArrayList<>());
     }
 
 }

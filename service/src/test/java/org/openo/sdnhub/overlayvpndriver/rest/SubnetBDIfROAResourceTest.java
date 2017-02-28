@@ -144,7 +144,7 @@ public class SubnetBDIfROAResourceTest {
 
         String ctrlUuidParam = "X-Driver-Parameter";
         ResultRsp<SbiSubnetBdInfoModel> expected =
-                subnetbdiroaresource.queryBDIf(deviceId, vni, ctrlUuidParam);
+                subnetbdiroaresource.queryBDIf(request, deviceId, vni, ctrlUuidParam);
         assertEquals("overlayvpn.operation.success", expected.getErrorCode());
     }
 
@@ -182,7 +182,7 @@ public class SubnetBDIfROAResourceTest {
             }
         };
         String ctrlUuidParam = null;
-        subnetbdiroaresource.queryBDIf(deviceId, vni, ctrlUuidParam);
+        subnetbdiroaresource.queryBDIf(request, deviceId, vni, ctrlUuidParam);
     }
 
     @Test(expected = ServiceException.class)
@@ -225,6 +225,6 @@ public class SubnetBDIfROAResourceTest {
             }
         };
         String ctrlUuidParam = "X-Driver-Parameter";
-        subnetbdiroaresource.queryBDIf(deviceId, vni, ctrlUuidParam);
+        subnetbdiroaresource.queryBDIf(request, deviceId, vni, ctrlUuidParam);
     }
 }

@@ -30,8 +30,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <swagger-core-version>1.5.0</swagger-core-version>
         <bsp-framework-version>3.0.0-SNAPSHOT</bsp-framework-version>
-        <springfwk.version>4.2.4.RELEASE</springfwk.version>
-        <springfwk.ex.version>4.2.4.RELEASE.fixed.3500</springfwk.ex.version>
+        <springfwk.version>3.1.0.RELEASE</springfwk.version>
+        <springfwk.ex.version>3.1.0.RELEASE.fixed.3500</springfwk.ex.version>
         <cxf.version>3.1.6</cxf.version>
         <slf4j.version>1.6.1</slf4j.version>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -109,32 +109,32 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
-            <version>4.2.4.RELEASE</version>
+            <version>3.1.0.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-aop</artifactId>
-            <version>4.2.4.RELEASE</version>
+            <version>3.1.0.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-beans</artifactId>
-            <version>4.2.4.RELEASE</version>
+            <version>3.1.0.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-            <version>4.2.4.RELEASE</version>
+            <version>3.1.0.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
-            <version>4.2.4.RELEASE</version>
+            <version>3.1.0.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
-            <version>4.2.4.RELEASE</version>
+            <version>3.1.0.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -144,12 +144,12 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-expression</artifactId>
-            <version>4.2.4.RELEASE</version>
+            <version>3.1.0.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-tx</artifactId>
-            <version>4.2.4.RELEASE</version>
+            <version>3.1.0.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.jmockit</groupId>

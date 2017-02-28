@@ -16,8 +16,6 @@
 
 package org.openo.sdnhub.overlayvpndriver.rest;
 
-import static org.openo.sdnhub.overlayvpndriver.common.consts.CommonConst.CTRL_HEADER_PARAM;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -25,6 +23,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
@@ -32,9 +31,12 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.Transformer;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
 import org.openo.sdnhub.overlayvpndriver.common.util.RequestHeaderUtil;
 import org.openo.sdnhub.overlayvpndriver.controller.model.IpsecConnList;
@@ -43,6 +45,8 @@ import org.openo.sdnhub.overlayvpndriver.sbi.impl.IpsecImpl;
 import org.openo.sdnhub.overlayvpndriver.service.model.SbiNeIpSec;
 import org.openo.sdnhub.overlayvpndriver.translator.NeConnectionToIpsec;
 import org.openo.sdno.exception.ParameterServiceException;
+import org.openo.sdno.framework.container.util.JsonUtil;
+import org.openo.sdno.overlayvpn.consts.CommConst;
 import org.openo.sdno.overlayvpn.errorcode.ErrorCode;
 import org.openo.sdno.overlayvpn.errorcode.ErrorCodeInfo;
 import org.openo.sdno.overlayvpn.result.FailData;
@@ -55,6 +59,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import static org.openo.sdnhub.overlayvpndriver.common.consts.CommonConst.CTRL_HEADER_PARAM;
+
 /**
  * Restful interface for IP-security VPN configuration.<br>
  *
@@ -66,18 +72,16 @@ import org.springframework.stereotype.Service;
 public class IpSecROAResource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IpSecROAResource.class);
-    private static final String INVALID_CONTROLLER_UUID = "Invalid controller UUID.";
-    private static final String NULL_OR_EMPTY_BODY_PARAMETER = "Request body parameter is null or empty.";
-
 
     @Autowired
     private IpsecImpl ipsecService;
 
     /**
      * Adds new IPSec VPN configuration using a specific controller.<br>
+     *
+     * @param request HTTP request
      * @param ctrlUuidParam Controller UUID
      * @param ipSecNeConnectionList collection of IPSec VPN configuration
-     *
      * @return ResultRsp object with IPSec VPN added configuration status data
      * @throws ServiceException when input validation fails
      * @since SDNHUB 0.5
@@ -86,8 +90,8 @@ public class IpSecROAResource {
     @Path("/device/batch-create-ipsecs")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ResultRsp<SbiNeIpSec> ipsecCreate(@HeaderParam(CTRL_HEADER_PARAM) String ctrlUuidParam,
-            List<SbiNeIpSec> ipSecNeConnectionList)
+    public ResultRsp<SbiNeIpSec> ipsecCreate(@Context HttpServletRequest request,
+            @HeaderParam(CTRL_HEADER_PARAM) String ctrlUuidParam, List<SbiNeIpSec> ipSecNeConnectionList)
             throws ServiceException {
 
         long beginTime = System.currentTimeMillis();
@@ -99,13 +103,13 @@ public class IpSecROAResource {
         totalResult.setFail(new ArrayList<FailData<SbiNeIpSec>>());
 
         if(!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error(INVALID_CONTROLLER_UUID);
-            throw new ParameterServiceException(INVALID_CONTROLLER_UUID);
+            LOGGER.error("Invalid controller UUID.");
+            throw new ParameterServiceException("Invalid controller UUID.");
         }
 
         if(CollectionUtils.isEmpty(ipSecNeConnectionList)) {
-            LOGGER.error(NULL_OR_EMPTY_BODY_PARAMETER);
-            throw new ParameterServiceException(NULL_OR_EMPTY_BODY_PARAMETER);
+            LOGGER.error("Request body parameter is null or empty.");
+            throw new ParameterServiceException("Request body parameter is null or empty.");
         }
 
         for(SbiNeIpSec ipsecModel : ipSecNeConnectionList){
@@ -127,7 +131,7 @@ public class IpSecROAResource {
                 ipsecService.fillSmallErrorInfo(errorCodeInfoLst, entry, resultRsp);
                 for(SbiNeIpSec SbiNeIpSec : deviceIdToTpsecConnListMap.get(entry.getKey())) {
                     FailData<SbiNeIpSec> failData =
-                            new FailData<>(resultRsp.getErrorCode(), resultRsp.getMessage(), SbiNeIpSec);
+                            new FailData<SbiNeIpSec>(resultRsp.getErrorCode(), resultRsp.getMessage(), SbiNeIpSec);
                     totalResult.getFail().add(failData);
                 }
             }
@@ -138,10 +142,11 @@ public class IpSecROAResource {
 
     /**
      * Deletes IPSec VPN configuration using a specific controller.<br>
+     *
+     * @param request HTTP request
      * @param ctrlUuidParam Controller UUID
      * @param deviceId device id
      * @param ipsecList collection of IPSec VPN configuration
-     *
      * @return ResultRsp object with IPSec VPN deleted configuration status data
      * @throws ServiceException when input validation fails
      * @since SDNHUB 0.5
@@ -151,27 +156,34 @@ public class IpSecROAResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @SuppressWarnings("unchecked")
-    public ResultRsp<SbiNeIpSec> deleteIpSec(@HeaderParam(CTRL_HEADER_PARAM) String ctrlUuidParam,
-            @PathParam("deviceid") String deviceId, List<SbiNeIpSec> ipsecList) throws ServiceException {
+    public ResultRsp<SbiNeIpSec> deleteIpSec(@Context HttpServletRequest request,
+            @HeaderParam(CTRL_HEADER_PARAM) String ctrlUuidParam, @PathParam("deviceid") String deviceId,
+            List<SbiNeIpSec> ipsecList) throws ServiceException {
 
         long beginTime = System.currentTimeMillis();
         LOGGER.debug("Ipsec delete begin time = " + beginTime);
 
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
         if(!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error(INVALID_CONTROLLER_UUID);
-            throw new ParameterServiceException(INVALID_CONTROLLER_UUID);
+            LOGGER.error("Invalid controller UUID.");
+            throw new ParameterServiceException("Invalid controller UUID.");
         }
 
         if(CollectionUtils.isEmpty(ipsecList)) {
-            LOGGER.error(NULL_OR_EMPTY_BODY_PARAMETER);
-            throw new ParameterServiceException(NULL_OR_EMPTY_BODY_PARAMETER);
+            LOGGER.error("Request body parameter is null or empty.");
+            throw new ParameterServiceException("Request body parameter is null or empty.");
         }
 
         ValidationUtil.validateModel(ipsecList);
         CheckStrUtil.checkUuidStr(deviceId);
 
-        List<String> externalIds = new ArrayList<>(CollectionUtils.collect(ipsecList, arg0 -> ((SbiNeIpSec)arg0).getExternalId()));
+        List<String> externalIds = new ArrayList<>(CollectionUtils.collect(ipsecList, new Transformer() {
+
+            @Override
+            public Object transform(Object arg0) {
+                return ((SbiNeIpSec)arg0).getExternalId();
+            }
+        }));
 
         ipsecService.checkSeqNumber(externalIds);
         ResultRsp<SbiNeIpSec> response = ipsecService.batchDeleteIpsecConn(ctrlUuid, ipsecList);
@@ -181,9 +193,10 @@ public class IpSecROAResource {
 
     /**
      * Queries IPSec VPN configuration using a specific controller.<br>
+     *
+     * @param request HTTP request
      * @param ctrlUuidParam Controller UUID
      * @param ipSecNeConnectionList collection of IPSec VPN configuration
-     *
      * @return ResultRsp object with IPSec VPN queried configuration status data
      * @throws ServiceException when input validation fails
      * @since SDNHUB 0.5
@@ -192,35 +205,34 @@ public class IpSecROAResource {
     @Path("/device/batch-query-ipsecs")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ResultRsp<SbiNeIpSec> query(@HeaderParam(CTRL_HEADER_PARAM) String ctrlUuidParam,
-            List<SbiNeIpSec> ipSecNeConnectionList)
+    public ResultRsp<SbiNeIpSec> query(@Context HttpServletRequest request,
+            @HeaderParam(CTRL_HEADER_PARAM) String ctrlUuidParam, List<SbiNeIpSec> ipSecNeConnectionList)
             throws ServiceException {
 
         long beginTime = System.currentTimeMillis();
         LOGGER.debug("Ipsec query begin time = " + beginTime);
 
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
-
         if(!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error(INVALID_CONTROLLER_UUID);
-            throw new ParameterServiceException(INVALID_CONTROLLER_UUID);
+            LOGGER.error("Invalid controller UUID.");
+            throw new ParameterServiceException("Invalid controller UUID.");
         }
+
         if(CollectionUtils.isEmpty(ipSecNeConnectionList)) {
-            LOGGER.error(NULL_OR_EMPTY_BODY_PARAMETER);
-            throw new ParameterServiceException(NULL_OR_EMPTY_BODY_PARAMETER);
+            LOGGER.error("Request body parameter is null or empty.");
+            throw new ParameterServiceException("Request body parameter is null or empty.");
         }
         ValidationUtil.validateModel(ipSecNeConnectionList);
 
-        ResultRsp<SbiNeIpSec> totalResult = new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS);
+        ResultRsp<SbiNeIpSec> totalResult = new ResultRsp<SbiNeIpSec>(ErrorCode.OVERLAYVPN_SUCCESS);
         for(SbiNeIpSec neIpSec : ipSecNeConnectionList) {
             try {
                 ResultRsp<List<IpsecConnList>> rsp = ipsecService.queryIpsecByDevice(ctrlUuid, neIpSec.getDeviceId(),
                         neIpSec.getSoureIfName());
 
                 totalResult.setSuccessed(new ArrayList<SbiNeIpSec>());
-            	
-           	 for(IpsecConnList ipsecModel : rsp.getData()) {
-                    Set<String> seqNumSet = new HashSet<>();
+                for(IpsecConnList ipsecModel : rsp.getData()) {
+                    Set<String> seqNumSet = new HashSet<String>();
                     for(IpsecConnection ipsecCon : ipsecModel.getIpsecConnection())
                     {
                         seqNumSet.add(String.valueOf(ipsecCon.getSeqNumber()));
@@ -232,14 +244,14 @@ public class IpSecROAResource {
                     }
                     else
                     {
-                        FailData<SbiNeIpSec> failData = new FailData<>(ErrorCode.OVERLAYVPN_FAILED, "can not find", neIpSec);
+                        FailData<SbiNeIpSec> failData = new FailData<SbiNeIpSec>(ErrorCode.OVERLAYVPN_FAILED, "can not find", neIpSec);
                         totalResult.getFail().add(failData);
                     }
                 }
             } catch(ServiceException e) {
                 LOGGER.error("query failed!", e);
                 FailData<SbiNeIpSec> failData =
-                        new FailData<>(ErrorCode.OVERLAYVPN_FAILED, "query failed", neIpSec);
+                        new FailData<SbiNeIpSec>(ErrorCode.OVERLAYVPN_FAILED, "query failed", neIpSec);
                 totalResult.getFail().add(failData);
             }
         }
@@ -249,9 +261,10 @@ public class IpSecROAResource {
 
     /**
      * Updates IPSec VPN configuration using a specific controller.<br>
+     *
+     * @param request HTTP request
      * @param ctrlUuidParam Controller UUID
      * @param ipSecNeConnectionList collection of IPSec VPN configuration
-     *
      * @return ResultRsp object with IPSec VPN updated configuration status data
      * @throws ServiceException when input validation fails
      * @since SDNHUB 0.5
@@ -260,27 +273,29 @@ public class IpSecROAResource {
     @Path("/device/batch-update-ipsecs")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ResultRsp<SbiNeIpSec> ipsecUpdate(@HeaderParam(CTRL_HEADER_PARAM) String ctrlUuidParam,
-            List<SbiNeIpSec> ipSecNeConnectionList)
+    public ResultRsp<SbiNeIpSec> ipsecUpdate(@Context HttpServletRequest request,
+            @HeaderParam(CTRL_HEADER_PARAM) String ctrlUuidParam, List<SbiNeIpSec> ipSecNeConnectionList)
             throws ServiceException {
 
         long beginTime = System.currentTimeMillis();
         LOGGER.debug("Ipsec update begin time = " + beginTime);
 
-        ResultRsp<SbiNeIpSec> totalResult = new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS);
+        ResultRsp<SbiNeIpSec> totalResult = new ResultRsp<SbiNeIpSec>(ErrorCode.OVERLAYVPN_SUCCESS);
         totalResult.setSuccessed(new ArrayList<SbiNeIpSec>());
         totalResult.setFail(new ArrayList<FailData<SbiNeIpSec>>());
 
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
 
         if(!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error(INVALID_CONTROLLER_UUID);
-            throw new ParameterServiceException(INVALID_CONTROLLER_UUID);
+            LOGGER.error("Invalid controller UUID.");
+            throw new ParameterServiceException("Invalid controller UUID.");
         }
+
         if(CollectionUtils.isEmpty(ipSecNeConnectionList)) {
-            LOGGER.error(NULL_OR_EMPTY_BODY_PARAMETER);
-            throw new ParameterServiceException(NULL_OR_EMPTY_BODY_PARAMETER);
+            LOGGER.error("Request body parameter is null or empty.");
+            throw new ParameterServiceException("Request body parameter is null or empty.");
         }
+
         ValidationUtil.validateModel(ipSecNeConnectionList);
 
         for(SbiNeIpSec neIpSec : ipSecNeConnectionList)
