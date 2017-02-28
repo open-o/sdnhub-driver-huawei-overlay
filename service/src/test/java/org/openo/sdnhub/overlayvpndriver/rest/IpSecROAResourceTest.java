@@ -135,7 +135,7 @@ public class IpSecROAResourceTest {
         sbiNeIpSec.setUuid("654");
         sbiNeIpSec.setWorkType("work");
         ipSecNeConnectionList.add(sbiNeIpSec);
-        
+
         new MockUp<ValidationUtil>() {
 
             @Mock
@@ -405,7 +405,7 @@ public class IpSecROAResourceTest {
 
     @Test
     public void testDeleteIpSec() throws ServiceException {
-        
+
         new MockUp<OverlayVpnDriverProxy>() {
 
             private List<RuleList> ruleList;
@@ -495,7 +495,7 @@ public class IpSecROAResourceTest {
 
     @Test
     public void testQuery() throws ServiceException {
-        
+
         new MockUp<OverlayVpnDriverProxy>() {
 
             private List<RuleList> ruleList;

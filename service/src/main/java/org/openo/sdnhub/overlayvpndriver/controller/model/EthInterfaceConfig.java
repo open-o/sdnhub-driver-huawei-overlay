@@ -43,7 +43,7 @@ public class EthInterfaceConfig {
     @AString(require = true, scope = "'1','2'")
     private String ifAttr;
 
-    private String defaultVlan;
+    private Integer defaultVlan;
 
     private String trunkVlan;
 
@@ -74,11 +74,11 @@ public class EthInterfaceConfig {
         this.name = name;
     }
 
-    public String getDefaultVlan() {
+    public Integer getDefaultVlan() {
         return defaultVlan;
     }
 
-    public void setDefaultVlan(String defaultVlan) {
+    public void setDefaultVlan(Integer defaultVlan) {
         this.defaultVlan = defaultVlan;
     }
 

@@ -137,7 +137,7 @@ public class VlanServiceImpl {
         } else {
             ethConfig = ethConfigList.get(0);
         }
-        ethConfig.setDefaultVlan(inf.getDefaultVlan().toString());
+        ethConfig.setDefaultVlan(inf.getDefaultVlan());
         ethConfig.setTrunkVlan(String.valueOf(inf.getDefaultVlan()));
 
         return ethConfig;
@@ -178,7 +178,7 @@ public class VlanServiceImpl {
             throw new ServiceException("localsite.vlan.ac.error", "no config in ac");
         }
         EthInterfaceConfig ethConfig = ethConfigList.get(0);
-        ethConfig.setDefaultVlan(ifVlan.getDefaultVlan().toString());
+        ethConfig.setDefaultVlan(ifVlan.getDefaultVlan());
         ethConfig.setTrunkVlan(String.valueOf(ifVlan.getDefaultVlan()));
         return ethConfig;
     }

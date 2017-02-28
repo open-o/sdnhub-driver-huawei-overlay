@@ -7,6 +7,15 @@
         "protocol": "http",
         "services": [
             {
+                "service_url": "/openoapi/sbi-localsite/v1",
+                "support_sys": [
+                    {
+                        "type": "Agile Controller-BRANCH",
+                        "version": "V200R002C00"
+                    }
+                ]
+            },
+            {
                 "service_url": "/openoapi/sbi-vxlan/v1",
                 "support_sys": [
                     {
@@ -25,7 +34,7 @@
                 ]
             },
             {
-                "service_url": "/openoapi/sbi-waninterface/v1",
+                "service_url": "/openoapi/sbi-route/v1",
                 "support_sys": [
                     {
                         "type": "Agile Controller-BRANCH",
