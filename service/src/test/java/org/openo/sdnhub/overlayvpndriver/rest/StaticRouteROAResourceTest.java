@@ -27,11 +27,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
+import org.openo.sdnhub.overlayvpndriver.controller.model.ControllerNbiStaticRoute;
 import org.openo.sdnhub.overlayvpndriver.http.OverlayVpnDriverProxy;
+import org.openo.sdnhub.overlayvpndriver.result.OverlayVpnDriverResponse;
 import org.openo.sdnhub.overlayvpndriver.sbi.impl.StaticRouteImpl;
 import org.openo.sdno.overlayvpn.model.v2.route.SbiNeStaticRoute;
 import org.openo.sdno.overlayvpn.result.ResultRsp;
 import org.openo.sdno.overlayvpn.util.check.ValidationUtil;
+import org.openo.sdno.testframework.util.file.JsonUtil;
 import org.openo.sdno.util.http.HTTPReturnMessage;
 
 import java.lang.reflect.Field;
@@ -89,8 +92,15 @@ public class StaticRouteROAResourceTest {
             @Mock
             public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
 
+                ControllerNbiStaticRoute nbiStaticRoute = new ControllerNbiStaticRoute();
+                nbiStaticRoute.setId("123");
+                nbiStaticRoute.setNextHop("123");
+                nbiStaticRoute.setDhcp(true);
+                OverlayVpnDriverResponse<ControllerNbiStaticRoute> response = new OverlayVpnDriverResponse<>();
+                response.setErrcode("0");
+                response.setData(nbiStaticRoute);
                 HTTPReturnMessage msg = new HTTPReturnMessage();
-                msg.setBody(queryResJson);
+                msg.setBody(JsonUtil.toJson(response));
                 msg.setStatus(200);
                 return msg;
             }

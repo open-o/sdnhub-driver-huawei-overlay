@@ -35,11 +35,13 @@ import org.openo.sdnhub.overlayvpndriver.http.OverlayVpnDriverProxy;
 import org.openo.sdnhub.overlayvpndriver.result.ACDelResponse;
 import org.openo.sdnhub.overlayvpndriver.result.OverlayVpnDriverResponse;
 import org.openo.sdnhub.overlayvpndriver.sbi.impl.IpsecImpl;
+import org.openo.sdnhub.overlayvpndriver.service.model.Ip;
 import org.openo.sdnhub.overlayvpndriver.service.model.SbiIkePolicy;
 import org.openo.sdnhub.overlayvpndriver.service.model.SbiIpSecPolicy;
 import org.openo.sdnhub.overlayvpndriver.service.model.SbiNeIpSec;
 import org.openo.sdno.framework.container.util.JsonUtil;
 import org.openo.sdno.overlayvpn.result.ResultRsp;
+import org.openo.sdno.overlayvpn.util.check.ValidationUtil;
 import org.openo.sdno.util.http.HTTPReturnMessage;
 
 import java.lang.reflect.Field;
@@ -83,7 +85,11 @@ public class IpSecROAResourceTest {
         sbiNeIpSec.setDestIfName("destIfName");
         sbiNeIpSec.setDeviceId("123");
         sbiNeIpSec.setExternalId("111");
-        sbiNeIpSec.setExternalIpSecId("222");
+        sbiNeIpSec.setExternalIpSecId("92345728-2345678");
+        Ip ip = new Ip();
+        ip.setIpv4("10.172.31.12");
+        ip.setUuid("12345678");
+        sbiNeIpSec.setPeerAddress(JsonUtil.toJson(ip));
         SbiIkePolicy ikePolicy = new SbiIkePolicy();
         ikePolicy.setAuthAlgorithm("md5");
         ikePolicy.setEncryptionAlgorithm("des");
@@ -112,7 +118,7 @@ public class IpSecROAResourceTest {
         sbiNeIpSec.setNeId("333");
         sbiNeIpSec.setNqa("nqa");
         sbiNeIpSec.setOperationStatus("None");
-        sbiNeIpSec.setPeerAddress("10.10.2.3");
+        //sbiNeIpSec.setPeerAddress("10.10.2.3");
         sbiNeIpSec.setPeerDeviceId("444");
         sbiNeIpSec.setPeerLanCidrs("10.21.54.6");
         sbiNeIpSec.setPeerNeId("555");
@@ -129,6 +135,14 @@ public class IpSecROAResourceTest {
         sbiNeIpSec.setUuid("654");
         sbiNeIpSec.setWorkType("work");
         ipSecNeConnectionList.add(sbiNeIpSec);
+        
+        new MockUp<ValidationUtil>() {
+
+            @Mock
+            public void validateModel(Object obj) throws ServiceException {
+
+            }
+        };
     }
 
     @Test
@@ -391,6 +405,7 @@ public class IpSecROAResourceTest {
 
     @Test
     public void testDeleteIpSec() throws ServiceException {
+        
         new MockUp<OverlayVpnDriverProxy>() {
 
             private List<RuleList> ruleList;
@@ -480,6 +495,7 @@ public class IpSecROAResourceTest {
 
     @Test
     public void testQuery() throws ServiceException {
+        
         new MockUp<OverlayVpnDriverProxy>() {
 
             private List<RuleList> ruleList;

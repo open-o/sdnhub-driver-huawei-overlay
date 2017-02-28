@@ -49,37 +49,20 @@ public class StaticRouteImplTest {
             @Mock
             public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
 
-                OverlayVpnDriverResponse<List<ControllerNbiStaticRoute>> response =
-                        new OverlayVpnDriverResponse<List<ControllerNbiStaticRoute>>();
-
-                List<ControllerNbiStaticRoute> list = new ArrayList<ControllerNbiStaticRoute>();
-
-                ControllerNbiStaticRoute route = new ControllerNbiStaticRoute();
-                route.setId("123");
-                list.add(route);
-                response.setData(list);
-                response.setErrcode("success");
-
+                ControllerNbiStaticRoute nbiStaticRoute = new ControllerNbiStaticRoute();
+                nbiStaticRoute.setId("123");
+                nbiStaticRoute.setNextHop("123");
+                nbiStaticRoute.setDhcp(true);
+                OverlayVpnDriverResponse<ControllerNbiStaticRoute> response = new OverlayVpnDriverResponse<>();
+                response.setErrcode("0");
+                response.setData(nbiStaticRoute);
                 HTTPReturnMessage msg = new HTTPReturnMessage();
                 msg.setBody(JsonUtil.toJson(response));
+                msg.setStatus(200);
                 return msg;
             }
         };
 
-        new MockUp<HTTPReturnMessage>() {
-
-            @Mock
-            public boolean isSuccess() {
-                return true;
-            }
-        };
-
-        new MockUp<OverlayVpnDriverResponse<List<ControllerNbiStaticRoute>>>() {
-            @Mock
-            public boolean isSucess() {
-                return true;
-            }
-        };
         String deviceId = "111";
         String destIp = "10.20.10.30";
         String staticRouteId = "staticRouteId";
@@ -98,30 +81,20 @@ public class StaticRouteImplTest {
             @Mock
             public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
 
-                OverlayVpnDriverResponse<List<ControllerNbiStaticRoute>> response =
-                        new OverlayVpnDriverResponse<List<ControllerNbiStaticRoute>>();
-
-                List<ControllerNbiStaticRoute> list = new ArrayList<ControllerNbiStaticRoute>();
-
-                ControllerNbiStaticRoute route = new ControllerNbiStaticRoute();
-                route.setId("123");
-                list.add(route);
-                response.setData(list);
+                ControllerNbiStaticRoute nbiStaticRoute = new ControllerNbiStaticRoute();
+                nbiStaticRoute.setId("123");
+                nbiStaticRoute.setNextHop("123");
+                nbiStaticRoute.setDhcp(true);
+                OverlayVpnDriverResponse<ControllerNbiStaticRoute> response = new OverlayVpnDriverResponse<>();
                 response.setErrcode("0");
-
+                response.setData(nbiStaticRoute);
                 HTTPReturnMessage msg = new HTTPReturnMessage();
                 msg.setBody(JsonUtil.toJson(response));
+                msg.setStatus(200);
                 return msg;
             }
         };
-
-        new MockUp<HTTPReturnMessage>() {
-
-            @Mock
-            public boolean isSuccess() {
-                return true;
-            }
-        };
+       
         StaticRouteImpl impl = new StaticRouteImpl();
         List<ControllerNbiStaticRoute> list = new ArrayList<>();
         ControllerNbiStaticRoute route = new ControllerNbiStaticRoute();
