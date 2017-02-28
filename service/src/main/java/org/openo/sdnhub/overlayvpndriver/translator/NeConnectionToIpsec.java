@@ -128,7 +128,7 @@ public class NeConnectionToIpsec {
             IpsecConnection ipsecConnection = new IpsecConnection(ipSecNeConnection.getNeId());
 
             ipsecConnection.setSeqNumber(Integer.valueOf(ipSecNeConnection.getExternalId()));
-            Ike ike = buildIke(ipSecNeConnection, ipSecNeConnection.buildPeerIp());
+            Ike ike = buildIke(ipSecNeConnection, ipSecNeConnection.getPeerAddress());
 
 
             IpSec ipSec = buildIpsec(ipSecNeConnection);
@@ -180,7 +180,7 @@ public class NeConnectionToIpsec {
             IpsecConnection ipsecConnection = new IpsecConnection(ipSecNeConnection.getNeId());
             ipsecConnection.setSeqNumber(Integer.valueOf(ipSecNeConnection.getExternalId()));
 
-            Ike ike = buildIke(ipSecNeConnection, ipSecNeConnection.buildPeerIp());
+            Ike ike = buildIke(ipSecNeConnection, ipSecNeConnection.getPeerAddress());
 
             LocalId localIdInfo = new LocalId("fqdn",ipSecNeConnection.getTenantName());
             ike.setLocalId(localIdInfo);
@@ -282,11 +282,11 @@ public class NeConnectionToIpsec {
 
     private static RuleList buildRule(final SbiNeIpSec ipSecNeConnection)
     {
-        String srcIp = ipSecNeConnection.buildSourceIp();
+        String srcIp = ipSecNeConnection.getSourceAddress();
         //String srcIpMask = IpUtils.prefixToMask(IpUtils.getIPMaskFromCIDR(ipSecNeConnection.getSourceAddress()));
         String srcIpMask = IpUtils.prefixToMask(CONST_MASK_32);
 
-        String destIp = ipSecNeConnection.buildPeerIp();
+        String destIp = ipSecNeConnection.getPeerAddress();
         //String destIpMask = IpUtils.prefixToMask(IpUtils.getIPMaskFromCIDR(ipSecNeConnection.getPeerAddress()));
         String destIpMask = IpUtils.prefixToMask(CONST_MASK_32);
 

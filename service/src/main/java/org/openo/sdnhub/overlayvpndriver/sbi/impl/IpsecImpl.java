@@ -227,7 +227,7 @@ public class IpsecImpl {
             ResultRsp<List<IpsecConnList>> result =
                     queryIpsecByDevice(ctrlUuid, deviceId, ipSecModel.getInterfaceName());
 
-            if(CollectionUtils.isEmpty(result.getData())) {
+            if(!CollectionUtils.isEmpty(result.getData())) {
                 ipSecModel.setName(result.getData().get(0).getName());
                 IpsecConnection ipsecConn = ipSecModel.getIpsecConnection().get(0);
                 if ("true".equals(ipsecConn.getType())) {
@@ -327,7 +327,7 @@ public class IpsecImpl {
 
         if(FALSE.equals(sbiNeIpSec.getIsTemplateType()))
         {
-            tempIpsecConn.getIke().setLocalAddress(sbiNeIpSec.buildSourceIp());
+            tempIpsecConn.getIke().setLocalAddress(sbiNeIpSec.getSourceAddress());
 
             Ip ip = JsonUtil.fromJson(sbiNeIpSec.getPeerAddress(), Ip.class);
             tempIpsecConn.getIke().setPeerAddress(ip.getIpv4());

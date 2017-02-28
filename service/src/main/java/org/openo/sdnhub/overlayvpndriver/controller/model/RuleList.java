@@ -38,6 +38,10 @@ public class RuleList {
 
     private String srcIp;
 
+    public RuleList() {
+        super();
+    }
+
     public RuleList(String policy, String srcIp, String srcNetMask, String desIp, String desNetMask) {
         super();
         this.setPolicy(policy);

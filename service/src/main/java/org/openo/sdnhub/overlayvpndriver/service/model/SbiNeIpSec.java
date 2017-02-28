@@ -250,16 +250,6 @@ public class SbiNeIpSec extends SbiIpSecNetModel {
         this.localNeRole = localNeRole;
     }
 
-    public String buildSourceIp() {
-        Ip ip = JsonUtil.fromJson(sourceAddress, Ip.class);
-        return ip.getIpv4();
-    }
-
-    public String buildPeerIp() {
-        Ip ip = JsonUtil.fromJson(peerAddress, Ip.class);
-        return ip.getIpv4();
-    }
-
     /**
      * Get tenantName
      *
