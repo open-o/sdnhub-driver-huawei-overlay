@@ -20,7 +20,7 @@
             "neId": "4989302",
             "deviceId": "1234",
             "peerDeviceId": "4993043",
-            "externalIpSecId": "3012332",
+            "externalIpSecId": "2ace53bdd02f481ea8ae9ffd2211c845",
             "sourceAddress": "1.1.1.1",
             "peerAddress": "2.2.2.2",
             "ikePolicy": {
@@ -55,7 +55,7 @@
             "actionState": "Normal",
             "createTime": 0,
             "updateTime": 0,
-            "sourceIfId": "234562"
+            "sourceIfId": "GigabitEthernet0/0/1"
         }]
     },
     "response": {
@@ -84,7 +84,7 @@
                 "neId": "4989302",
                 "deviceId": "1234",
                 "peerDeviceId": "4993043",
-                "externalIpSecId": "3012332",
+                "externalIpSecId": "2ace53bdd02f481ea8ae9ffd2211c845",
                 "sourceAddress": "1.1.1.1",
                 "peerAddress": "2.2.2.2",
                 "ikePolicy": {
@@ -128,7 +128,7 @@
                 "actionState": "Normal",
                 "createTime": 0,
                 "updateTime": 0,
-                "sourceIfId": "234562"
+                "sourceIfId": "GigabitEthernet0/0/1"
             }],
             "fail": []
         }

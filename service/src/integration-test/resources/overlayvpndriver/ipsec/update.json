@@ -55,7 +55,7 @@
             "actionState": "Normal",
             "createTime": 0,
             "updateTime": 0,
-            "sourceIfId": "234562"
+            "sourceIfId": "GigabitEthernet0/0/1"
         }]
     },
     "response": {
@@ -128,7 +128,7 @@
                 "actionState": "Normal",
                 "createTime": 0,
                 "updateTime": 0,
-                "sourceIfId": "234562"
+                "sourceIfId": "GigabitEthernet0/0/1"
             }],
             "fail": []
         }
