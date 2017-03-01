@@ -86,7 +86,6 @@ public class Configuration {
     /**
      * JSON file parser.<br>
      *
-     * @param domain AC WAN configuration domain
      * @return the values which is a key value map
      * @throws ServiceException
      * @since SDNHUB 0.5
@@ -94,7 +93,7 @@ public class Configuration {
     private static List<Map<String, String>> getJsonFileData() throws ServiceException {
         try {
             String content = IOUtils.toString(
-                    Configuration.class.getClassLoader().getResourceAsStream("/generalconfig/overlaydriverConf.json"));
+                    Configuration.class.getClassLoader().getResourceAsStream("generalconfig/overlaydriverConf.json"));
             ObjectMapper mapper = new ObjectMapper();
             return mapper.readValue(content.getBytes(), List.class);
         } catch(IOException e) {

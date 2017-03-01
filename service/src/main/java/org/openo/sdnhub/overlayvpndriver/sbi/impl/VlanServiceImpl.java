@@ -16,12 +16,6 @@
 
 package org.openo.sdnhub.overlayvpndriver.sbi.impl;
 
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.openo.baseservice.remoteservice.exception.ServiceException;
 import org.openo.sdnhub.overlayvpndriver.common.consts.CommonConst;
 import org.openo.sdnhub.overlayvpndriver.controller.consts.ControllerUrlConst;
@@ -33,6 +27,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Vlan service implementation.<br>
@@ -68,7 +68,7 @@ public class VlanServiceImpl {
         ResultRsp<List<EthInterfaceConfig>> response = EthInterfaceConfigImpl.queryEthConfig(ctrlUuid, queryUrl);
         if(!response.isValid()) {
             LOGGER.error("query eth failed,info :" + response.toString());
-            throw new ServiceException("localsite.vlan.ac.error", "query eth config fail in ac");
+            throw new ServiceException(SLOCALSITEERROR, "query eth config fail in ac");
         }
         return response.getData();
     }
@@ -113,7 +113,7 @@ public class VlanServiceImpl {
                 EthInterfaceConfigImpl.configEthInterface(ctrlUuid, configUrl, JsonUtil.toJson(crtInfoMap));
         if(!response.isSuccess()) {
             LOGGER.error("config eth fail, info: " + response.toString());
-            throw new ServiceException("localsite.vlan.ac.error", "eth config fail in ac");
+            throw new ServiceException(SLOCALSITEERROR, "eth config fail in ac");
         }
 
         if (response.getData() == null) {
@@ -175,7 +175,7 @@ public class VlanServiceImpl {
         List<EthInterfaceConfig> ethConfigList = queryEthByName(ctrlUuid, deviceId, ifVlan.getIfName());
         if(CollectionUtils.isEmpty(ethConfigList)) {
             LOGGER.error("no eth config in AC");
-            throw new ServiceException("localsite.vlan.ac.error", "no config in ac");
+            throw new ServiceException(SLOCALSITEERROR, "no config in ac");
         }
         EthInterfaceConfig ethConfig = ethConfigList.get(0);
         ethConfig.setDefaultVlan(ifVlan.getDefaultVlan());
@@ -205,7 +205,7 @@ public class VlanServiceImpl {
         ResultRsp<List<EthInterfaceConfig>> response = EthInterfaceConfigImpl.queryEthConfig(ctrlUuid, queryUrl);
         if(!response.isSuccess()) {
             LOGGER.error("query eth failed, info :" + response.toString());
-            throw new ServiceException("localsite.vlan.ac.error", "query eth config fail in ac");
+            throw new ServiceException(SLOCALSITEERROR, "query eth config fail in ac");
         }
 
         if ( response.getData() == null) {

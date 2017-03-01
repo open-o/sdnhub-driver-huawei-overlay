@@ -16,16 +16,14 @@
 
 package org.openo.sdnhub.overlayvpndriver.service.model;
 
-import javax.validation.constraints.NotNull;
-
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
-import org.openo.sdno.framework.container.util.JsonUtil;
 import org.openo.sdno.overlayvpn.inventory.sdk.model.annotation.MOResType;
 import org.openo.sdno.overlayvpn.inventory.sdk.model.annotation.NONInvField;
 import org.openo.sdno.overlayvpn.verify.annotation.AIp;
-import org.openo.sdno.overlayvpn.verify.annotation.AIpMask;
 import org.openo.sdno.overlayvpn.verify.annotation.AString;
+
+import javax.validation.constraints.NotNull;
 
 @MOResType(infoModelName = "ipsec_sbi_neipsec")
 public class SbiNeIpSec extends SbiIpSecNetModel {

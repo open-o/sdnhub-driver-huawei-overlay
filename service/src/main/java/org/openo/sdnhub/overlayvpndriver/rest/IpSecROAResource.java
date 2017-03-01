@@ -16,25 +16,6 @@
 
 package org.openo.sdnhub.overlayvpndriver.rest;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Transformer;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
@@ -45,8 +26,6 @@ import org.openo.sdnhub.overlayvpndriver.sbi.impl.IpsecImpl;
 import org.openo.sdnhub.overlayvpndriver.service.model.SbiNeIpSec;
 import org.openo.sdnhub.overlayvpndriver.translator.NeConnectionToIpsec;
 import org.openo.sdno.exception.ParameterServiceException;
-import org.openo.sdno.framework.container.util.JsonUtil;
-import org.openo.sdno.overlayvpn.consts.CommConst;
 import org.openo.sdno.overlayvpn.errorcode.ErrorCode;
 import org.openo.sdno.overlayvpn.errorcode.ErrorCodeInfo;
 import org.openo.sdno.overlayvpn.result.FailData;
@@ -58,6 +37,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import java.util.*;
+import java.util.Map.Entry;
 
 import static org.openo.sdnhub.overlayvpndriver.common.consts.CommonConst.CTRL_HEADER_PARAM;
 

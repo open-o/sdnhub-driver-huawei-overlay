@@ -16,10 +16,6 @@
 
 package org.openo.sdnhub.overlayvpndriver.http;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
@@ -37,6 +33,8 @@ import org.openo.sdno.util.http.HTTPReturnMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
+
+import java.io.IOException;
 
 /**
  * Proxy class for AC Branch Controller, providing restful and web socket

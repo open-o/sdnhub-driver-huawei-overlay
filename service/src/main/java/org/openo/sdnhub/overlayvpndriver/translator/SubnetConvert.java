@@ -16,25 +16,19 @@
 
 package org.openo.sdnhub.overlayvpndriver.translator;
 
-import org.codehaus.jackson.type.TypeReference;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
-import org.openo.sdnhub.overlayvpndriver.common.consts.DriverErrorCode;
-import org.openo.sdnhub.overlayvpndriver.controller.consts.ControllerUrlConst;
 import org.openo.sdnhub.overlayvpndriver.controller.model.ACDhcp6Config;
 import org.openo.sdnhub.overlayvpndriver.controller.model.ACNetwork;
 import org.openo.sdnhub.overlayvpndriver.controller.model.ACSubnet;
-import org.openo.sdnhub.overlayvpndriver.http.OverlayVpnDriverProxy;
 import org.openo.sdnhub.overlayvpndriver.sbi.impl.SubnetServiceImpl;
-import org.openo.sdnhub.overlayvpndriver.service.model.*;
-import org.openo.sdno.exception.ParameterServiceException;
-import org.openo.sdno.framework.container.util.JsonUtil;
+import org.openo.sdnhub.overlayvpndriver.service.model.DhcpConfig;
+import org.openo.sdnhub.overlayvpndriver.service.model.DnsServerConfig;
+import org.openo.sdnhub.overlayvpndriver.service.model.SbiSubnetNetModel;
+import org.openo.sdnhub.overlayvpndriver.service.model.TimeConfig;
 import org.openo.sdno.overlayvpn.result.ResultRsp;
-import org.openo.sdno.util.http.HTTPReturnMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StringUtils;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 

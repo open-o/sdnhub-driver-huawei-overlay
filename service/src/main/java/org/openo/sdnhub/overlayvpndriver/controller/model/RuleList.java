@@ -16,8 +16,6 @@
 
 package org.openo.sdnhub.overlayvpndriver.controller.model;
 
-import org.springframework.util.StringUtils;
-
 /**
  * <br/>
  * <p>

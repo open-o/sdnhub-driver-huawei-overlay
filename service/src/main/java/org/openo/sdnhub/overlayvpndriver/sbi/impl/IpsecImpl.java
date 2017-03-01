@@ -16,16 +16,6 @@
 
 package org.openo.sdnhub.overlayvpndriver.sbi.impl;
 
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentHashMap;
-
-import com.ctc.wstx.util.StringUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.type.TypeReference;
@@ -40,12 +30,7 @@ import org.openo.sdnhub.overlayvpndriver.controller.model.IpsecConnection;
 import org.openo.sdnhub.overlayvpndriver.http.OverlayVpnDriverProxy;
 import org.openo.sdnhub.overlayvpndriver.result.ACDelResponse;
 import org.openo.sdnhub.overlayvpndriver.result.OverlayVpnDriverResponse;
-import org.openo.sdnhub.overlayvpndriver.service.model.ACResponse;
-import org.openo.sdnhub.overlayvpndriver.service.model.IpSecConnectionType;
-import org.openo.sdnhub.overlayvpndriver.service.model.NQADeviceModel;
-import org.openo.sdnhub.overlayvpndriver.service.model.NeRoleType;
-import org.openo.sdnhub.overlayvpndriver.service.model.SbiNeIpSec;
-import org.openo.sdnhub.overlayvpndriver.service.model.SbiNqa;
+import org.openo.sdnhub.overlayvpndriver.service.model.*;
 import org.openo.sdnhub.overlayvpndriver.translator.NqaIpSecTranslate;
 import org.openo.sdno.exception.ParameterServiceException;
 import org.openo.sdno.framework.container.util.JsonUtil;
@@ -58,6 +43,15 @@ import org.openo.sdno.overlayvpn.result.SvcExcptUtil;
 import org.openo.sdno.util.http.HTTPReturnMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.HashMap;
 
 /**
  * IP-security service implementation.<br>

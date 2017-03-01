@@ -43,13 +43,13 @@ public class TranslateVxlanResponse {
      *
      * @param sbiNeVxlanInstances
      * @param deviceId
-     * @param VxLanDeviceModels
+     * @param vxLanDeviceModels
      * @since SDNHUB 0.5
      */
     public static void translateVxlanId(List<SbiNeVxlanInstance> sbiNeVxlanInstances, String deviceId,
-            List<VxLanDeviceModel> VxLanDeviceModels) {
+            List<VxLanDeviceModel> vxLanDeviceModels) {
 
-        for(VxLanDeviceModel vxLanDeviceModel : VxLanDeviceModels) {
+        for(VxLanDeviceModel vxLanDeviceModel : vxLanDeviceModels) {
             for(SbiNeVxlanInstance vxlanInstance : sbiNeVxlanInstances) {
                 if(checkNeVxlan(deviceId, vxLanDeviceModel, vxlanInstance)) {
                     continue;

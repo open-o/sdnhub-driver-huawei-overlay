@@ -26,14 +26,6 @@ package org.openo.sdnhub.overlayvpndriver.service.model;
  */
 public class NQADeviceModel {
 
-    public Integer getTtl() {
-        return ttl;
-    }
-
-    public void setTtl(Integer ttl) {
-        this.ttl = ttl;
-    }
-
     private String id;
 
     private String testType;
@@ -55,6 +47,14 @@ public class NQADeviceModel {
     private Integer ttl;
 
     private Integer tos;
+
+    public Integer getTtl() {
+        return ttl;
+    }
+
+    public void setTtl(Integer ttl) {
+        this.ttl = ttl;
+    }
 
     public String getId() {
         return id;
