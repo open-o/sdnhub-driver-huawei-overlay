@@ -30,8 +30,8 @@ public class LocalId {
 
     private String type;
 
-    public LocalId()
-    {
+    public LocalId() {
+        // no argument constructor
     }
 
     public LocalId(String type, String value)

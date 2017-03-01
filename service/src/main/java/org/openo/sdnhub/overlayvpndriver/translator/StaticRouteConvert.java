@@ -42,6 +42,10 @@ public class StaticRouteConvert {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StaticRouteConvert.class);
 
+    private StaticRouteConvert() {
+        // private constructer
+    }
+
     /**
      * Utility method to filter created unique static routes. <br/>
      *

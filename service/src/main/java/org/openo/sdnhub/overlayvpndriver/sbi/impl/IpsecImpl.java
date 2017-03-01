@@ -88,7 +88,7 @@ public class IpsecImpl {
 
             for(IpsecConnList ipsecModel : result.getData()) {
                 if(neIpSec.getExternalIpSecId().equals(ipsecModel.getUuid())) {
-                    List<IpsecConnection> connList = new ArrayList<IpsecConnection>();
+                    List<IpsecConnection> connList = new ArrayList<>();
                     for(IpsecConnection ipsecConn : ipsecModel.getIpsecConnection()) {
                         if(neIpSec.getExternalId().equals(String.valueOf(ipsecConn.getSeqNumber()))) {
                             connList.add(ipsecConn);
@@ -125,7 +125,7 @@ public class IpsecImpl {
     public static ResultRsp<List<IpsecConnList>> queryIpsecByDevice(String ctrlUuid, String deviceId, String interfaceName)
             throws ServiceException {
 
-        ResultRsp<List<IpsecConnList>> resultRsp = new ResultRsp<List<IpsecConnList>>(ErrorCode.OVERLAYVPN_SUCCESS);
+        ResultRsp<List<IpsecConnList>> resultRsp = new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS);
         if ((StringUtils.isEmpty(ctrlUuid)) || (StringUtils.isEmpty(deviceId)))
         {
             LOGGER.error("queryIpsecByDevice: parameter error.");
@@ -291,7 +291,7 @@ public class IpsecImpl {
 
         if(CollectionUtils.isEmpty(result.getData()))
         {
-            FailData<SbiNeIpSec> failData = new FailData<SbiNeIpSec>();
+            FailData<SbiNeIpSec> failData = new FailData<>();
             failData.setData(sbiNeIpSec);
             updateRsp.getFail().add(failData);
             return;
@@ -311,7 +311,7 @@ public class IpsecImpl {
 
         if(null == tempIpsecConn)
         {
-            FailData<SbiNeIpSec> failData = new FailData<SbiNeIpSec>();
+            FailData<SbiNeIpSec> failData = new FailData<>();
             failData.setData(sbiNeIpSec);
             updateRsp.getFail().add(failData);
             return;
@@ -337,7 +337,7 @@ public class IpsecImpl {
         }
         else
         {
-            FailData<SbiNeIpSec> failData = new FailData<SbiNeIpSec>(rsp.getErrorCode(), rsp.getMessage(), sbiNeIpSec);
+            FailData<SbiNeIpSec> failData = new FailData<>(rsp.getErrorCode(), rsp.getMessage(), sbiNeIpSec);
             updateRsp.getFail().add(failData);
         }
     }
@@ -354,7 +354,7 @@ public class IpsecImpl {
             throws ServiceException {
 
         for(Map.Entry<String, List<SbiNeIpSec>> entry : deviceIdToTpsecConnListMap.entrySet()) {
-            List<SbiNqa> nqaList = new ArrayList<SbiNqa>();
+            List<SbiNqa> nqaList = new ArrayList<>();
             for(SbiNeIpSec SbiNeIpSec : entry.getValue()) {
                 if("nqa".equals(SbiNeIpSec.getProtectionPolicy())
                         && NeRoleType.LOCALCPE.getName().equals(SbiNeIpSec.getLocalNeRole())) {
@@ -364,7 +364,7 @@ public class IpsecImpl {
 
             List<NQADeviceModel> nqlDeviceModelList = NqaIpSecTranslate.convertDeviceMode(nqaList);
             if(!CollectionUtils.isEmpty(nqlDeviceModelList)) {
-                final Map<String, List<NQADeviceModel>> crtInfoMap = new HashMap<String, List<NQADeviceModel>>();
+                final Map<String, List<NQADeviceModel>> crtInfoMap = new HashMap<>();
                 crtInfoMap.put(CommonConst.NQA_LIST, nqlDeviceModelList);
                 final String createUrl = MessageFormat.format(ControllerUrlConst.NQA_CONFIG_URL, entry.getKey());
 
@@ -389,7 +389,7 @@ public class IpsecImpl {
             if(deviceIdToIpsecConnMap.containsKey(ipSecConn.getDeviceId())) {
                 deviceIdToIpsecConnMap.get(ipSecConn.getDeviceId()).add(ipSecConn);
             } else {
-                List<SbiNeIpSec> dataList = new ArrayList<SbiNeIpSec>();
+                List<SbiNeIpSec> dataList = new ArrayList<>();
                 dataList.add(ipSecConn);
                 deviceIdToIpsecConnMap.put(ipSecConn.getDeviceId(), dataList);
             }
@@ -495,7 +495,7 @@ public class IpsecImpl {
             }
 
             LOGGER.error("createIpSecByDevice: asresponse return error");
-            return new ResultRsp<IpsecConnList>(ErrorCode.OVERLAYVPN_FAILED + acresponse.getErrmsg());
+            return new ResultRsp<>(ErrorCode.OVERLAYVPN_FAILED + acresponse.getErrmsg());
         }
 
         LOGGER.error("createIpSecByDevice: httpMsg return error");
@@ -504,47 +504,7 @@ public class IpsecImpl {
             // Need to return specific time out message
         }
 
-        return new ResultRsp<IpsecConnList>(ErrorCode.OVERLAYVPN_FAILED + " createIpSecByDevice: httpMsg return error");
-    }
-
-    private ResultRsp<IpsecConnList> deleteIpsecConn(String ctrlUuid, String deviceId, IpsecConnList ipSecModel)
-            throws ServiceException {
-
-        ResultRsp<IpsecConnList> resultRsp = new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS);
-        String deleteUrl = MessageFormat.format(ControllerUrlConst.CONST_CONFIG_IPSEC, deviceId);
-
-        Map<String, List<IpsecConnList>> crtInfoMap = new ConcurrentHashMap<>();
-        List<IpsecConnList> list = new ArrayList<>();
-        list.add(ipSecModel);
-        crtInfoMap.put(CommConst.IP_SEC_LIST, list);
-
-        final HTTPReturnMessage httpMsg =
-                OverlayVpnDriverProxy.getInstance().sendDeleteMsg(deleteUrl, JsonUtil.toJson(crtInfoMap), ctrlUuid);
-
-        String body = httpMsg.getBody();
-
-        if(httpMsg.isSuccess() && StringUtils.isNotEmpty(body)) {
-            ACDelResponse acresponse = JsonUtil.fromJson(body, new TypeReference<ACDelResponse>() {});
-            if(acresponse.isSucess()) {
-                //May need to set data or successed part of response in future.
-                return resultRsp;
-            }
-
-            LOGGER.error("createIpSecByDevice: asresponse return error");
-            return new ResultRsp<>(ErrorCode.OVERLAYVPN_FAILED + acresponse.getErrmsg());
-        }
-        LOGGER.error("createIpSecByDevice: httpMsg return error");
         return new ResultRsp<>(ErrorCode.OVERLAYVPN_FAILED + " createIpSecByDevice: httpMsg return error");
-    }
-
-    private IpsecConnList compareData4Create(IpsecConnList existIpSecModel, IpsecConnList ipSecModel) {
-
-        ipSecModel.setUuid(existIpSecModel.getUuid());
-        IpsecConnList newIpSecModel = new IpsecConnList();
-        newIpSecModel.setName(existIpSecModel.getName());
-        newIpSecModel.setUuid(existIpSecModel.getUuid());
-        newIpSecModel.setIpsecConnection(ipSecModel.getIpsecConnection());
-        return newIpSecModel;
     }
 
     private ResultRsp<List<NQADeviceModel>> createNqaConfigForIPSec(String cltuuid, String createUrl, String nqaListJson)

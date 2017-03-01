@@ -59,6 +59,9 @@ public class IpSecROAResource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IpSecROAResource.class);
 
+    private static final String CONTROLLER_INV_UUID = "Invalid controller UUID.";
+    private static final String REQ_BODY_NULL_OR_EMPTY = "Request body parameter is null or empty.";
+
     @Autowired
     private IpsecImpl ipsecService;
 
@@ -89,13 +92,13 @@ public class IpSecROAResource {
         totalResult.setFail(new ArrayList<FailData<SbiNeIpSec>>());
 
         if(!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error("Invalid controller UUID.");
-            throw new ParameterServiceException("Invalid controller UUID.");
+            LOGGER.error(CONTROLLER_INV_UUID);
+            throw new ParameterServiceException(CONTROLLER_INV_UUID);
         }
 
         if(CollectionUtils.isEmpty(ipSecNeConnectionList)) {
-            LOGGER.error("Request body parameter is null or empty.");
-            throw new ParameterServiceException("Request body parameter is null or empty.");
+            LOGGER.error(REQ_BODY_NULL_OR_EMPTY);
+            throw new ParameterServiceException(REQ_BODY_NULL_OR_EMPTY);
         }
 
         for(SbiNeIpSec ipsecModel : ipSecNeConnectionList){
@@ -151,13 +154,13 @@ public class IpSecROAResource {
 
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
         if(!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error("Invalid controller UUID.");
-            throw new ParameterServiceException("Invalid controller UUID.");
+            LOGGER.error(CONTROLLER_INV_UUID);
+            throw new ParameterServiceException(CONTROLLER_INV_UUID);
         }
 
         if(CollectionUtils.isEmpty(ipsecList)) {
-            LOGGER.error("Request body parameter is null or empty.");
-            throw new ParameterServiceException("Request body parameter is null or empty.");
+            LOGGER.error(REQ_BODY_NULL_OR_EMPTY);
+            throw new ParameterServiceException(REQ_BODY_NULL_OR_EMPTY);
         }
 
         ValidationUtil.validateModel(ipsecList);
@@ -200,13 +203,13 @@ public class IpSecROAResource {
 
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
         if(!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error("Invalid controller UUID.");
-            throw new ParameterServiceException("Invalid controller UUID.");
+            LOGGER.error(CONTROLLER_INV_UUID);
+            throw new ParameterServiceException(CONTROLLER_INV_UUID);
         }
 
         if(CollectionUtils.isEmpty(ipSecNeConnectionList)) {
-            LOGGER.error("Request body parameter is null or empty.");
-            throw new ParameterServiceException("Request body parameter is null or empty.");
+            LOGGER.error(REQ_BODY_NULL_OR_EMPTY);
+            throw new ParameterServiceException(REQ_BODY_NULL_OR_EMPTY);
         }
         ValidationUtil.validateModel(ipSecNeConnectionList);
 
@@ -273,13 +276,13 @@ public class IpSecROAResource {
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
 
         if(!UuidUtil.validate(ctrlUuid)) {
-            LOGGER.error("Invalid controller UUID.");
-            throw new ParameterServiceException("Invalid controller UUID.");
+            LOGGER.error(CONTROLLER_INV_UUID);
+            throw new ParameterServiceException(CONTROLLER_INV_UUID);
         }
 
         if(CollectionUtils.isEmpty(ipSecNeConnectionList)) {
-            LOGGER.error("Request body parameter is null or empty.");
-            throw new ParameterServiceException("Request body parameter is null or empty.");
+            LOGGER.error(REQ_BODY_NULL_OR_EMPTY);
+            throw new ParameterServiceException(REQ_BODY_NULL_OR_EMPTY);
         }
 
         ValidationUtil.validateModel(ipSecNeConnectionList);

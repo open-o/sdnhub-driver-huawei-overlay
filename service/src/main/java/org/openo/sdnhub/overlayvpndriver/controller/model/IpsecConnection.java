@@ -59,8 +59,8 @@ public class IpsecConnection {
     /**
      * Initialization with default values.
      */
-    public IpsecConnection()
-    {
+    public IpsecConnection() {
+        // no argument constructor
     }
 
     /**

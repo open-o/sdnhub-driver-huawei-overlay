@@ -77,7 +77,7 @@ public class VxLanROAResource {
     public ResultRsp<SbiNeVxlanInstance> createVxlan(@Context HttpServletRequest request,
                                                      @HeaderParam(CommonConst.CTRL_HEADER_PARAM) String ctrlUuidParam,
                                                      List<SbiNeVxlanInstance> vxLanInstanceList)
-            throws WebApplicationException, ServiceException {
+            throws ServiceException {
         long beginTime = System.currentTimeMillis();
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
 
@@ -160,14 +160,14 @@ public class VxLanROAResource {
         long beginTime = System.currentTimeMillis();
         UuidUtil.validate(ctrlUuid);
 
-        ResultRsp<SbiNeVxlanInstance> totalResult = new ResultRsp<SbiNeVxlanInstance>(ErrorCode.OVERLAYVPN_SUCCESS);
+        ResultRsp<SbiNeVxlanInstance> totalResult = new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS);
         Map<String, List<VxLanDeviceModel>> deviceIdToDeviceModelMap = VxlanConvert.convertVxlanInsToNetVxlanDeviceModel(vxlanInstanceList);
         LOGGER.warn("vxlanDeviceModelMap:" + JsonUtil.toJson(deviceIdToDeviceModelMap));
         Map<String, List<SbiNeVxlanInstance>> deviceIdToVxlanInsMap = VxlanConvert.divideVxlanInsByDeviceId(vxlanInstanceList);
         LOGGER.warn("deviceIdToVxlanInsMap:" + JsonUtil.toJson(deviceIdToVxlanInsMap));
 
-        List<SbiNeVxlanInstance> succVxlanInstances = new ArrayList<SbiNeVxlanInstance>();
-        List<FailData<SbiNeVxlanInstance>> failDatas = new ArrayList<FailData<SbiNeVxlanInstance>>();
+        List<SbiNeVxlanInstance> succVxlanInstances = new ArrayList<>();
+        List<FailData<SbiNeVxlanInstance>> failDatas = new ArrayList<>();
         for (Map.Entry<String, List<VxLanDeviceModel>> entry : deviceIdToDeviceModelMap.entrySet())
         {
             String deviceId = entry.getKey();
@@ -175,7 +175,7 @@ public class VxLanROAResource {
 
             VxLanDeviceModel delVxlanDeviceModel = VxLanSvcImpl.mergeVxlanDeviceModels(delVxlanDeviceModels, null);
 
-            ResultRsp<List<VxLanDeviceModel>> createResult = new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS);
+            ResultRsp<List<VxLanDeviceModel>> createResult;
             List<VxLanDeviceModel> acExistVxlanModels = VxLanSvcImpl.queryVxlanByDevice(ctrlUuid, deviceId).getData();
             if (CollectionUtils.isEmpty(acExistVxlanModels))
             {
@@ -193,16 +193,13 @@ public class VxLanROAResource {
             }
 
             List<SbiNeVxlanInstance> currNbiVxlanInsList = deviceIdToVxlanInsMap.get(deviceId);
-            if (createResult.isSuccess())
-            {
+            if (createResult.isSuccess()) {
                 LOGGER.warn("deviceId:" + deviceId + " success");
                 succVxlanInstances.addAll(currNbiVxlanInsList);
             }
-            else
-            {
+            else {
                 LOGGER.warn("deviceId:" + deviceId + " fail");
-                for(SbiNeVxlanInstance failVxlanIns : currNbiVxlanInsList)
-                {
+                for(SbiNeVxlanInstance failVxlanIns : currNbiVxlanInsList) {
                     failDatas.add(new FailData<SbiNeVxlanInstance>(createResult.getErrorCode(),
                             createResult.getMessage(), failVxlanIns));
                 }
@@ -212,8 +209,7 @@ public class VxLanROAResource {
         totalResult.setSuccessed(succVxlanInstances);
         totalResult.setFail(failDatas);
 
-        if (CollectionUtils.isNotEmpty(failDatas))
-        {
+        if (CollectionUtils.isNotEmpty(failDatas)) {
             totalResult.setErrorCode(ErrorCode.OVERLAYVPN_FAILED);
         }
 

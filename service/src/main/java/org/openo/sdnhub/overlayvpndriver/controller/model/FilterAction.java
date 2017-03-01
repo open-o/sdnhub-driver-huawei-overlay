@@ -35,9 +35,8 @@ public class FilterAction {
     @Valid
     private Action action;
 
-    public FilterAction()
-    {
-
+    public FilterAction() {
+        // no argument constructor
     }
 
     public FilterAction(Filter filter, Action action)

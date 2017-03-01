@@ -33,9 +33,8 @@ public class Redirect {
 
     private String mask;
 
-    public Redirect()
-    {
-
+    public Redirect() {
+        // no argument constructor
     }
 
 

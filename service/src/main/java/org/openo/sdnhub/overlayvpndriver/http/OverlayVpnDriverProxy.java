@@ -117,9 +117,7 @@ public class OverlayVpnDriverProxy {
             LOGGER.debug("@sendGetMsg" + finalurl);
             HttpResponse response = httpClient.execute(httpget);
 
-            HTTPReturnMessage httpReturnMessage=httpContentType(response);
-            return httpReturnMessage;
-
+            return httpContentType(response);
         } catch(IOException e) {
 
             throw new ServiceException(ErrorCode.ADAPTER_CONNECTOR_RESPONSE_FAIL, e);
@@ -175,9 +173,7 @@ public class OverlayVpnDriverProxy {
             HttpResponse response = httpClient.execute(httppost);
             LOGGER.debug(LOG_SEND_POST_MSG + finalurl + response);
 
-            HTTPReturnMessage httpReturnMessage=httpContentType(response);
-            return httpReturnMessage;
-
+            return httpContentType(response);
         } catch(IOException e) {
 
             throw new ServiceException(ErrorCode.ADAPTER_CONNECTOR_RESPONSE_FAIL, e);
@@ -215,9 +211,7 @@ public class OverlayVpnDriverProxy {
             HttpResponse response = httpClient.execute(httpput);
             LOGGER.debug(LOG_SEND_PUT_MSG + finalurl + response);
 
-            HTTPReturnMessage httpReturnMessage=httpContentType(response);
-            return httpReturnMessage;
-
+            return httpContentType(response);
         } catch(IOException e) {
 
             throw new ServiceException(ErrorCode.ADAPTER_CONNECTOR_RESPONSE_FAIL, e);
@@ -252,9 +246,7 @@ public class OverlayVpnDriverProxy {
             HttpResponse response = httpClient.execute(httpdelete);
             LOGGER.debug(LOG_SEND_DELETE_MSG + finalurl + response);
 
-            HTTPReturnMessage httpReturnMessage=httpContentType(response);
-            return httpReturnMessage;
-
+            return httpContentType(response);
         } catch(IOException e) {
 
             throw new ServiceException(ErrorCode.ADAPTER_CONNECTOR_RESPONSE_FAIL, e);
