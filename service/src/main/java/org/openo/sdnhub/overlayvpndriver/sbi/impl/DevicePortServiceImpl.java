@@ -157,7 +157,7 @@ public class DevicePortServiceImpl {
      * @param deviceId Device Id
      * @param portname Port Name
      * @return ResultRsp for loopback query
-     * @throws ServiceException In case of operation fails
+     * @throws ServiceException when input validation fails
      * @since  SDNHUB 0.5
      */
     public static ResultRsp<SbiIp> queryLoopBack(String  ctrlUuid,
@@ -248,6 +248,7 @@ public class DevicePortServiceImpl {
         }
         catch (InterruptedException e) {
             LOGGER.error("sleep exception =", e);
+            Thread.currentThread().interrupt();
         }
     }
 }
