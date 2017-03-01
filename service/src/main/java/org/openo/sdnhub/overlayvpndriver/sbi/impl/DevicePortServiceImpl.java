@@ -26,6 +26,8 @@ import org.codehaus.jackson.type.TypeReference;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
 import org.openo.sdnhub.overlayvpndriver.common.consts.CommonConst;
 import org.openo.sdnhub.overlayvpndriver.common.consts.DriverErrorCode;
+import org.openo.sdnhub.overlayvpndriver.config.ConfigKeyConst;
+import org.openo.sdnhub.overlayvpndriver.config.Configuration;
 import org.openo.sdnhub.overlayvpndriver.controller.consts.ControllerUrlConst;
 import org.openo.sdnhub.overlayvpndriver.controller.model.AcDevicePort;
 import org.openo.sdnhub.overlayvpndriver.controller.model.LoopBackPort;
@@ -52,7 +54,7 @@ public class DevicePortServiceImpl {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DevicePortServiceImpl.class);
 
-    private DevicePortServiceImpl(){
+    private DevicePortServiceImpl() {
     }
 
 
@@ -212,8 +214,8 @@ public class DevicePortServiceImpl {
 
             SbiIp tempIp = new SbiIp(acDevicePort);
 
-            if(CommonConst.WAN_DEFAULT_IP.equals(tempIp.getIpv4())) {
-                for (int queryip = 0; queryip < CommonConst.QUERY_TIME; queryip ++) {
+            if(Configuration.getValues(ConfigKeyConst.WAN_DEFAULT_IP).equals(tempIp.getIpv4())) {
+                for(int queryip = 0; queryip < CommonConst.QUERY_TIME; queryip++) {
                     List<AcDevicePort> portList = DevicePortServiceImpl.queryPorts(deviceId, ctrlId, Arrays.asList(portName));
                     if(org.apache.commons.collections.CollectionUtils.isEmpty(portList)) {
                         return new ResultRsp<SbiIp>(DriverErrorCode.CLOUDVPN_FAILED);
@@ -225,7 +227,7 @@ public class DevicePortServiceImpl {
                         return new ResultRsp<SbiIp>(DriverErrorCode.CLOUDVPN_FAILED);
                     }
 
-                    if(CommonConst.WAN_DEFAULT_IP.equals(queryPort.getIpAddr())) {
+                    if(Configuration.getValues(ConfigKeyConst.WAN_DEFAULT_IP).equals(queryPort.getIpAddr())) {
                         DevicePortServiceImpl.sleepSometime(CommConst.GET_WAN_IP_WAIT_TIME);
                     } else {
                         tempIp = new SbiIp(queryPort);

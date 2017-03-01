@@ -22,6 +22,7 @@ import static org.junit.Assert.assertEquals;
 import mockit.Mock;
 import mockit.MockUp;
 
+import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -39,6 +40,8 @@ import org.openo.sdno.overlayvpn.result.ResultRsp;
 import org.openo.sdno.overlayvpn.util.check.ValidationUtil;
 import org.openo.sdno.util.http.HTTPReturnMessage;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -109,6 +112,14 @@ public class LocalSiteSNatROAResourceTest {
                 return httpReturnMessage;
             }
         };
+        
+        new MockUp<IOUtils>() {
+
+            @Mock
+            public String toString(InputStream input) throws IOException {
+                return "temp";
+            }
+        };
         SbiSnatNetModel snatNet = new SbiSnatNetModel();
         snatNet.setAclId("7db47412f2b44164a16ef18b16a81c0c");
         snatNet.setAclNumber("3501");
@@ -134,6 +145,14 @@ public class LocalSiteSNatROAResourceTest {
                 httpReturnMessage.setStatus(200);
 
                 return httpReturnMessage;
+            }
+        };
+        
+        new MockUp<IOUtils>() {
+
+            @Mock
+            public String toString(InputStream input) throws IOException {
+                return "temp";
             }
         };
         SbiSnatNetModel snatNet = new SbiSnatNetModel();

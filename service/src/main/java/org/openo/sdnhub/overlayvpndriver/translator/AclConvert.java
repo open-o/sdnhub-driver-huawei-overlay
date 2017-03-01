@@ -16,6 +16,8 @@
 
 package org.openo.sdnhub.overlayvpndriver.translator;
 
+import org.openo.sdnhub.overlayvpndriver.config.ConfigKeyConst;
+import org.openo.sdnhub.overlayvpndriver.config.Configuration;
 import org.openo.sdnhub.overlayvpndriver.controller.model.AcAcl;
 import org.openo.sdnhub.overlayvpndriver.controller.model.AcAclRule;
 import org.openo.sdnhub.overlayvpndriver.service.model.SbiSnatNetModel;
@@ -33,15 +35,6 @@ import java.util.List;
  * @version SDNHUB 0.5 06-Feb-2017
  */
 public class AclConvert {
-
-    // RFC 1918 IP
-    private static final String DENY_PRIVATE_3 = "192.168.0.0/16";
-
-    // RFC 1918 IP
-    private static final String DENY_PRIVATE_2 = "172.16.0.0/12";
-
-    // RFC 1918 IP
-    private static final String DENY_PRIVATE_1 = "10.0.0.0/8";
 
     private static final String POLICY_PERMIT = "permit";
 
@@ -69,20 +62,20 @@ public class AclConvert {
         AcAclRule denyRule1 = new AcAclRule();
         denyRule1.setId(10);
         denyRule1.setPolicy(POLICY_DENY);
-        denyRule1.setDesIp(DENY_PRIVATE_1);
+        denyRule1.setDesIp(Configuration.getValues(ConfigKeyConst.DENY_PRIVATE_1));
         denyRule1.setDescription(snatNetModel.getDescription());
         rules.add(denyRule1);
 
         AcAclRule denyRule2 = new AcAclRule();
         denyRule2.setId(50);
         denyRule2.setPolicy(POLICY_DENY);
-        denyRule2.setDesIp(DENY_PRIVATE_2);
+        denyRule2.setDesIp(Configuration.getValues(ConfigKeyConst.DENY_PRIVATE_2));
         denyRule2.setDescription(snatNetModel.getDescription());
         rules.add(denyRule2);
         AcAclRule denyRule3 = new AcAclRule();
         denyRule3.setId(100);
         denyRule3.setPolicy(POLICY_DENY);
-        denyRule3.setDesIp(DENY_PRIVATE_3);
+        denyRule3.setDesIp(Configuration.getValues(ConfigKeyConst.DENY_PRIVATE_3));
         denyRule3.setDescription(snatNetModel.getDescription());
         rules.add(denyRule3);
 

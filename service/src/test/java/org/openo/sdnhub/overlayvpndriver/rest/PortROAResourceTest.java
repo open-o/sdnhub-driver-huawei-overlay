@@ -18,6 +18,11 @@ package org.openo.sdnhub.overlayvpndriver.rest;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.IOException;
+import java.io.InputStream;
+
+import org.apache.commons.io.IOUtils;
+
 import mockit.Mock;
 import mockit.MockUp;
 
@@ -57,6 +62,14 @@ public class PortROAResourceTest {
                 msg.setBody(queryResJson);
                 msg.setStatus(200);
                 return msg;
+            }
+        };
+        
+        new MockUp<IOUtils>() {
+
+            @Mock
+            public String toString(InputStream input) throws IOException {
+                return "[{\"cfgkey\": \"wan-default-ip\",\"cfgvalue\":\"0.0.0.0\",\"validator\": \"\",\"encrypt\": \"false\"}]";
             }
         };
 
