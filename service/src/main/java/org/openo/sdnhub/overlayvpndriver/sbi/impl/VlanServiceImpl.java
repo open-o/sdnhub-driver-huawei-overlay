@@ -117,7 +117,7 @@ public class VlanServiceImpl {
         }
 
         if (response.getData() == null) {
-            return new ArrayList<EthInterfaceConfig>();
+            return new ArrayList<>();
         }
         return response.getData();
     }
@@ -209,7 +209,7 @@ public class VlanServiceImpl {
         }
 
         if ( response.getData() == null) {
-            return new ArrayList<EthInterfaceConfig>();
+            return new ArrayList<>();
         }
         return response.getData();
     }

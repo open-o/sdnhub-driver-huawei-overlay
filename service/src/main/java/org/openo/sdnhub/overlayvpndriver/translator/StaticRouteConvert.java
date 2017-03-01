@@ -131,11 +131,10 @@ public class StaticRouteConvert {
                 }
             }
 
-            if(StringUtils.hasLength(tempCreateStaticRoute.getIp())) {
-                if(!isRouteDestIPExisted(tempCreateStaticRoute.getIp(), tempCreateStaticRoute.getMask(),
+            if(StringUtils.hasLength(tempCreateStaticRoute.getIp())
+                    && !isRouteDestIPExisted(tempCreateStaticRoute.getIp(), tempCreateStaticRoute.getMask(),
                         existing.getIp(), existing.getMask())) {
-                    continue;
-                }
+                continue;
             }
 
             return existing;
@@ -252,7 +251,7 @@ public class StaticRouteConvert {
             SbiNeStaticRoute nbiRoute = findCorrespondNbiModel(staticRoute, totalNbiRoutes);
             if(null != nbiRoute)
             {
-                FailData<SbiNeStaticRoute> failData = new FailData<SbiNeStaticRoute>(resultRsp.getErrorCode(),resultRsp.getMessage(),nbiRoute);
+                FailData<SbiNeStaticRoute> failData = new FailData<>(resultRsp.getErrorCode(),resultRsp.getMessage(),nbiRoute);
                 failedNbiDatas.add(failData);
             }
         }

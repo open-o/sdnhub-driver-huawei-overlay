@@ -167,7 +167,7 @@ public class StaticRouteROAResource {
             totalResult.setErrorCode(ErrorCode.OVERLAYVPN_FAILED);
         }
 
-        LOGGER.info("Static route create end. cost:{}", (System.currentTimeMillis() - beginTime));
+        LOGGER.info("Static route create end. cost:{}", System.currentTimeMillis() - beginTime);
         return totalResult;
     }
 

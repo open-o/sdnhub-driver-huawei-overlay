@@ -58,6 +58,7 @@ public class VxLanSvcImpl {
 
     private static final String DELETE_VXLN_PARAMETER = "ids";
 
+
     /**
      * Adds new Vxlan configuration using a specific Controller.<br>
      *
@@ -279,12 +280,11 @@ public class VxLanSvcImpl {
 
     private static void mergeVxlanDeviceModel(VxLanDeviceModel createVxlanDeviceModel, VxLanDeviceModel mergeVxlanDeviceModel)
     {
-        if(null == mergeVxlanDeviceModel || CollectionUtils.isEmpty(mergeVxlanDeviceModel.getVniList()))
-        {
+        if(null == mergeVxlanDeviceModel || CollectionUtils.isEmpty(mergeVxlanDeviceModel.getVniList())) {
             return;
         }
 
-        List<Vni> createVniList = new ArrayList<Vni>();
+        List<Vni> createVniList = new ArrayList<>();
         createVniList.addAll(createVxlanDeviceModel.getVniList());
         for(Vni acVni : mergeVxlanDeviceModel.getVniList())
         {

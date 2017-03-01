@@ -35,7 +35,8 @@ import org.openo.sdno.overlayvpn.model.v2.vxlan.SbiNeVxlanTunnel;
  */
 public class TranslateVxlanResponse {
 
-    public TranslateVxlanResponse(){
+    private TranslateVxlanResponse(){
+        // private constructor
     }
 
     /**

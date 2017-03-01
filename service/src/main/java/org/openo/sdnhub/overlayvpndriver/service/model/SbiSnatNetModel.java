@@ -23,6 +23,8 @@ import org.openo.sdno.overlayvpn.model.v2.basemodel.BaseServiceModel;
 import org.openo.sdno.overlayvpn.verify.annotation.AString;
 import org.openo.sdno.overlayvpn.verify.annotation.AUuid;
 
+import java.util.Objects;
+
 /**
  * SBI model class of Nat Data.<br>
  *
@@ -139,6 +141,38 @@ public class SbiSnatNetModel extends BaseServiceModel {
     @NONInvField
     @AString(scope = "none,create,updateIp", require = false)
     private String type;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        SbiSnatNetModel that = (SbiSnatNetModel) o;
+        return Objects.equals(neId, that.neId) &&
+                Objects.equals(deviceId, that.deviceId) &&
+                Objects.equals(controllerId, that.controllerId) &&
+                Objects.equals(natId, that.natId) &&
+                Objects.equals(internetGatewayId, that.internetGatewayId) &&
+                Objects.equals(subnetId, that.subnetId) &&
+                Objects.equals(ifName, that.ifName) &&
+                Objects.equals(privateIpAddress, that.privateIpAddress) &&
+                Objects.equals(privatePrefix, that.privatePrefix) &&
+                Objects.equals(aclNumber, that.aclNumber) &&
+                Objects.equals(aclId, that.aclId) &&
+                Objects.equals(startPublicIpAddress, that.startPublicIpAddress) &&
+                Objects.equals(endPublicIpAddress, that.endPublicIpAddress) &&
+                Objects.equals(qosPreNat, that.qosPreNat) &&
+                Objects.equals(createtime, that.createtime) &&
+                Objects.equals(updatetime, that.updatetime) &&
+                Objects.equals(type, that.type);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), neId, deviceId, controllerId, natId, internetGatewayId, subnetId,
+                ifName, privateIpAddress, privatePrefix, aclNumber, aclId, startPublicIpAddress, endPublicIpAddress,
+                qosPreNat, createtime, updatetime, type);
+    }
 
     public String getNeId() {
         return neId;

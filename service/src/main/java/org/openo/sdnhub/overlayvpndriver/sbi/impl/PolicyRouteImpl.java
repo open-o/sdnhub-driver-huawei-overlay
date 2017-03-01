@@ -281,8 +281,7 @@ public class PolicyRouteImpl {
      */
     public static Map<String, List<SbiNePolicyRoute>> deriveByDeviceId(final String ctrlUuid,
             final List<SbiNePolicyRoute> nbiNeTunnelList) {
-        Map<String, List<SbiNePolicyRoute>> deviceIdToTunnelListMap =
-                new ConcurrentHashMap<String, List<SbiNePolicyRoute>>();
+        Map<String, List<SbiNePolicyRoute>> deviceIdToTunnelListMap = new ConcurrentHashMap<>();
         if(CollectionUtils.isEmpty(nbiNeTunnelList)) {
             return deviceIdToTunnelListMap;
         }

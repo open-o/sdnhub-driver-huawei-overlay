@@ -121,7 +121,7 @@ public class NeConnectionToIpsec {
         ipsecModel.setUuid(workIpSecConnections.get(0).getExternalIpSecId());
         ipsecModel.setName(ipsecModel.getUuid().substring(0, 8));
 
-        List<IpsecConnection> connList= new ArrayList<IpsecConnection>();
+        List<IpsecConnection> connList= new ArrayList<>();
 
         for (SbiNeIpSec ipSecNeConnection : workIpSecConnections)
         {
@@ -173,7 +173,7 @@ public class NeConnectionToIpsec {
         ipsecModel.setUuid(projectIpSecConnections.get(0).getExternalIpSecId());
         ipsecModel.setName(ipsecModel.getUuid().substring(0, 8));
 
-        List<IpsecConnection> connList= new ArrayList<IpsecConnection>();
+        List<IpsecConnection> connList= new ArrayList<>();
 
         for (SbiNeIpSec ipSecNeConnection : projectIpSecConnections)
         {
@@ -247,17 +247,16 @@ public class NeConnectionToIpsec {
     private static IpSec buildIpsec(SbiNeIpSec ipSecaNeConnection) {
         IpSec ipsec = new IpSec();
 
-        if(ipSecaNeConnection.getIpSecPolicy() != null) {
-            if(ipSecaNeConnection.getIpSecPolicy().getAuthAlgorithm() != null) {
-                ipsec.setEspAuthAlgorithm(ipSecaNeConnection.getIpSecPolicy().getAuthAlgorithm());
-            }
+        if(ipSecaNeConnection.getIpSecPolicy() != null
+            && ipSecaNeConnection.getIpSecPolicy().getAuthAlgorithm() != null) {
+            ipsec.setEspAuthAlgorithm(ipSecaNeConnection.getIpSecPolicy().getAuthAlgorithm());
         }
         return ipsec;
     }
 
     private static List<RuleList> buildRuleList(final SbiNeIpSec ipSecNeConnection)
     {
-        List<RuleList> ruleList = new ArrayList<RuleList>();
+        List<RuleList> ruleList = new ArrayList<>();
 
         List<Ip> sourceLanIps = JsonUtil.fromJson(ipSecNeConnection.getSourceLanCidrs(), new TypeReference<List<Ip>>(){});
         List<Ip> peerLanIps = JsonUtil.fromJson(ipSecNeConnection.getPeerLanCidrs(), new TypeReference<List<Ip>>(){});
@@ -283,11 +282,9 @@ public class NeConnectionToIpsec {
     private static RuleList buildRule(final SbiNeIpSec ipSecNeConnection)
     {
         String srcIp = ipSecNeConnection.getSourceAddress();
-        //String srcIpMask = IpUtils.prefixToMask(IpUtils.getIPMaskFromCIDR(ipSecNeConnection.getSourceAddress()));
         String srcIpMask = IpUtils.prefixToMask(CONST_MASK_32);
 
         String destIp = ipSecNeConnection.getPeerAddress();
-        //String destIpMask = IpUtils.prefixToMask(IpUtils.getIPMaskFromCIDR(ipSecNeConnection.getPeerAddress()));
         String destIpMask = IpUtils.prefixToMask(CONST_MASK_32);
 
         return new RuleList("permit", srcIp, srcIpMask, destIp, destIpMask);
