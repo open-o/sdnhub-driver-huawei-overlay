@@ -65,6 +65,7 @@ public class FilterActionList extends UuidModel {
     /**
      * overriding super class equals method
      */
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;

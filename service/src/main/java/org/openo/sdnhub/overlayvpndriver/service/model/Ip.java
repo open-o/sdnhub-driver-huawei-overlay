@@ -137,6 +137,7 @@ public class Ip extends UuidModel {
      * @return true if this object equals to other object
      * @since SDNO 0.5
      */
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
