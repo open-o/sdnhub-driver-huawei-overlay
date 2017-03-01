@@ -154,4 +154,17 @@ public class SbiIfVlan extends UuidModel {
 
         return true;
     }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (serviceVlanUuId != null ? serviceVlanUuId.hashCode() : 0);
+        result = 31 * result + (ethInterfaceConfigId != null ? ethInterfaceConfigId.hashCode() : 0);
+        result = 31 * result + (ifId != null ? ifId.hashCode() : 0);
+        result = 31 * result + (ifName != null ? ifName.hashCode() : 0);
+        result = 31 * result + (defaultVlan != null ? defaultVlan.hashCode() : 0);
+        result = 31 * result + (linkType != null ? linkType.hashCode() : 0);
+        result = 31 * result + (vlans != null ? vlans.hashCode() : 0);
+        return result;
+    }
 }

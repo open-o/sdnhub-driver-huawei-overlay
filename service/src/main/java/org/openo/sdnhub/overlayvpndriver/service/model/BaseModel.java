@@ -204,4 +204,20 @@ public class BaseModel extends UuidModel {
 
         return true;
     }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (tenantId != null ? tenantId.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (deployStatus != null ? deployStatus.hashCode() : 0);
+        result = 31 * result + (operationStatus != null ? operationStatus.hashCode() : 0);
+        result = 31 * result + (activeStatus != null ? activeStatus.hashCode() : 0);
+        result = 31 * result + (runningStatus != null ? runningStatus.hashCode() : 0);
+        result = 31 * result + (createtime != null ? createtime.hashCode() : 0);
+        result = 31 * result + (updatetime != null ? updatetime.hashCode() : 0);
+        result = 31 * result + (additionalInfo != null ? additionalInfo.hashCode() : 0);
+        return result;
+    }
 }

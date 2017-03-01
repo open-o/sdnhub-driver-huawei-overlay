@@ -392,4 +392,33 @@ public class SbiSubnetNetModel extends BaseServiceModel {
 
         return true;
     }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (neId != null ? neId.hashCode() : 0);
+        result = 31 * result + (controllerId != null ? controllerId.hashCode() : 0);
+        result = 31 * result + (networkId != null ? networkId.hashCode() : 0);
+        result = 31 * result + (serviceSubnetId != null ? serviceSubnetId.hashCode() : 0);
+        result = 31 * result + (vni != null ? vni.hashCode() : 0);
+        result = 31 * result + (vlanId != null ? vlanId.hashCode() : 0);
+        result = 31 * result + (cidrIpAddress != null ? cidrIpAddress.hashCode() : 0);
+        result = 31 * result + (cidrMask != null ? cidrMask.hashCode() : 0);
+        result = 31 * result + (gatewayIp != null ? gatewayIp.hashCode() : 0);
+        result = 31 * result + (enableDhcp != null ? enableDhcp.hashCode() : 0);
+        result = 31 * result + (ipRangeStartIp != null ? ipRangeStartIp.hashCode() : 0);
+        result = 31 * result + (ipRangeEndIp != null ? ipRangeEndIp.hashCode() : 0);
+        result = 31 * result + (useMode != null ? useMode.hashCode() : 0);
+        result = 31 * result + (changedMode != null ? changedMode.hashCode() : 0);
+        result = 31 * result + (dhcpMode != null ? dhcpMode.hashCode() : 0);
+        result = 31 * result + (dnsMode != null ? dnsMode.hashCode() : 0);
+        result = 31 * result + (unlimit != null ? unlimit.hashCode() : 0);
+        result = 31 * result + (ipv6Address != null ? ipv6Address.hashCode() : 0);
+        result = 31 * result + (prefixLength != null ? prefixLength.hashCode() : 0);
+        result = 31 * result + (dhcp6Enable != null ? dhcp6Enable.hashCode() : 0);
+        result = 31 * result + (dhcp6Mode != null ? dhcp6Mode.hashCode() : 0);
+        result = 31 * result + (priorDnsServer != null ? priorDnsServer.hashCode() : 0);
+        result = 31 * result + (standbyDnsServer != null ? standbyDnsServer.hashCode() : 0);
+        return result;
+    }
 }

@@ -170,4 +170,14 @@ public class IpsecConnList extends UuidModel {
         return true;
     }
 
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (createFlag ? 1 : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (interfaceName != null ? interfaceName.hashCode() : 0);
+        result = 31 * result + (ipsecConnection != null ? ipsecConnection.hashCode() : 0);
+        result = 31 * result + (serviceId != null ? serviceId.hashCode() : 0);
+        return result;
+    }
 }

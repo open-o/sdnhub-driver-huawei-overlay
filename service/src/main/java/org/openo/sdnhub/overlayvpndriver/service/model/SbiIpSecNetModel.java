@@ -158,4 +158,17 @@ public abstract class SbiIpSecNetModel extends BaseModel {
 
         return true;
     }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (controllerId != null ? controllerId.hashCode() : 0);
+        result = 31 * result + (externalId != null ? externalId.hashCode() : 0);
+        result = 31 * result + (connectionServiceId != null ? connectionServiceId.hashCode() : 0);
+        result = 31 * result + (neId != null ? neId.hashCode() : 0);
+        result = 31 * result + (peerNeId != null ? peerNeId.hashCode() : 0);
+        result = 31 * result + (deviceId != null ? deviceId.hashCode() : 0);
+        result = 31 * result + (peerDeviceId != null ? peerDeviceId.hashCode() : 0);
+        return result;
+    }
 }

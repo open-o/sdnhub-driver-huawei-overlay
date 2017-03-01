@@ -137,4 +137,14 @@ public class SbiRouteNetModel extends BaseModel {
 
         return true;
     }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (deviceId != null ? deviceId.hashCode() : 0);
+        result = 31 * result + (controllerId != null ? controllerId.hashCode() : 0);
+        result = 31 * result + (externalId != null ? externalId.hashCode() : 0);
+        result = 31 * result + (nbiNeRouteId != null ? nbiNeRouteId.hashCode() : 0);
+        return result;
+    }
 }

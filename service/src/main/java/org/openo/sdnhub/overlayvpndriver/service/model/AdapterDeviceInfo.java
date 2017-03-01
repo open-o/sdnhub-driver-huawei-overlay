@@ -328,4 +328,27 @@ public class AdapterDeviceInfo extends AdapterDeviceCreateBasicInfo {
 
         return true;
     }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (id != null ? id.hashCode() : 0);
+        result = 31 * result + (showTenant != null ? showTenant.hashCode() : 0);
+        result = 31 * result + (serviceIp != null ? serviceIp.hashCode() : 0);
+        result = 31 * result + (neType != null ? neType.hashCode() : 0);
+        result = 31 * result + (version != null ? version.hashCode() : 0);
+        result = 31 * result + (status != null ? status.hashCode() : 0);
+        result = 31 * result + (gisLon != null ? gisLon.hashCode() : 0);
+        result = 31 * result + (gisLat != null ? gisLat.hashCode() : 0);
+        result = 31 * result + (vendor != null ? vendor.hashCode() : 0);
+        result = 31 * result + (tenantId != null ? tenantId.hashCode() : 0);
+        result = 31 * result + (tenantName != null ? tenantName.hashCode() : 0);
+        result = 31 * result + (orgnizationId != null ? orgnizationId.hashCode() : 0);
+        result = 31 * result + (creator != null ? creator.hashCode() : 0);
+        result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
+        result = 31 * result + (registerTime != null ? registerTime.hashCode() : 0);
+        result = 31 * result + (modifier != null ? modifier.hashCode() : 0);
+        result = 31 * result + (modifyTime != null ? modifyTime.hashCode() : 0);
+        return result;
+    }
 }

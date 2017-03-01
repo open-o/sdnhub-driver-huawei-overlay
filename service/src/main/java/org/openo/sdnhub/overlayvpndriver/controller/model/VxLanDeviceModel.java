@@ -109,6 +109,16 @@ public class VxLanDeviceModel extends AbstUuidModel {
         return vniList;
     }
 
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + vneId;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (localAddress != null ? localAddress.hashCode() : 0);
+        result = 31 * result + (vniList != null ? vniList.hashCode() : 0);
+        return result;
+    }
+
     /**
      * @param vniList collection of vni.
      */

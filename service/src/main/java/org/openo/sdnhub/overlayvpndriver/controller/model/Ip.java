@@ -103,4 +103,13 @@ public class Ip extends UuidModel {
         return true;
     }
 
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (ipv4 != null ? ipv4.hashCode() : 0);
+        result = 31 * result + (ipv6 != null ? ipv6.hashCode() : 0);
+        result = 31 * result + (ipMask != null ? ipMask.hashCode() : 0);
+        result = 31 * result + (prefixLength != null ? prefixLength.hashCode() : 0);
+        return result;
+    }
 }

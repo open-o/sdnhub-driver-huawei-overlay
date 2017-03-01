@@ -117,4 +117,14 @@ public class SbiIkePolicy extends SbiSecurityPolicy {
 
         return true;
     }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (ikeVersion != null ? ikeVersion.hashCode() : 0);
+        result = 31 * result + (psk != null ? psk.hashCode() : 0);
+        result = 31 * result + (authAlgorithm != null ? authAlgorithm.hashCode() : 0);
+        result = 31 * result + (encryptionAlgorithm != null ? encryptionAlgorithm.hashCode() : 0);
+        return result;
+    }
 }

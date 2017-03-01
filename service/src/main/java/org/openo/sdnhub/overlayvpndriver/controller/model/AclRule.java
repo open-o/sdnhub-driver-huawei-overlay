@@ -45,6 +45,14 @@ public class AclRule extends UuidModel {
         return policy;
     }
 
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (policy != null ? policy.hashCode() : 0);
+        result = 31 * result + (srcIp != null ? srcIp.hashCode() : 0);
+        result = 31 * result + (desIp != null ? desIp.hashCode() : 0);
+        return result;
+    }
 
     public void setPolicy(String policy) {
         this.policy = policy;

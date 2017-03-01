@@ -154,4 +154,16 @@ public class SbiNePolicyRoute extends SbiRouteNetModel {
 
         return true;
     }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (trafficPolicyName != null ? trafficPolicyName.hashCode() : 0);
+        result = 31 * result + (interfaceName != null ? interfaceName.hashCode() : 0);
+        result = 31 * result + (direction != null ? direction.hashCode() : 0);
+        result = 31 * result + (filterAction != null ? filterAction.hashCode() : 0);
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (srcDeviceId != null ? srcDeviceId.hashCode() : 0);
+        return result;
+    }
 }

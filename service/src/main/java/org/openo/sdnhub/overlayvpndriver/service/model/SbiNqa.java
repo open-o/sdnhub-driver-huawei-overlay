@@ -299,5 +299,24 @@ public class SbiNqa extends SbiRouteNetModel {
 
         return true;
     }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (neId != null ? neId.hashCode() : 0);
+        result = 31 * result + (neRole != null ? neRole.hashCode() : 0);
+        result = 31 * result + (srcIp != null ? srcIp.hashCode() : 0);
+        result = 31 * result + (srcPortName != null ? srcPortName.hashCode() : 0);
+        result = 31 * result + (dstIp != null ? dstIp.hashCode() : 0);
+        result = 31 * result + (dstPortName != null ? dstPortName.hashCode() : 0);
+        result = 31 * result + (testType != null ? testType.hashCode() : 0);
+        result = 31 * result + (frequency != null ? frequency.hashCode() : 0);
+        result = 31 * result + (probeCount != null ? probeCount.hashCode() : 0);
+        result = 31 * result + (timeout != null ? timeout.hashCode() : 0);
+        result = 31 * result + (ttl != null ? ttl.hashCode() : 0);
+        result = 31 * result + (tos != null ? tos.hashCode() : 0);
+        result = 31 * result + (interval != null ? interval.hashCode() : 0);
+        return result;
+    }
 }
 

@@ -88,4 +88,13 @@ public class FilterActionList extends UuidModel {
 
         return true;
     }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (action != null ? action.hashCode() : 0);
+        result = 31 * result + (ruleList != null ? ruleList.hashCode() : 0);
+        result = 31 * result + (filter != null ? filter.hashCode() : 0);
+        return result;
+    }
 }

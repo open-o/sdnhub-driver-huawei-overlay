@@ -304,4 +304,23 @@ public class Vni extends AbstUuidModel {
 
         return true;
     }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (deleteMode ? 1 : 0);
+        result = 31 * result + vni;
+        result = 31 * result + (macLearingMode != null ? macLearingMode.hashCode() : 0);
+        result = 31 * result + (evpnRtMode != null ? evpnRtMode.hashCode() : 0);
+        result = 31 * result + (evpnRtExport != null ? evpnRtExport.hashCode() : 0);
+        result = 31 * result + (evpnRtImport != null ? evpnRtImport.hashCode() : 0);
+        result = 31 * result + (peerAddresslist != null ? peerAddresslist.hashCode() : 0);
+        result = 31 * result + (broadCastManager ? 1 : 0);
+        result = 31 * result + (filterList != null ? filterList.hashCode() : 0);
+        result = 31 * result + (portlist != null ? portlist.hashCode() : 0);
+        result = 31 * result + (vlanlist != null ? vlanlist.hashCode() : 0);
+        result = 31 * result + (portvlanlist != null ? portvlanlist.hashCode() : 0);
+        result = 31 * result + (qosPreClassify ? 1 : 0);
+        return result;
+    }
 }
