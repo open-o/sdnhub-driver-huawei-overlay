@@ -116,4 +116,35 @@ public class VxLanDeviceModel extends AbstUuidModel {
     {
         this.vniList = vniList;
     }
+
+    /**
+     * Override equals Function.<br>
+     *
+     * @param obj other Object
+     * @return true if this object equals to other object
+     * @since SDNO 0.5
+     */
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null) {
+            return false;
+        }
+
+        if (super.getClass() != obj.getClass()) {
+            return false;
+        }
+
+        VxLanDeviceModel other = (VxLanDeviceModel) obj;
+        if (this.uuid == null) {
+            if (other.uuid != null)
+                return false;
+        } else if (!(this.uuid.equals(other.uuid))) {
+            return false;
+        }
+
+        return true;
+    }
 }

@@ -143,4 +143,31 @@ public class IpsecConnList extends UuidModel {
         return "ClassPojo [interfaceName = " + interfaceName + ", name = " + name + ", ipsecConnection = "
                 + ipsecConnection + "]";
     }
+    /**
+     * overriding super class equals method
+     */
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null) {
+            return false;
+        }
+
+        if (super.getClass() != obj.getClass()) {
+            return false;
+        }
+
+        IpsecConnList other = (IpsecConnList) obj;
+        if (this.uuid == null) {
+            if (other.uuid != null)
+                return false;
+        } else if (!(this.uuid.equals(other.uuid))) {
+            return false;
+        }
+
+        return true;
+    }
+
 }

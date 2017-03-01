@@ -127,4 +127,35 @@ public abstract class SbiIpSecNetModel extends BaseModel {
     public void setPeerDeviceId(String peerDeviceId) {
         this.peerDeviceId = peerDeviceId;
     }
+
+    /**
+     * Override equals Function.<br>
+     *
+     * @param obj other Object
+     * @return true if this object equals to other object
+     * @since SDNO 0.5
+     */
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null) {
+            return false;
+        }
+
+        if (super.getClass() != obj.getClass()) {
+            return false;
+        }
+
+        SbiIpSecNetModel other = (SbiIpSecNetModel) obj;
+        if (this.uuid == null) {
+            if (other.uuid != null)
+                return false;
+        } else if (!(this.uuid.equals(other.uuid))) {
+            return false;
+        }
+
+        return true;
+    }
 }

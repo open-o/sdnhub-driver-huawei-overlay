@@ -129,4 +129,35 @@ public class Ip extends UuidModel {
     public void setIsTypeV4(boolean isTypeV4) {
         this.isTypeV4 = isTypeV4;
     }
+
+    /**
+     * Override equals Function.<br>
+     *
+     * @param obj other Object
+     * @return true if this object equals to other object
+     * @since SDNO 0.5
+     */
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null) {
+            return false;
+        }
+
+        if (super.getClass() != obj.getClass()) {
+            return false;
+        }
+
+        Ip other = (Ip) obj;
+        if (this.uuid == null) {
+            if (other.uuid != null)
+                return false;
+        } else if (!(this.uuid.equals(other.uuid))) {
+            return false;
+        }
+
+        return true;
+    }
 }

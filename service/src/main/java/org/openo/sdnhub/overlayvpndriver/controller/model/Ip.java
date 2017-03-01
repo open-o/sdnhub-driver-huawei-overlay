@@ -76,5 +76,31 @@ public class Ip extends UuidModel {
     public void setPrefixLength(String prefixLength) {
         this.prefixLength = prefixLength;
     }
+    /**
+     * overriding super class equals method
+     */
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null) {
+            return false;
+        }
+
+        if (super.getClass() != obj.getClass()) {
+            return false;
+        }
+
+        Ip other = (Ip) obj;
+        if (this.uuid == null) {
+            if (other.uuid != null)
+                return false;
+        } else if (!(this.uuid.equals(other.uuid))) {
+            return false;
+        }
+
+        return true;
+    }
 
 }

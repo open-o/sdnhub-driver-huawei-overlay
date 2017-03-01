@@ -69,6 +69,31 @@ public class AclRule extends UuidModel {
     public void setDesIp(Ip desIp) {
         this.desIp = desIp;
     }
+    /**
+     * overriding super class equals method
+     */
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
 
+        if (obj == null) {
+            return false;
+        }
+
+        if (super.getClass() != obj.getClass()) {
+            return false;
+        }
+
+        AclRule other = (AclRule) obj;
+        if (this.uuid == null) {
+            if (other.uuid != null)
+                return false;
+        } else if (!(this.uuid.equals(other.uuid))) {
+            return false;
+        }
+
+        return true;
+    }
 
 }
