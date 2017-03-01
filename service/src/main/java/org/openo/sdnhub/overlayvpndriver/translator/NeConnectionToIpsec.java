@@ -220,7 +220,7 @@ public class NeConnectionToIpsec {
         try {
             psk = EncryptionUtil.decode(ipSecaNeConnection.getIkePolicy().getPsk().toCharArray());
         } catch(Exception e) {
-            LOGGER.error("decode psk failed");
+            LOGGER.error("decode psk failed :" + e);
         }
 
         Ike ike = new Ike();

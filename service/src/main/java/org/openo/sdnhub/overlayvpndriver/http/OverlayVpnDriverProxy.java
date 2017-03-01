@@ -97,7 +97,7 @@ public class OverlayVpnDriverProxy {
      *            The restful URL path
      * @param body
      *            The message body
-     * @param ctlrUuid
+     * @param ctrlUuid
      *            The controller UUID
      * @return The object of HTTPReturnMessage
      * @throws ServiceException
@@ -119,6 +119,19 @@ public class OverlayVpnDriverProxy {
             LOGGER.debug("@sendGetMsg" + finalurl);
             HttpResponse response = httpClient.execute(httpget);
 
+            HTTPReturnMessage httpReturnMessage=httpContentType(response);
+            return httpReturnMessage;
+
+        } catch(IOException e) {
+
+            throw new ServiceException(ErrorCode.ADAPTER_CONNECTOR_RESPONSE_FAIL, e);
+        }
+
+    }
+
+    private static HTTPReturnMessage httpContentType(HttpResponse response) throws ServiceException{
+
+        try{
             HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
             ContentType contentType = ContentType.get(response.getEntity());
             if((contentType == null) || (null == contentType.getCharset())) {
@@ -126,11 +139,10 @@ public class OverlayVpnDriverProxy {
             } else {
                 httpReturnMessage.setBody(EntityUtils.toString(response.getEntity()));
             }
-
             httpReturnMessage.setStatus(response.getStatusLine().getStatusCode());
             return httpReturnMessage;
-        } catch(IOException e) {
 
+        }catch(IOException e){
             throw new ServiceException(ErrorCode.ADAPTER_CONNECTOR_RESPONSE_FAIL, e);
         }
 
@@ -143,7 +155,7 @@ public class OverlayVpnDriverProxy {
      *            The restful URL path
      * @param body
      *            The message body
-     * @param ctlrUuid
+     * @param ctrlUuid
      *            The controller UUID
      * @return The object of HTTPReturnMessage
      * @throws ServiceException
@@ -165,15 +177,7 @@ public class OverlayVpnDriverProxy {
             HttpResponse response = httpClient.execute(httppost);
             LOGGER.debug(LOG_SEND_POST_MSG + finalurl + response);
 
-            HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
-            ContentType contentType = ContentType.get(response.getEntity());
-            if((contentType == null) || (null == contentType.getCharset())) {
-                httpReturnMessage.setBody(EntityUtils.toString(response.getEntity(), HTTP.UTF_8));
-            } else {
-                httpReturnMessage.setBody(EntityUtils.toString(response.getEntity()));
-            }
-
-            httpReturnMessage.setStatus(response.getStatusLine().getStatusCode());
+            HTTPReturnMessage httpReturnMessage=httpContentType(response);
             return httpReturnMessage;
 
         } catch(IOException e) {
@@ -190,7 +194,7 @@ public class OverlayVpnDriverProxy {
      *            The restful URL path
      * @param body
      *            The message body
-     * @param ctlrUuid
+     * @param ctrlUuid
      *            The controller UUID
      * @return The object of HTTPReturnMessage
      * @throws ServiceException
@@ -213,15 +217,7 @@ public class OverlayVpnDriverProxy {
             HttpResponse response = httpClient.execute(httpput);
             LOGGER.debug(LOG_SEND_PUT_MSG + finalurl + response);
 
-            HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
-            ContentType contentType = ContentType.get(response.getEntity());
-            if((contentType == null) || (null == contentType.getCharset())) {
-                httpReturnMessage.setBody(EntityUtils.toString(response.getEntity(), HTTP.UTF_8));
-            } else {
-                httpReturnMessage.setBody(EntityUtils.toString(response.getEntity()));
-            }
-
-            httpReturnMessage.setStatus(response.getStatusLine().getStatusCode());
+            HTTPReturnMessage httpReturnMessage=httpContentType(response);
             return httpReturnMessage;
 
         } catch(IOException e) {
@@ -237,7 +233,7 @@ public class OverlayVpnDriverProxy {
      *            The restful URL path
      * @param body
      *            The message body
-     * @param ctlrUuid
+     * @param ctrlUuid
      *            The controller UUID
      * @return The object of HTTPReturnMessage
      * @throws ServiceException
@@ -258,15 +254,7 @@ public class OverlayVpnDriverProxy {
             HttpResponse response = httpClient.execute(httpdelete);
             LOGGER.debug(LOG_SEND_DELETE_MSG + finalurl + response);
 
-            HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
-            ContentType contentType = ContentType.get(response.getEntity());
-            if((contentType == null) || (null == contentType.getCharset())) {
-                httpReturnMessage.setBody(EntityUtils.toString(response.getEntity(), HTTP.UTF_8));
-            } else {
-                httpReturnMessage.setBody(EntityUtils.toString(response.getEntity()));
-            }
-
-            httpReturnMessage.setStatus(response.getStatusLine().getStatusCode());
+            HTTPReturnMessage httpReturnMessage=httpContentType(response);
             return httpReturnMessage;
 
         } catch(IOException e) {

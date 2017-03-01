@@ -17,6 +17,8 @@
 package org.openo.sdnhub.overlayvpndriver.common.util;
 
 import org.apache.commons.lang.StringUtils;
+import org.openo.sdnhub.overlayvpndriver.config.ConfigKeyConst;
+import org.openo.sdnhub.overlayvpndriver.config.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,7 +53,7 @@ public class IpAddressUtil {
             return null;
         }
         if(mask <= 0) {
-            return "0.0.0.0";
+            return Configuration.getValues(ConfigKeyConst.WAN_DEFAULT_IP);
         } else if(mask >= 32) {
             return ip;
         }
