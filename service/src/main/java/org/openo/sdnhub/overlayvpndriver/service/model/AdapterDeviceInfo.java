@@ -399,6 +399,10 @@ public class AdapterDeviceInfo extends AdapterDeviceCreateBasicInfo {
         if (!Objects.equals(modifyTime, other.modifyTime)) {
             return false;
         }
+
+        if (!Objects.equals(getEsn(), other.getEsn())) {
+            return false;
+        }
         
         return true;
     }
