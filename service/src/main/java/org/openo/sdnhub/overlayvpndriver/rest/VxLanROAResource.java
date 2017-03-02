@@ -59,6 +59,9 @@ public class VxLanROAResource {
     @Autowired
     private VxLanSvcImpl vxlanService = null;
 
+    public static final String DEVICE_ID = "deviceId:";
+    public static final String SUCCESS_STR = " success";
+
     /**
      * Adds new Vxlan configuration using a specific Controller.<br>
      *
@@ -109,7 +112,7 @@ public class VxLanROAResource {
             List<SbiNeVxlanInstance> currNbiVxlanInsList = deviceIdToVxlaninsMap.get(deviceId);
             if (createResult.isSuccess())
             {
-                LOGGER.warn("deviceId:" + deviceId + " success");
+                LOGGER.warn(DEVICE_ID + deviceId + SUCCESS_STR);
                 succVxlanInstances.addAll(currNbiVxlanInsList);
             }
             else
@@ -194,11 +197,11 @@ public class VxLanROAResource {
 
             List<SbiNeVxlanInstance> currNbiVxlanInsList = deviceIdToVxlanInsMap.get(deviceId);
             if (createResult.isSuccess()) {
-                LOGGER.warn("deviceId:" + deviceId + " success");
+                LOGGER.warn(DEVICE_ID + deviceId + SUCCESS_STR);
                 succVxlanInstances.addAll(currNbiVxlanInsList);
             }
             else {
-                LOGGER.warn("deviceId:" + deviceId + " fail");
+                LOGGER.warn(DEVICE_ID + deviceId + " fail");
                 for(SbiNeVxlanInstance failVxlanIns : currNbiVxlanInsList) {
                     failDatas.add(new FailData<SbiNeVxlanInstance>(createResult.getErrorCode(),
                             createResult.getMessage(), failVxlanIns));
@@ -315,10 +318,10 @@ public class VxLanROAResource {
                     VxLanSvcImpl.updateVxlanByDevice(ctrlUuid, deviceId, Arrays.asList(updateVxlanDeviceModel));
             List<SbiNeVxlanInstance> currNbiVxlanInsList = deviceIdToVxlanInsMap.get(deviceId);
             if(createResult.isSuccess()) {
-                LOGGER.debug("deviceId:" + deviceId + " success");
+                LOGGER.debug(DEVICE_ID + deviceId + SUCCESS_STR);
                 succVxlanInstances.addAll(currNbiVxlanInsList);
             } else {
-                LOGGER.debug("deviceId:" + deviceId + " fail");
+                LOGGER.debug(DEVICE_ID + deviceId + " fail");
                 for(SbiNeVxlanInstance failVxlanIns : currNbiVxlanInsList) {
                     failDatas.add(new FailData<SbiNeVxlanInstance>(createResult.getErrorCode(),
                             createResult.getMessage(), failVxlanIns));

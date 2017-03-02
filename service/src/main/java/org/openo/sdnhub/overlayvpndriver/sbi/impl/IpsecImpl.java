@@ -28,7 +28,6 @@ import org.openo.sdnhub.overlayvpndriver.controller.model.Ip;
 import org.openo.sdnhub.overlayvpndriver.controller.model.IpsecConnList;
 import org.openo.sdnhub.overlayvpndriver.controller.model.IpsecConnection;
 import org.openo.sdnhub.overlayvpndriver.http.OverlayVpnDriverProxy;
-import org.openo.sdnhub.overlayvpndriver.result.ACDelResponse;
 import org.openo.sdnhub.overlayvpndriver.result.OverlayVpnDriverResponse;
 import org.openo.sdnhub.overlayvpndriver.service.model.*;
 import org.openo.sdnhub.overlayvpndriver.translator.NqaIpSecTranslate;

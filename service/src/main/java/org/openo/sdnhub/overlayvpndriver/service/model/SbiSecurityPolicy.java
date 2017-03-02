@@ -16,8 +16,6 @@
 
 package org.openo.sdnhub.overlayvpndriver.service.model;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openo.sdno.overlayvpn.model.v2.uuid.UuidModel;
 import org.openo.sdno.overlayvpn.verify.annotation.AInt;
 import org.openo.sdno.overlayvpn.verify.annotation.AString;
@@ -25,6 +23,15 @@ import org.openo.sdno.overlayvpn.verify.annotation.AUuid;
 
 import java.util.Objects;
 
+/**
+ *
+ * SBI Security Policy Class.<br>
+ * <p>
+ * </p>
+ *
+ * @author
+ * @version     NFVO 0.5  Mar 2, 2017
+ */
 public class SbiSecurityPolicy extends UuidModel {
 
     @AString(scope = "Group2,Group5,Group14")
@@ -41,9 +48,18 @@ public class SbiSecurityPolicy extends UuidModel {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
+        if (this == o)
+        {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass())
+        {
+            return false;
+        }
+        if (!super.equals(o))
+        {
+            return false;
+        }
         SbiSecurityPolicy that = (SbiSecurityPolicy) o;
         return Objects.equals(pfs, that.pfs) &&
                 Objects.equals(lifeTime, that.lifeTime) &&

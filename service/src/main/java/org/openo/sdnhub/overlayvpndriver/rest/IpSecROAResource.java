@@ -120,7 +120,7 @@ public class IpSecROAResource {
                 ipsecService.fillSmallErrorInfo(errorCodeInfoLst, entry, resultRsp);
                 for(SbiNeIpSec SbiNeIpSec : deviceIdToTpsecConnListMap.get(entry.getKey())) {
                     FailData<SbiNeIpSec> failData =
-                            new FailData<SbiNeIpSec>(resultRsp.getErrorCode(), resultRsp.getMessage(), SbiNeIpSec);
+                            new FailData<>(resultRsp.getErrorCode(), resultRsp.getMessage(), SbiNeIpSec);
                     totalResult.getFail().add(failData);
                 }
             }
@@ -213,7 +213,7 @@ public class IpSecROAResource {
         }
         ValidationUtil.validateModel(ipSecNeConnectionList);
 
-        ResultRsp<SbiNeIpSec> totalResult = new ResultRsp<SbiNeIpSec>(ErrorCode.OVERLAYVPN_SUCCESS);
+        ResultRsp<SbiNeIpSec> totalResult = new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS);
         for(SbiNeIpSec neIpSec : ipSecNeConnectionList) {
             try {
                 ResultRsp<List<IpsecConnList>> rsp = ipsecService.queryIpsecByDevice(ctrlUuid, neIpSec.getDeviceId(),
@@ -221,7 +221,7 @@ public class IpSecROAResource {
 
                 totalResult.setSuccessed(new ArrayList<SbiNeIpSec>());
                 for(IpsecConnList ipsecModel : rsp.getData()) {
-                    Set<String> seqNumSet = new HashSet<String>();
+                    Set<String> seqNumSet = new HashSet<>();
                     for(IpsecConnection ipsecCon : ipsecModel.getIpsecConnection())
                     {
                         seqNumSet.add(String.valueOf(ipsecCon.getSeqNumber()));
@@ -233,14 +233,14 @@ public class IpSecROAResource {
                     }
                     else
                     {
-                        FailData<SbiNeIpSec> failData = new FailData<SbiNeIpSec>(ErrorCode.OVERLAYVPN_FAILED, "can not find", neIpSec);
+                        FailData<SbiNeIpSec> failData = new FailData<>(ErrorCode.OVERLAYVPN_FAILED, "can not find", neIpSec);
                         totalResult.getFail().add(failData);
                     }
                 }
             } catch(ServiceException e) {
                 LOGGER.error("query failed!", e);
                 FailData<SbiNeIpSec> failData =
-                        new FailData<SbiNeIpSec>(ErrorCode.OVERLAYVPN_FAILED, "query failed", neIpSec);
+                        new FailData<>(ErrorCode.OVERLAYVPN_FAILED, "query failed", neIpSec);
                 totalResult.getFail().add(failData);
             }
         }
@@ -269,7 +269,7 @@ public class IpSecROAResource {
         long beginTime = System.currentTimeMillis();
         LOGGER.debug("Ipsec update begin time = " + beginTime);
 
-        ResultRsp<SbiNeIpSec> totalResult = new ResultRsp<SbiNeIpSec>(ErrorCode.OVERLAYVPN_SUCCESS);
+        ResultRsp<SbiNeIpSec> totalResult = new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS);
         totalResult.setSuccessed(new ArrayList<SbiNeIpSec>());
         totalResult.setFail(new ArrayList<FailData<SbiNeIpSec>>());
 

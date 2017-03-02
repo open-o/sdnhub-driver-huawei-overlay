@@ -25,6 +25,15 @@ import org.openo.sdno.overlayvpn.verify.annotation.AString;
 
 import javax.validation.constraints.NotNull;
 
+/**
+ *
+ * SBI NE IPsec class.<br>
+ * <p>
+ * </p>
+ *
+ * @author
+ * @version     NFVO 0.5  Mar 2, 2017
+ */
 @MOResType(infoModelName = "ipsec_sbi_neipsec")
 public class SbiNeIpSec extends SbiIpSecNetModel {
 
@@ -57,29 +66,6 @@ public class SbiNeIpSec extends SbiIpSecNetModel {
 
     @AString(min = 0, max = 4096)
     private String sourceLanCidrs;
-
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (externalIpSecId != null ? externalIpSecId.hashCode() : 0);
-        result = 31 * result + (soureIfName != null ? soureIfName.hashCode() : 0);
-        result = 31 * result + (destIfName != null ? destIfName.hashCode() : 0);
-        result = 31 * result + (sourceAddress != null ? sourceAddress.hashCode() : 0);
-        result = 31 * result + (peerAddress != null ? peerAddress.hashCode() : 0);
-        result = 31 * result + (ikePolicy != null ? ikePolicy.hashCode() : 0);
-        result = 31 * result + (ipSecPolicy != null ? ipSecPolicy.hashCode() : 0);
-        result = 31 * result + (workType != null ? workType.hashCode() : 0);
-        result = 31 * result + (sourceLanCidrs != null ? sourceLanCidrs.hashCode() : 0);
-        result = 31 * result + (peerLanCidrs != null ? peerLanCidrs.hashCode() : 0);
-        result = 31 * result + (isTemplateType != null ? isTemplateType.hashCode() : 0);
-        result = 31 * result + (nqa != null ? nqa.hashCode() : 0);
-        result = 31 * result + (localNeRole != null ? localNeRole.hashCode() : 0);
-        result = 31 * result + (tenantName != null ? tenantName.hashCode() : 0);
-        result = 31 * result + (protectionPolicy != null ? protectionPolicy.hashCode() : 0);
-        result = 31 * result + (qosPreClassify != null ? qosPreClassify.hashCode() : 0);
-        result = 31 * result + (regionId != null ? regionId.hashCode() : 0);
-        return result;
-    }
 
     @AString(min = 0, max = 4096)
     private String peerLanCidrs;
@@ -321,6 +307,29 @@ public class SbiNeIpSec extends SbiIpSecNetModel {
 
     public void setRegionId(String regionId) {
         this.regionId = regionId;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (externalIpSecId != null ? externalIpSecId.hashCode() : 0);
+        result = 31 * result + (soureIfName != null ? soureIfName.hashCode() : 0);
+        result = 31 * result + (destIfName != null ? destIfName.hashCode() : 0);
+        result = 31 * result + (sourceAddress != null ? sourceAddress.hashCode() : 0);
+        result = 31 * result + (peerAddress != null ? peerAddress.hashCode() : 0);
+        result = 31 * result + (ikePolicy != null ? ikePolicy.hashCode() : 0);
+        result = 31 * result + (ipSecPolicy != null ? ipSecPolicy.hashCode() : 0);
+        result = 31 * result + (workType != null ? workType.hashCode() : 0);
+        result = 31 * result + (sourceLanCidrs != null ? sourceLanCidrs.hashCode() : 0);
+        result = 31 * result + (peerLanCidrs != null ? peerLanCidrs.hashCode() : 0);
+        result = 31 * result + (isTemplateType != null ? isTemplateType.hashCode() : 0);
+        result = 31 * result + (nqa != null ? nqa.hashCode() : 0);
+        result = 31 * result + (localNeRole != null ? localNeRole.hashCode() : 0);
+        result = 31 * result + (tenantName != null ? tenantName.hashCode() : 0);
+        result = 31 * result + (protectionPolicy != null ? protectionPolicy.hashCode() : 0);
+        result = 31 * result + (qosPreClassify != null ? qosPreClassify.hashCode() : 0);
+        result = 31 * result + (regionId != null ? regionId.hashCode() : 0);
+        return result;
     }
 
     /**

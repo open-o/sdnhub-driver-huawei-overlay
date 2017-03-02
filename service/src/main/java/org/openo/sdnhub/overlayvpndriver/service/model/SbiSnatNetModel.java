@@ -144,9 +144,18 @@ public class SbiSnatNetModel extends BaseServiceModel {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
+        if (this == o)
+        {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass())
+        {
+            return false;
+        }
+        if (!super.equals(o))
+        {
+            return false;
+        }
         SbiSnatNetModel that = (SbiSnatNetModel) o;
         return Objects.equals(neId, that.neId) &&
                 Objects.equals(deviceId, that.deviceId) &&
