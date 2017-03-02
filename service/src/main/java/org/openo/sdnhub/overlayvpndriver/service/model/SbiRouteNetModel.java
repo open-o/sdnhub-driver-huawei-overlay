@@ -16,6 +16,8 @@
 
 package org.openo.sdnhub.overlayvpndriver.service.model;
 
+import java.util.Objects;
+
 import org.openo.sdno.overlayvpn.verify.annotation.AUuid;
 
 public class SbiRouteNetModel extends BaseModel {
@@ -114,25 +116,36 @@ public class SbiRouteNetModel extends BaseModel {
      * @return true if this object equals to other object
      * @since SDNO 0.5
      */
+
     @Override
     public boolean equals(Object obj) {
+        if (null == obj) {
+            return false;
+        }
+
         if (this == obj) {
             return true;
         }
 
-        if (obj == null) {
-            return false;
-        }
-
-        if (super.getClass() != obj.getClass()) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
 
         SbiRouteNetModel other = (SbiRouteNetModel) obj;
-        if (this.uuid == null) {
-            if (other.uuid != null)
-                return false;
-        } else if (!(this.uuid.equals(other.uuid))) {
+
+        if (!Objects.equals(deviceId, other.deviceId)) {
+            return false;
+        }
+
+        if (!Objects.equals(controllerId, other.controllerId)) {
+            return false;
+        }
+        
+        if (!Objects.equals(externalId, other.externalId)) {
+            return false;
+        }
+
+        if (!Objects.equals(nbiNeRouteId, other.nbiNeRouteId)) {
             return false;
         }
 
@@ -141,11 +154,7 @@ public class SbiRouteNetModel extends BaseModel {
 
     @Override
     public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (deviceId != null ? deviceId.hashCode() : 0);
-        result = 31 * result + (controllerId != null ? controllerId.hashCode() : 0);
-        result = 31 * result + (externalId != null ? externalId.hashCode() : 0);
-        result = 31 * result + (nbiNeRouteId != null ? nbiNeRouteId.hashCode() : 0);
-        return result;
+        return Objects.hash(deviceId, controllerId, externalId, nbiNeRouteId);
     }
+
 }

@@ -16,6 +16,8 @@
 
 package org.openo.sdnhub.overlayvpndriver.service.model;
 
+import java.util.Objects;
+
 import org.openo.sdno.overlayvpn.inventory.sdk.model.annotation.MOResType;
 import org.openo.sdno.overlayvpn.verify.annotation.AString;
 
@@ -93,25 +95,36 @@ public class SbiIpSecPolicy extends SbiSecurityPolicy {
      * @return true if this object equals to other object
      * @since SDNO 0.5
      */
+    
     @Override
     public boolean equals(Object obj) {
+        if (null == obj) {
+            return false;
+        }
+
         if (this == obj) {
             return true;
         }
 
-        if (obj == null) {
-            return false;
-        }
-
-        if (super.getClass() != obj.getClass()) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
 
         SbiIpSecPolicy other = (SbiIpSecPolicy) obj;
-        if (this.uuid == null) {
-            if (other.uuid != null)
-                return false;
-        } else if (!(this.uuid.equals(other.uuid))) {
+
+        if (!Objects.equals(transformProtocol, other.transformProtocol)) {
+            return false;
+        }
+
+        if (!Objects.equals(encapsulationMode, other.encapsulationMode)) {
+            return false;
+        }
+        
+        if (!Objects.equals(authAlgorithm, other.authAlgorithm)) {
+            return false;
+        }
+
+        if (!Objects.equals(encryptionAlgorithm, other.encryptionAlgorithm)) {
             return false;
         }
 
@@ -120,11 +133,6 @@ public class SbiIpSecPolicy extends SbiSecurityPolicy {
 
     @Override
     public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (transformProtocol != null ? transformProtocol.hashCode() : 0);
-        result = 31 * result + (encapsulationMode != null ? encapsulationMode.hashCode() : 0);
-        result = 31 * result + (authAlgorithm != null ? authAlgorithm.hashCode() : 0);
-        result = 31 * result + (encryptionAlgorithm != null ? encryptionAlgorithm.hashCode() : 0);
-        return result;
+        return Objects.hash(transformProtocol, encapsulationMode, authAlgorithm, encryptionAlgorithm);
     }
 }

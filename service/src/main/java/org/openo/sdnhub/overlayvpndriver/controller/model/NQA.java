@@ -22,6 +22,8 @@ import org.openo.sdno.overlayvpn.model.v2.uuid.UuidModel;
 import org.openo.sdno.overlayvpn.verify.annotation.AInt;
 import org.openo.sdno.overlayvpn.verify.annotation.AString;
 
+import java.util.Objects;
+
 /**
  * Model class file for NQA.<br>
  *
@@ -166,44 +168,81 @@ public class NQA extends UuidModel {
      */
     @Override
     public boolean equals(Object obj) {
+        if (null == obj) {
+            return false;
+        }
+
         if (this == obj) {
             return true;
         }
 
-        if (obj == null) {
-            return false;
-        }
-
-        if (super.getClass() != obj.getClass()) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
 
         NQA other = (NQA) obj;
-        if (this.uuid == null) {
-            if (other.uuid != null)
-                return false;
-        } else if (!(this.uuid.equals(other.uuid))) {
+
+        if (!Objects.equals(srcIp, other.srcIp)) {
             return false;
         }
 
+        if (!Objects.equals(srcPortName, other.srcPortName)) {
+            return false;
+        }
+        
+        if (!Objects.equals(ipsecConnectionId, other.ipsecConnectionId)) {
+            return false;
+        }
+
+        if (!Objects.equals(nqaState, other.nqaState)) {
+            return false;
+        }
+
+        return checkOther(other);
+    }
+    
+    private boolean checkOther(NQA other) {
+        if (!Objects.equals(dstIp, other.dstIp)) {
+            return false;
+        }
+
+        if (!Objects.equals(dstPortName, other.dstPortName)) {
+            return false;
+        }
+        
+        if (!Objects.equals(testType, other.testType)) {
+            return false;
+        }
+        
+        if (!Objects.equals(frequency, other.frequency)) {
+            return false;
+        }
+
+        if (!Objects.equals(probeCount, other.probeCount)) {
+            return false;
+        }
+        
+        if (!Objects.equals(timeout, other.timeout)) {
+            return false;
+        }
+
+        if (!Objects.equals(ttl, other.ttl)) {
+            return false;
+        }
+        
+        if (!Objects.equals(tos, other.tos)) {
+            return false;
+        }
+        
         return true;
     }
-
+    
+    /* (non-Javadoc)
+     * @see org.openo.sdno.overlayvpn.model.v2.uuid.UuidModel#hashCode()
+     */
     @Override
     public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (srcIp != null ? srcIp.hashCode() : 0);
-        result = 31 * result + (srcPortName != null ? srcPortName.hashCode() : 0);
-        result = 31 * result + (dstIp != null ? dstIp.hashCode() : 0);
-        result = 31 * result + (dstPortName != null ? dstPortName.hashCode() : 0);
-        result = 31 * result + (testType != null ? testType.hashCode() : 0);
-        result = 31 * result + (frequency != null ? frequency.hashCode() : 0);
-        result = 31 * result + (probeCount != null ? probeCount.hashCode() : 0);
-        result = 31 * result + (timeout != null ? timeout.hashCode() : 0);
-        result = 31 * result + (ttl != null ? ttl.hashCode() : 0);
-        result = 31 * result + (tos != null ? tos.hashCode() : 0);
-        result = 31 * result + (ipsecConnectionId != null ? ipsecConnectionId.hashCode() : 0);
-        result = 31 * result + (nqaState != null ? nqaState.hashCode() : 0);
-        return result;
+        return Objects.hash(srcIp, srcPortName, dstIp, dstPortName, testType, frequency, probeCount,
+                timeout, ttl, tos, ipsecConnectionId, nqaState);
     }
 }

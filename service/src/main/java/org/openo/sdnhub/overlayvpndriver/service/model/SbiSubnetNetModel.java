@@ -16,6 +16,8 @@
 
 package org.openo.sdnhub.overlayvpndriver.service.model;
 
+import java.util.Objects;
+
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.openo.sdno.overlayvpn.inventory.sdk.model.annotation.MOResType;
 import org.openo.sdno.overlayvpn.inventory.sdk.model.annotation.NONInvField;
@@ -369,25 +371,122 @@ public class SbiSubnetNetModel extends BaseServiceModel {
      * @return true if this object equals to other object
      * @since SDNO 0.5
      */
+    
     @Override
     public boolean equals(Object obj) {
+        if (null == obj) {
+            return false;
+        }
+
         if (this == obj) {
             return true;
         }
 
-        if (obj == null) {
-            return false;
-        }
-
-        if (super.getClass() != obj.getClass()) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
 
         SbiSubnetNetModel other = (SbiSubnetNetModel) obj;
-        if (this.uuid == null) {
-            if (other.uuid != null)
-                return false;
-        } else if (!(this.uuid.equals(other.uuid))) {
+
+        if (!Objects.equals(neId, other.neId)) {
+            return false;
+        }
+
+        if (!Objects.equals(controllerId, other.controllerId)) {
+            return false;
+        }
+        
+        if (!Objects.equals(networkId, other.networkId)) {
+            return false;
+        }
+
+        return checkOther(other);
+    }
+
+    private boolean checkOther(SbiSubnetNetModel other) {
+        
+        if (!Objects.equals(serviceSubnetId, other.serviceSubnetId)) {
+            return false;
+        }
+
+        if (!Objects.equals(vni, other.vni)) {
+            return false;
+        }
+        
+        if (!Objects.equals(vlanId, other.vlanId)) {
+            return false;
+        }
+        
+        if (!Objects.equals(cidrIpAddress, other.cidrIpAddress)) {
+            return false;
+        }
+
+        if (!Objects.equals(cidrMask, other.cidrMask)) {
+            return false;
+        }
+        
+        if (!Objects.equals(gatewayIp, other.gatewayIp)) {
+            return false;
+        }
+
+        if (!Objects.equals(enableDhcp, other.enableDhcp)) {
+            return false;
+        }
+        
+        if (!Objects.equals(ipRangeStartIp, other.ipRangeStartIp)) {
+            return false;
+        }
+        
+        if (!Objects.equals(ipRangeEndIp, other.ipRangeEndIp)) {
+            return false;
+        }
+
+        if (!Objects.equals(useMode, other.useMode)) {
+            return false;
+        }
+        
+        return checkOtherMembers(other);
+    }
+    
+    private boolean checkOtherMembers(SbiSubnetNetModel other) {
+        
+        if (!Objects.equals(changedMode, other.changedMode)) {
+            return false;
+        }
+        
+        if (!Objects.equals(dhcpMode, other.dhcpMode)) {
+            return false;
+        }
+
+        if (!Objects.equals(dnsMode, other.dnsMode)) {
+            return false;
+        }
+        
+        if (!Objects.equals(unlimit, other.unlimit)) {
+            return false;
+        }
+        
+        if (!Objects.equals(ipv6Address, other.ipv6Address)) {
+            return false;
+        }
+        
+        if (!Objects.equals(prefixLength, other.prefixLength)) {
+            return false;
+        }
+
+        if (!Objects.equals(dhcp6Enable, other.dhcp6Enable)) {
+            return false;
+        }
+        
+        if (!Objects.equals(dhcp6Mode, other.dhcp6Mode)) {
+            return false;
+        }
+        
+        if (!Objects.equals(priorDnsServer, other.priorDnsServer)) {
+            return false;
+        }
+        
+        if (!Objects.equals(standbyDnsServer, other.standbyDnsServer)) {
             return false;
         }
 
@@ -396,30 +495,8 @@ public class SbiSubnetNetModel extends BaseServiceModel {
 
     @Override
     public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (neId != null ? neId.hashCode() : 0);
-        result = 31 * result + (controllerId != null ? controllerId.hashCode() : 0);
-        result = 31 * result + (networkId != null ? networkId.hashCode() : 0);
-        result = 31 * result + (serviceSubnetId != null ? serviceSubnetId.hashCode() : 0);
-        result = 31 * result + (vni != null ? vni.hashCode() : 0);
-        result = 31 * result + (vlanId != null ? vlanId.hashCode() : 0);
-        result = 31 * result + (cidrIpAddress != null ? cidrIpAddress.hashCode() : 0);
-        result = 31 * result + (cidrMask != null ? cidrMask.hashCode() : 0);
-        result = 31 * result + (gatewayIp != null ? gatewayIp.hashCode() : 0);
-        result = 31 * result + (enableDhcp != null ? enableDhcp.hashCode() : 0);
-        result = 31 * result + (ipRangeStartIp != null ? ipRangeStartIp.hashCode() : 0);
-        result = 31 * result + (ipRangeEndIp != null ? ipRangeEndIp.hashCode() : 0);
-        result = 31 * result + (useMode != null ? useMode.hashCode() : 0);
-        result = 31 * result + (changedMode != null ? changedMode.hashCode() : 0);
-        result = 31 * result + (dhcpMode != null ? dhcpMode.hashCode() : 0);
-        result = 31 * result + (dnsMode != null ? dnsMode.hashCode() : 0);
-        result = 31 * result + (unlimit != null ? unlimit.hashCode() : 0);
-        result = 31 * result + (ipv6Address != null ? ipv6Address.hashCode() : 0);
-        result = 31 * result + (prefixLength != null ? prefixLength.hashCode() : 0);
-        result = 31 * result + (dhcp6Enable != null ? dhcp6Enable.hashCode() : 0);
-        result = 31 * result + (dhcp6Mode != null ? dhcp6Mode.hashCode() : 0);
-        result = 31 * result + (priorDnsServer != null ? priorDnsServer.hashCode() : 0);
-        result = 31 * result + (standbyDnsServer != null ? standbyDnsServer.hashCode() : 0);
-        return result;
-    }
+        return Objects.hash(neId, controllerId, networkId, serviceSubnetId, vni, vlanId, cidrIpAddress, cidrMask,
+                gatewayIp, enableDhcp, ipRangeStartIp, ipRangeEndIp, useMode, changedMode, dhcpMode, dnsMode, unlimit,
+                ipv6Address, prefixLength, dhcp6Enable, dhcp6Mode, priorDnsServer, standbyDnsServer);
+    }  
 }

@@ -16,6 +16,8 @@
 
 package org.openo.sdnhub.overlayvpndriver.service.model;
 
+import java.util.Objects;
+
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.openo.sdno.overlayvpn.inventory.sdk.model.annotation.NONInvField;
 import org.openo.sdno.overlayvpn.model.common.enums.ActionStatus;
@@ -183,42 +185,71 @@ public class BaseModel extends UuidModel {
      */
     @Override
     public boolean equals(Object obj) {
+        if (null == obj) {
+            return false;
+        }
+
         if (this == obj) {
             return true;
         }
 
-        if (obj == null) {
-            return false;
-        }
-
-        if (super.getClass() != obj.getClass()) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
 
         BaseModel other = (BaseModel) obj;
-        if (this.uuid == null) {
-            if (other.uuid != null)
-                return false;
-        } else if (!(this.uuid.equals(other.uuid))) {
+
+        if (!Objects.equals(name, other.name)) {
+            return false;
+        }
+
+        if (!Objects.equals(tenantId, other.tenantId)) {
+            return false;
+        }
+        
+        if (!Objects.equals(description, other.description)) {
+            return false;
+        }
+
+        return checkOther(other);
+    }
+
+    private boolean checkOther(BaseModel other) {
+        
+        if (!Objects.equals(deployStatus, other.deployStatus)) {
+            return false;
+        }
+        
+        if (!Objects.equals(operationStatus, other.operationStatus)) {
+            return false;
+        }
+
+        if (!Objects.equals(activeStatus, other.activeStatus)) {
+            return false;
+        }
+        
+        if (!Objects.equals(runningStatus, other.runningStatus)) {
+            return false;
+        }
+        
+        if (!Objects.equals(createtime, other.createtime)) {
+            return false;
+        }
+
+        if (!Objects.equals(updatetime, other.updatetime)) {
+            return false;
+        }
+        
+        if (!Objects.equals(additionalInfo, other.additionalInfo)) {
             return false;
         }
 
         return true;
     }
-
+    
     @Override
     public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (tenantId != null ? tenantId.hashCode() : 0);
-        result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + (deployStatus != null ? deployStatus.hashCode() : 0);
-        result = 31 * result + (operationStatus != null ? operationStatus.hashCode() : 0);
-        result = 31 * result + (activeStatus != null ? activeStatus.hashCode() : 0);
-        result = 31 * result + (runningStatus != null ? runningStatus.hashCode() : 0);
-        result = 31 * result + (createtime != null ? createtime.hashCode() : 0);
-        result = 31 * result + (updatetime != null ? updatetime.hashCode() : 0);
-        result = 31 * result + (additionalInfo != null ? additionalInfo.hashCode() : 0);
-        return result;
+        return Objects.hash(name, tenantId, description, deployStatus, operationStatus, activeStatus, runningStatus,
+                createtime, updatetime, additionalInfo);
     }
 }

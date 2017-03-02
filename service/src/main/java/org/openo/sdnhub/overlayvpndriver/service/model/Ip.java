@@ -16,6 +16,8 @@
 
 package org.openo.sdnhub.overlayvpndriver.service.model;
 
+import java.util.Objects;
+
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.openo.sdno.overlayvpn.inventory.sdk.model.annotation.NONInvField;
 import org.openo.sdno.overlayvpn.model.v2.uuid.UuidModel;
@@ -137,42 +139,65 @@ public class Ip extends UuidModel {
      * @return true if this object equals to other object
      * @since SDNO 0.5
      */
+    
     @Override
     public boolean equals(Object obj) {
+        if (null == obj) {
+            return false;
+        }
+
         if (this == obj) {
             return true;
         }
 
-        if (obj == null) {
-            return false;
-        }
-
-        if (super.getClass() != obj.getClass()) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
 
         Ip other = (Ip) obj;
-        if (this.uuid == null) {
-            if (other.uuid != null)
-                return false;
-        } else if (!(this.uuid.equals(other.uuid))) {
+
+        if (!Objects.equals(ipv4, other.ipv4)) {
             return false;
         }
 
+        if (!Objects.equals(ipv6, other.ipv6)) {
+            return false;
+        }
+        
+        if (!Objects.equals(ipMask, other.ipMask)) {
+            return false;
+        }
+
+        return checkOther(other);
+    }
+
+    private boolean checkOther(Ip other) {
+        if (!Objects.equals(prefixLength, other.prefixLength)) {
+            return false;
+        }
+
+        if (!Objects.equals(neId, other.neId)) {
+            return false;
+        }
+        
+        if (!Objects.equals(deviceId, other.deviceId)) {
+            return false;
+        }
+        
+        if (!Objects.equals(routeId, other.routeId)) {
+            return false;
+        }
+
+        if (!Objects.equals(isTypeV4, other.isTypeV4)) {
+            return false;
+        }
+        
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (ipv4 != null ? ipv4.hashCode() : 0);
-        result = 31 * result + (ipv6 != null ? ipv6.hashCode() : 0);
-        result = 31 * result + (ipMask != null ? ipMask.hashCode() : 0);
-        result = 31 * result + (prefixLength != null ? prefixLength.hashCode() : 0);
-        result = 31 * result + (neId != null ? neId.hashCode() : 0);
-        result = 31 * result + (deviceId != null ? deviceId.hashCode() : 0);
-        result = 31 * result + (routeId != null ? routeId.hashCode() : 0);
-        result = 31 * result + (isTypeV4 ? 1 : 0);
-        return result;
+        return Objects.hash(ipv4, ipv6, ipMask, prefixLength, neId, deviceId, routeId,
+                isTypeV4);
     }
 }

@@ -16,6 +16,8 @@
 
 package org.openo.sdnhub.overlayvpndriver.service.model;
 
+import java.util.Objects;
+
 import org.openo.sdno.overlayvpn.model.uuid.AbstUuidModel;
 import org.openo.sdno.overlayvpn.verify.annotation.AString;
 
@@ -108,14 +110,7 @@ public class AdapterDeviceCreateBasicInfo extends AbstUuidModel {
     public void setDescription(String description) {
         this.description = description;
     }
-
-    @Override
-    public int hashCode() {
-        int result = 1;
-        result = 31 * result + (esn == null ? 0 : esn.hashCode());
-        return result;
-    }
-
+    
     /**
      * Override equals Function.<br>
      *
@@ -125,27 +120,43 @@ public class AdapterDeviceCreateBasicInfo extends AbstUuidModel {
      */
     @Override
     public boolean equals(Object obj) {
-        if(this == obj) {
+        if (null == obj) {
+            return false;
+        }
+
+        if (this == obj) {
             return true;
         }
 
-        if(obj == null) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
 
-        if(getClass() != obj.getClass()) {
+        AdapterDeviceCreateBasicInfo other = (AdapterDeviceCreateBasicInfo) obj;
+
+        if (!Objects.equals(name, other.name)) {
             return false;
         }
 
-        AdapterDeviceInfo other = (AdapterDeviceInfo)obj;
-        if(esn == null) {
-            if(other.getEsn() != null) {
-                return false;
-            }
-        } else if(!esn.equals(other.getEsn())) {
+        if (!Objects.equals(esn, other.esn)) {
+            return false;
+        }
+        
+        if (!Objects.equals(orgnizationName, other.orgnizationName)) {
+            return false;
+        }
+
+        if (!Objects.equals(description, other.description)) {
             return false;
         }
 
         return true;
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, esn, orgnizationName, description);
+                
+    }
+
 }

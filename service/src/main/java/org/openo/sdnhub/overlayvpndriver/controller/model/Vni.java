@@ -17,6 +17,7 @@
 package org.openo.sdnhub.overlayvpndriver.controller.model;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.openo.sdno.overlayvpn.model.uuid.AbstUuidModel;
 import org.openo.sdno.overlayvpn.verify.annotation.AInt;
@@ -281,47 +282,87 @@ public class Vni extends AbstUuidModel {
      * @return true if this object equals to other object
      * @since SDNO 0.5
      */
+   
     @Override
     public boolean equals(Object obj) {
+        if (null == obj) {
+            return false;
+        }
+
         if (this == obj) {
             return true;
         }
 
-        if (obj == null) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
 
-        if (super.getClass() != obj.getClass()) {
+        Vni other = (Vni)obj;
+
+        if (!Objects.equals(deleteMode, other.deleteMode)) {
             return false;
         }
 
-        Vni other = (Vni) obj;
-        if (this.uuid == null) {
-            if (other.uuid != null)
-                return false;
-        } else if (!(this.uuid.equals(other.uuid))) {
+        if (!Objects.equals(vni, other.vni)) {
+            return false;
+        }
+        
+        if (!Objects.equals(qosPreClassify, other.qosPreClassify)) {
+            return false;
+        }
+        
+        if (!Objects.equals(macLearingMode, other.macLearingMode)) {
             return false;
         }
 
+        return checkOther(other);
+    }
+
+    private boolean checkOther(Vni other) {
+        
+        if (!Objects.equals(evpnRtMode, other.evpnRtMode)) {
+            return false;
+        }
+        
+        if (!Objects.equals(evpnRtExport, other.evpnRtExport)) {
+            return false;
+        }
+
+        if (!Objects.equals(evpnRtImport, other.evpnRtImport)) {
+            return false;
+        }
+        
+        if (!Objects.equals(broadCastManager, other.broadCastManager)) {
+            return false;
+        }
+        
+        if (!peerAddresslist.equals(other.peerAddresslist)) {
+            return false;
+        }
+        
+        if (!filterList.equals(other.filterList)) {
+            return false;
+        }
+        
+        if (!portlist.equals(other.portlist)) {
+            return false;
+        }
+        
+        if (!vlanlist.equals(other.vlanlist)) {
+            return false;
+        }
+        
+        if (!portvlanlist.equals(other.portvlanlist)) {
+            return false;
+        }
+       
         return true;
     }
-
+    
     @Override
     public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (deleteMode ? 1 : 0);
-        result = 31 * result + vni;
-        result = 31 * result + (macLearingMode != null ? macLearingMode.hashCode() : 0);
-        result = 31 * result + (evpnRtMode != null ? evpnRtMode.hashCode() : 0);
-        result = 31 * result + (evpnRtExport != null ? evpnRtExport.hashCode() : 0);
-        result = 31 * result + (evpnRtImport != null ? evpnRtImport.hashCode() : 0);
-        result = 31 * result + (peerAddresslist != null ? peerAddresslist.hashCode() : 0);
-        result = 31 * result + (broadCastManager ? 1 : 0);
-        result = 31 * result + (filterList != null ? filterList.hashCode() : 0);
-        result = 31 * result + (portlist != null ? portlist.hashCode() : 0);
-        result = 31 * result + (vlanlist != null ? vlanlist.hashCode() : 0);
-        result = 31 * result + (portvlanlist != null ? portvlanlist.hashCode() : 0);
-        result = 31 * result + (qosPreClassify ? 1 : 0);
-        return result;
+        return Objects.hash(deleteMode, vni, macLearingMode, evpnRtMode, evpnRtExport, evpnRtImport, peerAddresslist,
+                broadCastManager, filterList, portlist, vlanlist, portvlanlist, qosPreClassify);
     }
+    
 }

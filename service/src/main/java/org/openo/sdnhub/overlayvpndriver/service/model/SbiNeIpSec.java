@@ -24,6 +24,7 @@ import org.openo.sdno.overlayvpn.verify.annotation.AIp;
 import org.openo.sdno.overlayvpn.verify.annotation.AString;
 
 import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 /**
  *
@@ -310,57 +311,104 @@ public class SbiNeIpSec extends SbiIpSecNetModel {
     }
 
     @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (externalIpSecId != null ? externalIpSecId.hashCode() : 0);
-        result = 31 * result + (soureIfName != null ? soureIfName.hashCode() : 0);
-        result = 31 * result + (destIfName != null ? destIfName.hashCode() : 0);
-        result = 31 * result + (sourceAddress != null ? sourceAddress.hashCode() : 0);
-        result = 31 * result + (peerAddress != null ? peerAddress.hashCode() : 0);
-        result = 31 * result + (ikePolicy != null ? ikePolicy.hashCode() : 0);
-        result = 31 * result + (ipSecPolicy != null ? ipSecPolicy.hashCode() : 0);
-        result = 31 * result + (workType != null ? workType.hashCode() : 0);
-        result = 31 * result + (sourceLanCidrs != null ? sourceLanCidrs.hashCode() : 0);
-        result = 31 * result + (peerLanCidrs != null ? peerLanCidrs.hashCode() : 0);
-        result = 31 * result + (isTemplateType != null ? isTemplateType.hashCode() : 0);
-        result = 31 * result + (nqa != null ? nqa.hashCode() : 0);
-        result = 31 * result + (localNeRole != null ? localNeRole.hashCode() : 0);
-        result = 31 * result + (tenantName != null ? tenantName.hashCode() : 0);
-        result = 31 * result + (protectionPolicy != null ? protectionPolicy.hashCode() : 0);
-        result = 31 * result + (qosPreClassify != null ? qosPreClassify.hashCode() : 0);
-        result = 31 * result + (regionId != null ? regionId.hashCode() : 0);
-        return result;
-    }
-
-    /**
-     * Override equals Function.<br>
-     *
-     * @param obj other Object
-     * @return true if this object equals to other object
-     * @since SDNO 0.5
-     */
-    @Override
     public boolean equals(Object obj) {
+        if (null == obj) {
+            return false;
+        }
+
         if (this == obj) {
             return true;
         }
 
-        if (obj == null) {
-            return false;
-        }
-
-        if (super.getClass() != obj.getClass()) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
 
         SbiNeIpSec other = (SbiNeIpSec) obj;
-        if (this.uuid == null) {
-            if (other.uuid != null)
-                return false;
-        } else if (!(this.uuid.equals(other.uuid))) {
+
+        if (!Objects.equals(externalIpSecId, other.externalIpSecId)) {
+            return false;
+        }
+
+        if (!Objects.equals(soureIfName, other.soureIfName)) {
+            return false;
+        }
+
+        if (!Objects.equals(destIfName, other.destIfName)) {
+            return false;
+        }
+
+        return checkOther(other);
+    }
+
+    private boolean checkOther(SbiNeIpSec other) {
+        if (!Objects.equals(sourceAddress, other.sourceAddress)) {
+            return false;
+        }
+
+        if (!Objects.equals(peerAddress, other.peerAddress)) {
+            return false;
+        }
+
+        if (!Objects.equals(ikePolicy, other.ikePolicy)) {
+            return false;
+        }
+
+        if (!Objects.equals(ipSecPolicy, other.ipSecPolicy)) {
+            return false;
+        }
+
+        if (!Objects.equals(workType, other.workType)) {
+            return false;
+        }
+
+        if (!Objects.equals(sourceLanCidrs, other.sourceLanCidrs)) {
+            return false;
+        }
+
+        if (!Objects.equals(peerLanCidrs, other.peerLanCidrs)) {
+            return false;
+        }
+
+        if (!Objects.equals(isTemplateType, other.isTemplateType)) {
+            return false;
+        }
+
+        return checkOtherMembers(other);
+    }
+
+    private boolean checkOtherMembers(SbiNeIpSec other) {
+        if (!Objects.equals(nqa, other.nqa)) {
+            return false;
+        }
+
+        if (!Objects.equals(localNeRole, other.localNeRole)) {
+            return false;
+        }
+
+        if (!Objects.equals(tenantName, other.tenantName)) {
+            return false;
+        }
+
+        if (!Objects.equals(protectionPolicy, other.protectionPolicy)) {
+            return false;
+        }
+
+        if (!Objects.equals(qosPreClassify, other.qosPreClassify)) {
+            return false;
+        }
+
+        if (!Objects.equals(regionId, other.regionId)) {
             return false;
         }
 
         return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(externalIpSecId, soureIfName, destIfName, sourceAddress, peerAddress, ikePolicy,
+                ipSecPolicy, workType, sourceLanCidrs, peerLanCidrs, isTemplateType, nqa, localNeRole, tenantName,
+                protectionPolicy, qosPreClassify, regionId);
     }
 }

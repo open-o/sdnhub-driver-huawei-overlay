@@ -16,6 +16,8 @@
 
 package org.openo.sdnhub.overlayvpndriver.service.model;
 
+import java.util.Objects;
+
 import org.openo.sdno.overlayvpn.inventory.sdk.model.annotation.MOResType;
 import org.openo.sdno.overlayvpn.model.common.enums.ipsec.IKEVersion;
 import org.openo.sdno.overlayvpn.verify.annotation.AString;
@@ -96,36 +98,41 @@ public class SbiIkePolicy extends SbiSecurityPolicy {
      */
     @Override
     public boolean equals(Object obj) {
+        if (null == obj) {
+            return false;
+        }
+
         if (this == obj) {
             return true;
         }
 
-        if (obj == null) {
-            return false;
-        }
-
-        if (super.getClass() != obj.getClass()) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
 
         SbiIkePolicy other = (SbiIkePolicy) obj;
-        if (this.uuid == null) {
-            if (other.uuid != null)
-                return false;
-        } else if (!(this.uuid.equals(other.uuid))) {
+
+        if (!Objects.equals(ikeVersion, other.ikeVersion)) {
             return false;
         }
 
+        if (!Objects.equals(psk, other.psk)) {
+            return false;
+        }
+        
+        if (!Objects.equals(authAlgorithm, other.authAlgorithm)) {
+            return false;
+        }
+
+        if (!Objects.equals(encryptionAlgorithm, other.encryptionAlgorithm)) {
+            return false;
+        }
+        
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (ikeVersion != null ? ikeVersion.hashCode() : 0);
-        result = 31 * result + (psk != null ? psk.hashCode() : 0);
-        result = 31 * result + (authAlgorithm != null ? authAlgorithm.hashCode() : 0);
-        result = 31 * result + (encryptionAlgorithm != null ? encryptionAlgorithm.hashCode() : 0);
-        return result;
+        return Objects.hash(ikeVersion, psk, authAlgorithm, encryptionAlgorithm);
     }
 }

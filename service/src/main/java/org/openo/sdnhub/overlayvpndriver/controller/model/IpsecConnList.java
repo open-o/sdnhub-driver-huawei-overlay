@@ -20,6 +20,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.openo.sdno.overlayvpn.model.v2.uuid.UuidModel;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * <br/>
@@ -161,24 +162,36 @@ public class IpsecConnList extends UuidModel {
         }
 
         IpsecConnList other = (IpsecConnList) obj;
-        if (this.uuid == null) {
-            if (other.uuid != null)
-                return false;
-        } else if (!(this.uuid.equals(other.uuid))) {
+
+        if (!Objects.equals(createFlag, other.createFlag)) {
+            return false;
+        }
+        if (!Objects.equals(name, other.name)) {
+            return false;
+        }
+        if (!Objects.equals(interfaceName, other.interfaceName)) {
+            return false;
+        }
+        
+        return checkOther(other);
+
+    }
+    
+    private boolean checkOther(IpsecConnList other) {
+        if (!Objects.equals(serviceId, other.serviceId)) {
             return false;
         }
 
+        if (!ipsecConnection.equals(other.ipsecConnection)) {
+            return false;
+        }
+        
         return true;
     }
-
+    
     @Override
     public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (createFlag ? 1 : 0);
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (interfaceName != null ? interfaceName.hashCode() : 0);
-        result = 31 * result + (ipsecConnection != null ? ipsecConnection.hashCode() : 0);
-        result = 31 * result + (serviceId != null ? serviceId.hashCode() : 0);
-        return result;
+        return Objects.hash(createFlag, name, interfaceName, ipsecConnection, serviceId);
     }
+
 }

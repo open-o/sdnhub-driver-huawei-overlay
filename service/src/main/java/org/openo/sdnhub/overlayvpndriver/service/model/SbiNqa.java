@@ -16,6 +16,8 @@
 
 package org.openo.sdnhub.overlayvpndriver.service.model;
 
+import java.util.Objects;
+
 import org.openo.sdno.overlayvpn.inventory.sdk.model.annotation.MOInvField;
 import org.openo.sdno.overlayvpn.inventory.sdk.model.annotation.MOResType;
 import org.openo.sdno.overlayvpn.verify.annotation.AInt;
@@ -278,46 +280,85 @@ public class SbiNqa extends SbiRouteNetModel {
      */
     @Override
     public boolean equals(Object obj) {
+        if (null == obj) {
+            return false;
+        }
+
         if (this == obj) {
             return true;
         }
 
-        if (obj == null) {
-            return false;
-        }
-
-        if (super.getClass() != obj.getClass()) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
 
         SbiNqa other = (SbiNqa) obj;
-        if (this.uuid == null) {
-            if (other.uuid != null)
-                return false;
-        } else if (!(this.uuid.equals(other.uuid))) {
+
+        if (!Objects.equals(neId, other.neId)) {
             return false;
         }
 
-        return true;
+        if (!Objects.equals(neRole, other.neRole)) {
+            return false;
+        }
+        
+        if (!Objects.equals(srcIp, other.srcIp)) {
+            return false;
+        }
+
+        if (!Objects.equals(srcPortName, other.srcPortName)) {
+            return false;
+        }
+
+        return checkOther(other);
     }
 
+    private boolean checkOther(SbiNqa other) {
+        
+
+        if (!Objects.equals(dstIp, other.dstIp)) {
+            return false;
+        }
+
+        if (!Objects.equals(dstPortName, other.dstPortName)) {
+            return false;
+        }
+        
+        if (!Objects.equals(testType, other.testType)) {
+            return false;
+        }
+        
+        if (!Objects.equals(frequency, other.frequency)) {
+            return false;
+        }
+
+        if (!Objects.equals(probeCount, other.probeCount)) {
+            return false;
+        }
+        
+        if (!Objects.equals(timeout, other.timeout)) {
+            return false;
+        }
+
+        if (!Objects.equals(ttl, other.ttl)) {
+            return false;
+        }
+        
+        if (!Objects.equals(tos, other.tos)) {
+            return false;
+        }
+        
+        if (!Objects.equals(interval, other.interval)) {
+            return false;
+        }
+        
+        return true;
+    }
     @Override
     public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (neId != null ? neId.hashCode() : 0);
-        result = 31 * result + (neRole != null ? neRole.hashCode() : 0);
-        result = 31 * result + (srcIp != null ? srcIp.hashCode() : 0);
-        result = 31 * result + (srcPortName != null ? srcPortName.hashCode() : 0);
-        result = 31 * result + (dstIp != null ? dstIp.hashCode() : 0);
-        result = 31 * result + (dstPortName != null ? dstPortName.hashCode() : 0);
-        result = 31 * result + (testType != null ? testType.hashCode() : 0);
-        result = 31 * result + (frequency != null ? frequency.hashCode() : 0);
-        result = 31 * result + (probeCount != null ? probeCount.hashCode() : 0);
-        result = 31 * result + (timeout != null ? timeout.hashCode() : 0);
-        result = 31 * result + (ttl != null ? ttl.hashCode() : 0);
-        result = 31 * result + (tos != null ? tos.hashCode() : 0);
-        result = 31 * result + (interval != null ? interval.hashCode() : 0);
-        return result;
+        return Objects.hash(neId, neRole, srcIp, srcPortName, dstIp, dstPortName, testType,
+                frequency, probeCount, timeout, ttl, tos, interval);
     }
+
 }
 

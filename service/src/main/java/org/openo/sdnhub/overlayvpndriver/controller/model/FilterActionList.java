@@ -16,9 +16,10 @@
 
 package org.openo.sdnhub.overlayvpndriver.controller.model;
 
-import java.util.List;
-
 import org.openo.sdno.overlayvpn.model.v2.uuid.UuidModel;
+
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Model class for FilterActionList.<br/>
@@ -80,22 +81,22 @@ public class FilterActionList extends UuidModel {
         }
 
         FilterActionList other = (FilterActionList) obj;
-        if (this.uuid == null) {
-            if (other.uuid != null)
-                return false;
-        } else if (!(this.uuid.equals(other.uuid))) {
+
+        if (!Objects.equals(action, other.action)) {
+            return false;
+        }
+        if (!Objects.equals(filter, other.filter)) {
+            return false;
+        }
+        if (!ruleList.equals(other.ruleList)) {
             return false;
         }
 
         return true;
     }
-
+    
     @Override
     public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (action != null ? action.hashCode() : 0);
-        result = 31 * result + (ruleList != null ? ruleList.hashCode() : 0);
-        result = 31 * result + (filter != null ? filter.hashCode() : 0);
-        return result;
+        return Objects.hash(action, ruleList, filter);
     }
 }

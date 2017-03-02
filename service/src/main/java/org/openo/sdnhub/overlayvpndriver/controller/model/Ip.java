@@ -16,6 +16,8 @@
 
 package org.openo.sdnhub.overlayvpndriver.controller.model;
 
+import java.util.Objects;
+
 import org.openo.sdno.overlayvpn.inventory.sdk.model.annotation.MOResType;
 import org.openo.sdno.overlayvpn.model.v2.uuid.UuidModel;
 import org.openo.sdno.overlayvpn.verify.annotation.AInt;
@@ -94,10 +96,17 @@ public class Ip extends UuidModel {
         }
 
         Ip other = (Ip) obj;
-        if (this.uuid == null) {
-            if (other.uuid != null)
-                return false;
-        } else if (!(this.uuid.equals(other.uuid))) {
+
+        if (!Objects.equals(ipv4, other.ipv4)) {
+            return false;
+        }
+        if (!Objects.equals(ipv6, other.ipv6)) {
+            return false;
+        }
+        if (!Objects.equals(ipMask, other.ipMask)) {
+            return false;
+        }
+        if (!Objects.equals(prefixLength, other.prefixLength)) {
             return false;
         }
 
@@ -106,11 +115,6 @@ public class Ip extends UuidModel {
 
     @Override
     public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (ipv4 != null ? ipv4.hashCode() : 0);
-        result = 31 * result + (ipv6 != null ? ipv6.hashCode() : 0);
-        result = 31 * result + (ipMask != null ? ipMask.hashCode() : 0);
-        result = 31 * result + (prefixLength != null ? prefixLength.hashCode() : 0);
-        return result;
+        return Objects.hash(ipv4, ipv6, ipMask, prefixLength);
     }
 }

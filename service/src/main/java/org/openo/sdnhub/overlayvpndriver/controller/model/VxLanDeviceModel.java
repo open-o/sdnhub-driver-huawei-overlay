@@ -17,6 +17,7 @@
 package org.openo.sdnhub.overlayvpndriver.controller.model;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.openo.sdno.overlayvpn.model.uuid.AbstUuidModel;
 import org.openo.sdno.overlayvpn.verify.annotation.AIp;
@@ -108,17 +109,7 @@ public class VxLanDeviceModel extends AbstUuidModel {
     {
         return vniList;
     }
-
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + vneId;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (localAddress != null ? localAddress.hashCode() : 0);
-        result = 31 * result + (vniList != null ? vniList.hashCode() : 0);
-        return result;
-    }
-
+    
     /**
      * @param vniList collection of vni.
      */
@@ -136,26 +127,41 @@ public class VxLanDeviceModel extends AbstUuidModel {
      */
     @Override
     public boolean equals(Object obj) {
+        if (null == obj) {
+            return false;
+        }
+
         if (this == obj) {
             return true;
         }
 
-        if (obj == null) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
 
-        if (super.getClass() != obj.getClass()) {
+        VxLanDeviceModel other = (VxLanDeviceModel)obj;
+
+        if (!Objects.equals(vneId, other.vneId)) {
             return false;
         }
 
-        VxLanDeviceModel other = (VxLanDeviceModel) obj;
-        if (this.uuid == null) {
-            if (other.uuid != null)
-                return false;
-        } else if (!(this.uuid.equals(other.uuid))) {
+        if (!Objects.equals(name, other.name)) {
             return false;
         }
-
+        
+        if (!Objects.equals(localAddress, other.localAddress)) {
+            return false;
+        }
+        
+        if (!vniList.equals(other.vniList)) {
+            return false;
+        }
         return true;
     }
+    
+    @Override
+    public int hashCode() {
+        return Objects.hash(vneId, name, localAddress, vniList);
+    }
+
 }

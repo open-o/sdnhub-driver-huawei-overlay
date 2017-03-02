@@ -16,6 +16,8 @@
 
 package org.openo.sdnhub.overlayvpndriver.service.model;
 
+import java.util.Objects;
+
 /**
  * Class of Configuration Site NetworkElement Model.<br>
  * <p>
@@ -307,49 +309,104 @@ public class AdapterDeviceInfo extends AdapterDeviceCreateBasicInfo {
      */
     @Override
     public boolean equals(Object obj) {
+        if (null == obj) {
+            return false;
+        }
+
         if (this == obj) {
             return true;
         }
 
-        if (obj == null) {
-            return false;
-        }
-
-        if (super.getClass() != obj.getClass()) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
 
         AdapterDeviceInfo other = (AdapterDeviceInfo) obj;
-        if (this.uuid == null) {
-            if (other.uuid != null)
-                return false;
-        } else if (!(this.uuid.equals(other.uuid))) {
+
+        if (!Objects.equals(id, other.id)) {
             return false;
         }
 
-        return true;
+        if (!Objects.equals(showTenant, other.showTenant)) {
+            return false;
+        }
+        
+        if (!Objects.equals(serviceIp, other.serviceIp)) {
+            return false;
+        }
+
+        if (!Objects.equals(neType, other.neType)) {
+            return false;
+        }
+
+        return checkOther(other);
     }
 
+    private boolean checkOther(AdapterDeviceInfo other) {
+        if (!Objects.equals(version, other.version)) {
+            return false;
+        }
+
+        if (!Objects.equals(status, other.status)) {
+            return false;
+        }
+        
+        if (!Objects.equals(gisLon, other.gisLon)) {
+            return false;
+        }
+        
+        if (!Objects.equals(gisLat, other.gisLat)) {
+            return false;
+        }
+
+        if (!Objects.equals(vendor, other.vendor)) {
+            return false;
+        }
+        
+        if (!Objects.equals(tenantId, other.tenantId)) {
+            return false;
+        }
+
+        if (!Objects.equals(tenantName, other.tenantName)) {
+            return false;
+        }
+        
+        if (!Objects.equals(orgnizationId, other.orgnizationId)) {
+            return false;
+        }
+        
+        return checkOtherMembers(other);
+    }
+    
+    private boolean checkOtherMembers(AdapterDeviceInfo other) {
+        
+        if (!Objects.equals(creator, other.creator)) {
+            return false;
+        }
+        
+        if (!Objects.equals(createTime, other.createTime)) {
+            return false;
+        }
+
+        if (!Objects.equals(registerTime, other.registerTime)) {
+            return false;
+        }
+        
+        if (!Objects.equals(modifier, other.modifier)) {
+            return false;
+        }
+        
+        if (!Objects.equals(modifyTime, other.modifyTime)) {
+            return false;
+        }
+        
+        return true;
+    }
+    
     @Override
     public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (id != null ? id.hashCode() : 0);
-        result = 31 * result + (showTenant != null ? showTenant.hashCode() : 0);
-        result = 31 * result + (serviceIp != null ? serviceIp.hashCode() : 0);
-        result = 31 * result + (neType != null ? neType.hashCode() : 0);
-        result = 31 * result + (version != null ? version.hashCode() : 0);
-        result = 31 * result + (status != null ? status.hashCode() : 0);
-        result = 31 * result + (gisLon != null ? gisLon.hashCode() : 0);
-        result = 31 * result + (gisLat != null ? gisLat.hashCode() : 0);
-        result = 31 * result + (vendor != null ? vendor.hashCode() : 0);
-        result = 31 * result + (tenantId != null ? tenantId.hashCode() : 0);
-        result = 31 * result + (tenantName != null ? tenantName.hashCode() : 0);
-        result = 31 * result + (orgnizationId != null ? orgnizationId.hashCode() : 0);
-        result = 31 * result + (creator != null ? creator.hashCode() : 0);
-        result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
-        result = 31 * result + (registerTime != null ? registerTime.hashCode() : 0);
-        result = 31 * result + (modifier != null ? modifier.hashCode() : 0);
-        result = 31 * result + (modifyTime != null ? modifyTime.hashCode() : 0);
-        return result;
+        return Objects.hash(id, showTenant, serviceIp, neType, version, status, gisLon,
+                gisLat, vendor, tenantId, tenantName, orgnizationId, creator, createTime, 
+                registerTime, modifier, modifyTime);
     }
 }

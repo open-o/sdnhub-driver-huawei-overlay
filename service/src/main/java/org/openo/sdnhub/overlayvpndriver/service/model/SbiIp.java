@@ -149,13 +149,8 @@ public class SbiIp extends UuidModel {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + ((ipMask == null) ? 0 : ipMask.hashCode());
-        result = prime * result + ((ipv4 == null) ? 0 : ipv4.hashCode());
-        result = prime * result + ((ipv6 == null) ? 0 : ipv6.hashCode());
-        result = prime * result + ((prefixLength == null) ? 0 : prefixLength.hashCode());
-        return result;
+        return Objects.hash(ipMask, ipv4, ipv6, prefixLength);
+                
     }
 
     @Override

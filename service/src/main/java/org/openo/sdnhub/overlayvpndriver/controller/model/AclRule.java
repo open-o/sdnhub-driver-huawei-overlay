@@ -19,6 +19,7 @@ package org.openo.sdnhub.overlayvpndriver.controller.model;
 import org.openo.sdno.overlayvpn.model.v2.uuid.UuidModel;
 import org.openo.sdno.overlayvpn.verify.annotation.AString;
 
+import java.util.Objects;
 /**
  * Model class for AclRule.<br/>
  *
@@ -43,15 +44,6 @@ public class AclRule extends UuidModel {
 
     public String getPolicy() {
         return policy;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (policy != null ? policy.hashCode() : 0);
-        result = 31 * result + (srcIp != null ? srcIp.hashCode() : 0);
-        result = 31 * result + (desIp != null ? desIp.hashCode() : 0);
-        return result;
     }
 
     public void setPolicy(String policy) {
@@ -90,19 +82,28 @@ public class AclRule extends UuidModel {
             return false;
         }
 
-        if (super.getClass() != obj.getClass()) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
 
         AclRule other = (AclRule) obj;
-        if (this.uuid == null) {
-            if (other.uuid != null)
-                return false;
-        } else if (!(this.uuid.equals(other.uuid))) {
+        
+        if (!Objects.equals(policy, other.policy)) {
             return false;
         }
-
+        if (!Objects.equals(srcIp, other.srcIp)) {
+            return false;
+        }
+        if (!Objects.equals(desIp, other.desIp)) {
+            return false;
+        }
         return true;
     }
+    
+    @Override
+    public int hashCode() {
+        return Objects.hash(policy, srcIp, desIp);
+    }
+
 
 }

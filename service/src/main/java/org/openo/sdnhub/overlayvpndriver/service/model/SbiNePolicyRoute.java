@@ -16,6 +16,8 @@
 
 package org.openo.sdnhub.overlayvpndriver.service.model;
 
+import java.util.Objects;
+
 import org.openo.sdno.overlayvpn.inventory.sdk.model.annotation.MOResType;
 import org.openo.sdno.overlayvpn.verify.annotation.AString;
 
@@ -131,40 +133,57 @@ public class SbiNePolicyRoute extends SbiRouteNetModel {
      * @return true if this object equals to other object
      * @since SDNO 0.5
      */
+    
     @Override
     public boolean equals(Object obj) {
+        if (null == obj) {
+            return false;
+        }
+
         if (this == obj) {
             return true;
         }
 
-        if (obj == null) {
-            return false;
-        }
-
-        if (super.getClass() != obj.getClass()) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
 
         SbiNePolicyRoute other = (SbiNePolicyRoute) obj;
-        if (this.uuid == null) {
-            if (other.uuid != null)
-                return false;
-        } else if (!(this.uuid.equals(other.uuid))) {
+
+        if (!Objects.equals(trafficPolicyName, other.trafficPolicyName)) {
             return false;
         }
 
-        return true;
+        if (!Objects.equals(interfaceName, other.interfaceName)) {
+            return false;
+        }
+        
+        if (!Objects.equals(direction, other.direction)) {
+            return false;
+        }
+
+        return checkOther(other);
     }
 
+    private boolean checkOther(SbiNePolicyRoute other) {
+        if (!Objects.equals(filterAction, other.filterAction)) {
+            return false;
+        }
+
+        if (!Objects.equals(type, other.type)) {
+            return false;
+        }
+        
+        if (!Objects.equals(srcDeviceId, other.srcDeviceId)) {
+            return false;
+        }
+        
+        return true;
+    }
+    
     @Override
     public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (trafficPolicyName != null ? trafficPolicyName.hashCode() : 0);
-        result = 31 * result + (interfaceName != null ? interfaceName.hashCode() : 0);
-        result = 31 * result + (direction != null ? direction.hashCode() : 0);
-        result = 31 * result + (filterAction != null ? filterAction.hashCode() : 0);
-        result = 31 * result + (type != null ? type.hashCode() : 0);
-        result = 31 * result + (srcDeviceId != null ? srcDeviceId.hashCode() : 0);
-        return result;
+        return Objects.hash(trafficPolicyName, interfaceName, direction, filterAction, type, srcDeviceId);
     }
+
 }

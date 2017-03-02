@@ -16,6 +16,8 @@
 
 package org.openo.sdnhub.overlayvpndriver.service.model;
 
+import java.util.Objects;
+
 import org.openo.sdno.overlayvpn.inventory.sdk.model.annotation.MOResType;
 import org.openo.sdno.overlayvpn.model.v2.uuid.UuidModel;
 import org.openo.sdno.overlayvpn.verify.annotation.AString;
@@ -131,41 +133,62 @@ public class SbiIfVlan extends UuidModel {
      * @return true if this object equals to other object
      * @since SDNO 0.5
      */
+    
     @Override
     public boolean equals(Object obj) {
+        if (null == obj) {
+            return false;
+        }
+
         if (this == obj) {
             return true;
         }
 
-        if (obj == null) {
-            return false;
-        }
-
-        if (super.getClass() != obj.getClass()) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
 
         SbiIfVlan other = (SbiIfVlan) obj;
-        if (this.uuid == null) {
-            if (other.uuid != null)
-                return false;
-        } else if (!(this.uuid.equals(other.uuid))) {
+
+        if (!Objects.equals(serviceVlanUuId, other.serviceVlanUuId)) {
             return false;
         }
 
-        return true;
+        if (!Objects.equals(ethInterfaceConfigId, other.ethInterfaceConfigId)) {
+            return false;
+        }
+        
+        if (!Objects.equals(ethInterfaceConfigId, other.ethInterfaceConfigId)) {
+            return false;
+        }
+
+        return checkOther(other);
     }
 
+    private boolean checkOther(SbiIfVlan other) {
+        
+        if (!Objects.equals(ifName, other.ifName)) {
+            return false;
+        }
+
+        if (!Objects.equals(defaultVlan, other.defaultVlan)) {
+            return false;
+        }
+        
+        if (!Objects.equals(linkType, other.linkType)) {
+            return false;
+        }
+        
+        if (!Objects.equals(vlans, other.vlans)) {
+            return false;
+        }
+        
+        return true;
+    }
+    
     @Override
     public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (serviceVlanUuId != null ? serviceVlanUuId.hashCode() : 0);
-        result = 31 * result + (ethInterfaceConfigId != null ? ethInterfaceConfigId.hashCode() : 0);
-        result = 31 * result + (ifId != null ? ifId.hashCode() : 0);
-        result = 31 * result + (ifName != null ? ifName.hashCode() : 0);
-        result = 31 * result + (defaultVlan != null ? defaultVlan.hashCode() : 0);
-        result = 31 * result + (linkType != null ? linkType.hashCode() : 0);
-        result = 31 * result + (vlans != null ? vlans.hashCode() : 0);
-        return result;
+        return Objects.hash(serviceVlanUuId, ethInterfaceConfigId, ethInterfaceConfigId, 
+                ifName, defaultVlan, linkType, vlans);
     }
 }
