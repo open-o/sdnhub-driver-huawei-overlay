@@ -54,6 +54,22 @@ public class VxlanConvert {
     private VxlanConvert(){
     }
 
+    private static boolean isNeedToDeply (SbiNeVxlanInstance vxLanInstance) {
+        boolean isNeedDeploy = false;
+
+        if(!StringUtils.isEmpty(vxLanInstance.getExternalId())) {
+            isNeedDeploy = true;
+        } else {
+            for(SbiNeVxlanTunnel tunnel : vxLanInstance.getVxlanTunnelList()) {
+                if(StringUtils.isEmpty(tunnel.getExternalId())) {
+                    isNeedDeploy = true;
+                    break;
+                }
+            }
+        }
+        return isNeedDeploy;
+    }
+
     /**
      * Translate service SBI VxLan device model structure to controller specific structure.<br>
      *
@@ -63,36 +79,21 @@ public class VxlanConvert {
      */
     public static Map<String, List<VxLanDeviceModel>>
             convertVxlanInsToNetVxlanDeviceModel(List<SbiNeVxlanInstance> vxLanInstanceList) {
-        Map<String, List<VxLanDeviceModel>> vxlanDeviceModelMap =
-                new ConcurrentHashMap<>();
-
+        Map<String, List<VxLanDeviceModel>> vxlanDeviceModelMap = new ConcurrentHashMap<>();
         Iterator<SbiNeVxlanInstance> iterator = vxLanInstanceList.iterator();
+
         while(iterator.hasNext()) {
             SbiNeVxlanInstance vxLanInstance = iterator.next();
-
-            boolean isNeedDeploy = false;
-            if(!StringUtils.isEmpty(vxLanInstance.getExternalId())) {
-                isNeedDeploy = true;
-            } else {
-                for(SbiNeVxlanTunnel tunnel : vxLanInstance.getVxlanTunnelList()) {
-                    if(StringUtils.isEmpty(tunnel.getExternalId())) {
-                        isNeedDeploy = true;
-                        break;
-                    }
-                }
-            }
-
+            boolean isNeedDeploy = isNeedToDeply(vxLanInstance);
             if(!isNeedDeploy) {
                 LOGGER.debug("removing vxlan :" + vxLanInstance.toString());
                 iterator.remove();
                 continue;
             }
-
             String neId = vxLanInstance.getDeviceId();
             if(!vxlanDeviceModelMap.containsKey(neId)) {
                 vxlanDeviceModelMap.put(neId, new ArrayList<VxLanDeviceModel>());
             }
-
             vxlanDeviceModelMap.get(neId).add(convertToVxlanDeviceModel(vxLanInstance));
         }
         return vxlanDeviceModelMap;
