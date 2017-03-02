@@ -38,12 +38,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import static org.openo.sdnhub.overlayvpndriver.common.consts.CommonConst.CTRL_HEADER_PARAM;
 
@@ -68,7 +76,6 @@ public class IpSecROAResource {
     /**
      * Adds new IPSec VPN configuration using a specific controller.<br>
      *
-     * @param request HTTP request
      * @param ctrlUuidParam Controller UUID
      * @param ipSecNeConnectionList collection of IPSec VPN configuration
      * @return ResultRsp object with IPSec VPN added configuration status data
@@ -79,9 +86,8 @@ public class IpSecROAResource {
     @Path("/device/batch-create-ipsecs")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ResultRsp<SbiNeIpSec> ipsecCreate(@Context HttpServletRequest request,
-            @HeaderParam(CTRL_HEADER_PARAM) String ctrlUuidParam, List<SbiNeIpSec> ipSecNeConnectionList)
-            throws ServiceException {
+    public ResultRsp<SbiNeIpSec> ipsecCreate(@HeaderParam(CTRL_HEADER_PARAM) String ctrlUuidParam,
+                                             List<SbiNeIpSec> ipSecNeConnectionList) throws ServiceException {
 
         long beginTime = System.currentTimeMillis();
         LOGGER.info("Ipsec create begin time = " + beginTime);
@@ -132,7 +138,6 @@ public class IpSecROAResource {
     /**
      * Deletes IPSec VPN configuration using a specific controller.<br>
      *
-     * @param request HTTP request
      * @param ctrlUuidParam Controller UUID
      * @param deviceId device id
      * @param ipsecList collection of IPSec VPN configuration
@@ -145,9 +150,9 @@ public class IpSecROAResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @SuppressWarnings("unchecked")
-    public ResultRsp<SbiNeIpSec> deleteIpSec(@Context HttpServletRequest request,
-            @HeaderParam(CTRL_HEADER_PARAM) String ctrlUuidParam, @PathParam("deviceid") String deviceId,
-            List<SbiNeIpSec> ipsecList) throws ServiceException {
+    public ResultRsp<SbiNeIpSec> deleteIpSec(@HeaderParam(CTRL_HEADER_PARAM) String ctrlUuidParam,
+                                             @PathParam("deviceid") String deviceId,
+                                             List<SbiNeIpSec> ipsecList) throws ServiceException {
 
         long beginTime = System.currentTimeMillis();
         LOGGER.debug("Ipsec delete begin time = " + beginTime);
@@ -183,7 +188,6 @@ public class IpSecROAResource {
     /**
      * Queries IPSec VPN configuration using a specific controller.<br>
      *
-     * @param request HTTP request
      * @param ctrlUuidParam Controller UUID
      * @param ipSecNeConnectionList collection of IPSec VPN configuration
      * @return ResultRsp object with IPSec VPN queried configuration status data
@@ -194,9 +198,8 @@ public class IpSecROAResource {
     @Path("/device/batch-query-ipsecs")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ResultRsp<SbiNeIpSec> query(@Context HttpServletRequest request,
-            @HeaderParam(CTRL_HEADER_PARAM) String ctrlUuidParam, List<SbiNeIpSec> ipSecNeConnectionList)
-            throws ServiceException {
+    public ResultRsp<SbiNeIpSec> query(@HeaderParam(CTRL_HEADER_PARAM) String ctrlUuidParam,
+                                       List<SbiNeIpSec> ipSecNeConnectionList) throws ServiceException {
 
         long beginTime = System.currentTimeMillis();
         LOGGER.debug("Ipsec query begin time = " + beginTime);
@@ -251,7 +254,6 @@ public class IpSecROAResource {
     /**
      * Updates IPSec VPN configuration using a specific controller.<br>
      *
-     * @param request HTTP request
      * @param ctrlUuidParam Controller UUID
      * @param ipSecNeConnectionList collection of IPSec VPN configuration
      * @return ResultRsp object with IPSec VPN updated configuration status data
@@ -262,9 +264,8 @@ public class IpSecROAResource {
     @Path("/device/batch-update-ipsecs")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ResultRsp<SbiNeIpSec> ipsecUpdate(@Context HttpServletRequest request,
-            @HeaderParam(CTRL_HEADER_PARAM) String ctrlUuidParam, List<SbiNeIpSec> ipSecNeConnectionList)
-            throws ServiceException {
+    public ResultRsp<SbiNeIpSec> ipsecUpdate(@HeaderParam(CTRL_HEADER_PARAM) String ctrlUuidParam,
+                                             List<SbiNeIpSec> ipSecNeConnectionList) throws ServiceException {
 
         long beginTime = System.currentTimeMillis();
         LOGGER.debug("Ipsec update begin time = " + beginTime);
@@ -287,8 +288,7 @@ public class IpSecROAResource {
 
         ValidationUtil.validateModel(ipSecNeConnectionList);
 
-        for(SbiNeIpSec neIpSec : ipSecNeConnectionList)
-        {
+        for(SbiNeIpSec neIpSec : ipSecNeConnectionList) {
             ipsecService.update(ctrlUuid, neIpSec.getDeviceId(), neIpSec, totalResult);
         }
 
