@@ -16,11 +16,8 @@
 
 package org.openo.sdnhub.overlayvpndriver.rest;
 
-import static org.junit.Assert.assertEquals;
-
 import mockit.Mock;
 import mockit.MockUp;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
@@ -40,6 +37,8 @@ import org.openo.sdno.util.http.HTTPReturnMessage;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 public class SubnetROAResourceTest {
 
@@ -101,7 +100,7 @@ public class SubnetROAResourceTest {
 
     @Test(expected = ServiceException.class)
     public void testCreateSubnet_EmptyUuid() throws ServiceException {
-        subnetRoAResource.createSubnet(null, DEVICE_ID, null, sbiSubnetNetModel);
+        subnetRoAResource.createSubnet(DEVICE_ID, null, sbiSubnetNetModel);
     }
 
     @Test
@@ -133,7 +132,7 @@ public class SubnetROAResourceTest {
             }
         };
         ResultRsp<SbiSubnetNetModel> acResult =
-                subnetRoAResource.createSubnet(null, DEVICE_ID, CTRL_UUID, sbiSubnetNetModel);
+                subnetRoAResource.createSubnet(DEVICE_ID, CTRL_UUID, sbiSubnetNetModel);
         assertEquals(DriverErrorCode.OVERLAYVPN_SUCCESS, acResult.getErrorCode());
         assertEquals("uuid", acResult.getData().getUuid());
     }
@@ -160,7 +159,7 @@ public class SubnetROAResourceTest {
         };
         @SuppressWarnings("unused")
         ResultRsp<SbiSubnetNetModel> acResult =
-                subnetRoAResource.createSubnet(null, DEVICE_ID, CTRL_UUID, sbiSubnetNetModel);
+                subnetRoAResource.createSubnet(DEVICE_ID, CTRL_UUID, sbiSubnetNetModel);
     }
 
     @Test(expected = ServiceException.class)
@@ -192,13 +191,13 @@ public class SubnetROAResourceTest {
         };
         @SuppressWarnings("unused")
         ResultRsp<SbiSubnetNetModel> acResult =
-                subnetRoAResource.createSubnet(null, DEVICE_ID, CTRL_UUID, sbiSubnetNetModel);
+                subnetRoAResource.createSubnet(DEVICE_ID, CTRL_UUID, sbiSubnetNetModel);
     }
 
     @Test(expected = ServiceException.class)
     public void testGetSubnet_EmptyUuid() throws ServiceException {
 
-        subnetRoAResource.getSubnet(null, DEVICE_ID, NETWORK_ID, null);
+        subnetRoAResource.getSubnet(DEVICE_ID, NETWORK_ID, null);
     }
 
     @Test
@@ -228,7 +227,7 @@ public class SubnetROAResourceTest {
             }
         };
 
-        ResultRsp<SbiSubnetNetModel> acResult = subnetRoAResource.getSubnet(null, DEVICE_ID, NETWORK_ID, CTRL_UUID);
+        ResultRsp<SbiSubnetNetModel> acResult = subnetRoAResource.getSubnet(DEVICE_ID, NETWORK_ID, CTRL_UUID);
         assertEquals(DriverErrorCode.OVERLAYVPN_SUCCESS, acResult.getErrorCode());
         assertEquals("9244-58349-67-890", acResult.getData().getNetworkId());
     }
@@ -259,7 +258,7 @@ public class SubnetROAResourceTest {
             }
         };
 
-        ResultRsp<SbiSubnetNetModel> acResult = subnetRoAResource.getSubnet(null, DEVICE_ID, NETWORK_ID, CTRL_UUID);
+        ResultRsp<SbiSubnetNetModel> acResult = subnetRoAResource.getSubnet(DEVICE_ID, NETWORK_ID, CTRL_UUID);
         assertEquals(DriverErrorCode.OVERLAYVPN_SUCCESS, acResult.getErrorCode());
         assertEquals("81244ad0-b4ea-41ed-969e-d5588b32f", acResult.getData().getControllerId());
     }
@@ -277,7 +276,7 @@ public class SubnetROAResourceTest {
             }
         };
         @SuppressWarnings("unused")
-        ResultRsp<SbiSubnetNetModel> acResult = subnetRoAResource.getSubnet(null, DEVICE_ID, NETWORK_ID, CTRL_UUID);
+        ResultRsp<SbiSubnetNetModel> acResult = subnetRoAResource.getSubnet(DEVICE_ID, NETWORK_ID, CTRL_UUID);
     }
 
     @Test(expected = ServiceException.class)
@@ -300,13 +299,13 @@ public class SubnetROAResourceTest {
             }
         };
         @SuppressWarnings("unused")
-        ResultRsp<SbiSubnetNetModel> acResult = subnetRoAResource.getSubnet(null, DEVICE_ID, NETWORK_ID, CTRL_UUID);
+        ResultRsp<SbiSubnetNetModel> acResult = subnetRoAResource.getSubnet(DEVICE_ID, NETWORK_ID, CTRL_UUID);
     }
 
     @Test(expected = ServiceException.class)
     public void testUpdateSubnet_EmptyUuid() throws ServiceException {
 
-        subnetRoAResource.updateSubnet(null, DEVICE_ID, null, sbiSubnetNetModel);
+        subnetRoAResource.updateSubnet(DEVICE_ID, null, sbiSubnetNetModel);
     }
 
     @Test
@@ -357,7 +356,7 @@ public class SubnetROAResourceTest {
             }
         };
         ResultRsp<SbiSubnetNetModel> acResult =
-                subnetRoAResource.updateSubnet(null, DEVICE_ID, CTRL_UUID, sbiSubnetNetModel);
+                subnetRoAResource.updateSubnet(DEVICE_ID, CTRL_UUID, sbiSubnetNetModel);
         assertEquals(DriverErrorCode.OVERLAYVPN_SUCCESS, acResult.getErrorCode());
         assertEquals("uuid", acResult.getData().getUuid());
     }
@@ -404,7 +403,7 @@ public class SubnetROAResourceTest {
         };
         @SuppressWarnings("unused")
         ResultRsp<SbiSubnetNetModel> acResult =
-                subnetRoAResource.updateSubnet(null, DEVICE_ID, CTRL_UUID, sbiSubnetNetModel);
+                subnetRoAResource.updateSubnet(DEVICE_ID, CTRL_UUID, sbiSubnetNetModel);
     }
 
     @Test(expected = ServiceException.class)
@@ -457,12 +456,12 @@ public class SubnetROAResourceTest {
         };
         @SuppressWarnings("unused")
         ResultRsp<SbiSubnetNetModel> acResult =
-                subnetRoAResource.updateSubnet(null, DEVICE_ID, CTRL_UUID, sbiSubnetNetModel);
+                subnetRoAResource.updateSubnet(DEVICE_ID, CTRL_UUID, sbiSubnetNetModel);
     }
 
     @Test(expected = ServiceException.class)
     public void testDeleteSubnet_EmptyUuid() throws ServiceException {
-        subnetRoAResource.deleteSubnet(null, DEVICE_ID, NETWORK_ID, null);
+        subnetRoAResource.deleteSubnet(DEVICE_ID, NETWORK_ID, null);
     }
 
     @Test
@@ -489,7 +488,7 @@ public class SubnetROAResourceTest {
                 return msg;
             }
         };
-        ResultRsp<String> acResult = subnetRoAResource.deleteSubnet(null, DEVICE_ID, NETWORK_ID, CTRL_UUID);
+        ResultRsp<String> acResult = subnetRoAResource.deleteSubnet(DEVICE_ID, NETWORK_ID, CTRL_UUID);
         assertEquals(DriverErrorCode.OVERLAYVPN_SUCCESS, acResult.getErrorCode());
     }
 
@@ -514,7 +513,7 @@ public class SubnetROAResourceTest {
             }
         };
         @SuppressWarnings("unused")
-        ResultRsp<String> acResult = subnetRoAResource.deleteSubnet(null, DEVICE_ID, NETWORK_ID, CTRL_UUID);
+        ResultRsp<String> acResult = subnetRoAResource.deleteSubnet(DEVICE_ID, NETWORK_ID, CTRL_UUID);
     }
 
     @Test(expected = ServiceException.class)
@@ -542,6 +541,6 @@ public class SubnetROAResourceTest {
             }
         };
         @SuppressWarnings("unused")
-        ResultRsp<String> acResult = subnetRoAResource.deleteSubnet(null, DEVICE_ID, NETWORK_ID, CTRL_UUID);
+        ResultRsp<String> acResult = subnetRoAResource.deleteSubnet(DEVICE_ID, NETWORK_ID, CTRL_UUID);
     }
 }

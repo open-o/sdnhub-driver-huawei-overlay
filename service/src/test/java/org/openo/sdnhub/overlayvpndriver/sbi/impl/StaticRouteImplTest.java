@@ -94,7 +94,7 @@ public class StaticRouteImplTest {
                 return msg;
             }
         };
-       
+
         StaticRouteImpl impl = new StaticRouteImpl();
         List<ControllerNbiStaticRoute> list = new ArrayList<>();
         ControllerNbiStaticRoute route = new ControllerNbiStaticRoute();

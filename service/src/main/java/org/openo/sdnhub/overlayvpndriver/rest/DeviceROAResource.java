@@ -16,32 +16,13 @@
 
 package org.openo.sdnhub.overlayvpndriver.rest;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-
 import org.openo.baseservice.remoteservice.exception.ServiceException;
-import org.openo.sdno.exception.ParameterServiceException;
 import org.openo.sdnhub.overlayvpndriver.common.consts.CommonConst;
 import org.openo.sdnhub.overlayvpndriver.common.util.RequestHeaderUtil;
 import org.openo.sdnhub.overlayvpndriver.sbi.impl.DeviceServiceImpl;
 import org.openo.sdnhub.overlayvpndriver.service.model.AdapterDeviceCreateBasicInfo;
 import org.openo.sdnhub.overlayvpndriver.service.model.AdapterDeviceInfo;
+import org.openo.sdno.exception.ParameterServiceException;
 import org.openo.sdno.framework.container.util.JsonUtil;
 import org.openo.sdno.overlayvpn.consts.CommConst;
 import org.openo.sdno.overlayvpn.result.ResultRsp;
@@ -54,6 +35,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Restful interface for Device configuration.<br>
@@ -75,7 +72,6 @@ public class DeviceROAResource {
     /**
      * Adds new device configuration using a specific Controller.<br>
      *
-     * @param request HTTP request
      * @param ctrlUuidParam Controller UUID
      * @param aDevCrtInfos collection of device configuration
      * @return ResultRsp object with added device configuration status data
@@ -86,9 +82,8 @@ public class DeviceROAResource {
     @Path("/devices")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ResultRsp<AdapterDeviceInfo> createDevices(@Context HttpServletRequest request,
-            @HeaderParam(CommonConst.CTRL_HEADER_PARAM) String ctrlUuidParam, List<AdapterDeviceCreateBasicInfo> aDevCrtInfos)
-            throws ServiceException {
+    public ResultRsp<AdapterDeviceInfo> createDevices(@HeaderParam(CommonConst.CTRL_HEADER_PARAM) String ctrlUuidParam,
+                                                      List<AdapterDeviceCreateBasicInfo> aDevCrtInfos) throws ServiceException {
 
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
 
@@ -122,7 +117,6 @@ public class DeviceROAResource {
     /**
      * Queries device configuration using a specific Controller.<br/>
      *
-     * @param request HTTP request
      * @param ctrlUuidParam Controller UUID
      * @param esn esn number
      * @return ResultRsp object with collection of queried device configuration
@@ -133,8 +127,7 @@ public class DeviceROAResource {
     @Path("/devices")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ResultRsp<List<AdapterDeviceInfo>> queryDeviceByEsn(@Context HttpServletRequest request,
-                                                               @HeaderParam(CommonConst.CTRL_HEADER_PARAM) String ctrlUuidParam,
+    public ResultRsp<List<AdapterDeviceInfo>> queryDeviceByEsn(@HeaderParam(CommonConst.CTRL_HEADER_PARAM) String ctrlUuidParam,
                                                                @QueryParam(CommonConst.ESN_QUERY_PARAM) String esn) throws ServiceException {
 
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
@@ -152,7 +145,6 @@ public class DeviceROAResource {
     /**
      * Deletes device configuration using a specific Controller.<br/>
      *
-     * @param request HTTP request
      * @param deviceIds collection of device id
      * @param ctrlUuidParam Controller UUID
      * @return ResultRsp object with deleted device configuration status data
@@ -163,8 +155,7 @@ public class DeviceROAResource {
     @Path("/devices")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ResultRsp<String> deleteDevices(@Context HttpServletRequest request,
-                                           @QueryParam(CommonConst.DEVICE_IDS_PATH_PARAM) List<String> deviceIds,
+    public ResultRsp<String> deleteDevices(@QueryParam(CommonConst.DEVICE_IDS_PATH_PARAM) List<String> deviceIds,
                                            @HeaderParam(CommonConst.CTRL_HEADER_PARAM) String ctrlUuidParam)
             throws ServiceException {
 
@@ -187,7 +178,6 @@ public class DeviceROAResource {
     /**
      * Updates device configuration using a specific Controller.<br/>
      *
-     * @param request HTTP request
      * @param ctrlUuidParam Controller UUID
      * @param deviceId device id
      * @param adapterDeviceInfo device configuration needs to be updated
@@ -199,8 +189,7 @@ public class DeviceROAResource {
     @Path("/deviceid/{deviceuuid}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ResultRsp<String> modifyDevice(@Context HttpServletRequest request,
-                                          @HeaderParam(CommonConst.CTRL_HEADER_PARAM) String ctrlUuidParam,
+    public ResultRsp<String> modifyDevice(@HeaderParam(CommonConst.CTRL_HEADER_PARAM) String ctrlUuidParam,
                                           @PathParam(CommonConst.DEVICE_UUID_PATH_PARAM) String deviceId,
             AdapterDeviceInfo adapterDeviceInfo) throws ServiceException {
 

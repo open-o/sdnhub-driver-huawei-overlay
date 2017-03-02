@@ -31,9 +31,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
@@ -58,7 +62,6 @@ public class InterfaceIpROAResource {
     /**
      * Update IP related configuration for interface.<br/>
      *
-     * @param request Http request context
      * @param ctrlUuidParam Controller UUID
      * @param deviceId Device ID to be updated
      * @param interfaceIpConfigList List of IP configuration for the interfaces
@@ -70,9 +73,9 @@ public class InterfaceIpROAResource {
     @Path("/device/{deviceuuid}/interfaces")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ResultRsp<List<SbiInterfaceIpConfig>> updateInterfaceIp(@Context HttpServletRequest request,
-            @HeaderParam("X-Driver-Parameter") String ctrlUuidParam, @PathParam("deviceuuid") String deviceId,
-            List<SbiInterfaceIpConfig> interfaceIpConfigList) throws ServiceException {
+    public ResultRsp<List<SbiInterfaceIpConfig>> updateInterfaceIp(@HeaderParam("X-Driver-Parameter") String ctrlUuidParam,
+                                                                   @PathParam("deviceuuid") String deviceId,
+                                                                   List<SbiInterfaceIpConfig> interfaceIpConfigList) throws ServiceException {
 
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
 
@@ -100,7 +103,6 @@ public class InterfaceIpROAResource {
     /**
      * Query IP related configuration for interface.<br/>
      *
-     * @param request
      * @param ctrlUuidParam Controller UUID
      * @param deviceId Device ID to be queried
      * @return ResultRsp for queried interface
@@ -111,9 +113,8 @@ public class InterfaceIpROAResource {
     @Path("/device/{deviceuuid}/interfaces")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ResultRsp<List<SbiInterfaceIpConfig>> queryInterfaceIp(@Context HttpServletRequest request,
-            @HeaderParam("X-Driver-Parameter") String ctrlUuidParam, @PathParam("deviceuuid") String deviceId)
-            throws ServiceException {
+    public ResultRsp<List<SbiInterfaceIpConfig>> queryInterfaceIp(@HeaderParam("X-Driver-Parameter") String ctrlUuidParam,
+                                                                  @PathParam("deviceuuid") String deviceId) throws ServiceException {
 
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
         if(!UuidUtil.validate(ctrlUuid)) {

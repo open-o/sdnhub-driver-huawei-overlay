@@ -16,8 +16,6 @@
 
 package org.openo.sdnhub.overlayvpndriver.rest;
 
-import static org.junit.Assert.assertEquals;
-
 import mockit.Mock;
 import mockit.MockUp;
 import org.junit.Before;
@@ -35,6 +33,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 
 public class NqaROAResourceTest {
@@ -81,7 +81,7 @@ public class NqaROAResourceTest {
         sbiNqa.setDstIp("10.12.13.7");
         sbiNqaList.add(sbiNqa);
         String deviceId = "123";
-        ResultRsp<SbiNqa> result = nqaRoaResource.queryNQA(null, "extSysID=ctrlid1024", deviceId, sbiNqaList);
+        ResultRsp<SbiNqa> result = nqaRoaResource.queryNQA("extSysID=ctrlid1024", deviceId, sbiNqaList);
         assertEquals(result.getHttpCode(), 200);
     }
 
@@ -106,7 +106,7 @@ public class NqaROAResourceTest {
         sbiNqa.setDstIp("10.12.13.7");
         sbiNqaList.add(sbiNqa);
         String deviceId = "123";
-        ResultRsp<SbiNqa> result = nqaRoaResource.queryNQA(null, "extSysID=ctrlid1024", deviceId, sbiNqaList);
+        ResultRsp<SbiNqa> result = nqaRoaResource.queryNQA("extSysID=ctrlid1024", deviceId, sbiNqaList);
         assertEquals(result.getHttpCode(), 200);
     }
 
@@ -131,7 +131,7 @@ public class NqaROAResourceTest {
         sbiNqa.setDstIp("10.12.13.7");
         sbiNqaList.add(sbiNqa);
         String deviceId = "123";
-        nqaRoaResource.queryNQA(null, "", deviceId, sbiNqaList);
+        nqaRoaResource.queryNQA("", deviceId, sbiNqaList);
 
     }
 
@@ -188,7 +188,7 @@ public class NqaROAResourceTest {
         sbiNqaList.add(sbiNqa1);
         OverlayVpnDriverResponse<SbiNqa> obj = new OverlayVpnDriverResponse<SbiNqa>();
         obj.setData(sbiNqa);
-        nqaRoaResource.createNQA(null, "extSysID=ctrlid1024", "123", sbiNqaList);
+        nqaRoaResource.createNQA("extSysID=ctrlid1024", "123", sbiNqaList);
     }
 
     @Test(expected = ServiceException.class)
@@ -220,7 +220,7 @@ public class NqaROAResourceTest {
         List<SbiNqa> sbiNqaList = new ArrayList<SbiNqa>();
         sbiNqaList.add(sbiNqa);
         sbiNqaList.add(sbiNqa1);
-        nqaRoaResource.createNQA(null, "extSysID=ctrlid1024", "123", sbiNqaList);
+        nqaRoaResource.createNQA("extSysID=ctrlid1024", "123", sbiNqaList);
     }
 
     @Test(expected = ServiceException.class)
@@ -252,7 +252,7 @@ public class NqaROAResourceTest {
         List<SbiNqa> sbiNqaList = new ArrayList<SbiNqa>();
         sbiNqaList.add(sbiNqa);
         sbiNqaList.add(sbiNqa1);
-        nqaRoaResource.createNQA(null, "extSysID=ctrlid1024", "123", sbiNqaList);
+        nqaRoaResource.createNQA("extSysID=ctrlid1024", "123", sbiNqaList);
     }
 
     @Test(expected = ServiceException.class)
@@ -274,7 +274,7 @@ public class NqaROAResourceTest {
 
         sbiNqaList.add(sbiNqa);
         sbiNqaList.add(sbiNqa1);
-        nqaRoaResource.createNQA(null, "extSysID=ctrlid1024", "123", sbiNqaList);
+        nqaRoaResource.createNQA("extSysID=ctrlid1024", "123", sbiNqaList);
     }
 
     @Test(expected = ServiceException.class)
@@ -306,7 +306,7 @@ public class NqaROAResourceTest {
         List<SbiNqa> sbiNqaList = new ArrayList<SbiNqa>();
         sbiNqaList.add(sbiNqa);
         sbiNqaList.add(sbiNqa1);
-        nqaRoaResource.createNQA(null, "extSysID=ctrlid1024", "deviceid", sbiNqaList);
+        nqaRoaResource.createNQA("extSysID=ctrlid1024", "deviceid", sbiNqaList);
     }
 
     @Test(expected = ServiceException.class)
@@ -338,7 +338,7 @@ public class NqaROAResourceTest {
         List<SbiNqa> sbiNqaList = new ArrayList<SbiNqa>();
         sbiNqaList.add(sbiNqa);
         sbiNqaList.add(sbiNqa1);
-        nqaRoaResource.createNQA(null, "extSysID=ctrlid1024", "deviceid", sbiNqaList);
+        nqaRoaResource.createNQA("extSysID=ctrlid1024", "deviceid", sbiNqaList);
     }
 
     @Test(expected = ServiceException.class)
@@ -360,7 +360,7 @@ public class NqaROAResourceTest {
 
         sbiNqaList.add(sbiNqa);
         sbiNqaList.add(sbiNqa1);
-        nqaRoaResource.createNQA(null, "extSysID=ctrlid1024", "deviceid", sbiNqaList);
+        nqaRoaResource.createNQA("extSysID=ctrlid1024", "deviceid", sbiNqaList);
     }
 
     @Test(expected = ServiceException.class)
@@ -392,7 +392,7 @@ public class NqaROAResourceTest {
         List<SbiNqa> sbiNqaList = new ArrayList<SbiNqa>();
         sbiNqaList.add(sbiNqa);
         sbiNqaList.add(sbiNqa1);
-        nqaRoaResource.createNQA(null, "", "deviceid", sbiNqaList);
+        nqaRoaResource.createNQA("", "deviceid", sbiNqaList);
     }
 
     @Test
@@ -425,7 +425,7 @@ public class NqaROAResourceTest {
         sbiNqaList.add(sbiNqa);
         sbiNqaList.add(sbiNqa1);
         String deviceId = "123";
-        ResultRsp<SbiNqa> result = nqaRoaResource.updateNQA(null, "extSysID=ctrlid1024", deviceId, sbiNqaList);
+        ResultRsp<SbiNqa> result = nqaRoaResource.updateNQA("extSysID=ctrlid1024", deviceId, sbiNqaList);
         assertEquals(result.getData(), null);
     }
 
@@ -459,7 +459,7 @@ public class NqaROAResourceTest {
         sbiNqaList.add(sbiNqa);
         sbiNqaList.add(sbiNqa1);
         String deviceId = "123";
-        nqaRoaResource.updateNQA(null, "", deviceId, sbiNqaList);
+        nqaRoaResource.updateNQA("", deviceId, sbiNqaList);
     }
 
     @Test(expected = ServiceException.class)
@@ -492,7 +492,7 @@ public class NqaROAResourceTest {
         sbiNqaList.add(sbiNqa);
         sbiNqaList.add(sbiNqa1);
         String deviceId = "123";
-        nqaRoaResource.updateNQA(null, "extSysID=ctrlid1024", deviceId, sbiNqaList);
+        nqaRoaResource.updateNQA("extSysID=ctrlid1024", deviceId, sbiNqaList);
 
     }
 
@@ -519,7 +519,7 @@ public class NqaROAResourceTest {
         List<SbiNqa> sbiNqaList = new ArrayList<SbiNqa>();
         sbiNqaList.add(sbiNqa);
         String deviceId = "123";
-        nqaRoaResource.updateNQA(null, "extSysID=ctrlid1024", deviceId, sbiNqaList);
+        nqaRoaResource.updateNQA("extSysID=ctrlid1024", deviceId, sbiNqaList);
     }
 
     @Test(expected = ServiceException.class)
@@ -544,7 +544,7 @@ public class NqaROAResourceTest {
 
         sbiNqaList.add(sbiNqa);
         sbiNqaList.add(sbiNqa1);
-        nqaRoaResource.updateNQA(null, "extSysID=ctrlid1024", deviceId, sbiNqaList);
+        nqaRoaResource.updateNQA("extSysID=ctrlid1024", deviceId, sbiNqaList);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -571,7 +571,7 @@ public class NqaROAResourceTest {
         sbiNqa.setDstIp("11.23.52.36");
         sbiNqaList.add(sbiNqa);
         String deviceId = "123";
-        nqaRoaResource.updateNQA(null, "extSysID=ctrlid1024", deviceId, sbiNqaList);
+        nqaRoaResource.updateNQA("extSysID=ctrlid1024", deviceId, sbiNqaList);
     }
 
     @Test
@@ -589,7 +589,7 @@ public class NqaROAResourceTest {
         };
         List<String> sbiNqaIdList = Arrays.asList("externalId1, externalId2");
         String deviceId = "123";
-        ResultRsp<String> result = nqaRoaResource.deleteNQA(null, "extSysID=ctrlid1024", deviceId, sbiNqaIdList);
+        ResultRsp<String> result = nqaRoaResource.deleteNQA("extSysID=ctrlid1024", deviceId, sbiNqaIdList);
         assertEquals(result.getHttpCode(), 200);
     }
 
@@ -608,7 +608,7 @@ public class NqaROAResourceTest {
         };
 
         String deviceId = "123";
-        nqaRoaResource.deleteNQA(null, "", deviceId, Arrays.asList("externalID1", "externalId2"));
+        nqaRoaResource.deleteNQA("", deviceId, Arrays.asList("externalID1", "externalId2"));
     }
 
     @Test(expected = ServiceException.class)
@@ -626,7 +626,7 @@ public class NqaROAResourceTest {
          */
 
         String deviceId = "123";
-        nqaRoaResource.deleteNQA(null, "extSysID=ctrlid1024", deviceId, null);
+        nqaRoaResource.deleteNQA("extSysID=ctrlid1024", deviceId, null);
     }
 
     @Test
@@ -643,7 +643,7 @@ public class NqaROAResourceTest {
             }
         };
         String deviceId = "123";
-        ResultRsp<String> result = nqaRoaResource.deleteNQA(null, "extSysID=ctrlid1024", deviceId,
+        ResultRsp<String> result = nqaRoaResource.deleteNQA("extSysID=ctrlid1024", deviceId,
                 Arrays.asList("externalID1", "externalId2"));
         assertEquals(result.getData(), null);
     }

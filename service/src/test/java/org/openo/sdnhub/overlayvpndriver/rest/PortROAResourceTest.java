@@ -16,22 +16,20 @@
 
 package org.openo.sdnhub.overlayvpndriver.rest;
 
-import static org.junit.Assert.assertEquals;
-
-import java.io.IOException;
-import java.io.InputStream;
-
-import org.apache.commons.io.IOUtils;
-
 import mockit.Mock;
 import mockit.MockUp;
-
+import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
 import org.openo.sdnhub.overlayvpndriver.http.OverlayVpnDriverProxy;
 import org.openo.sdnhub.overlayvpndriver.service.model.SbiIp;
 import org.openo.sdno.overlayvpn.result.ResultRsp;
 import org.openo.sdno.util.http.HTTPReturnMessage;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * <br/>
@@ -64,7 +62,7 @@ public class PortROAResourceTest {
                 return msg;
             }
         };
-        
+
         new MockUp<IOUtils>() {
 
             @Mock
@@ -73,7 +71,7 @@ public class PortROAResourceTest {
             }
         };
 
-        ResultRsp<SbiIp> result = portRoAResource.queryPortIpByPortName(null, "extSysID=ctrlid1024", "123", "test_port");
+        ResultRsp<SbiIp> result = portRoAResource.queryPortIpByPortName("extSysID=ctrlid1024", "123", "test_port");
         assertEquals(result.getErrorCode(), "success");
     }
 
@@ -91,7 +89,7 @@ public class PortROAResourceTest {
                 return msg;
             }
         };
-        portRoAResource.queryPortIpByPortName(null, "extSysID=ctrlid1024", "123", null);
+        portRoAResource.queryPortIpByPortName("extSysID=ctrlid1024", "123", null);
     }
 
     @Test(expected = ServiceException.class)
@@ -109,7 +107,7 @@ public class PortROAResourceTest {
             }
         };
 
-        portRoAResource.queryPortIpByPortName(null, "extSysID=ctrlid1024", "123", null);
+        portRoAResource.queryPortIpByPortName("extSysID=ctrlid1024", "123", null);
     }
 
     @Test(expected = ServiceException.class)
@@ -127,16 +125,16 @@ public class PortROAResourceTest {
             }
         };
 
-        portRoAResource.queryPortIpByPortName(null, "extSysID=ctrlid1024", "123", null);
+        portRoAResource.queryPortIpByPortName("extSysID=ctrlid1024", "123", null);
     }
 
     @Test(expected = ServiceException.class)
     public void testQueryPortInvalidCtrlUuid() throws ServiceException {
-        portRoAResource.queryPortIpByPortName(null, "extSysID=!@#$", "123", null);
+        portRoAResource.queryPortIpByPortName("extSysID=!@#$", "123", null);
     }
 
     @Test(expected = ServiceException.class)
     public void testQueryPortInvalidDeviceId() throws ServiceException {
-        portRoAResource.queryPortIpByPortName(null, "extSysID=ctrlid1024", null, null);
+        portRoAResource.queryPortIpByPortName("extSysID=ctrlid1024", null, null);
     }
 }

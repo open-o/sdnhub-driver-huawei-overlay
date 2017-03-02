@@ -30,9 +30,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import java.util.Arrays;
 import java.util.List;
@@ -56,7 +60,6 @@ public class PortROAResource {
     /**
      * Query interface information of the current device using a specific controller.<br>
      *
-     * @param request HTTP request
      * @param ctrlUuidParam Controller UUID
      * @param deviceId device id
      * @param portName port name for query
@@ -68,10 +71,9 @@ public class PortROAResource {
     @Path("/device/{deviceId}/ports")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ResultRsp<SbiIp> queryPortIpByPortName(@Context HttpServletRequest request,
-            @HeaderParam(CTRL_HEADER_PARAM) String ctrlUuidParam, @PathParam("deviceId") String deviceId,
-            @QueryParam("portName") String portName)
-            throws ServiceException {
+    public ResultRsp<SbiIp> queryPortIpByPortName(@HeaderParam(CTRL_HEADER_PARAM) String ctrlUuidParam,
+                                                  @PathParam("deviceId") String deviceId,
+                                                  @QueryParam("portName") String portName) throws ServiceException {
 
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);
         if(!UuidUtil.validate(ctrlUuid)) {
