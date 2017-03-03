@@ -94,7 +94,7 @@ public class FilterActionList extends UuidModel {
 
         return true;
     }
-    
+
     @Override
     public int hashCode() {
         return Objects.hash(action, ruleList, filter);

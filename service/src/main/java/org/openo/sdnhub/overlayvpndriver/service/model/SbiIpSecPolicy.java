@@ -95,7 +95,7 @@ public class SbiIpSecPolicy extends SbiSecurityPolicy {
      * @return true if this object equals to other object
      * @since SDNO 0.5
      */
-    
+
     @Override
     public boolean equals(Object obj) {
         if (null == obj) {
@@ -119,7 +119,7 @@ public class SbiIpSecPolicy extends SbiSecurityPolicy {
         if (!Objects.equals(encapsulationMode, other.encapsulationMode)) {
             return false;
         }
-        
+
         if (!Objects.equals(authAlgorithm, other.authAlgorithm)) {
             return false;
         }

@@ -150,7 +150,7 @@ public class SbiIp extends UuidModel {
     @Override
     public int hashCode() {
         return Objects.hash(ipMask, ipv4, ipv6, prefixLength);
-                
+
     }
 
     @Override

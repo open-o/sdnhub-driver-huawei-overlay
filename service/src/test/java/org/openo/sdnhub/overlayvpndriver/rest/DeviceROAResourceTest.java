@@ -89,7 +89,7 @@ public class DeviceROAResourceTest {
             }
         };
         ResultRsp<List<AdapterDeviceInfo>> resp = resource.queryDeviceByEsn(CTRL_UUID, "123");
-        assertTrue("success".equals(resp.getErrorCode())
+        assertTrue("overlayvpn.operation.success".equals(resp.getErrorCode())
                 && resp.getData().get(0).getId().equals("81244ad0-b4ea-41ed-969e-d5588b32fd4c"));
     }
 
@@ -117,7 +117,7 @@ public class DeviceROAResourceTest {
             }
         };
         ResultRsp<List<AdapterDeviceInfo>> resp = resource.queryDeviceByEsn(CTRL_UUID, "123");
-        assertTrue("cloudvpn.failed".equals(resp.getErrorCode()));
+        assertTrue("overlayvpn.operation.fail".equals(resp.getErrorCode()));
     }
 
     @Test
@@ -144,7 +144,7 @@ public class DeviceROAResourceTest {
             }
         };
         ResultRsp<List<AdapterDeviceInfo>> resp = resource.queryDeviceByEsn(CTRL_UUID, "123");
-        assertTrue("cloudvpn.failed".equals(resp.getErrorCode()));
+        assertTrue("overlayvpn.operation.fail".equals(resp.getErrorCode()));
     }
 
     @Test
@@ -171,7 +171,7 @@ public class DeviceROAResourceTest {
             }
         };
         ResultRsp<List<AdapterDeviceInfo>> resp = resource.queryDeviceByEsn(CTRL_UUID, "123");
-        assertTrue("cloudvpn.failed".equals(resp.getErrorCode()));
+        assertTrue("overlayvpn.operation.fail".equals(resp.getErrorCode()));
 
     }
 
@@ -214,7 +214,7 @@ public class DeviceROAResourceTest {
         adevCrtInfos.add(adapterCreateInfo);
         ResultRsp<AdapterDeviceInfo> resp = resource.createDevices(CTRL_UUID, adevCrtInfos);
 
-        assertEquals("success", resp.getErrorCode());
+        assertEquals("overlayvpn.operation.success", resp.getErrorCode());
         assertEquals(resp.getSuccessed().get(0).getId(), "81244ad0-b4ea-41ed-969e-d5588b32fd4c");
     }
 
@@ -353,7 +353,7 @@ public class DeviceROAResourceTest {
         List<String> idList = new ArrayList<>();
         idList.add("12345");
         ResultRsp<String> resp = resource.deleteDevices(idList, CTRL_UUID);
-        assertTrue("0".equals(resp.getErrorCode()));
+        assertTrue("overlayvpn.operation.success".equals(resp.getErrorCode()));
     }
 
     @Test
@@ -381,7 +381,7 @@ public class DeviceROAResourceTest {
         List<String> idList = new ArrayList<>();
         idList.add("12345");
         ResultRsp<String> resp = resource.deleteDevices(idList, CTRL_UUID);
-        assertTrue("500".equals(resp.getErrorCode()));
+        assertEquals("overlayvpn.operation.fail", resp.getErrorCode());
     }
 
     @Test(expected = ServiceException.class)

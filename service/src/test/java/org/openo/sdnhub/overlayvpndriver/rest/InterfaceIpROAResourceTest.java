@@ -155,7 +155,7 @@ public class InterfaceIpROAResourceTest {
         List<SbiInterfaceIpConfig> interfaceIpList = Arrays.asList(interfaceIpConfig);
         ResultRsp<List<SbiInterfaceIpConfig>> expected =
                 interfaceIpRoaResource.updateInterfaceIp(ctrlUuidParam, deviceId, interfaceIpList);
-        assertEquals(expected.getErrorCode(), "cloudvpn.failed");
+        assertEquals(expected.getErrorCode(), "overlayvpn.operation.fail");
     }
 
     @Test
@@ -229,7 +229,7 @@ public class InterfaceIpROAResourceTest {
 
         ResultRsp<List<SbiInterfaceIpConfig>> result =
                 interfaceIpRoaResource.queryInterfaceIp(ctrlUuidParam, deviceId);
-        assertEquals(result.getErrorCode(), "cloudvpn.failed");
+        assertEquals(result.getErrorCode(), "overlayvpn.operation.fail");
     }
 
 }

@@ -26,7 +26,7 @@ import org.junit.Test;
 public class SbiRouteNetModelTest {
 
     SbiRouteNetModel srnm = new SbiRouteNetModel();
-    
+
 
     /**
      * <br/>
@@ -43,105 +43,105 @@ public class SbiRouteNetModelTest {
         srnm.setNbiNeRouteId("664656956");
 
     }
-    
+
     @Test
     public void testEqualsObject() {
 
         SbiRouteNetModel srnm1 = new SbiRouteNetModel();
-        
+
         srnm1.setControllerId("646644534");
         srnm1.setDeviceId("95446563");
         srnm1.setExternalId("674668553");
         srnm1.setNbiNeRouteId("664656956");
-        
+
         assertTrue(srnm.equals(srnm1));
         assertFalse(srnm.equals(null));
         assertFalse(srnm.equals(new Object()));
         srnm1.hashCode();
-    
+
     }
-    
+
     @Test
     public void testEqualsObjectSame() {
 
         SbiRouteNetModel srnm1 = new SbiRouteNetModel();
-        
+
         srnm1.setControllerId("646644534");
         srnm1.setDeviceId("95446563");
         srnm1.setExternalId("674668553");
         srnm1.setNbiNeRouteId("664656956");
-        
+
         assertTrue(srnm.equals(srnm));
-    
+
     }
-    
+
     @Test
     public void testEqualsObjectCid() {
 
         SbiRouteNetModel srnm1 = new SbiRouteNetModel();
-        
+
         srnm1.setControllerId("946532");
         srnm1.setDeviceId("95446563");
         srnm1.setExternalId("674668553");
         srnm1.setNbiNeRouteId("664656956");
-        
+
         assertFalse(srnm.equals(srnm1));
         srnm1.hashCode();
-    
+
     }
 
     @Test
     public void testEqualsObjectDid() {
 
         SbiRouteNetModel srnm1 = new SbiRouteNetModel();
-        
+
         srnm1.setControllerId("646644534");
         srnm1.setDeviceId("75688566");
         srnm1.setExternalId("674668553");
         srnm1.setNbiNeRouteId("664656956");
-        
+
         assertFalse(srnm.equals(srnm1));
         srnm1.hashCode();
-    
+
     }
-    
+
     @Test
     public void testEqualsObjectEid() {
 
         SbiRouteNetModel srnm1 = new SbiRouteNetModel();
-        
+
         srnm1.setControllerId("646644534");
         srnm1.setDeviceId("95446563");
         srnm1.setExternalId("46842256");
         srnm1.setNbiNeRouteId("664656956");
-        
+
         assertFalse(srnm.equals(srnm1));
         srnm1.hashCode();
-    
+
     }
-    
+
     @Test
     public void testEqualsObjectNrid() {
 
         SbiRouteNetModel srnm1 = new SbiRouteNetModel();
-        
+
         srnm1.setControllerId("646644534");
         srnm1.setDeviceId("95446563");
         srnm1.setExternalId("674668553");
         srnm1.setNbiNeRouteId("87565645");
-        
+
         assertFalse(srnm.equals(srnm1));
         srnm1.hashCode();
-    
+
     }
-    
+
     @Test
     public void testToString() {
 
         SbiRouteNetModel srnm1 = new SbiRouteNetModel();
-        
+
         srnm1.toString();
-    
+
     }
 
 }

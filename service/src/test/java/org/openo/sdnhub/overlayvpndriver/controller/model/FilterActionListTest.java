@@ -136,7 +136,7 @@ public class FilterActionListTest {
 
         assertFalse(actionList.equals(null));
         assertFalse(actionList.equals(new Object()));
-        
+
         assertFalse(actionList.equals(actionList1));
         assertTrue(actionList.equals(actionList));
         assertFalse(actionList.equals(actionList3));

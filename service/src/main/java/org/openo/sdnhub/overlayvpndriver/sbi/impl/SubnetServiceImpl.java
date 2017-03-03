@@ -200,7 +200,7 @@ public class SubnetServiceImpl {
             throw new ParameterServiceException(SINVALIDPARAM);
         }
 
-        ResultRsp<List<ACNetwork>> resultRsp = new ResultRsp<>(DriverErrorCode.CLOUDVPN_SUCCESS);
+        ResultRsp<List<ACNetwork>> resultRsp = new ResultRsp<>(DriverErrorCode.OVERLAYVPN_SUCCESS);
 
         String getUrl = MessageFormat.format(ControllerUrlConst.DEVICE_NETWORK_URL, deviceId);
 

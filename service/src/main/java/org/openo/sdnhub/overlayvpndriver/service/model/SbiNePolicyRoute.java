@@ -133,7 +133,7 @@ public class SbiNePolicyRoute extends SbiRouteNetModel {
      * @return true if this object equals to other object
      * @since SDNO 0.5
      */
-    
+
     @Override
     public boolean equals(Object obj) {
         if (null == obj) {
@@ -157,7 +157,7 @@ public class SbiNePolicyRoute extends SbiRouteNetModel {
         if (!Objects.equals(interfaceName, other.interfaceName)) {
             return false;
         }
-        
+
         if (!Objects.equals(direction, other.direction)) {
             return false;
         }
@@ -173,14 +173,14 @@ public class SbiNePolicyRoute extends SbiRouteNetModel {
         if (!Objects.equals(type, other.type)) {
             return false;
         }
-        
+
         if (!Objects.equals(srcDeviceId, other.srcDeviceId)) {
             return false;
         }
-        
+
         return true;
     }
-    
+
     @Override
     public int hashCode() {
         return Objects.hash(trafficPolicyName, interfaceName, direction, filterAction, type, srcDeviceId);

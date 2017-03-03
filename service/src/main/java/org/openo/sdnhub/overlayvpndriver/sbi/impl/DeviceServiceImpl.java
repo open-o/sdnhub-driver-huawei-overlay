@@ -72,12 +72,12 @@ public class DeviceServiceImpl {
                     JsonUtil.fromJson(msg.getBody(), new TypeReference<ACResponse<List<AdapterDeviceInfo>>>() {});
             if((null == response) || (!response.isSucceed())) {
                 LOGGER.error("query devices : parser msg to ACResponse error, msg : " + msg.getBody());
-                return new ResultRsp<>(DriverErrorCode.CLOUDVPN_FAILED,
+                return new ResultRsp<>(DriverErrorCode.OVERLAYVPN_FAIL,
                         "query device httpReturnMessage return error", null, null, null);
             }
-            return new ResultRsp<>(DriverErrorCode.CLOUDVPN_SUCCESS, response.getData());
+            return new ResultRsp<>(DriverErrorCode.OVERLAYVPN_SUCCESS, response.getData());
         }
-        return new ResultRsp<>(DriverErrorCode.CLOUDVPN_FAILED, "failed to get device details ",
+        return new ResultRsp<>(DriverErrorCode.OVERLAYVPN_FAIL, "failed to get device details ",
                 null, null, null);
     }
 
@@ -107,10 +107,10 @@ public class DeviceServiceImpl {
                 return getResultData(response);
             } else {
                 LOGGER.error("create devices: parser msg to AcResponse error");
-                return new ResultRsp<>(DriverErrorCode.CLOUDVPN_FAILED);
+                return new ResultRsp<>(DriverErrorCode.OVERLAYVPN_FAIL);
             }
         }
-        return new ResultRsp<>(DriverErrorCode.CLOUDVPN_FAILED,
+        return new ResultRsp<>(DriverErrorCode.OVERLAYVPN_FAIL,
                 "create device httpReturnMsg return error", null, null, null);
     }
 
@@ -131,9 +131,9 @@ public class DeviceServiceImpl {
 
         ResultRsp result = new ResultRsp<AdapterDeviceInfo>();
         if (response.isSucceed()) {
-            result.setErrorCode(DriverErrorCode.CLOUDVPN_SUCCESS);
+            result.setErrorCode(DriverErrorCode.OVERLAYVPN_SUCCESS);
         } else {
-            result.setErrorCode(DriverErrorCode.CLOUDVPN_FAILED);
+            result.setErrorCode(DriverErrorCode.OVERLAYVPN_FAIL);
         }
         result.setMessage(response.getErrmsg());
         result.setSuccessed(successed);
@@ -178,7 +178,7 @@ public class DeviceServiceImpl {
         }
         ACResponse response = ResultUtil.parserACResponse(modifyRsp.getBody());
         if(null != response) {
-            rsp.setErrorCode(response.getErrcode());
+            rsp.setErrorCode(DriverErrorCode.OVERLAYVPN_SUCCESS);
             rsp.setMessage(response.getErrmsg());
             if(!"0".equals(response.getErrcode())) {
                 FailData<String> fail = new FailData<>();
@@ -188,7 +188,7 @@ public class DeviceServiceImpl {
             }
         } else {
             LOGGER.error("modify device parserACResponse error : " + modifyRsp.getBody());
-            rsp.setErrorCode(DriverErrorCode.CLOUDVPN_FAILED);
+            rsp.setErrorCode(DriverErrorCode.OVERLAYVPN_FAIL);
         }
         return rsp;
     }
@@ -217,18 +217,18 @@ public class DeviceServiceImpl {
 
         if(!deleteRsp.isSuccess() || (!StringUtils.hasLength(deleteRsp.getBody()))) {
             LOGGER.error("delete device error");
-            rsp.setErrorCode(String.valueOf(deleteRsp.getStatus()));
+            rsp.setErrorCode(DriverErrorCode.OVERLAYVPN_FAIL);
             rsp.setMessage(deleteRsp.getBody());
             return rsp;
         }
         ACResponse response = ResultUtil.parserACResponse(deleteRsp.getBody());
         if(null != response) {
-            rsp.setErrorCode(response.getErrcode());
+            rsp.setErrorCode(DriverErrorCode.OVERLAYVPN_SUCCESS);
             rsp.setMessage(response.getErrmsg());
 
         } else {
             LOGGER.error("delete device error : " + deleteRsp.getBody());
-            rsp.setErrorCode(DriverErrorCode.CLOUDVPN_FAILED);
+            rsp.setErrorCode(DriverErrorCode.OVERLAYVPN_FAIL);
         }
         return rsp;
     }

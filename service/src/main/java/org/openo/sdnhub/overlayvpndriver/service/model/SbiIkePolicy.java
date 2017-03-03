@@ -119,7 +119,7 @@ public class SbiIkePolicy extends SbiSecurityPolicy {
         if (!Objects.equals(psk, other.psk)) {
             return false;
         }
-        
+
         if (!Objects.equals(authAlgorithm, other.authAlgorithm)) {
             return false;
         }
@@ -127,7 +127,7 @@ public class SbiIkePolicy extends SbiSecurityPolicy {
         if (!Objects.equals(encryptionAlgorithm, other.encryptionAlgorithm)) {
             return false;
         }
-        
+
         return true;
     }
 

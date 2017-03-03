@@ -27,7 +27,7 @@ import org.junit.Test;
 public class SbiSnatNetModelTest {
 
     SbiSnatNetModel ssnm = new SbiSnatNetModel();
-    
+
     /**
      * <br/>
      *
@@ -36,7 +36,7 @@ public class SbiSnatNetModelTest {
      */
     @Before
     public void setup() {
-        
+
         ssnm.setAclId("1234aclId");
         ssnm.setAclNumber("5464665654");
         ssnm.setControllerId("1254362");
@@ -54,14 +54,14 @@ public class SbiSnatNetModelTest {
         ssnm.setNeId("51358465");
         ssnm.setNatId("87465462");
         ssnm.setInternetGatewayId("4545412165452");
-        
+
     }
 
     @Test
     public void testEqualsObject() {
 
         SbiSnatNetModel ssnm1 = new SbiSnatNetModel();
-        
+
         ssnm1.setAclId("1234aclId");
         ssnm1.setAclNumber("5464665654");
         ssnm1.setControllerId("1254362");
@@ -79,19 +79,19 @@ public class SbiSnatNetModelTest {
         ssnm1.setNeId("51358465");
         ssnm1.setNatId("87465462");
         ssnm1.setInternetGatewayId("4545412165452");
-       
+
         assertTrue(ssnm.equals(ssnm1));
         assertFalse(ssnm.equals(null));
         assertFalse(ssnm.equals(new Object()));
         ssnm1.hashCode();
-        
+
     }
-      
+
     @Test
     public void testEqualsObjectId() {
 
         SbiSnatNetModel ssnm1 = new SbiSnatNetModel();
-        
+
         ssnm1.setAclId("9456594564");
         ssnm1.setAclNumber("5464665654");
         ssnm1.setControllerId("1254362");
@@ -111,14 +111,14 @@ public class SbiSnatNetModelTest {
         ssnm1.setInternetGatewayId("4545412165452");
         assertFalse(ssnm.equals(ssnm1));
         ssnm1.hashCode();
-        
+
     }
-    
+
     @Test
     public void testEqualsObjectNum() {
 
         SbiSnatNetModel ssnm1 = new SbiSnatNetModel();
-        
+
         ssnm1.setAclId("1234aclId");
         ssnm1.setAclNumber("98465656");
         ssnm1.setControllerId("1254362");
@@ -138,14 +138,14 @@ public class SbiSnatNetModelTest {
         ssnm1.setInternetGatewayId("4545412165452");
         assertFalse(ssnm.equals(ssnm1));
         ssnm1.hashCode();
-        
+
     }
-    
+
     @Test
     public void testEqualsObjectCid() {
 
         SbiSnatNetModel ssnm1 = new SbiSnatNetModel();
-        
+
         ssnm1.setAclId("1234aclId");
         ssnm1.setAclNumber("5464665654");
         ssnm1.setControllerId("8464984");
@@ -165,14 +165,14 @@ public class SbiSnatNetModelTest {
         ssnm1.setInternetGatewayId("4545412165452");
         assertFalse(ssnm.equals(ssnm1));
         ssnm1.hashCode();
-        
-    } 
-    
+
+    }
+
     @Test
     public void testEqualsObjectCt() {
 
         SbiSnatNetModel ssnm1 = new SbiSnatNetModel();
-        
+
         ssnm1.setAclId("1234aclId");
         ssnm1.setAclNumber("5464665654");
         ssnm1.setControllerId("1254362");
@@ -190,17 +190,17 @@ public class SbiSnatNetModelTest {
         ssnm1.setNeId("51358465");
         ssnm1.setNatId("87465462");
         ssnm1.setInternetGatewayId("4545412165452");
-                
+
         assertFalse(ssnm.equals(ssnm1));
         ssnm1.hashCode();
-        
+
     }
-    
+
     @Test
     public void testEqualsObjectDi() {
 
         SbiSnatNetModel ssnm1 = new SbiSnatNetModel();
-        
+
         ssnm1.setAclId("1234aclId");
         ssnm1.setAclNumber("5464665654");
         ssnm1.setControllerId("1254362");
@@ -218,17 +218,17 @@ public class SbiSnatNetModelTest {
         ssnm1.setNeId("51358465");
         ssnm1.setNatId("87465462");
         ssnm1.setInternetGatewayId("4545412165452");
-                
+
         assertFalse(ssnm.equals(ssnm1));
         ssnm1.hashCode();
-        
+
     }
-    
+
     @Test
     public void testEqualsObjectEpia() {
 
         SbiSnatNetModel ssnm1 = new SbiSnatNetModel();
-        
+
         ssnm1.setAclId("1234aclId");
         ssnm1.setAclNumber("5464665654");
         ssnm1.setControllerId("1254362");
@@ -246,17 +246,17 @@ public class SbiSnatNetModelTest {
         ssnm1.setNeId("51358465");
         ssnm1.setNatId("87465462");
         ssnm1.setInternetGatewayId("4545412165452");
-                
+
         assertFalse(ssnm.equals(ssnm1));
         ssnm1.hashCode();
-        
+
     }
-    
+
     @Test
     public void testEqualsObjectIn() {
 
         SbiSnatNetModel ssnm1 = new SbiSnatNetModel();
-        
+
         ssnm1.setAclId("1234aclId");
         ssnm1.setAclNumber("5464665654");
         ssnm1.setControllerId("1254362");
@@ -274,17 +274,17 @@ public class SbiSnatNetModelTest {
         ssnm1.setNeId("51358465");
         ssnm1.setNatId("87465462");
         ssnm1.setInternetGatewayId("4545412165452");
-                
+
         assertFalse(ssnm.equals(ssnm1));
         ssnm1.hashCode();
-        
+
     }
-    
+
     @Test
     public void testEqualsObjectUpt() {
 
         SbiSnatNetModel ssnm1 = new SbiSnatNetModel();
-        
+
         ssnm1.setAclId("1234aclId");
         ssnm1.setAclNumber("5464665654");
         ssnm1.setControllerId("1254362");
@@ -302,17 +302,17 @@ public class SbiSnatNetModelTest {
         ssnm1.setNeId("51358465");
         ssnm1.setNatId("87465462");
         ssnm1.setInternetGatewayId("4545412165452");
-                
+
         assertFalse(ssnm.equals(ssnm1));
         ssnm1.hashCode();
-        
+
     }
-    
+
     @Test
     public void testEqualsObjectTy() {
 
         SbiSnatNetModel ssnm1 = new SbiSnatNetModel();
-        
+
         ssnm1.setAclId("1234aclId");
         ssnm1.setAclNumber("5464665654");
         ssnm1.setControllerId("1254362");
@@ -330,17 +330,17 @@ public class SbiSnatNetModelTest {
         ssnm1.setNeId("51358465");
         ssnm1.setNatId("87465462");
         ssnm1.setInternetGatewayId("4545412165452");
-                
+
         assertFalse(ssnm.equals(ssnm1));
         ssnm1.hashCode();
-        
+
     }
-    
+
     @Test
     public void testEqualsObjectUpSid() {
 
         SbiSnatNetModel ssnm1 = new SbiSnatNetModel();
-        
+
         ssnm1.setAclId("1234aclId");
         ssnm1.setAclNumber("5464665654");
         ssnm1.setControllerId("1254362");
@@ -358,17 +358,17 @@ public class SbiSnatNetModelTest {
         ssnm1.setNeId("51358465");
         ssnm1.setNatId("87465462");
         ssnm1.setInternetGatewayId("4545412165452");
-                
+
         assertFalse(ssnm.equals(ssnm1));
         ssnm1.hashCode();
-        
+
     }
-    
+
     @Test
     public void testEqualsObjectSpi() {
 
         SbiSnatNetModel ssnm1 = new SbiSnatNetModel();
-        
+
         ssnm1.setAclId("1234aclId");
         ssnm1.setAclNumber("5464665654");
         ssnm1.setControllerId("1254362");
@@ -386,17 +386,17 @@ public class SbiSnatNetModelTest {
         ssnm1.setNeId("51358465");
         ssnm1.setNatId("87465462");
         ssnm1.setInternetGatewayId("4545412165452");
-                
+
         assertFalse(ssnm.equals(ssnm1));
         ssnm1.hashCode();
-        
+
     }
-    
+
     @Test
     public void testEqualsObjectQp() {
 
         SbiSnatNetModel ssnm1 = new SbiSnatNetModel();
-        
+
         ssnm1.setAclId("1234aclId");
         ssnm1.setAclNumber("5464665654");
         ssnm1.setControllerId("1254362");
@@ -414,17 +414,17 @@ public class SbiSnatNetModelTest {
         ssnm1.setNeId("51358465");
         ssnm1.setNatId("87465462");
         ssnm1.setInternetGatewayId("4545412165452");
-                
+
         assertFalse(ssnm.equals(ssnm1));
         ssnm1.hashCode();
-        
+
     }
-    
+
     @Test
     public void testEqualsObjectPp() {
 
         SbiSnatNetModel ssnm1 = new SbiSnatNetModel();
-        
+
         ssnm1.setAclId("1234aclId");
         ssnm1.setAclNumber("5464665654");
         ssnm1.setControllerId("1254362");
@@ -442,17 +442,17 @@ public class SbiSnatNetModelTest {
         ssnm1.setNeId("51358465");
         ssnm1.setNatId("87465462");
         ssnm1.setInternetGatewayId("4545412165452");
-                
+
         assertFalse(ssnm.equals(ssnm1));
         ssnm1.hashCode();
-        
+
     }
-    
+
     @Test
     public void testEqualsObjectPia() {
 
         SbiSnatNetModel ssnm1 = new SbiSnatNetModel();
-        
+
         ssnm1.setAclId("1234aclId");
         ssnm1.setAclNumber("5464665654");
         ssnm1.setControllerId("1254362");
@@ -470,17 +470,17 @@ public class SbiSnatNetModelTest {
         ssnm1.setNeId("51358465");
         ssnm1.setNatId("87465462");
         ssnm1.setInternetGatewayId("4545412165452");
-                
+
         assertFalse(ssnm.equals(ssnm1));
         ssnm1.hashCode();
-        
+
     }
-    
+
     @Test
     public void testEqualsObjectNid() {
 
         SbiSnatNetModel ssnm1 = new SbiSnatNetModel();
-        
+
         ssnm1.setAclId("1234aclId");
         ssnm1.setAclNumber("5464665654");
         ssnm1.setControllerId("1254362");
@@ -498,17 +498,17 @@ public class SbiSnatNetModelTest {
         ssnm1.setNeId("94568965");
         ssnm1.setNatId("87465462");
         ssnm1.setInternetGatewayId("4545412165452");
-                
+
         assertFalse(ssnm.equals(ssnm1));
         ssnm1.hashCode();
-        
+
     }
-    
+
     @Test
     public void testEqualsObjectNaid() {
 
         SbiSnatNetModel ssnm1 = new SbiSnatNetModel();
-        
+
         ssnm1.setAclId("1234aclId");
         ssnm1.setAclNumber("5464665654");
         ssnm1.setControllerId("1254362");
@@ -526,17 +526,17 @@ public class SbiSnatNetModelTest {
         ssnm1.setNeId("51358465");
         ssnm1.setNatId("945465974");
         ssnm1.setInternetGatewayId("4545412165452");
-                
+
         assertFalse(ssnm.equals(ssnm1));
         ssnm1.hashCode();
-        
+
     }
-    
+
     @Test
     public void testEqualsObjectIgi() {
 
         SbiSnatNetModel ssnm1 = new SbiSnatNetModel();
-        
+
         ssnm1.setAclId("1234aclId");
         ssnm1.setAclNumber("5464665654");
         ssnm1.setControllerId("1254362");
@@ -554,11 +554,11 @@ public class SbiSnatNetModelTest {
         ssnm1.setNeId("51358465");
         ssnm1.setNatId("87465462");
         ssnm1.setInternetGatewayId("3654556526");
-                
+
         assertFalse(ssnm.equals(ssnm1));
         assertTrue(ssnm.equals(ssnm));
         ssnm1.hashCode();
-        
+
     }
-    
+
 }

@@ -169,7 +169,7 @@ public class IpTest {
         ip1.setDeviceId("987654");
         ip1.setRouteId("25");
         ip1.setIsTypeV4(true);
-        
+
         assertTrue(ip.equals(ip1));
         assertTrue(ip.equals(ip));
     }
@@ -188,7 +188,7 @@ public class IpTest {
 
         ip1.hashCode();
         ip.hashCode();
-        
+
         assertFalse(ip.equals(ip1));
         assertFalse(ip.equals(null));
         assertFalse(ip.equals(new Object()));

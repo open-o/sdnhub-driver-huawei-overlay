@@ -172,11 +172,11 @@ public class IpsecConnList extends UuidModel {
         if (!Objects.equals(interfaceName, other.interfaceName)) {
             return false;
         }
-        
+
         return checkOther(other);
 
     }
-    
+
     private boolean checkOther(IpsecConnList other) {
         if (!Objects.equals(serviceId, other.serviceId)) {
             return false;
@@ -185,10 +185,10 @@ public class IpsecConnList extends UuidModel {
         if (!ipsecConnection.equals(other.ipsecConnection)) {
             return false;
         }
-        
+
         return true;
     }
-    
+
     @Override
     public int hashCode() {
         return Objects.hash(createFlag, name, interfaceName, ipsecConnection, serviceId);

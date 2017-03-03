@@ -207,10 +207,10 @@ public class BaseModelTest {
         assertFalse(baseModel.equals(baseModel1));
     }
 
-   
+
     @Test
     public void testEqual() {
-        
+
         BaseModel baseModel1 = new BaseModel();
         baseModel1.setTenantId("tenant1");
         baseModel1.setName("basemodel1");
@@ -222,7 +222,7 @@ public class BaseModelTest {
         baseModel1.setCreatetime((long)280);
         baseModel1.setUpdatetime((long)180);
         baseModel1.setAdditionalInfo("additional1");
-        
+
         assertTrue(baseModel.equals(baseModel1));
         assertTrue(baseModel.equals(baseModel));
     }

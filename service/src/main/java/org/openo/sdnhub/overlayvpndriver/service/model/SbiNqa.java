@@ -301,7 +301,7 @@ public class SbiNqa extends SbiRouteNetModel {
         if (!Objects.equals(neRole, other.neRole)) {
             return false;
         }
-        
+
         if (!Objects.equals(srcIp, other.srcIp)) {
             return false;
         }
@@ -314,7 +314,7 @@ public class SbiNqa extends SbiRouteNetModel {
     }
 
     private boolean checkOther(SbiNqa other) {
-        
+
 
         if (!Objects.equals(dstIp, other.dstIp)) {
             return false;
@@ -323,11 +323,11 @@ public class SbiNqa extends SbiRouteNetModel {
         if (!Objects.equals(dstPortName, other.dstPortName)) {
             return false;
         }
-        
+
         if (!Objects.equals(testType, other.testType)) {
             return false;
         }
-        
+
         if (!Objects.equals(frequency, other.frequency)) {
             return false;
         }
@@ -335,7 +335,7 @@ public class SbiNqa extends SbiRouteNetModel {
         if (!Objects.equals(probeCount, other.probeCount)) {
             return false;
         }
-        
+
         if (!Objects.equals(timeout, other.timeout)) {
             return false;
         }
@@ -343,15 +343,15 @@ public class SbiNqa extends SbiRouteNetModel {
         if (!Objects.equals(ttl, other.ttl)) {
             return false;
         }
-        
+
         if (!Objects.equals(tos, other.tos)) {
             return false;
         }
-        
+
         if (!Objects.equals(interval, other.interval)) {
             return false;
         }
-        
+
         return true;
     }
     @Override

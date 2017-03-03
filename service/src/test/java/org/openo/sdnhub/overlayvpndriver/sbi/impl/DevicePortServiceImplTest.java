@@ -68,14 +68,14 @@ public class DevicePortServiceImplTest {
             }
         };
 
-        ResultRsp<SbiIp> rsp = DevicePortServiceImpl.queryLoopBack("ctrlUuid", "deviceId", "port");
+        ResultRsp<SbiIp> rsp = DevicePortServiceImpl.queryLoopBack("ctrlUuid", "deviceid", "port");
         assertEquals("overlayvpn.operation.success", rsp.getErrorCode());
     }
 
     @Test
     public void traslateDevicePortToIpPortNull() throws ServiceException {
 
-        ResultRsp<SbiIp> rsp = DevicePortServiceImpl.traslateDevicePortToIp(null, "ctrlUuid", "deviceId", "port");
+        ResultRsp<SbiIp> rsp = DevicePortServiceImpl.traslateDevicePortToIp(null, "ctrlUuid", "deviceid", "port");
         assertEquals(null, rsp.getData());
     }
 
@@ -85,7 +85,7 @@ public class DevicePortServiceImplTest {
         AcDevicePort port = new AcDevicePort();
         port.setId("123");
 
-        DevicePortServiceImpl.traslateDevicePortToIp(port, "ctrlUuid", "deviceId", "port");
+        DevicePortServiceImpl.traslateDevicePortToIp(port, "ctrlUuid", "deviceid", "port");
     }
 
     @Test(expected = ServiceException.class)
@@ -113,7 +113,7 @@ public class DevicePortServiceImplTest {
         };
 
         List<String> list = new ArrayList<>();
-        DevicePortServiceImpl.queryPorts("ctrlUuid", "deviceId", list);
+        DevicePortServiceImpl.queryPorts("ctrlUuid", "deviceid", list);
     }
 
     @Test(expected = ServiceException.class)
@@ -141,7 +141,7 @@ public class DevicePortServiceImplTest {
         };
 
         List<String> list = new ArrayList<>();
-        DevicePortServiceImpl.queryPorts("ctrlUuid", "deviceId", list);
+        DevicePortServiceImpl.queryPorts("ctrlUuid", "deviceid", list);
     }
 
     @Test(expected = ServiceException.class)
@@ -169,7 +169,7 @@ public class DevicePortServiceImplTest {
         };
 
         List<String> list = new ArrayList<>();
-        DevicePortServiceImpl.queryPorts("ctrlUuid", "deviceId", list);
+        DevicePortServiceImpl.queryPorts("ctrlUuid", "deviceid", list);
     }
 
     @Test(expected = ServiceException.class)
@@ -201,7 +201,7 @@ public class DevicePortServiceImplTest {
             }
         };
 
-        DevicePortServiceImpl.queryLoopBack("ctrlUuid", "deviceId", null);
+        DevicePortServiceImpl.queryLoopBack("ctrlUuid", "deviceid", null);
     }
 
     @Test(expected = ServiceException.class)
@@ -233,7 +233,7 @@ public class DevicePortServiceImplTest {
             }
         };
 
-        DevicePortServiceImpl.queryLoopBack("ctrlUuid", "deviceId", "port");
+        DevicePortServiceImpl.queryLoopBack("ctrlUuid", "deviceid", "port");
     }
 
     @Test(expected = ServiceException.class)
@@ -265,7 +265,7 @@ public class DevicePortServiceImplTest {
             }
         };
 
-        DevicePortServiceImpl.queryLoopBack("ctrlUuid", "deviceId", "port");
+        DevicePortServiceImpl.queryLoopBack("ctrlUuid", "deviceid", "port");
     }
 
     @Test
@@ -297,7 +297,7 @@ public class DevicePortServiceImplTest {
             }
         };
 
-        ResultRsp<SbiIp> rsp = DevicePortServiceImpl.queryLoopBack("ctrlUuid", "deviceId", null);
+        ResultRsp<SbiIp> rsp = DevicePortServiceImpl.queryLoopBack("ctrlUuid", "deviceid", null);
         assertEquals("overlayvpn.operation.success", rsp.getErrorCode());
     }
 
@@ -330,8 +330,6 @@ public class DevicePortServiceImplTest {
             }
         };
 
-        ResultRsp<SbiIp> rsp = DevicePortServiceImpl.queryLoopBack("ctrlUuid", "deviceId", "Port");
-       // assertEquals("overlayvpn.operation.success", rsp.getErrorCode());
+        ResultRsp<SbiIp> rsp = DevicePortServiceImpl.queryLoopBack("ctrlUuid", "deviceid", "Port");
     }
-
 }

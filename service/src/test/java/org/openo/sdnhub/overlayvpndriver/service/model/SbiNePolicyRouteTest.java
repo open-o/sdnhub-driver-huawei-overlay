@@ -68,7 +68,7 @@ public class SbiNePolicyRouteTest {
 
         route3.hashCode();
     }
-    
+
     @Test
     public void testEquals1() {
 
@@ -79,21 +79,21 @@ public class SbiNePolicyRouteTest {
         route4.setDirection("direction");
         route4.setFilterAction("filterAction");
 
-        assertTrue(route1.equals(route4));  
+        assertTrue(route1.equals(route4));
     }
-    
+
     @Test
     public void testEquals2() {
-        
-        assertTrue(route1.equals(route1));  
+
+        assertTrue(route1.equals(route1));
     }
-    
+
     @Test
     public void testEquals3() {
-        
-        assertFalse(route1.equals(null));  
+
+        assertFalse(route1.equals(null));
     }
-    
+
     @Test
     public void testToString() {
 
@@ -106,7 +106,7 @@ public class SbiNePolicyRouteTest {
 
         route5.toString();
     }
-    
+
     @Test
     public void testEquals6() {
 
@@ -117,9 +117,9 @@ public class SbiNePolicyRouteTest {
         route6.setDirection("direction");
         route6.setFilterAction("filterAction");
 
-        assertFalse(route1.equals(route6));  
+        assertFalse(route1.equals(route6));
     }
-    
+
     @Test
     public void testEquals7() {
 
@@ -130,9 +130,9 @@ public class SbiNePolicyRouteTest {
         route7.setDirection("direction");
         route7.setFilterAction("filterAction");
 
-        assertFalse(route1.equals(route7));  
+        assertFalse(route1.equals(route7));
     }
-    
+
     @Test
     public void testEquals8() {
 
@@ -143,9 +143,9 @@ public class SbiNePolicyRouteTest {
         route8.setDirection("directionTest");
         route8.setFilterAction("filterAction");
 
-        assertFalse(route1.equals(route8));  
+        assertFalse(route1.equals(route8));
     }
-    
+
     @Test
     public void testEquals9() {
 
@@ -156,13 +156,13 @@ public class SbiNePolicyRouteTest {
         route9.setDirection("direction");
         route9.setFilterAction("filterActionTest");
 
-        assertFalse(route1.equals(route9));  
+        assertFalse(route1.equals(route9));
     }
-    
+
     @Test
     public void testEqualsObject() {
-        
-        assertFalse(route1.equals(new Object()));  
+
+        assertFalse(route1.equals(new Object()));
     }
 
 }

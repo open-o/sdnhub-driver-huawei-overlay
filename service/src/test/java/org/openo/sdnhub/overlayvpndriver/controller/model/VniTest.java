@@ -25,10 +25,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class VniTest {
-    
-    Vni vni = new Vni(); 
+
+    Vni vni = new Vni();
     List<VniFilter> listvf = new LinkedList<>();
-    
+
     /**
      * <br/>
      *
@@ -37,7 +37,7 @@ public class VniTest {
      */
     @Before
     public void setup() {
-        
+
         vni.setMacLearingMode("macLearingMode");
         vni.setDeleteMode(true);
         vni.setBroadCastManager(true);
@@ -71,12 +71,12 @@ public class VniTest {
         listin.add(in);
         vni.setVlanlist(listin);
     }
-    
+
     @Test
-    public void testEqualsObjectSame() {  
-              
+    public void testEqualsObjectSame() {
+
         Vni vniMac = new Vni();
-            
+
         vniMac.setMacLearingMode("macLearingMode");
         vniMac.setDeleteMode(true);
         vniMac.setBroadCastManager(true);
@@ -111,15 +111,15 @@ public class VniTest {
         List<Integer> listin1 = new LinkedList<>();
         listin1.add(in1);
         vniMac.setVlanlist(listin1);
-         
-             
+
+
         vniMac.hashCode();
-        
-        assertFalse(vni.equals(vniMac));       
+
+        assertFalse(vni.equals(vniMac));
     }
 
     @Test
-    public void testEqualsObjectMac() {     
+    public void testEqualsObjectMac() {
 
         Vni vniMac = new Vni();
         vniMac.setMacLearingMode("bookmacbook");
@@ -157,15 +157,15 @@ public class VniTest {
         List<Integer> listin = new LinkedList<>();
         listin.add(in);
         vniMac.setVlanlist(listin);
-        
-             
+
+
         vniMac.hashCode();
-        
-        assertFalse(vni.equals(vniMac));       
+
+        assertFalse(vni.equals(vniMac));
     }
-    
+
     @Test
-    public void testEqualsObjectDm() {     
+    public void testEqualsObjectDm() {
 
         Vni vniMac = new Vni();
         vniMac.setMacLearingMode("macLearingMode");
@@ -202,14 +202,14 @@ public class VniTest {
         List<Integer> listin = new LinkedList<>();
         listin.add(in);
         vniMac.setVlanlist(listin);
-                     
+
         vniMac.hashCode();
-        
-        assertFalse(vni.equals(vniMac));       
+
+        assertFalse(vni.equals(vniMac));
     }
-    
+
     @Test
-    public void testEqualsObjectBcm() {     
+    public void testEqualsObjectBcm() {
 
         Vni vniMac = new Vni();
         vniMac.setMacLearingMode("macLearingMode");
@@ -246,14 +246,14 @@ public class VniTest {
         List<Integer> listin = new LinkedList<>();
         listin.add(in);
         vniMac.setVlanlist(listin);
-                     
+
         vniMac.hashCode();
-        
-        assertFalse(vni.equals(vniMac));      
+
+        assertFalse(vni.equals(vniMac));
     }
-    
+
     @Test
-    public void testEqualsObjectEre() {     
+    public void testEqualsObjectEre() {
 
         Vni vniMac = new Vni();
         vniMac.setMacLearingMode("macLearingMode");
@@ -290,14 +290,14 @@ public class VniTest {
         List<Integer> listin = new LinkedList<>();
         listin.add(in);
         vniMac.setVlanlist(listin);
-                     
+
         vniMac.hashCode();
-        
-        assertFalse(vni.equals(vniMac));        
+
+        assertFalse(vni.equals(vniMac));
     }
-    
+
     @Test
-    public void testEqualsObjectEri() {     
+    public void testEqualsObjectEri() {
 
         Vni vniMac = new Vni();
         vniMac.setMacLearingMode("macLearingMode");
@@ -334,14 +334,14 @@ public class VniTest {
         List<Integer> listin = new LinkedList<>();
         listin.add(in);
         vniMac.setVlanlist(listin);
-                     
+
         vniMac.hashCode();
-        
-        assertFalse(vni.equals(vniMac));       
+
+        assertFalse(vni.equals(vniMac));
     }
-    
+
     @Test
-    public void testEqualsObjectErm() {     
+    public void testEqualsObjectErm() {
 
         Vni vniMac = new Vni();
         vniMac.setMacLearingMode("macLearingMode");
@@ -378,20 +378,20 @@ public class VniTest {
         List<Integer> listin = new LinkedList<>();
         listin.add(in);
         vniMac.setVlanlist(listin);
-                     
+
         vniMac.hashCode();
-        
-        assertFalse(vni.equals(vniMac));        
+
+        assertFalse(vni.equals(vniMac));
     }
-    
+
     @Test
-    public void testEqualsObjectFilter() {     
+    public void testEqualsObjectFilter() {
 
         Vni vniMac = new Vni();
         vniMac.setMacLearingMode("macLearingMode");
         vniMac.setDeleteMode(true);
         vniMac.setBroadCastManager(true);
-        vniMac.setEvpnRtExport("evpnRtExport"); 
+        vniMac.setEvpnRtExport("evpnRtExport");
         vniMac.setEvpnRtImport("evpnRtImport");
         vniMac.setEvpnRtMode("evpnRtMode");
         VniFilter filterList = new VniFilter();
@@ -422,14 +422,14 @@ public class VniTest {
         List<Integer> listin = new LinkedList<>();
         listin.add(in);
         vniMac.setVlanlist(listin);
-                     
+
         vniMac.hashCode();
-        
-        assertFalse(vni.equals(vniMac));       
+
+        assertFalse(vni.equals(vniMac));
     }
-            
+
     @Test
-    public void testEqualsObjectPeer() {     
+    public void testEqualsObjectPeer() {
 
         Vni vniMac = new Vni();
         vniMac.setMacLearingMode("macLearingMode");
@@ -466,14 +466,14 @@ public class VniTest {
         List<Integer> listin = new LinkedList<>();
         listin.add(in);
         vniMac.setVlanlist(listin);
-                     
+
         vniMac.hashCode();
-        
-        assertFalse(vni.equals(vniMac));       
+
+        assertFalse(vni.equals(vniMac));
     }
-    
+
     @Test
-    public void testEqualsObjectPortList() {     
+    public void testEqualsObjectPortList() {
 
         Vni vniMac = new Vni();
         vniMac.setMacLearingMode("macLearingMode");
@@ -505,14 +505,14 @@ public class VniTest {
         List<Integer> listin = new LinkedList<>();
         listin.add(in);
         vniMac.setVlanlist(listin);
-                     
+
         vniMac.hashCode();
-        
-        assertFalse(vni.equals(vniMac));       
+
+        assertFalse(vni.equals(vniMac));
     }
-    
+
     @Test
-    public void testEqualsObjectPortVanList() {     
+    public void testEqualsObjectPortVanList() {
 
         Vni vniMac = new Vni();
         vniMac.setMacLearingMode("macLearingMode");
@@ -546,14 +546,14 @@ public class VniTest {
         List<Integer> listin = new LinkedList<>();
         listin.add(in);
         vniMac.setVlanlist(listin);
-                     
+
         vniMac.hashCode();
-        
-        assertFalse(vni.equals(vniMac));       
+
+        assertFalse(vni.equals(vniMac));
     }
-    
+
     @Test
-    public void testEqualsObjectQpc() {     
+    public void testEqualsObjectQpc() {
 
         Vni vniMac = new Vni();
         vniMac.setMacLearingMode("macLearingMode");
@@ -590,14 +590,14 @@ public class VniTest {
         List<Integer> listin = new LinkedList<>();
         listin.add(in);
         vniMac.setVlanlist(listin);
-                     
+
         vniMac.hashCode();
-        
-        assertFalse(vni.equals(vniMac));     
+
+        assertFalse(vni.equals(vniMac));
     }
-    
+
     @Test
-    public void testEqualsObjectUid() {     
+    public void testEqualsObjectUid() {
 
         Vni vniMac = new Vni();
         vniMac.setMacLearingMode("macLearingMode");
@@ -634,14 +634,14 @@ public class VniTest {
         List<Integer> listin = new LinkedList<>();
         listin.add(in);
         vniMac.setVlanlist(listin);
-                     
+
         vniMac.hashCode();
-        
-        assertFalse(vni.equals(vniMac));      
+
+        assertFalse(vni.equals(vniMac));
     }
-    
+
     @Test
-    public void testEqualsObjectVi() {     
+    public void testEqualsObjectVi() {
 
         Vni vniMac = new Vni();
         vniMac.setMacLearingMode("macLearingMode");
@@ -678,14 +678,14 @@ public class VniTest {
         List<Integer> listin = new LinkedList<>();
         listin.add(in);
         vniMac.setVlanlist(listin);
-                     
+
         vniMac.hashCode();
-        
-        assertFalse(vni.equals(vniMac));      
+
+        assertFalse(vni.equals(vniMac));
     }
-    
+
     @Test
-    public void testEqualsObjectVlanList() {     
+    public void testEqualsObjectVlanList() {
 
         Vni vniMac = new Vni();
         vniMac.setMacLearingMode("macLearingMode");
@@ -719,15 +719,15 @@ public class VniTest {
         List<Integer> listin = new LinkedList<>();
         listin.add(in);
         vniMac.setVlanlist(listin);
-                     
+
         vniMac.hashCode();
-        
-        assertFalse(vni.equals(vniMac));      
+
+        assertFalse(vni.equals(vniMac));
     }
-    
+
     @Test
     public void testEqualsObjectNull() {
-       
+
         Vni vni1 = new Vni();
         vni1.setMacLearingMode(null);
         vni1.setDeleteMode(true);

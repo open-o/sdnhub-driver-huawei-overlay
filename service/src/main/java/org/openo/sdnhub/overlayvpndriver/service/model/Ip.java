@@ -139,7 +139,7 @@ public class Ip extends UuidModel {
      * @return true if this object equals to other object
      * @since SDNO 0.5
      */
-    
+
     @Override
     public boolean equals(Object obj) {
         if (null == obj) {
@@ -163,7 +163,7 @@ public class Ip extends UuidModel {
         if (!Objects.equals(ipv6, other.ipv6)) {
             return false;
         }
-        
+
         if (!Objects.equals(ipMask, other.ipMask)) {
             return false;
         }
@@ -179,11 +179,11 @@ public class Ip extends UuidModel {
         if (!Objects.equals(neId, other.neId)) {
             return false;
         }
-        
+
         if (!Objects.equals(deviceId, other.deviceId)) {
             return false;
         }
-        
+
         if (!Objects.equals(routeId, other.routeId)) {
             return false;
         }
@@ -191,7 +191,7 @@ public class Ip extends UuidModel {
         if (!Objects.equals(isTypeV4, other.isTypeV4)) {
             return false;
         }
-        
+
         return true;
     }
 

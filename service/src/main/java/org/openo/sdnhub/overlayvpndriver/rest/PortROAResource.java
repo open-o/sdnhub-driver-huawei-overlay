@@ -68,11 +68,11 @@ public class PortROAResource {
      * @since SDNHUB 0.5
      */
     @GET
-    @Path("/device/{deviceId}/ports")
+    @Path("/device/{deviceid}/ports")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ResultRsp<SbiIp> queryPortIpByPortName(@HeaderParam(CTRL_HEADER_PARAM) String ctrlUuidParam,
-                                                  @PathParam("deviceId") String deviceId,
+                                                  @PathParam("deviceid") String deviceId,
                                                   @QueryParam("portName") String portName) throws ServiceException {
 
         String ctrlUuid = RequestHeaderUtil.readControllerUUID(ctrlUuidParam);

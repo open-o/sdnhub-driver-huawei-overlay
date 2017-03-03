@@ -235,11 +235,12 @@ public class OverlayVpnDriverProxy {
         try {
             String finalurl = getControllerUrl(url, ctrlUuid);
 
-            HttpDelete httpdelete = new HttpDelete(finalurl);
+            HttpDeleteWithBody httpdelete = new HttpDeleteWithBody(finalurl);
             httpdelete.addHeader(JSON_CONTENT_TYPE, JSON_APPLICATION_TYPE);
             httpdelete.addHeader(JSON_ACCEPT, JSON_APPLICATION_TYPE);
             if(StringUtils.hasLength(body)) {
-                //Do Nothing
+                StringEntity reqEntity = new StringEntity(body);
+                httpdelete.setEntity(reqEntity);
             }
 
             LOGGER.debug(LOG_SEND_DELETE_MSG + finalurl);

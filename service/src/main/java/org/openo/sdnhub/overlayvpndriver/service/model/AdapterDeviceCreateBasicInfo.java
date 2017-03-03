@@ -110,7 +110,7 @@ public class AdapterDeviceCreateBasicInfo extends AbstUuidModel {
     public void setDescription(String description) {
         this.description = description;
     }
-    
+
     /**
      * Override equals Function.<br>
      *
@@ -141,7 +141,7 @@ public class AdapterDeviceCreateBasicInfo extends AbstUuidModel {
         if (!Objects.equals(esn, other.esn)) {
             return false;
         }
-        
+
         if (!Objects.equals(orgnizationName, other.orgnizationName)) {
             return false;
         }
@@ -156,7 +156,7 @@ public class AdapterDeviceCreateBasicInfo extends AbstUuidModel {
     @Override
     public int hashCode() {
         return Objects.hash(name, esn, orgnizationName, description);
-                
+
     }
 
 }

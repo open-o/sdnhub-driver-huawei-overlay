@@ -29,7 +29,7 @@ public class AclRuleTest {
     Ip ip1 = new Ip();
 
     Ip ip2 = new Ip();
-    
+
     /**
      * <br/>
      *

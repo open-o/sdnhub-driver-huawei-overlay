@@ -63,15 +63,15 @@ public class InterfaceIpServiceImpl {
         LOGGER.debug("body:{}", modifyRsp);
         if(!modifyRsp.isSuccess()) {
             LOGGER.error("update interface ip error,status:{}", modifyRsp.getStatus());
-            return new ResultRsp<>(DriverErrorCode.CLOUDVPN_FAILED, null, null,  modifyRsp.toString(), null);
+            return new ResultRsp<>(DriverErrorCode.OVERLAYVPN_FAIL, null, null,  modifyRsp.toString(), null);
         }
         ACResponse<List<SbiInterfaceIpConfig>> response =
                 JsonUtil.fromJson(modifyRsp.getBody(), new TypeReference<ACResponse<List<SbiInterfaceIpConfig>>>() {});
         if(null != response) {
-            return new ResultRsp<>(response.getErrcode(), response.getData());
+            return new ResultRsp<>(DriverErrorCode.OVERLAYVPN_SUCCESS, response.getData());
         }
         LOGGER.error("update interface error:" + modifyRsp.getBody());
-        return new ResultRsp<>(DriverErrorCode.CLOUDVPN_FAILED);
+        return new ResultRsp<>(DriverErrorCode.OVERLAYVPN_FAIL);
     }
 
     /**
@@ -91,14 +91,14 @@ public class InterfaceIpServiceImpl {
         LOGGER.debug("body:{}", queryRsp);
         if(!queryRsp.isSuccess()) {
             LOGGER.error("query interface ip error,status:{}", queryRsp.getStatus());
-            return new ResultRsp<>(DriverErrorCode.CLOUDVPN_FAILED);
+            return new ResultRsp<>(DriverErrorCode.OVERLAYVPN_FAIL);
         }
         ACResponse<List<SbiInterfaceIpConfig>> response =
                 JsonUtil.fromJson(queryRsp.getBody(), new TypeReference<ACResponse<List<SbiInterfaceIpConfig>>>() {});
         if(null != response) {
-            return new ResultRsp<>(response.getErrcode(), response.getData());
+            return new ResultRsp<>(DriverErrorCode.OVERLAYVPN_SUCCESS, response.getData());
         }
         LOGGER.error("query interface ip failed:" + queryRsp.getBody());
-        return new ResultRsp<>(DriverErrorCode.CLOUDVPN_FAILED);
+        return new ResultRsp<>(DriverErrorCode.OVERLAYVPN_FAIL);
     }
 }

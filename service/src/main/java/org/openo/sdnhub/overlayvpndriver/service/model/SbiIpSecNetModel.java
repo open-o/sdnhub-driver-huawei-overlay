@@ -137,7 +137,7 @@ public abstract class SbiIpSecNetModel extends BaseModel {
      * @return true if this object equals to other object
      * @since SDNO 0.5
      */
-    
+
     @Override
     public boolean equals(Object obj) {
         if (null == obj) {
@@ -161,7 +161,7 @@ public abstract class SbiIpSecNetModel extends BaseModel {
         if (!Objects.equals(externalId, other.externalId)) {
             return false;
         }
-        
+
         if (!Objects.equals(connectionServiceId, other.connectionServiceId)) {
             return false;
         }
@@ -177,21 +177,21 @@ public abstract class SbiIpSecNetModel extends BaseModel {
         if (!Objects.equals(peerNeId, other.peerNeId)) {
             return false;
         }
-        
+
         if (!Objects.equals(deviceId, other.deviceId)) {
             return false;
         }
-        
+
         if (!Objects.equals(peerDeviceId, other.peerDeviceId)) {
             return false;
         }
-        
+
         return true;
     }
-    
+
     @Override
     public int hashCode() {
         return Objects.hash(controllerId, externalId, connectionServiceId, neId, peerNeId, deviceId, peerDeviceId);
-                
+
     }
 }

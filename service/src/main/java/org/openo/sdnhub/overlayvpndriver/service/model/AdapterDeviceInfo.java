@@ -330,7 +330,7 @@ public class AdapterDeviceInfo extends AdapterDeviceCreateBasicInfo {
         if (!Objects.equals(showTenant, other.showTenant)) {
             return false;
         }
-        
+
         if (!Objects.equals(serviceIp, other.serviceIp)) {
             return false;
         }
@@ -350,11 +350,11 @@ public class AdapterDeviceInfo extends AdapterDeviceCreateBasicInfo {
         if (!Objects.equals(status, other.status)) {
             return false;
         }
-        
+
         if (!Objects.equals(gisLon, other.gisLon)) {
             return false;
         }
-        
+
         if (!Objects.equals(gisLat, other.gisLat)) {
             return false;
         }
@@ -362,7 +362,7 @@ public class AdapterDeviceInfo extends AdapterDeviceCreateBasicInfo {
         if (!Objects.equals(vendor, other.vendor)) {
             return false;
         }
-        
+
         if (!Objects.equals(tenantId, other.tenantId)) {
             return false;
         }
@@ -370,20 +370,20 @@ public class AdapterDeviceInfo extends AdapterDeviceCreateBasicInfo {
         if (!Objects.equals(tenantName, other.tenantName)) {
             return false;
         }
-        
+
         if (!Objects.equals(orgnizationId, other.orgnizationId)) {
             return false;
         }
-        
+
         return checkOtherMembers(other);
     }
-    
+
     private boolean checkOtherMembers(AdapterDeviceInfo other) {
-        
+
         if (!Objects.equals(creator, other.creator)) {
             return false;
         }
-        
+
         if (!Objects.equals(createTime, other.createTime)) {
             return false;
         }
@@ -391,11 +391,11 @@ public class AdapterDeviceInfo extends AdapterDeviceCreateBasicInfo {
         if (!Objects.equals(registerTime, other.registerTime)) {
             return false;
         }
-        
+
         if (!Objects.equals(modifier, other.modifier)) {
             return false;
         }
-        
+
         if (!Objects.equals(modifyTime, other.modifyTime)) {
             return false;
         }
@@ -403,14 +403,14 @@ public class AdapterDeviceInfo extends AdapterDeviceCreateBasicInfo {
         if (!Objects.equals(getEsn(), other.getEsn())) {
             return false;
         }
-        
+
         return true;
     }
-    
+
     @Override
     public int hashCode() {
         return Objects.hash(id, showTenant, serviceIp, neType, version, status, gisLon,
-                gisLat, vendor, tenantId, tenantName, orgnizationId, creator, createTime, 
+                gisLat, vendor, tenantId, tenantName, orgnizationId, creator, createTime,
                 registerTime, modifier, modifyTime);
     }
 }

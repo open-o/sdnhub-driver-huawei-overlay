@@ -62,7 +62,7 @@ public class DeviceServiceImplTest {
         };
 
         ResultRsp<List<AdapterDeviceInfo>> resp = dsi.queryDevices("12345ctrluuid", "jkbfa");
-        assertEquals("success", resp.getErrorCode());
+        assertEquals("overlayvpn.operation.success", resp.getErrorCode());
     }
 
     @Test
@@ -91,7 +91,7 @@ public class DeviceServiceImplTest {
 
         ResultRsp<List<AdapterDeviceInfo>> resp = dsi.queryDevices("12345ctrluuid", "jkbfa");
 
-        assertEquals("cloudvpn.failed", resp.getErrorCode());
+        assertEquals("overlayvpn.operation.fail", resp.getErrorCode());
     }
 
     @Test
@@ -120,7 +120,7 @@ public class DeviceServiceImplTest {
 
         ResultRsp<List<AdapterDeviceInfo>> resp = dsi.queryDevices("12345ctrluuid", "jkbfa");
         resp.getSuccessed();
-        assertEquals("cloudvpn.failed", resp.getErrorCode());
+        assertEquals("overlayvpn.operation.fail", resp.getErrorCode());
     }
 
     @Test
@@ -148,7 +148,7 @@ public class DeviceServiceImplTest {
         };
 
         ResultRsp<List<AdapterDeviceInfo>> resp = dsi.queryDevices("12345ctrluuid", "jkbfa");
-        assertEquals("cloudvpn.failed", resp.getErrorCode());
+        assertEquals("overlayvpn.operation.fail", resp.getErrorCode());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -204,7 +204,7 @@ public class DeviceServiceImplTest {
         };
 
         ResultRsp<AdapterDeviceInfo> resp = dsi.createDevices("12345ctrluuid", "jkbfa");
-        assertEquals("cloudvpn.failed", resp.getErrorCode());
+        assertEquals("overlayvpn.operation.fail", resp.getErrorCode());
 
     }
 
@@ -233,7 +233,7 @@ public class DeviceServiceImplTest {
         };
 
         ResultRsp<AdapterDeviceInfo> resp = dsi.createDevices("12345ctrluuid", "jkbfa");
-        assertEquals("cloudvpn.failed", resp.getErrorCode());
+        assertEquals("overlayvpn.operation.fail", resp.getErrorCode());
     }
 
     @Test
@@ -261,7 +261,7 @@ public class DeviceServiceImplTest {
         };
 
         ResultRsp<AdapterDeviceInfo> resp = dsi.createDevices("12345ctrluuid", "jkbfa");
-        assertEquals("cloudvpn.failed", resp.getErrorCode());
+        assertEquals("overlayvpn.operation.fail", resp.getErrorCode());
     }
 
     @Test
@@ -291,7 +291,7 @@ public class DeviceServiceImplTest {
         };
 
         ResultRsp<String> resp = dsi.modifyDevice("1234kowed", "1234deviceId", deviceInfo);
-        assertEquals("0", resp.getErrorCode());
+        assertEquals("overlayvpn.operation.success", resp.getErrorCode());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -384,7 +384,7 @@ public class DeviceServiceImplTest {
         };
 
         ResultRsp<String> resp = dsi.modifyDevice("1234kowed", "1234deviceId", deviceInfo);
-        assertEquals("cloudvpn.failed", resp.getErrorCode());
+        assertEquals("overlayvpn.operation.fail", resp.getErrorCode());
     }
 
     @Test
@@ -414,7 +414,7 @@ public class DeviceServiceImplTest {
         };
 
         ResultRsp<String> resp = dsi.deleteDevice("1235jnfiv", deviceIdList);
-        assertEquals(null, resp.getErrorCode());
+        assertEquals("overlayvpn.operation.success", resp.getErrorCode());
     }
 
     @Test
@@ -445,7 +445,7 @@ public class DeviceServiceImplTest {
 
         ResultRsp<String> resp = dsi.deleteDevice("1235jnfiv", deviceIdList);
 
-        assertEquals("500", resp.getErrorCode());
+        assertEquals("overlayvpn.operation.fail", resp.getErrorCode());
 
     }
 
@@ -477,7 +477,7 @@ public class DeviceServiceImplTest {
 
         ResultRsp<String> response = dsi.deleteDevice("1235jnfiv", deviceIdList);
 
-        assertEquals("200", response.getErrorCode());
+        assertEquals("overlayvpn.operation.fail", response.getErrorCode());
     }
 
     @Test
@@ -504,7 +504,7 @@ public class DeviceServiceImplTest {
             }
         };
         ResultRsp<String> response = dsi.deleteDevice("1235jnfiv", deviceIdList);
-        assertEquals("cloudvpn.failed", response.getErrorCode());
+        assertEquals("overlayvpn.operation.fail", response.getErrorCode());
     }
 
 }

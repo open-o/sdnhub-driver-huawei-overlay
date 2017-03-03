@@ -206,7 +206,7 @@ public class BaseModel extends UuidModel {
         if (!Objects.equals(tenantId, other.tenantId)) {
             return false;
         }
-        
+
         if (!Objects.equals(description, other.description)) {
             return false;
         }
@@ -215,11 +215,11 @@ public class BaseModel extends UuidModel {
     }
 
     private boolean checkOther(BaseModel other) {
-        
+
         if (!Objects.equals(deployStatus, other.deployStatus)) {
             return false;
         }
-        
+
         if (!Objects.equals(operationStatus, other.operationStatus)) {
             return false;
         }
@@ -227,11 +227,11 @@ public class BaseModel extends UuidModel {
         if (!Objects.equals(activeStatus, other.activeStatus)) {
             return false;
         }
-        
+
         if (!Objects.equals(runningStatus, other.runningStatus)) {
             return false;
         }
-        
+
         if (!Objects.equals(createtime, other.createtime)) {
             return false;
         }
@@ -239,14 +239,14 @@ public class BaseModel extends UuidModel {
         if (!Objects.equals(updatetime, other.updatetime)) {
             return false;
         }
-        
+
         if (!Objects.equals(additionalInfo, other.additionalInfo)) {
             return false;
         }
 
         return true;
     }
-    
+
     @Override
     public int hashCode() {
         return Objects.hash(name, tenantId, description, deployStatus, operationStatus, activeStatus, runningStatus,

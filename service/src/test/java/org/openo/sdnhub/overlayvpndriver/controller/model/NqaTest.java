@@ -25,7 +25,7 @@ import org.junit.Test;
 public class NqaTest {
 
     NQA nqa1 = new NQA();
-    
+
     /**
      * <br/>
      *
@@ -64,10 +64,10 @@ public class NqaTest {
         nqa2.setTos(2);
         nqa2.setIpsecConnectionId("ipsecConnectionId");
         nqa2.setNqaState("nqaState");
-        
+
         assertTrue(nqa1.equals(nqa2));
     }
-    
+
     @Test
     public void testhashCode1() {
         NQA nqa2 = new NQA();
@@ -83,10 +83,10 @@ public class NqaTest {
         nqa2.setTos(2);
         nqa2.setIpsecConnectionId("ipsecConnectionId");
         nqa2.setNqaState("nqaState");
-        
+
         nqa2.hashCode();
     }
-    
+
     @Test
     public void testhashCode2() {
         NQA nqa3 = new NQA();
@@ -102,20 +102,20 @@ public class NqaTest {
         nqa3.setTos(null);
         nqa3.setIpsecConnectionId(null);
         nqa3.setNqaState(null);
-        
+
         nqa3.hashCode();
     }
-    
+
     @Test
     public void testEqual2() {
         assertTrue(nqa1.equals(nqa1));
     }
-    
+
     @Test
     public void testEqual3() {
         assertFalse(nqa1.equals(null));
     }
-    
+
     @Test
     public void testEqual4() {
         NQA nqa4 = new NQA();
@@ -131,11 +131,11 @@ public class NqaTest {
         nqa4.setTos(2);
         nqa4.setIpsecConnectionId("ipsecConnectionId");
         nqa4.setNqaState("nqaState");
-        
+
         assertFalse(nqa1.equals(nqa4));
     }
-    
-    
+
+
     @Test
     public void testEqual5() {
         NQA nqa5 = new NQA();
@@ -151,10 +151,10 @@ public class NqaTest {
         nqa5.setTos(2);
         nqa5.setIpsecConnectionId("ipsecConnectionId");
         nqa5.setNqaState("nqaState");
-        
+
         assertFalse(nqa1.equals(nqa5));
     }
-    
+
     @Test
     public void testEqual6() {
         NQA nqa6 = new NQA();
@@ -170,10 +170,10 @@ public class NqaTest {
         nqa6.setTos(2);
         nqa6.setIpsecConnectionId("ipsecConnectionId");
         nqa6.setNqaState("nqaState");
-        
+
         assertFalse(nqa1.equals(nqa6));
     }
-    
+
     @Test
     public void testEqual7() {
         NQA nqa7 = new NQA();
@@ -189,10 +189,10 @@ public class NqaTest {
         nqa7.setTos(2);
         nqa7.setIpsecConnectionId("ipsecConnectionId");
         nqa7.setNqaState("nqaState");
-        
+
         assertFalse(nqa1.equals(nqa7));
     }
-        
+
     @Test
     public void testEqual8() {
         NQA nqa8 = new NQA();
@@ -208,10 +208,10 @@ public class NqaTest {
         nqa8.setTos(2);
         nqa8.setIpsecConnectionId("ipsecConnectionId");
         nqa8.setNqaState("nqaState");
-        
+
         assertFalse(nqa1.equals(nqa8));
     }
-    
+
     @Test
     public void testEqual9() {
         NQA nqa9 = new NQA();
@@ -227,7 +227,7 @@ public class NqaTest {
         nqa9.setTos(2);
         nqa9.setIpsecConnectionId("ipsecConnectionId");
         nqa9.setNqaState("nqaState");
-        
+
         assertFalse(nqa1.equals(nqa9));
     }
 
@@ -246,10 +246,10 @@ public class NqaTest {
         nqa10.setTos(2);
         nqa10.setIpsecConnectionId("ipsecConnectionId");
         nqa10.setNqaState("nqaState");
-        
+
         assertFalse(nqa1.equals(nqa10));
     }
-    
+
     @Test
     public void testEqual11() {
         NQA nqa11 = new NQA();
@@ -265,10 +265,10 @@ public class NqaTest {
         nqa11.setTos(2);
         nqa11.setIpsecConnectionId("ipsecConnectionId");
         nqa11.setNqaState("nqaState");
-        
+
         assertFalse(nqa1.equals(nqa11));
     }
-    
+
     @Test
     public void testEqual12() {
         NQA nqa12 = new NQA();
@@ -284,10 +284,10 @@ public class NqaTest {
         nqa12.setTos(2);
         nqa12.setIpsecConnectionId("ipsecConnectionId");
         nqa12.setNqaState("nqaState");
-        
+
         assertFalse(nqa1.equals(nqa12));
     }
-    
+
     @Test
     public void testEqual13() {
         NQA nqa13 = new NQA();
@@ -303,10 +303,10 @@ public class NqaTest {
         nqa13.setTos(3);
         nqa13.setIpsecConnectionId("ipsecConnectionId");
         nqa13.setNqaState("nqaState");
-        
+
         assertFalse(nqa1.equals(nqa13));
     }
-    
+
     @Test
     public void testEqual14() {
         NQA nqa14 = new NQA();
@@ -322,10 +322,10 @@ public class NqaTest {
         nqa14.setTos(2);
         nqa14.setIpsecConnectionId("ipsecConnectionIdTest");
         nqa14.setNqaState("nqaState");
-        
+
         assertFalse(nqa1.equals(nqa14));
     }
-    
+
     @Test
     public void testEqual15() {
         NQA nqa15 = new NQA();
@@ -341,10 +341,10 @@ public class NqaTest {
         nqa15.setTos(2);
         nqa15.setIpsecConnectionId("ipsecConnectionId");
         nqa15.setNqaState("nqaStateTest");
-        
+
         assertFalse(nqa1.equals(nqa15));
     }
-    
+
     @Test
     public void testEqualObject() {
         assertFalse(nqa1.equals(new Object()));

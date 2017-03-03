@@ -140,7 +140,7 @@ public class SbiRouteNetModel extends BaseModel {
         if (!Objects.equals(controllerId, other.controllerId)) {
             return false;
         }
-        
+
         if (!Objects.equals(externalId, other.externalId)) {
             return false;
         }

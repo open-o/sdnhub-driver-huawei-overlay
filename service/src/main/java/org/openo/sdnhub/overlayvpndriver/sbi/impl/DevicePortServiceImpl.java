@@ -103,7 +103,7 @@ public class DevicePortServiceImpl {
     private static ResultRsp<List<LoopBackPort>> queryLoopBackFromController(
             String ctrlUuid, String deviceId, String portName) throws ServiceException {
 
-        ResultRsp<List<LoopBackPort>> resultRsp = new ResultRsp<>(DriverErrorCode.CLOUDVPN_SUCCESS);
+        ResultRsp<List<LoopBackPort>> resultRsp = new ResultRsp<>(DriverErrorCode.OVERLAYVPN_SUCCESS);
         String queryUrl = MessageFormat.format(ControllerUrlConst.QUERY_LOOP_BACK_URL, deviceId);
 
         if(StringUtils.isNotEmpty(portName)) {
@@ -188,7 +188,7 @@ public class DevicePortServiceImpl {
             LOGGER.warn("queryTime:" + queryTime + ", loopback name:{} result has no data.", portname);
             sleepSometime(CommonConst.GET_WAN_IP_WAIT_TIME);
         }
-        throw new ServiceException(DriverErrorCode.CLOUDVPN_FAILED, "[LoopBack]" + portname + "has no ip info.");
+        throw new ServiceException(DriverErrorCode.OVERLAYVPN_FAIL, "[LoopBack]" + portname + "has no ip info.");
     }
 
     /**
@@ -203,7 +203,7 @@ public class DevicePortServiceImpl {
     public static ResultRsp<SbiIp> traslateDevicePortToIp(AcDevicePort acDevicePort, String portName,
                                                            String deviceId, String ctrlId) throws ServiceException {
 
-        ResultRsp<SbiIp> ipRsp = new ResultRsp<>(DriverErrorCode.CLOUDVPN_SUCCESS);
+        ResultRsp<SbiIp> ipRsp = new ResultRsp<>(DriverErrorCode.OVERLAYVPN_SUCCESS);
 
         if (acDevicePort != null) {
 
@@ -218,13 +218,13 @@ public class DevicePortServiceImpl {
                 for(int queryip = 0; queryip < CommonConst.QUERY_TIME; queryip++) {
                     List<AcDevicePort> portList = DevicePortServiceImpl.queryPorts(deviceId, ctrlId, Arrays.asList(portName));
                     if(org.apache.commons.collections.CollectionUtils.isEmpty(portList)) {
-                        return new ResultRsp<>(DriverErrorCode.CLOUDVPN_FAILED);
+                        return new ResultRsp<>(DriverErrorCode.OVERLAYVPN_FAIL);
                     }
 
                     AcDevicePort queryPort = portList.get(0);
 
                     if(null == queryPort) {
-                        return new ResultRsp<>(DriverErrorCode.CLOUDVPN_FAILED);
+                        return new ResultRsp<>(DriverErrorCode.OVERLAYVPN_FAIL);
                     }
 
                     if(Configuration.getValues(ConfigKeyConst.WAN_DEFAULT_IP).equals(queryPort.getIpAddr())) {

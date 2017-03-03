@@ -155,7 +155,7 @@ public class PolicyRouteROAResourceTest {
         ResultRsp<SbiNePolicyRoute> routeCreate =
                 policyRouteRoaResource.routeCreate(CTRL_UUID, sbiNePolicyRouteList);
         List<SbiNePolicyRoute> successed = routeCreate.getSuccessed();
-        assertEquals("success", routeCreate.getErrorCode());
+        assertEquals("overlayvpn.operation.success", routeCreate.getErrorCode());
         assertEquals("self-traffic-policy-1", successed.get(0).getTrafficPolicyName());
     }
 
@@ -201,7 +201,7 @@ public class PolicyRouteROAResourceTest {
         ResultRsp<SbiNePolicyRoute> routeCreate =
                 policyRouteRoaResource.routeCreate(CTRL_UUID, sbiNePolicyRouteList);
         List<FailData<SbiNePolicyRoute>> failData = routeCreate.getFail();
-        assertEquals("success", routeCreate.getErrorCode());
+        assertEquals("overlayvpn.operation.success", routeCreate.getErrorCode());
         assertTrue(failData.isEmpty());
     }
 
@@ -229,7 +229,7 @@ public class PolicyRouteROAResourceTest {
         ResultRsp<SbiNePolicyRoute> routeCreate =
                 policyRouteRoaResource.routeCreate(CTRL_UUID, sbiNePolicyRouteList);
         List<FailData<SbiNePolicyRoute>> failData = routeCreate.getFail();
-        assertEquals("success", routeCreate.getErrorCode());
+        assertEquals("overlayvpn.operation.success", routeCreate.getErrorCode());
         assertTrue(failData.isEmpty());
     }
 
@@ -283,7 +283,7 @@ public class PolicyRouteROAResourceTest {
         ResultRsp<SbiNePolicyRoute> routeUpdate =
                 policyRouteRoaResource.routeUpdate(CTRL_UUID, sbiNePolicyRouteList);
         List<SbiNePolicyRoute> successed = routeUpdate.getSuccessed();
-        assertEquals("success", routeUpdate.getErrorCode());
+        assertEquals("overlayvpn.operation.success", routeUpdate.getErrorCode());
         String filterActionExpected =
                 "{\"action\":null,\"ruleList\":[{\"policy\":null,\"srcIp\":null,"
                 + "\"desIp\":null,\"id\":\"uid12345\"}],\"filter\":{\"vlanId\":\"vlan1\","
@@ -335,7 +335,7 @@ public class PolicyRouteROAResourceTest {
         ResultRsp<SbiNePolicyRoute> routeUpdate =
                 policyRouteRoaResource.routeUpdate(CTRL_UUID, sbiNePolicyRouteList);
         List<FailData<SbiNePolicyRoute>> failData = routeUpdate.getFail();
-        assertEquals("success", routeUpdate.getErrorCode());
+        assertEquals("overlayvpn.operation.success", routeUpdate.getErrorCode());
         assertEquals(failData.size(), 0);
     }
 
@@ -376,7 +376,7 @@ public class PolicyRouteROAResourceTest {
         };
         ResultRsp<SbiNePolicyRoute> routeQuery =
                 policyRouteRoaResource.routeQuery(CTRL_UUID, sbiNePolicyRouteList);
-        assertEquals("success", routeQuery.getErrorCode());
+        assertEquals("overlayvpn.operation.success", routeQuery.getErrorCode());
     }
 
     @Test(expected = Exception.class)
@@ -482,7 +482,7 @@ public class PolicyRouteROAResourceTest {
         ResultRsp<SbiNePolicyRoute> routeQuery =
                 policyRouteRoaResource.routeQuery(CTRL_UUID, sbiNePolicyRouteList);
 
-        assertEquals("success", routeQuery.getErrorCode()); // Source code needs to be modified
+        assertEquals("overlayvpn.operation.success", routeQuery.getErrorCode()); // Source code needs to be modified
 
     }
 

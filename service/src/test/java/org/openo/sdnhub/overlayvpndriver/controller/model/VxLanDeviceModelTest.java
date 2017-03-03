@@ -59,20 +59,20 @@ public class VxLanDeviceModelTest {
         vni2.setEvpnRtExport("evpnRtExport");
         list2.add(vni2);
         model2.setVniList(list2);
-        
+
         model2.hashCode();
     }
-    
+
     @Test
     public void testHashCode2() {
         VxLanDeviceModel model3 = new VxLanDeviceModel();
         model3.setName(null);
         model3.setLocalAddress(null);
         model3.setVniList(null);
-        
+
         model3.hashCode();
     }
-    
+
     @Test
     public void testEqual2() {
         VxLanDeviceModel model2 = new VxLanDeviceModel();
@@ -84,20 +84,20 @@ public class VxLanDeviceModelTest {
         vni2.setEvpnRtExport("evpnRtExport");
         list2.add(vni2);
         model2.setVniList(list2);
-        
+
         //assertTrue(model1.equals(model2));
     }
-    
+
     @Test
     public void testEqual3() {
         assertTrue(model1.equals(model1));
     }
-    
+
     @Test
     public void testEqualNUll() {
         assertFalse(model1.equals(null));
     }
-    
+
     @Test
     public void testEqual4() {
         VxLanDeviceModel model4 = new VxLanDeviceModel();
@@ -109,10 +109,10 @@ public class VxLanDeviceModelTest {
         vni4.setEvpnRtExport("evpnRtExport");
         list4.add(vni4);
         model4.setVniList(list4);
-        
+
         assertFalse(model1.equals(model4));
     }
-    
+
     @Test
     public void testEqual5() {
         VxLanDeviceModel model5 = new VxLanDeviceModel();
@@ -124,10 +124,10 @@ public class VxLanDeviceModelTest {
         vni5.setEvpnRtExport("evpnRtExport");
         list5.add(vni5);
         model5.setVniList(list5);
-        
+
         assertFalse(model1.equals(model5));
     }
-    
+
     @Test
     public void testEqual6() {
         VxLanDeviceModel model6 = new VxLanDeviceModel();
@@ -139,11 +139,11 @@ public class VxLanDeviceModelTest {
         vni6.setEvpnRtExport("evpnRtExport");
         list6.add(vni6);
         model6.setVniList(list6);
-        
+
         assertFalse(model1.equals(model6));
     }
-    
-    
+
+
     @Test
     public void testEqual7() {
         VxLanDeviceModel model7 = new VxLanDeviceModel();
@@ -155,13 +155,13 @@ public class VxLanDeviceModelTest {
         vni7.setEvpnRtExport("evpnRtExportTest");
         list7.add(vni7);
         model7.setVniList(list7);
-        
+
         assertFalse(model1.equals(model7));
     }
-    
+
     @Test
     public void testEqualObject() {
         assertFalse(model1.equals(new Object()));
     }
-    
+
 }

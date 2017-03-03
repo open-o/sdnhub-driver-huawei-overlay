@@ -61,8 +61,8 @@ public class SbiSecurityPolicyTest {
         ssp1.hashCode();
 
     }
-    
-   
+
+
     @Test
     public void testEqualsObjectEid() {
 

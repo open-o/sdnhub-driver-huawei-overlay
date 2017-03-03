@@ -133,7 +133,7 @@ public class SbiIfVlan extends UuidModel {
      * @return true if this object equals to other object
      * @since SDNO 0.5
      */
-    
+
     @Override
     public boolean equals(Object obj) {
         if (null == obj) {
@@ -157,7 +157,7 @@ public class SbiIfVlan extends UuidModel {
         if (!Objects.equals(ethInterfaceConfigId, other.ethInterfaceConfigId)) {
             return false;
         }
-        
+
         if (!Objects.equals(ethInterfaceConfigId, other.ethInterfaceConfigId)) {
             return false;
         }
@@ -166,7 +166,7 @@ public class SbiIfVlan extends UuidModel {
     }
 
     private boolean checkOther(SbiIfVlan other) {
-        
+
         if (!Objects.equals(ifName, other.ifName)) {
             return false;
         }
@@ -174,21 +174,21 @@ public class SbiIfVlan extends UuidModel {
         if (!Objects.equals(defaultVlan, other.defaultVlan)) {
             return false;
         }
-        
+
         if (!Objects.equals(linkType, other.linkType)) {
             return false;
         }
-        
+
         if (!Objects.equals(vlans, other.vlans)) {
             return false;
         }
-        
+
         return true;
     }
-    
+
     @Override
     public int hashCode() {
-        return Objects.hash(serviceVlanUuId, ethInterfaceConfigId, ethInterfaceConfigId, 
+        return Objects.hash(serviceVlanUuId, ethInterfaceConfigId, ethInterfaceConfigId,
                 ifName, defaultVlan, linkType, vlans);
     }
 }

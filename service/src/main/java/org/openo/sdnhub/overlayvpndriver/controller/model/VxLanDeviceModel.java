@@ -109,7 +109,7 @@ public class VxLanDeviceModel extends AbstUuidModel {
     {
         return vniList;
     }
-    
+
     /**
      * @param vniList collection of vni.
      */
@@ -148,17 +148,17 @@ public class VxLanDeviceModel extends AbstUuidModel {
         if (!Objects.equals(name, other.name)) {
             return false;
         }
-        
+
         if (!Objects.equals(localAddress, other.localAddress)) {
             return false;
         }
-        
+
         if (!vniList.equals(other.vniList)) {
             return false;
         }
         return true;
     }
-    
+
     @Override
     public int hashCode() {
         return Objects.hash(vneId, name, localAddress, vniList);

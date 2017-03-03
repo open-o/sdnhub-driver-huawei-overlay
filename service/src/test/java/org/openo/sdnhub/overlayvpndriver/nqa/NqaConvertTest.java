@@ -53,7 +53,7 @@ public class NqaConvertTest {
         obj.setData(nqaDeviceModel);
         String actionDesc = "actionDesc";
         ResultRsp<SbiNqa> result = NqaConvert.parseResponse(httpMsg, actionDesc);
-        assertEquals(result.getErrorCode(), "cloudvpn.failed");
+        assertEquals(result.getErrorCode(), "overlayvpn.operation.fail");
     }
 
     @Test
@@ -117,7 +117,7 @@ public class NqaConvertTest {
 
         HTTPReturnMessage httpMsg = new HTTPReturnMessage();
         ResultRsp<SbiNqa> result = NqaConvert.parseResponse(httpMsg, "actionDesc");
-        assertEquals(result.getErrorCode(), "cloudvpn.failed");
+        assertEquals(result.getErrorCode(), "overlayvpn.operation.fail");
     }
 
     @Test
@@ -187,7 +187,7 @@ public class NqaConvertTest {
         obj.put("12", "value");
         String actionDesc = "actionDesc";
         ResultRsp<String> response = NqaConvert.parseDeleteResponse(httpMsg, actionDesc);
-        assertEquals(response.getErrorCode(), "cloudvpn.failed");
+        assertEquals(response.getErrorCode(), "overlayvpn.operation.fail");
     }
 
     @Test

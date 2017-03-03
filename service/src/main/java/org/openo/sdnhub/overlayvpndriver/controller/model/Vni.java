@@ -282,7 +282,7 @@ public class Vni extends AbstUuidModel {
      * @return true if this object equals to other object
      * @since SDNO 0.5
      */
-   
+
     @Override
     public boolean equals(Object obj) {
         if (null == obj) {
@@ -306,11 +306,11 @@ public class Vni extends AbstUuidModel {
         if (!Objects.equals(vni, other.vni)) {
             return false;
         }
-        
+
         if (!Objects.equals(qosPreClassify, other.qosPreClassify)) {
             return false;
         }
-        
+
         if (!Objects.equals(macLearingMode, other.macLearingMode)) {
             return false;
         }
@@ -319,11 +319,11 @@ public class Vni extends AbstUuidModel {
     }
 
     private boolean checkOther(Vni other) {
-        
+
         if (!Objects.equals(evpnRtMode, other.evpnRtMode)) {
             return false;
         }
-        
+
         if (!Objects.equals(evpnRtExport, other.evpnRtExport)) {
             return false;
         }
@@ -331,38 +331,38 @@ public class Vni extends AbstUuidModel {
         if (!Objects.equals(evpnRtImport, other.evpnRtImport)) {
             return false;
         }
-        
+
         if (!Objects.equals(broadCastManager, other.broadCastManager)) {
             return false;
         }
-        
+
         if (!peerAddresslist.equals(other.peerAddresslist)) {
             return false;
         }
-        
+
         if (!filterList.equals(other.filterList)) {
             return false;
         }
-        
+
         if (!portlist.equals(other.portlist)) {
             return false;
         }
-        
+
         if (!vlanlist.equals(other.vlanlist)) {
             return false;
         }
-        
+
         if (!portvlanlist.equals(other.portvlanlist)) {
             return false;
         }
-       
+
         return true;
     }
-    
+
     @Override
     public int hashCode() {
         return Objects.hash(deleteMode, vni, macLearingMode, evpnRtMode, evpnRtExport, evpnRtImport, peerAddresslist,
                 broadCastManager, filterList, portlist, vlanlist, portvlanlist, qosPreClassify);
     }
-    
+
 }

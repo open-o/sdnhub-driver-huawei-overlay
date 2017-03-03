@@ -23,9 +23,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class SbiSubnetNetModelTest {
-    
+
     SbiSubnetNetModel model1 = new SbiSubnetNetModel();
-    
+
     /**
      * <br/>
      *
@@ -59,14 +59,14 @@ public class SbiSubnetNetModelTest {
         model1.setDhcp6Mode("dhcp6Mode");
         model1.setPriorDnsServer("priorDnsServer");
         model1.setStandbyDnsServer("standbyDnsServer");
-        
+
     }
-    
+
     @Test
     public void testHashCode() {
-        
+
         SbiSubnetNetModel model2 = new SbiSubnetNetModel();
-        
+
         model2.setNeId("neId");
         model2.setControllerId("controllerId");
         model2.setNetworkId("networkId");
@@ -90,15 +90,15 @@ public class SbiSubnetNetModelTest {
         model2.setDhcp6Mode("dhcp6Mode");
         model2.setPriorDnsServer("priorDnsServer");
         model2.setStandbyDnsServer("standbyDnsServer");
-        
+
         model2.hashCode();
     }
-    
+
     @Test
     public void testHashCodeNull() {
-        
+
         SbiSubnetNetModel model3 = new SbiSubnetNetModel();
-        
+
         model3.setNeId(null);
         model3.setControllerId(null);
         model3.setNetworkId(null);
@@ -122,15 +122,15 @@ public class SbiSubnetNetModelTest {
         model3.setDhcp6Mode(null);
         model3.setPriorDnsServer(null);
         model3.setStandbyDnsServer(null);
-        
+
         model3.hashCode();
     }
-    
+
     @Test
     public void testEquals1() {
-        
+
         SbiSubnetNetModel model4 = new SbiSubnetNetModel();
-        
+
         model4.setNeId("neId");
         model4.setControllerId("controllerId");
         model4.setNetworkId("networkId");
@@ -154,27 +154,27 @@ public class SbiSubnetNetModelTest {
         model4.setDhcp6Mode("dhcp6Mode");
         model4.setPriorDnsServer("priorDnsServer");
         model4.setStandbyDnsServer("standbyDnsServer");
-        
+
         assertTrue(model1.equals(model4));
     }
-    
+
     @Test
     public void testEquals2() {
-        
+
         assertTrue(model1.equals(model1));
     }
-    
+
     @Test
     public void testEquals3() {
-        
+
         assertFalse(model1.equals(null));
     }
-    
+
     @Test
     public void testEquals5() {
-        
+
         SbiSubnetNetModel model5 = new SbiSubnetNetModel();
-        
+
         model5.setNeId("neIdTest");
         model5.setControllerId("controllerId");
         model5.setNetworkId("networkId");
@@ -198,15 +198,15 @@ public class SbiSubnetNetModelTest {
         model5.setDhcp6Mode("dhcp6Mode");
         model5.setPriorDnsServer("priorDnsServer");
         model5.setStandbyDnsServer("standbyDnsServer");
-        
+
         assertFalse(model1.equals(model5));
     }
-    
+
     @Test
     public void testEquals6() {
-        
+
         SbiSubnetNetModel model6 = new SbiSubnetNetModel();
-        
+
         model6.setNeId("neId");
         model6.setControllerId("controllerIdTest");
         model6.setNetworkId("networkId");
@@ -230,15 +230,15 @@ public class SbiSubnetNetModelTest {
         model6.setDhcp6Mode("dhcp6Mode");
         model6.setPriorDnsServer("priorDnsServer");
         model6.setStandbyDnsServer("standbyDnsServer");
-        
+
         assertFalse(model1.equals(model6));
     }
-    
+
     @Test
     public void testEquals7() {
-        
+
         SbiSubnetNetModel model7 = new SbiSubnetNetModel();
-        
+
         model7.setNeId("neId");
         model7.setControllerId("controllerId");
         model7.setNetworkId("networkIdTest");
@@ -262,15 +262,15 @@ public class SbiSubnetNetModelTest {
         model7.setDhcp6Mode("dhcp6Mode");
         model7.setPriorDnsServer("priorDnsServer");
         model7.setStandbyDnsServer("standbyDnsServer");
-        
+
         assertFalse(model1.equals(model7));
     }
-    
+
     @Test
     public void testEquals8() {
-        
+
         SbiSubnetNetModel model8 = new SbiSubnetNetModel();
-        
+
         model8.setNeId("neId");
         model8.setControllerId("controllerId");
         model8.setNetworkId("networkId");
@@ -294,15 +294,15 @@ public class SbiSubnetNetModelTest {
         model8.setDhcp6Mode("dhcp6Mode");
         model8.setPriorDnsServer("priorDnsServer");
         model8.setStandbyDnsServer("standbyDnsServer");
-        
+
         assertFalse(model1.equals(model8));
     }
-    
+
     @Test
     public void testEquals9() {
-        
+
         SbiSubnetNetModel model9 = new SbiSubnetNetModel();
-        
+
         model9.setNeId("neId");
         model9.setControllerId("controllerId");
         model9.setNetworkId("networkId");
@@ -326,15 +326,15 @@ public class SbiSubnetNetModelTest {
         model9.setDhcp6Mode("dhcp6Mode");
         model9.setPriorDnsServer("priorDnsServer");
         model9.setStandbyDnsServer("standbyDnsServer");
-        
+
         assertFalse(model1.equals(model9));
     }
-    
+
     @Test
     public void testEquals10() {
-        
+
         SbiSubnetNetModel model10 = new SbiSubnetNetModel();
-        
+
         model10.setNeId("neId");
         model10.setControllerId("controllerId");
         model10.setNetworkId("networkId");
@@ -358,15 +358,15 @@ public class SbiSubnetNetModelTest {
         model10.setDhcp6Mode("dhcp6Mode");
         model10.setPriorDnsServer("priorDnsServer");
         model10.setStandbyDnsServer("standbyDnsServer");
-        
+
         assertFalse(model1.equals(model10));
     }
-    
+
     @Test
     public void testEquals11() {
-        
+
         SbiSubnetNetModel model11 = new SbiSubnetNetModel();
-        
+
         model11.setNeId("neId");
         model11.setControllerId("controllerId");
         model11.setNetworkId("networkId");
@@ -390,15 +390,15 @@ public class SbiSubnetNetModelTest {
         model11.setDhcp6Mode("dhcp6Mode");
         model11.setPriorDnsServer("priorDnsServer");
         model11.setStandbyDnsServer("standbyDnsServer");
-        
+
         assertFalse(model1.equals(model11));
     }
-    
+
     @Test
     public void testEquals12() {
-        
+
         SbiSubnetNetModel model12 = new SbiSubnetNetModel();
-        
+
         model12.setNeId("neId");
         model12.setControllerId("controllerId");
         model12.setNetworkId("networkId");
@@ -422,15 +422,15 @@ public class SbiSubnetNetModelTest {
         model12.setDhcp6Mode("dhcp6Mode");
         model12.setPriorDnsServer("priorDnsServer");
         model12.setStandbyDnsServer("standbyDnsServer");
-        
+
         assertFalse(model1.equals(model12));
     }
-    
+
     @Test
     public void testEquals13() {
-        
+
         SbiSubnetNetModel model13 = new SbiSubnetNetModel();
-        
+
         model13.setNeId("neId");
         model13.setControllerId("controllerId");
         model13.setNetworkId("networkId");
@@ -454,15 +454,15 @@ public class SbiSubnetNetModelTest {
         model13.setDhcp6Mode("dhcp6Mode");
         model13.setPriorDnsServer("priorDnsServer");
         model13.setStandbyDnsServer("standbyDnsServer");
-        
+
         assertFalse(model1.equals(model13));
     }
-    
+
     @Test
     public void testEquals14() {
-        
+
         SbiSubnetNetModel model14 = new SbiSubnetNetModel();
-        
+
         model14.setNeId("neId");
         model14.setControllerId("controllerId");
         model14.setNetworkId("networkId");
@@ -486,15 +486,15 @@ public class SbiSubnetNetModelTest {
         model14.setDhcp6Mode("dhcp6Mode");
         model14.setPriorDnsServer("priorDnsServer");
         model14.setStandbyDnsServer("standbyDnsServer");
-        
+
         assertFalse(model1.equals(model14));
     }
-    
+
     @Test
     public void testEquals15() {
-        
+
         SbiSubnetNetModel model15 = new SbiSubnetNetModel();
-        
+
         model15.setNeId("neId");
         model15.setControllerId("controllerId");
         model15.setNetworkId("networkId");
@@ -518,15 +518,15 @@ public class SbiSubnetNetModelTest {
         model15.setDhcp6Mode("dhcp6Mode");
         model15.setPriorDnsServer("priorDnsServer");
         model15.setStandbyDnsServer("standbyDnsServer");
-        
+
         assertFalse(model1.equals(model15));
     }
-    
+
     @Test
     public void testEquals16() {
-        
+
         SbiSubnetNetModel model16 = new SbiSubnetNetModel();
-        
+
         model16.setNeId("neId");
         model16.setControllerId("controllerId");
         model16.setNetworkId("networkId");
@@ -550,15 +550,15 @@ public class SbiSubnetNetModelTest {
         model16.setDhcp6Mode("dhcp6Mode");
         model16.setPriorDnsServer("priorDnsServer");
         model16.setStandbyDnsServer("standbyDnsServer");
-        
+
         assertFalse(model1.equals(model16));
     }
-    
+
     @Test
     public void testEquals17() {
-        
+
         SbiSubnetNetModel model17 = new SbiSubnetNetModel();
-        
+
         model17.setNeId("neId");
         model17.setControllerId("controllerId");
         model17.setNetworkId("networkId");
@@ -582,15 +582,15 @@ public class SbiSubnetNetModelTest {
         model17.setDhcp6Mode("dhcp6Mode");
         model17.setPriorDnsServer("priorDnsServer");
         model17.setStandbyDnsServer("standbyDnsServer");
-        
+
         assertFalse(model1.equals(model17));
     }
-    
+
     @Test
     public void testEquals18() {
-        
+
         SbiSubnetNetModel model18 = new SbiSubnetNetModel();
-        
+
         model18.setNeId("neId");
         model18.setControllerId("controllerId");
         model18.setNetworkId("networkId");
@@ -614,15 +614,15 @@ public class SbiSubnetNetModelTest {
         model18.setDhcp6Mode("dhcp6Mode");
         model18.setPriorDnsServer("priorDnsServer");
         model18.setStandbyDnsServer("standbyDnsServer");
-        
+
         assertFalse(model1.equals(model18));
     }
-    
+
     @Test
     public void testEquals19() {
-        
+
         SbiSubnetNetModel model19 = new SbiSubnetNetModel();
-        
+
         model19.setNeId("neId");
         model19.setControllerId("controllerId");
         model19.setNetworkId("networkId");
@@ -646,15 +646,15 @@ public class SbiSubnetNetModelTest {
         model19.setDhcp6Mode("dhcp6Mode");
         model19.setPriorDnsServer("priorDnsServer");
         model19.setStandbyDnsServer("standbyDnsServer");
-        
+
         assertFalse(model1.equals(model19));
     }
-    
+
     @Test
     public void testEquals20() {
-        
+
         SbiSubnetNetModel model20 = new SbiSubnetNetModel();
-        
+
         model20.setNeId("neId");
         model20.setControllerId("controllerId");
         model20.setNetworkId("networkId");
@@ -678,15 +678,15 @@ public class SbiSubnetNetModelTest {
         model20.setDhcp6Mode("dhcp6Mode");
         model20.setPriorDnsServer("priorDnsServer");
         model20.setStandbyDnsServer("standbyDnsServer");
-        
+
         assertFalse(model1.equals(model20));
     }
-    
+
     @Test
     public void testEquals21() {
-        
+
         SbiSubnetNetModel model21 = new SbiSubnetNetModel();
-        
+
         model21.setNeId("neId");
         model21.setControllerId("controllerId");
         model21.setNetworkId("networkId");
@@ -710,15 +710,15 @@ public class SbiSubnetNetModelTest {
         model21.setDhcp6Mode("dhcp6Mode");
         model21.setPriorDnsServer("priorDnsServer");
         model21.setStandbyDnsServer("standbyDnsServer");
-        
+
         assertFalse(model1.equals(model21));
     }
-    
+
     @Test
     public void testEquals22() {
-        
+
         SbiSubnetNetModel model22 = new SbiSubnetNetModel();
-        
+
         model22.setNeId("neId");
         model22.setControllerId("controllerId");
         model22.setNetworkId("networkId");
@@ -742,15 +742,15 @@ public class SbiSubnetNetModelTest {
         model22.setDhcp6Mode("dhcp6Mode");
         model22.setPriorDnsServer("priorDnsServer");
         model22.setStandbyDnsServer("standbyDnsServer");
-        
+
         assertFalse(model1.equals(model22));
     }
-    
+
     @Test
     public void testEquals23() {
-        
+
         SbiSubnetNetModel model23 = new SbiSubnetNetModel();
-        
+
         model23.setNeId("neId");
         model23.setControllerId("controllerId");
         model23.setNetworkId("networkId");
@@ -774,15 +774,15 @@ public class SbiSubnetNetModelTest {
         model23.setDhcp6Mode("dhcp6Mode");
         model23.setPriorDnsServer("priorDnsServer");
         model23.setStandbyDnsServer("standbyDnsServer");
-        
+
         assertFalse(model1.equals(model23));
     }
-    
+
     @Test
     public void testEquals24() {
-        
+
         SbiSubnetNetModel model24 = new SbiSubnetNetModel();
-        
+
         model24.setNeId("neId");
         model24.setControllerId("controllerId");
         model24.setNetworkId("networkId");
@@ -806,15 +806,15 @@ public class SbiSubnetNetModelTest {
         model24.setDhcp6Mode("dhcp6Mode");
         model24.setPriorDnsServer("priorDnsServer");
         model24.setStandbyDnsServer("standbyDnsServer");
-        
+
         assertFalse(model1.equals(model24));
     }
-    
+
     @Test
     public void testEquals25() {
-        
+
         SbiSubnetNetModel model25 = new SbiSubnetNetModel();
-        
+
         model25.setNeId("neId");
         model25.setControllerId("controllerId");
         model25.setNetworkId("networkId");
@@ -838,15 +838,15 @@ public class SbiSubnetNetModelTest {
         model25.setDhcp6Mode("dhcp6ModeTest");
         model25.setPriorDnsServer("priorDnsServer");
         model25.setStandbyDnsServer("standbyDnsServer");
-        
+
         assertFalse(model1.equals(model25));
     }
-    
+
     @Test
     public void testEquals26() {
-        
+
         SbiSubnetNetModel model26 = new SbiSubnetNetModel();
-        
+
         model26.setNeId("neId");
         model26.setControllerId("controllerId");
         model26.setNetworkId("networkId");
@@ -870,15 +870,15 @@ public class SbiSubnetNetModelTest {
         model26.setDhcp6Mode("dhcp6Mode");
         model26.setPriorDnsServer("priorDnsServerTest");
         model26.setStandbyDnsServer("standbyDnsServer");
-        
+
         assertFalse(model1.equals(model26));
     }
-    
+
     @Test
     public void testEquals27() {
-        
+
         SbiSubnetNetModel model27 = new SbiSubnetNetModel();
-        
+
         model27.setNeId("neId");
         model27.setControllerId("controllerId");
         model27.setNetworkId("networkId");
@@ -902,13 +902,13 @@ public class SbiSubnetNetModelTest {
         model27.setDhcp6Mode("dhcp6Mode");
         model27.setPriorDnsServer("priorDnsServer");
         model27.setStandbyDnsServer("standbyDnsServerTest");
-        
+
         assertFalse(model1.equals(model27));
     }
-    
+
     @Test
     public void testEquals28() {
         assertFalse(model1.equals(new Object()));
     }
-    
+
 }

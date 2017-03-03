@@ -371,7 +371,7 @@ public class SbiSubnetNetModel extends BaseServiceModel {
      * @return true if this object equals to other object
      * @since SDNO 0.5
      */
-    
+
     @Override
     public boolean equals(Object obj) {
         if (null == obj) {
@@ -395,7 +395,7 @@ public class SbiSubnetNetModel extends BaseServiceModel {
         if (!Objects.equals(controllerId, other.controllerId)) {
             return false;
         }
-        
+
         if (!Objects.equals(networkId, other.networkId)) {
             return false;
         }
@@ -404,7 +404,7 @@ public class SbiSubnetNetModel extends BaseServiceModel {
     }
 
     private boolean checkOther(SbiSubnetNetModel other) {
-        
+
         if (!Objects.equals(serviceSubnetId, other.serviceSubnetId)) {
             return false;
         }
@@ -412,11 +412,11 @@ public class SbiSubnetNetModel extends BaseServiceModel {
         if (!Objects.equals(vni, other.vni)) {
             return false;
         }
-        
+
         if (!Objects.equals(vlanId, other.vlanId)) {
             return false;
         }
-        
+
         if (!Objects.equals(cidrIpAddress, other.cidrIpAddress)) {
             return false;
         }
@@ -424,7 +424,7 @@ public class SbiSubnetNetModel extends BaseServiceModel {
         if (!Objects.equals(cidrMask, other.cidrMask)) {
             return false;
         }
-        
+
         if (!Objects.equals(gatewayIp, other.gatewayIp)) {
             return false;
         }
@@ -432,11 +432,11 @@ public class SbiSubnetNetModel extends BaseServiceModel {
         if (!Objects.equals(enableDhcp, other.enableDhcp)) {
             return false;
         }
-        
+
         if (!Objects.equals(ipRangeStartIp, other.ipRangeStartIp)) {
             return false;
         }
-        
+
         if (!Objects.equals(ipRangeEndIp, other.ipRangeEndIp)) {
             return false;
         }
@@ -444,16 +444,16 @@ public class SbiSubnetNetModel extends BaseServiceModel {
         if (!Objects.equals(useMode, other.useMode)) {
             return false;
         }
-        
+
         return checkOtherMembers(other);
     }
-    
+
     private boolean checkOtherMembers(SbiSubnetNetModel other) {
-        
+
         if (!Objects.equals(changedMode, other.changedMode)) {
             return false;
         }
-        
+
         if (!Objects.equals(dhcpMode, other.dhcpMode)) {
             return false;
         }
@@ -461,15 +461,15 @@ public class SbiSubnetNetModel extends BaseServiceModel {
         if (!Objects.equals(dnsMode, other.dnsMode)) {
             return false;
         }
-        
+
         if (!Objects.equals(unlimit, other.unlimit)) {
             return false;
         }
-        
+
         if (!Objects.equals(ipv6Address, other.ipv6Address)) {
             return false;
         }
-        
+
         if (!Objects.equals(prefixLength, other.prefixLength)) {
             return false;
         }
@@ -477,15 +477,15 @@ public class SbiSubnetNetModel extends BaseServiceModel {
         if (!Objects.equals(dhcp6Enable, other.dhcp6Enable)) {
             return false;
         }
-        
+
         if (!Objects.equals(dhcp6Mode, other.dhcp6Mode)) {
             return false;
         }
-        
+
         if (!Objects.equals(priorDnsServer, other.priorDnsServer)) {
             return false;
         }
-        
+
         if (!Objects.equals(standbyDnsServer, other.standbyDnsServer)) {
             return false;
         }
@@ -498,5 +498,5 @@ public class SbiSubnetNetModel extends BaseServiceModel {
         return Objects.hash(neId, controllerId, networkId, serviceSubnetId, vni, vlanId, cidrIpAddress, cidrMask,
                 gatewayIp, enableDhcp, ipRangeStartIp, ipRangeEndIp, useMode, changedMode, dhcpMode, dnsMode, unlimit,
                 ipv6Address, prefixLength, dhcp6Enable, dhcp6Mode, priorDnsServer, standbyDnsServer);
-    }  
+    }
 }

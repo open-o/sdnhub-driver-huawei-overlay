@@ -189,7 +189,7 @@ public class NQA extends UuidModel {
         if (!Objects.equals(srcPortName, other.srcPortName)) {
             return false;
         }
-        
+
         if (!Objects.equals(ipsecConnectionId, other.ipsecConnectionId)) {
             return false;
         }
@@ -200,7 +200,7 @@ public class NQA extends UuidModel {
 
         return checkOther(other);
     }
-    
+
     private boolean checkOther(NQA other) {
         if (!Objects.equals(dstIp, other.dstIp)) {
             return false;
@@ -209,11 +209,11 @@ public class NQA extends UuidModel {
         if (!Objects.equals(dstPortName, other.dstPortName)) {
             return false;
         }
-        
+
         if (!Objects.equals(testType, other.testType)) {
             return false;
         }
-        
+
         if (!Objects.equals(frequency, other.frequency)) {
             return false;
         }
@@ -221,7 +221,7 @@ public class NQA extends UuidModel {
         if (!Objects.equals(probeCount, other.probeCount)) {
             return false;
         }
-        
+
         if (!Objects.equals(timeout, other.timeout)) {
             return false;
         }
@@ -229,14 +229,14 @@ public class NQA extends UuidModel {
         if (!Objects.equals(ttl, other.ttl)) {
             return false;
         }
-        
+
         if (!Objects.equals(tos, other.tos)) {
             return false;
         }
-        
+
         return true;
     }
-    
+
     /* (non-Javadoc)
      * @see org.openo.sdno.overlayvpn.model.v2.uuid.UuidModel#hashCode()
      */

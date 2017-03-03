@@ -74,12 +74,12 @@ public class NqaConvert {
         if(StringUtils.isNotEmpty(httpMsg.getBody())) {
             final Map<String, String> errorMap =
                     JsonUtil.fromJson(httpMsg.getBody(), new TypeReference<Map<String, String>>() {});
-            return new ResultRsp<>(errorMap.get("errcode") + errorMap.get("errmsg"));
+            return new ResultRsp<>(DriverErrorCode.OVERLAYVPN_SUCCESS);
         }
 
         LOGGER.error(actionDesc + ": parser msg to ACResponse error, msg : " + httpMsg.getBody());
 
-        return new ResultRsp<>(DriverErrorCode.CLOUDVPN_FAILED);
+        return new ResultRsp<>(DriverErrorCode.OVERLAYVPN_FAIL);
     }
 
     /**
@@ -91,12 +91,12 @@ public class NqaConvert {
      * @since SDNHUB 0.5
      */
     public static ResultRsp<String> parseDeleteResponse(HTTPReturnMessage httpMsg, String actionDesc) {
-        final ResultRsp<String> resultRsp = new ResultRsp<>(DriverErrorCode.CLOUDVPN_FAILED);
+        final ResultRsp<String> resultRsp = new ResultRsp<>(DriverErrorCode.OVERLAYVPN_SUCCESS);
         if(httpMsg.isSuccess() && StringUtils.isNotEmpty(httpMsg.getBody())) {
             ACDelResponse acresponse = JsonUtil.fromJson(httpMsg.getBody(), new TypeReference<ACDelResponse>() {});
             if(!acresponse.isSucess()) {
                 LOGGER.error(actionDesc + ": " + "response return error, eerMsg : " + acresponse.getAllErrmsg());
-                resultRsp.setErrorCode(DriverErrorCode.CLOUDVPN_FAILED);
+                resultRsp.setErrorCode(DriverErrorCode.OVERLAYVPN_FAIL);
                 resultRsp.setMessage(acresponse.getAllErrmsg());
             }
 
@@ -104,7 +104,7 @@ public class NqaConvert {
         }
 
         LOGGER.error(actionDesc + "parse msg to  ACDelResponse error, msg: " + httpMsg.getBody());
-        resultRsp.setErrorCode(DriverErrorCode.CLOUDVPN_FAILED);
+        resultRsp.setErrorCode(DriverErrorCode.OVERLAYVPN_FAIL);
         resultRsp.setMessage(actionDesc);
 
         return resultRsp;

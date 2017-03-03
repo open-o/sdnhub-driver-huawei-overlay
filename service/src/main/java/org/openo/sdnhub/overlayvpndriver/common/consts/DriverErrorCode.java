@@ -44,10 +44,6 @@ public class DriverErrorCode {
 
     public static final String ADAPTER_COMM_FAILED = "ccadapter.communication_failed";
 
-    public static final String ADAPTER_SUCCESS = "cloudvpn.adapter.sucess";
-
-    public static final String ADAPTER_PART_SUCCESS = "cloudvpn.adapter.part_success";
-
     public static final String ADAPTER_FAILED = "cloudvpn.adapter.failed";
 
     public static final String ADAPTER_PARAMETER_INVALID = "cloudvpn.adapter.parameter_invalid";
@@ -60,13 +56,9 @@ public class DriverErrorCode {
 
     public static final String CLOUDVPN_DATABASE_QUERYT_FAILED = "cloudvpn.database.query_fail";
 
-    public static final String CLOUDVPN_SUCCESS = "success";
-
     public static final String ADAPTER_GRE_CREATE_IPSEC_ERROR = "ipsec.creat.errror";
 
     public static final String CLOUDVPN_PARAMETER_INVALID = "cloudvpn.parameter.invalid";
-
-    public static final String CLOUDVPN_FAILED = "cloudvpn.failed";
 
     public static final String ADAPTER_QOS_CREATE_ERROR = null;
 
@@ -123,6 +115,8 @@ public class DriverErrorCode {
     public static final String ADAPTER_CTRL_TIMEOUT = "adapter.controller.timeout";
 
     public static final String OVERLAYVPN_SUCCESS = "overlayvpn.operation.success";
+
+    public static final String OVERLAYVPN_FAIL = "overlayvpn.operation.fail";
 
     private DriverErrorCode() {
 

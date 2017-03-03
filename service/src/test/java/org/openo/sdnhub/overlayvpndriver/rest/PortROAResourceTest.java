@@ -72,7 +72,7 @@ public class PortROAResourceTest {
         };
 
         ResultRsp<SbiIp> result = portRoAResource.queryPortIpByPortName("extSysID=ctrlid1024", "123", "test_port");
-        assertEquals(result.getErrorCode(), "success");
+        assertEquals(result.getErrorCode(), "overlayvpn.operation.success");
     }
 
     @Test(expected = ServiceException.class)

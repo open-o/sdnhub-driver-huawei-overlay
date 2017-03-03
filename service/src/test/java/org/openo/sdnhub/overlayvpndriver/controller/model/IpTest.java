@@ -90,7 +90,7 @@ public class IpTest {
         ip1.setIpv4("12.12.12.12");
         ip1.setPrefixLength("23");
         ip1.setIpv6("::0000");
-        
+
         assertTrue(ip.equals(ip1));
         assertTrue(ip.equals(ip));
     }
@@ -105,7 +105,7 @@ public class IpTest {
 
         ip1.hashCode();
         ip.hashCode();
-        
+
         assertFalse(ip.equals(ip1));
         assertFalse(ip.equals(null));
         assertFalse(ip.equals(new Object()));

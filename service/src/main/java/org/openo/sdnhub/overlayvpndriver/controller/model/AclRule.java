@@ -87,7 +87,7 @@ public class AclRule extends UuidModel {
         }
 
         AclRule other = (AclRule) obj;
-        
+
         if (!Objects.equals(policy, other.policy)) {
             return false;
         }
@@ -99,7 +99,7 @@ public class AclRule extends UuidModel {
         }
         return true;
     }
-    
+
     @Override
     public int hashCode() {
         return Objects.hash(policy, srcIp, desIp);

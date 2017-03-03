@@ -98,7 +98,7 @@ public class PolicyRouteROAResource {
         long beginTime = System.currentTimeMillis();
         LOGGER.debug("Route create begin time = " + beginTime);
 
-        ResultRsp<SbiNePolicyRoute> totalResult = new ResultRsp<>(DriverErrorCode.CLOUDVPN_SUCCESS);
+        ResultRsp<SbiNePolicyRoute> totalResult = new ResultRsp<>(DriverErrorCode.OVERLAYVPN_SUCCESS);
         List<SbiNePolicyRoute> successedDatas = new ArrayList<>();
 
         List<FailData<SbiNePolicyRoute>> failedDatas = new ArrayList<>();
@@ -123,7 +123,7 @@ public class PolicyRouteROAResource {
         totalResult.setFail(failedDatas);
 
         if(CollectionUtils.isNotEmpty(failedDatas)) {
-            totalResult.setErrorCode(DriverErrorCode.CLOUDVPN_FAILED);
+            totalResult.setErrorCode(DriverErrorCode.OVERLAYVPN_FAIL);
         }
         return totalResult;
     }
@@ -153,7 +153,7 @@ public class PolicyRouteROAResource {
         long beginTime = System.currentTimeMillis();
         LOGGER.debug("Route update begin time = " + beginTime);
 
-        ResultRsp<SbiNePolicyRoute> totalResult = new ResultRsp<>(DriverErrorCode.CLOUDVPN_SUCCESS  );
+        ResultRsp<SbiNePolicyRoute> totalResult = new ResultRsp<>(DriverErrorCode.OVERLAYVPN_SUCCESS  );
         List<SbiNePolicyRoute> successedDatas = new ArrayList<>();
         List<FailData<SbiNePolicyRoute>> failedDatas = new ArrayList<>();
         List<SbiNePolicyRoute> checkOkroutelist = new ArrayList<>();
@@ -176,7 +176,7 @@ public class PolicyRouteROAResource {
         totalResult.setFail(failedDatas);
 
         if(CollectionUtils.isNotEmpty(failedDatas)) {
-            totalResult.setErrorCode(DriverErrorCode.CLOUDVPN_FAILED);
+            totalResult.setErrorCode(DriverErrorCode.OVERLAYVPN_FAIL);
         }
 
         return totalResult;
@@ -249,7 +249,7 @@ public class PolicyRouteROAResource {
         long beginTime = System.currentTimeMillis();
         LOGGER.debug("route query begin time = " + beginTime);
 
-        ResultRsp<SbiNePolicyRoute> totalResult = new ResultRsp<>(DriverErrorCode.CLOUDVPN_SUCCESS);
+        ResultRsp<SbiNePolicyRoute> totalResult = new ResultRsp<>(DriverErrorCode.OVERLAYVPN_SUCCESS);
         List<SbiNePolicyRoute> successedDatas = new ArrayList<>();
         List<FailData<SbiNePolicyRoute>> failedDatas = new ArrayList<>();
         List<SbiNePolicyRoute> checkOkRouteList = new ArrayList<>();
@@ -273,14 +273,14 @@ public class PolicyRouteROAResource {
                         successedDatas.add(nbiNeTunnel);
                     } else {
                         FailData<SbiNePolicyRoute> failData = new FailData<>(
-                                DriverErrorCode.CLOUDVPN_FAILED, "can't find", nbiNeTunnel);
+                                DriverErrorCode.OVERLAYVPN_FAIL, "can't find", nbiNeTunnel);
                         failedDatas.add(failData);
                     }
                 }
             } else {
                 for(SbiNePolicyRoute nbiNeTunnel : entry.getValue()) {
                     FailData<SbiNePolicyRoute> failData =
-                            new FailData<>(DriverErrorCode.CLOUDVPN_FAILED, "can't find", nbiNeTunnel);
+                            new FailData<>(DriverErrorCode.OVERLAYVPN_FAIL, "can't find", nbiNeTunnel);
                     failedDatas.add(failData);
                 }
             }
