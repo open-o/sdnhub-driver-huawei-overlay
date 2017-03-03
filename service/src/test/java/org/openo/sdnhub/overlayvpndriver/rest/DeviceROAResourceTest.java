@@ -27,6 +27,7 @@ import org.openo.sdnhub.overlayvpndriver.sbi.impl.DeviceServiceImpl;
 import org.openo.sdnhub.overlayvpndriver.service.model.ACResponse;
 import org.openo.sdnhub.overlayvpndriver.service.model.AdapterDeviceCreateBasicInfo;
 import org.openo.sdnhub.overlayvpndriver.service.model.AdapterDeviceInfo;
+import org.openo.sdno.exception.ParameterServiceException;
 import org.openo.sdno.framework.container.util.JsonUtil;
 import org.openo.sdno.overlayvpn.result.ResultRsp;
 import org.openo.sdno.overlayvpn.util.check.ValidationUtil;
@@ -206,7 +207,7 @@ public class DeviceROAResourceTest {
 
         AdapterDeviceCreateBasicInfo adapterCreateInfo = new AdapterDeviceCreateBasicInfo();
         adapterCreateInfo.setName("testdevice");
-        adapterCreateInfo.setEsn("aaaaaaaaaabbbbbbbbbb");
+        adapterCreateInfo.setEsn("THINCPEESNABCDEFGHIJ");
         adapterCreateInfo.setOrgnizationName("huawei");
         adapterCreateInfo.setDescription("test device");
 
@@ -266,6 +267,7 @@ public class DeviceROAResourceTest {
         AdapterDeviceInfo adapterDevInfo = new AdapterDeviceInfo();
 
         adapterDevInfo.setId("81244ad0-b4ea-41ed-969e-d5588b32fd4c");
+        adapterDevInfo.setEsn("THINCPEESNABCDEFGHIJ");
         ResultRsp<String> resp = resource.modifyDevice(CTRL_UUID, "12345", adapterDevInfo);
 
         assertTrue("overlayvpn.operation.success".equals(resp.getErrorCode()));
@@ -297,6 +299,7 @@ public class DeviceROAResourceTest {
         AdapterDeviceInfo adapterDevInfo = new AdapterDeviceInfo();
 
         adapterDevInfo.setId("81244ad0-b4ea-41ed-969e-d5588b32fd4c");
+        adapterDevInfo.setEsn("THINCPEESNABCDEFGHIJ");
         ResultRsp<String> resp = resource.modifyDevice(CTRL_UUID, "12345", adapterDevInfo);
 
         String failData = resp.getFail().get(0).getErrcode();

@@ -64,7 +64,11 @@ public class DeviceROAResource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DeviceROAResource.class);
 
-    private static final String INVALID_CONTROLLER_UUID="Invalid controller UUID.";
+    private static final String INVALID_CONTROLLER_UUID = "Invalid controller UUID.";
+
+    // pattern for the ESN
+    private static final String ESN_THIN_CPE = "^[A-Z0-9]{20}$";
+    private static final String ESN_CLOUD_CPE= "^21[a-zA-Z0-9]{8}[0-9]{14}[a-zA-Z0-9]{8}$";
 
     @Autowired
     private DeviceServiceImpl deviceService;
@@ -99,12 +103,15 @@ public class DeviceROAResource {
 
         for(AdapterDeviceCreateBasicInfo adapter : aDevCrtInfos) {
             ValidationUtil.validateModel(adapter);
+            validateEsnForAdapterDeviceCreateBasicInfo(adapter.getEsn());
         }
 
         for (AdapterDeviceCreateBasicInfo device : aDevCrtInfos) {
             if (!StringUtils.hasLength(device.getUuid())) {
                 device.allocateUuid();
             }
+
+
         }
 
         Map<String, List<AdapterDeviceCreateBasicInfo>> crtInfoMap =
@@ -211,7 +218,15 @@ public class DeviceROAResource {
         }
 
         ValidationUtil.validateModel(adapterDeviceInfo);
+        validateEsnForAdapterDeviceCreateBasicInfo(adapterDeviceInfo.getEsn());
 
         return deviceService.modifyDevice(ctrlUuid, deviceId, adapterDeviceInfo);
+    }
+
+    private void validateEsnForAdapterDeviceCreateBasicInfo (String esn) throws ServiceException {
+        // if esn doesn't match the pattern then throw the exception
+        if (esn == null || !(esn.matches(ESN_CLOUD_CPE) || esn.matches(ESN_THIN_CPE))) {
+            throw new ParameterServiceException("invalid esn");
+        }
     }
 }
