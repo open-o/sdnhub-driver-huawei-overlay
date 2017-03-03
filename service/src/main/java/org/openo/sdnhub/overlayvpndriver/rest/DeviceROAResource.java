@@ -103,7 +103,7 @@ public class DeviceROAResource {
 
         for(AdapterDeviceCreateBasicInfo adapter : aDevCrtInfos) {
             ValidationUtil.validateModel(adapter);
-            validateEsnForAdapterDeviceCreateBasicInfo(adapter.getEsn());
+            validateEsnForAdapterDeviceCreateBasicInfo(adapter);
         }
 
         for (AdapterDeviceCreateBasicInfo device : aDevCrtInfos) {
@@ -218,12 +218,16 @@ public class DeviceROAResource {
         }
 
         ValidationUtil.validateModel(adapterDeviceInfo);
-        validateEsnForAdapterDeviceCreateBasicInfo(adapterDeviceInfo.getEsn());
+        validateEsnForAdapterDeviceCreateBasicInfo(adapterDeviceInfo);
 
         return deviceService.modifyDevice(ctrlUuid, deviceId, adapterDeviceInfo);
     }
 
-    private void validateEsnForAdapterDeviceCreateBasicInfo (String esn) throws ServiceException {
+    private void validateEsnForAdapterDeviceCreateBasicInfo (
+            AdapterDeviceCreateBasicInfo adapterDeviceCreateBasicInfo) throws ServiceException {
+
+        String esn = (adapterDeviceCreateBasicInfo != null) ? adapterDeviceCreateBasicInfo.getEsn() : null;
+
         // if esn doesn't match the pattern then throw the exception
         if (esn == null || !(esn.matches(ESN_CLOUD_CPE) || esn.matches(ESN_THIN_CPE))) {
             throw new ParameterServiceException("invalid esn");
