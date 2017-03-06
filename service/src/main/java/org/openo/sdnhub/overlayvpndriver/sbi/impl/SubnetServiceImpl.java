@@ -61,7 +61,7 @@ public class SubnetServiceImpl {
      * @throws ServiceException In case of create operation fails
      * @since SDNHUB 0.5
      */
-    public ResultRsp<SbiSubnetNetModel> createSubnet(ACNetwork network, String ctrlUuid, String deviceId)
+    public ResultRsp<ACNetwork> createSubnet(ACNetwork network, String ctrlUuid, String deviceId)
             throws ServiceException {
 
         if(!StringUtils.hasLength(ctrlUuid) || !StringUtils.hasLength(deviceId) || null == network.getId()) {
@@ -69,7 +69,7 @@ public class SubnetServiceImpl {
             throw new ParameterServiceException(SINVALIDPARAM);
         }
 
-        ResultRsp<SbiSubnetNetModel> resultRsp = new ResultRsp<>(DriverErrorCode.OVERLAYVPN_SUCCESS);
+        ResultRsp<ACNetwork> resultRsp = new ResultRsp<>(DriverErrorCode.OVERLAYVPN_SUCCESS);
         String createUrl = MessageFormat.format(ControllerUrlConst.DEVICE_NETWORK_URL, deviceId);
         HTTPReturnMessage httpMsg =
                 OverlayVpnDriverProxy.getInstance().sendPutMsg(createUrl, JsonUtil.toJson(network), ctrlUuid);
@@ -79,8 +79,8 @@ public class SubnetServiceImpl {
             throw new ServiceException(DriverErrorCode.ADAPTER_SITE_SUBNET_CREATE_ERROR,
                     "Subnet create:  httpMsg return error.");
         }
-        ACResponse<SbiSubnetNetModel> acResponse =
-                JsonUtil.fromJson(body, new TypeReference<ACResponse<SbiSubnetNetModel>>() {});
+        ACResponse<ACNetwork> acResponse =
+                JsonUtil.fromJson(body, new TypeReference<ACResponse<ACNetwork>>() {});
         if(!acResponse.isSucceed()) {
             LOGGER.error("Subnet create :acresponse return error :" + acResponse.getErrmsg());
             String errorCode = DriverErrorCode.ADAPTER_SITE_SUBNET_CREATE_TUNNEL_ERROR;
