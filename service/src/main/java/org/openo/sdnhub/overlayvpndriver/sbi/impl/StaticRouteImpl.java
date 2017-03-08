@@ -31,10 +31,15 @@ import org.openo.sdnhub.overlayvpndriver.controller.model.ControllerNbiStaticRou
 import org.openo.sdnhub.overlayvpndriver.http.OverlayVpnDriverProxy;
 import org.openo.sdnhub.overlayvpndriver.result.ACDelResponse;
 import org.openo.sdnhub.overlayvpndriver.result.OverlayVpnDriverResponse;
+import org.openo.sdnhub.overlayvpndriver.service.model.Ip;
+import org.openo.sdnhub.overlayvpndriver.service.model.SbiNeStaticRoute;
 import org.openo.sdnhub.overlayvpndriver.translator.StaticRouteConvert;
+import org.openo.sdno.exception.ParameterServiceException;
 import org.openo.sdno.framework.container.util.JsonUtil;
 import org.openo.sdno.overlayvpn.errorcode.ErrorCode;
+import org.openo.sdno.overlayvpn.result.FailData;
 import org.openo.sdno.overlayvpn.result.ResultRsp;
+import org.openo.sdno.overlayvpn.util.check.ValidationUtil;
 import org.openo.sdno.util.http.HTTPReturnMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -251,5 +256,136 @@ public class StaticRouteImpl {
         resultRsp.setErrorCode(ErrorCode.OVERLAYVPN_FAILED);
         resultRsp.setMessage("delete Route by device failed.");
         return resultRsp;
+    }
+
+    /**
+     * check Ip data and fill it if required.
+     * @param neStaticRoutes List of static routes
+     * @param failDatas List of fail data.
+     * @param checkOkRouteList list of valid static routes.
+     * @throws ServiceException If invalid data found in model.
+     */
+    public void checkInputData(List<SbiNeStaticRoute> neStaticRoutes, List<FailData<SbiNeStaticRoute>> failDatas,
+            List<SbiNeStaticRoute> checkOkRouteList) throws ServiceException {
+        for(SbiNeStaticRoute route : neStaticRoutes){
+            try {
+                checkInputStaticType(route);
+                checkOkRouteList.add(route);
+            } catch (ServiceException e){
+                LOGGER.error("check failed.",e);
+                FailData<SbiNeStaticRoute> tempFailData = new FailData<>();
+                tempFailData.setData(route);
+                failDatas.add(tempFailData);
+
+                tempFailData.setErrcode(String.valueOf(e.getHttpCode()));
+                tempFailData.setErrmsg(e.getMessage());
+            }
+        }
+
+    }
+
+    private void checkInputStaticType(SbiNeStaticRoute route) throws ServiceException {
+        try {
+
+            if(StringUtils.hasLength(route.getDestIp())){
+                route.setDestIpData(JsonUtil.fromJson(route.getDestIp(),Ip.class));
+            }
+
+            if(StringUtils.hasLength(route.getNextHop())){
+                route.setNextHopData(JsonUtil.fromJson(route.getNextHop(),Ip.class));
+            }
+        } catch (IllegalArgumentException e){
+            throw new ParameterServiceException("null destIp.");
+        }
+
+        checkIpFormat(route.getDestIpData());
+
+        if(null != route.getNextHopData()) {
+            checkIpFormat(route.getNextHopData());
+        }
+
+        checkDestIpAndNextHop(route.getDestIpData(), route.getNextHopData());
+
+        if(null == route.getNextHopData() && !StringUtils.hasLength(route.getOutInterface())){
+            throw new ParameterServiceException("Both NextHop and OutInterfaceName are null for static type");
+        }
+
+    }
+
+    private void checkDestIpAndNextHop(Ip destIp, Ip nextHop) throws ServiceException {
+
+        if(null == nextHop){
+            return;
+        }
+
+        if(destIp.isTypeV4() && nextHop.isTypeV4()){
+            return;
+        }
+
+        if(!destIp.isTypeV4() && !nextHop.isTypeV4()){
+            return;
+        }
+        throw new ParameterServiceException("ip version not afford for destIp and nextHop");
+    }
+
+    private void checkIpFormat(Ip destIp) throws ServiceException {
+        ValidationUtil.validateModel(destIp);
+
+        String ipv4 = destIp.getIpv4();
+        String ipv6 = destIp.getIpv6();
+        String ipv4Mask = destIp.getIpMask();
+        String prefixLength = destIp.getPrefixLength();
+
+        if(StringUtils.hasLength(ipv4) && !StringUtils.hasLength(ipv4Mask)){
+            throw new ParameterServiceException("ipv4 format need mask");
+        }
+
+        if(!StringUtils.hasLength(ipv4) && StringUtils.hasLength(ipv4Mask)){
+            throw new ParameterServiceException("ipv4 format need ipv4");
+        }
+
+        if(!StringUtils.hasLength(ipv6) && StringUtils.hasLength(prefixLength)){
+            throw new ParameterServiceException("ipv4 format need ipv6");
+        }
+
+        if(StringUtils.hasLength(ipv6) && !StringUtils.hasLength(prefixLength)){
+            throw new ParameterServiceException("ipv6 format need prefix");
+        }
+
+        StringBuilder ipv4StringBUilder = new StringBuilder();
+        if(StringUtils.hasLength(ipv4) || StringUtils.hasLength(ipv4Mask)){
+            ipv4StringBUilder.append(destIp.getIpv4());
+            ipv4StringBUilder.append(destIp.getIpMask());
+        }
+
+        check(destIp, ipv6, prefixLength, ipv4StringBUilder);
+    }
+
+    private void check(Ip destIp, String ipv6, String prefixLength,
+            StringBuilder ipv4StringBUilder) throws ServiceException{
+        StringBuilder  ipv6StringBUilder = new StringBuilder();
+        if(StringUtils.hasLength(ipv6) || StringUtils.hasLength(prefixLength)){
+            ipv6StringBUilder.append(destIp.getIpv6());
+            ipv6StringBUilder.append(destIp.getPrefixLength());
+        }
+        if( ! StringUtils.hasLength(ipv4StringBUilder.toString()) &&
+                !StringUtils.hasLength(ipv6StringBUilder.toString())){
+            throw new ParameterServiceException("no ipv4 or ipv6");
+        }
+        if(StringUtils.hasLength(ipv4StringBUilder.toString()) &&
+                StringUtils.hasLength(ipv6StringBUilder.toString())){
+            throw new ParameterServiceException("both ipv4 and ipv6 are not null");
+        }
+
+        if(StringUtils.hasLength(ipv4StringBUilder.toString()) && (!StringUtils.hasLength(destIp.getIpv6()) ||
+                !StringUtils.hasLength(destIp.getPrefixLength()))){
+            throw new ParameterServiceException("parameter error for ipv6");
+        }
+
+        if(StringUtils.hasLength(ipv4StringBUilder.toString())){
+            destIp.setTypeV4(true);
+            return;
+        }
+        destIp.setTypeV4(false);
     }
 }

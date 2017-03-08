@@ -90,7 +90,10 @@ public class StaticRouteROAResource {
             throw new ParameterServiceException("query static route : request body is null or empty");
         }
 
-        for (SbiNeStaticRoute sbiNeStaticRoute : staticRouteList) {
+        List<SbiNeStaticRoute> checkOkRouteList = new ArrayList<>();
+        staticRouteService.checkInputData(staticRouteList,failedDatas,checkOkRouteList);
+
+        for (SbiNeStaticRoute sbiNeStaticRoute : checkOkRouteList) {
             ResultRsp<List<ControllerNbiStaticRoute>> resultRsp =
                     staticRouteService.queryRouteByDevice(ctrlUuid, sbiNeStaticRoute.getDeviceId(),
                                                           sbiNeStaticRoute.getDestIp(),
@@ -148,17 +151,21 @@ public class StaticRouteROAResource {
             ValidationUtil.validateModel(neStaticRoute);
         }
 
+        List<SbiNeStaticRoute> checkOkRouteList = new ArrayList<>();
+        staticRouteService.checkInputData(neStaticRoutes,failDatas,checkOkRouteList);
+
         Map<String, List<ControllerNbiStaticRoute>> neIdTunnelsMap =
-                StaticRouteConvert.convert2Route(neStaticRoutes, true);
+                StaticRouteConvert.convert2Route(checkOkRouteList, true);
+
         for(Entry<String, List<ControllerNbiStaticRoute>> entry : neIdTunnelsMap.entrySet()) {
             ResultRsp<List<ControllerNbiStaticRoute>> resultRsp =
                     staticRouteService.configStaticRoute(ctrlUuid, entry.getKey(), entry.getValue(), true);
 
             if(resultRsp.isSuccess()) {
-                StaticRouteConvert.backWriteId2NeStaticRoute(resultRsp.getData(), neStaticRoutes, entry.getKey(), successData);
+                StaticRouteConvert.backWriteId2NeStaticRoute(resultRsp.getData(), checkOkRouteList, entry.getKey(), successData);
             } else {
                 resultRsp.setData(entry.getValue());
-                StaticRouteConvert.fillFailDataInfo(failDatas, neStaticRoutes, resultRsp);
+                StaticRouteConvert.fillFailDataInfo(failDatas, checkOkRouteList, resultRsp);
             }
         }
         totalResult.setSuccessed(successData);
@@ -170,6 +177,8 @@ public class StaticRouteROAResource {
         LOGGER.info("Static route create end. cost:{}", System.currentTimeMillis() - beginTime);
         return totalResult;
     }
+
+
 
     /**
      * Delete static routes.<br/>
@@ -195,13 +204,17 @@ public class StaticRouteROAResource {
             throw new ParameterServiceException(INVALIDCTRLUUID);
         }
 
-        UuidUtil.validate(deviceId);
         if(CollectionUtils.isEmpty(neStaticRoutes)) {
             throw new ParameterServiceException("delete static route : body is null or empty");
         }
 
+        UuidUtil.validate(deviceId);
+        List<FailData<SbiNeStaticRoute>> failDatas = new ArrayList<>();
+        List<SbiNeStaticRoute> checkOkRouteList = new ArrayList<>();
+        staticRouteService.checkInputData(neStaticRoutes,failDatas,checkOkRouteList);
+
         List<String> routerIds = new ArrayList<>();
-        for(SbiNeStaticRoute router : neStaticRoutes) {
+        for(SbiNeStaticRoute router : checkOkRouteList) {
             String routerId = router.getExternalId();
             UuidUtil.validate(routerId);
             routerIds.add(routerId);
@@ -239,8 +252,11 @@ public class StaticRouteROAResource {
         List<SbiNeStaticRoute> successData = new ArrayList<>();
         List<FailData<SbiNeStaticRoute>> failedData = new ArrayList<>();
 
+        List<SbiNeStaticRoute> checkOkRouteList = new ArrayList<>();
+        staticRouteService.checkInputData(staticRouteList,failedData,checkOkRouteList);
+
         Map<String, List<ControllerNbiStaticRoute>> deviceIdToRouteMap =
-                StaticRouteConvert.convert2Route(staticRouteList, false);
+                StaticRouteConvert.convert2Route(checkOkRouteList, false);
 
         for(Entry<String, List<ControllerNbiStaticRoute>> entry : deviceIdToRouteMap.entrySet()) {
             ResultRsp<List<ControllerNbiStaticRoute>> resultRsp =
@@ -250,7 +266,7 @@ public class StaticRouteROAResource {
                 // If List<ControllerNbiStaticRoute processed correctly
                 // then fill the successData with corresponding SbiNeStaticRoute.
                 // Else populate failedData.
-                for(SbiNeStaticRoute route : staticRouteList) {
+                for(SbiNeStaticRoute route : checkOkRouteList) {
                     for(ControllerNbiStaticRoute cNbiStaticRoute : entry.getValue()) {
                         if(route.getExternalId().equals(cNbiStaticRoute.getUuid())) {
                             successData.add(route);
@@ -258,7 +274,7 @@ public class StaticRouteROAResource {
                     }
                 }
             } else {
-                for(SbiNeStaticRoute route : staticRouteList) {
+                for(SbiNeStaticRoute route : checkOkRouteList) {
                     for(ControllerNbiStaticRoute cNbiStaticRoute : entry.getValue()) {
                         if(route.getExternalId().equals(cNbiStaticRoute.getUuid())) {
                             FailData<SbiNeStaticRoute> failData = new FailData<>();

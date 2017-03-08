@@ -39,8 +39,10 @@ public class SbiNeStaticRoute extends SbiBaseNetModel {
 
     private String nqa;
 
+    @JsonIgnore
     private Ip destIpData;
 
+    @JsonIgnore
     private Ip nextHopData;
 
     public SbiNeStaticRoute(){
