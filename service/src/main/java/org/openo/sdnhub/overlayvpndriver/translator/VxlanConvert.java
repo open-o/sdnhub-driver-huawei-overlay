@@ -29,10 +29,10 @@ import org.openo.sdnhub.overlayvpndriver.controller.model.PortVlan;
 import org.openo.sdnhub.overlayvpndriver.controller.model.Vni;
 import org.openo.sdnhub.overlayvpndriver.controller.model.VxLanDeviceModel;
 import org.openo.sdnhub.overlayvpndriver.rest.VxLanROAResource;
+import org.openo.sdnhub.overlayvpndriver.service.model.SbiNeVxlanInstance;
+import org.openo.sdnhub.overlayvpndriver.service.model.SbiNeVxlanInterface;
+import org.openo.sdnhub.overlayvpndriver.service.model.SbiNeVxlanTunnel;
 import org.openo.sdno.overlayvpn.model.common.enums.vxlan.VxlanAccessType;
-import org.openo.sdno.overlayvpn.model.v2.vxlan.SbiNeVxlanInstance;
-import org.openo.sdno.overlayvpn.model.v2.vxlan.SbiNeVxlanInterface;
-import org.openo.sdno.overlayvpn.model.v2.vxlan.SbiNeVxlanTunnel;
 import org.openo.sdno.overlayvpn.result.SvcExcptUtil;
 import org.openo.sdno.overlayvpn.util.check.ValidationUtil;
 import org.slf4j.Logger;
@@ -114,6 +114,7 @@ public class VxlanConvert {
 
     private static Vni createVni(SbiNeVxlanInstance vxLanInstance) {
         Vni netVni = new Vni();
+        netVni.setDeleteMode(false);
         netVni.setVni(Integer.parseInt(vxLanInstance.getVni()));
         netVni.setMacLearingMode(CONTROL);
         List<String> peerAddressList = new ArrayList<>();
@@ -129,13 +130,13 @@ public class VxlanConvert {
 
         for(SbiNeVxlanInterface vxlanInterface : vxLanInstance.getVxlanInterfaceList()) {
             if(vxlanInterface.getAccessType().equals(VxlanAccessType.PORT.getName())) {
-                portList.add(vxlanInterface.getPortNativeId());
+                portList.add(vxlanInterface.getLocalName());
             } else if(vxlanInterface.getAccessType().equals(VxlanAccessType.DOT1Q.getName())) {
                 int vlan = Integer.parseInt(vxlanInterface.getDot1qVlanBitmap());
-                if(StringUtils.isEmpty(vxlanInterface.getPortNativeId())) {
+                if(StringUtils.isEmpty(vxlanInterface.getLocalName())) {
                     vlanList.add(vlan);
                 } else {
-                    PortVlan netPortVlan = new PortVlan(vxlanInterface.getPortNativeId(), vlan);
+                    PortVlan netPortVlan = new PortVlan(vxlanInterface.getLocalName(), vlan);
                     portvlanlist.add(netPortVlan);
                 }
             }
@@ -144,8 +145,8 @@ public class VxlanConvert {
         netVni.setPortlist(portList);
         netVni.setVlanlist(vlanList);
         netVni.setPortvlanlist(portvlanlist);
-        // qosPreClassify is unavailable to set
 
+        netVni.setQosPreClassify("true".equals(vxLanInstance.getQosPreClassify()) ? true : false);
         return netVni;
     }
 

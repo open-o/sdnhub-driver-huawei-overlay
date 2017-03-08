@@ -32,8 +32,8 @@ import org.openo.sdnhub.overlayvpndriver.controller.model.VxLanDeviceModel;
 import org.openo.sdnhub.overlayvpndriver.http.OverlayVpnDriverProxy;
 import org.openo.sdnhub.overlayvpndriver.result.ACDelResponse;
 import org.openo.sdnhub.overlayvpndriver.result.OverlayVpnDriverResponse;
+import org.openo.sdnhub.overlayvpndriver.service.model.SbiNeVxlanInstance;
 import org.openo.sdno.framework.container.util.JsonUtil;
-import org.openo.sdno.overlayvpn.model.v2.vxlan.SbiNeVxlanInstance;
 import org.openo.sdno.overlayvpn.result.ResultRsp;
 import org.openo.sdno.util.http.HTTPReturnMessage;
 

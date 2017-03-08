@@ -26,17 +26,15 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
 import org.openo.sdnhub.overlayvpndriver.controller.model.VxLanDeviceModel;
-import org.openo.sdno.overlayvpn.model.v2.vxlan.SbiNeVxlanInstance;
-import org.openo.sdno.overlayvpn.model.v2.vxlan.SbiNeVxlanInterface;
-import org.openo.sdno.overlayvpn.model.v2.vxlan.SbiNeVxlanTunnel;
+import org.openo.sdnhub.overlayvpndriver.service.model.SbiNeVxlanInstance;
+import org.openo.sdnhub.overlayvpndriver.service.model.SbiNeVxlanInterface;
+import org.openo.sdnhub.overlayvpndriver.service.model.SbiNeVxlanTunnel;
 import org.openo.sdno.overlayvpn.util.check.ValidationUtil;
-
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 
 public class VxlanConvertTest {
 
