@@ -19,8 +19,8 @@ package org.openo.sdnhub.overlayvpndriver.translator;
 import org.junit.Test;
 import org.openo.sdnhub.overlayvpndriver.common.util.CheckIpV6Util;
 import org.openo.sdnhub.overlayvpndriver.controller.model.ControllerNbiStaticRoute;
-import org.openo.sdno.overlayvpn.model.v2.route.SbiNeStaticRoute;
-
+import org.openo.sdnhub.overlayvpndriver.service.model.Ip;
+import org.openo.sdnhub.overlayvpndriver.service.model.SbiNeStaticRoute;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,9 +35,8 @@ public class StaticRouteConvertTest {
 
         ControllerNbiStaticRoute cnsr = new ControllerNbiStaticRoute();
 
-        cnsr.setId("id1234");
+        cnsr.setUuid("id1234");
         cnsr.setIp("ip1234");
-        cnsr.setBfdName("bfdName");
         cnsr.setDescription("description");
         cnsr.setDhcp(true);
         cnsr.setIpv6Address("ipv6addressforcnsr");
@@ -45,7 +44,7 @@ public class StaticRouteConvertTest {
         cnsr.setNextHop("1234nextHop");
         cnsr.setNqaId("nqaId1234");
         cnsr.setOutInterface("1234outInterfaceforcnsr");
-        cnsr.setPriority("priorityfirst");
+        cnsr.setPriority(10l);
         cnsr.setVpnId("vpnid1234");
         cnsr.setVpnName("vpnName");
         List<ControllerNbiStaticRoute> list = new ArrayList<>();
@@ -59,9 +58,8 @@ public class StaticRouteConvertTest {
 
         ControllerNbiStaticRoute cnsr = new ControllerNbiStaticRoute();
 
-        cnsr.setId("id1234");
+        cnsr.setUuid("id1234");
         cnsr.setIp("192.12.11.12");
-        cnsr.setBfdName("bfdName");
         cnsr.setDescription("description");
         cnsr.setDhcp(false);
         cnsr.setIpv6Address("");
@@ -69,15 +67,14 @@ public class StaticRouteConvertTest {
         cnsr.setNextHop("1234nextHop");
         cnsr.setNqaId("nqaId1234");
         cnsr.setOutInterface("1234outInterfaceforcnsr");
-        cnsr.setPriority("priorityfirst");
+        cnsr.setPriority(19l);
         cnsr.setVpnId("vpnid1234");
         cnsr.setVpnName("vpnName");
 
         ControllerNbiStaticRoute cnsr1 = new ControllerNbiStaticRoute();
 
-        cnsr1.setId("1234");
+        cnsr1.setUuid("1234");
         cnsr1.setIp("192.12.11.14");
-        cnsr1.setBfdName("bfdName123");
         cnsr1.setDescription("description123");
         cnsr1.setDhcp(false);
         cnsr1.setIpv6Address("::0000");
@@ -85,7 +82,7 @@ public class StaticRouteConvertTest {
         cnsr1.setNextHop("nextHop");
         cnsr1.setNqaId("nqaId");
         cnsr1.setOutInterface("outInterfaceforcnsr");
-        cnsr1.setPriority("priorityfirst123");
+        cnsr1.setPriority(10l);
         cnsr1.setVpnId("vpnid123456");
         cnsr1.setVpnName("vpnName123");
         List<ControllerNbiStaticRoute> list = new ArrayList<>();
@@ -102,9 +99,8 @@ public class StaticRouteConvertTest {
 
         ControllerNbiStaticRoute cnsr = new ControllerNbiStaticRoute();
 
-        cnsr.setId("id1234");
+        cnsr.setUuid("id1234");
         cnsr.setIp("ip1234");
-        cnsr.setBfdName("bfdName");
         cnsr.setDescription("description");
         cnsr.setDhcp(true);
         cnsr.setIpv6Address("ipv6addressforcnsr");
@@ -112,7 +108,7 @@ public class StaticRouteConvertTest {
         cnsr.setNextHop("1234nextHop");
         cnsr.setNqaId("nqaId1234");
         cnsr.setOutInterface("1234outInterfaceforcnsr");
-        cnsr.setPriority("priorityfirst");
+        cnsr.setPriority(10l);
         cnsr.setVpnId("vpnid1234");
         cnsr.setVpnName("vpnName");
         List<ControllerNbiStaticRoute> list = new ArrayList<>();
@@ -128,7 +124,7 @@ public class StaticRouteConvertTest {
 
         ControllerNbiStaticRoute cnsr1 = new ControllerNbiStaticRoute();
 
-        cnsr1.setId("");
+        cnsr1.setUuid("");
         cnsr1.setIp("192.32.12");
         cnsr1.setNextHop("jhbub");
         cnsr1.setIpv6Address("");
@@ -136,9 +132,8 @@ public class StaticRouteConvertTest {
 
         ControllerNbiStaticRoute cnsr = new ControllerNbiStaticRoute();
 
-        cnsr.setId("123id");
+        cnsr.setUuid("123id");
         cnsr.setIp("192.32.12");
-        cnsr.setBfdName("bfdName");
         cnsr.setDescription("description");
         cnsr.setDhcp(false);
         cnsr.setIpv6Address("ipv6addressforcnsr");
@@ -146,7 +141,7 @@ public class StaticRouteConvertTest {
         cnsr.setNextHop("1234nextHop");
         cnsr.setNqaId("nqaId1234");
         cnsr.setOutInterface("1234outInterfaceforcnsr");
-        cnsr.setPriority("priorityfirst");
+        cnsr.setPriority(10l);
         cnsr.setVpnId("vpnid1234");
         cnsr.setVpnName("vpnName");
         List<ControllerNbiStaticRoute> list = new ArrayList<>();
@@ -166,9 +161,8 @@ public class StaticRouteConvertTest {
 
         ControllerNbiStaticRoute cnsr = new ControllerNbiStaticRoute();
 
-        cnsr.setId("123id");
+        cnsr.setUuid("123id");
         cnsr.setIp("192.32.12");
-        cnsr.setBfdName("bfdName");
         cnsr.setDescription("description");
         cnsr.setDhcp(false);
         cnsr.setIpv6Address("ipv6addressforcnsr");
@@ -176,7 +170,7 @@ public class StaticRouteConvertTest {
         cnsr.setNextHop("1234nextHop");
         cnsr.setNqaId("nqaId1234");
         cnsr.setOutInterface("1234outInterfaceforcnsr");
-        cnsr.setPriority("priorityfirst");
+        cnsr.setPriority(10l);
         cnsr.setVpnId("vpnid1234");
         cnsr.setVpnName("vpnName");
         List<ControllerNbiStaticRoute> list = new ArrayList<>();
@@ -190,7 +184,7 @@ public class StaticRouteConvertTest {
 
         ControllerNbiStaticRoute cnsr1 = new ControllerNbiStaticRoute();
 
-        cnsr1.setId("");
+        cnsr1.setUuid("");
         cnsr1.setIp("");
         cnsr1.setNextHop("jhbub");
         cnsr1.setIpv6Address("ipv6addressforcnsr");
@@ -199,9 +193,8 @@ public class StaticRouteConvertTest {
 
         ControllerNbiStaticRoute cnsr = new ControllerNbiStaticRoute();
 
-        cnsr.setId("123id");
+        cnsr.setUuid("123id");
         cnsr.setIp("");
-        cnsr.setBfdName("bfdName");
         cnsr.setDescription("description");
         cnsr.setDhcp(false);
         cnsr.setIpv6Address("ipv6addressforcnsr");
@@ -209,7 +202,7 @@ public class StaticRouteConvertTest {
         cnsr.setNextHop("1234nextHop");
         cnsr.setNqaId("nqaId1234");
         cnsr.setOutInterface("1234outInterfaceforcnsr");
-        cnsr.setPriority("priorityfirst");
+        cnsr.setPriority(10l);
         cnsr.setVpnId("vpnid1234");
         cnsr.setVpnName("vpnName");
         List<ControllerNbiStaticRoute> list = new ArrayList<>();
@@ -225,16 +218,15 @@ public class StaticRouteConvertTest {
 
         ControllerNbiStaticRoute cnsr1 = new ControllerNbiStaticRoute();
 
-        cnsr1.setId("");
+        cnsr1.setUuid("");
         cnsr1.setNextHop("jhbub");
         cnsr1.setIpv6Address("ipv6addressforcnsr");
         cnsr1.setOutInterface("jhbiughfui");
 
         ControllerNbiStaticRoute cnsr = new ControllerNbiStaticRoute();
 
-        cnsr.setId("123id");
+        cnsr.setUuid("123id");
         cnsr.setIp("ip1234");
-        cnsr.setBfdName("bfdName");
         cnsr.setDescription("description");
         cnsr.setDhcp(false);
         cnsr.setIpv6Address("ipv6addressforcnsr");
@@ -242,7 +234,7 @@ public class StaticRouteConvertTest {
         cnsr.setNextHop("1234nextHop");
         cnsr.setNqaId("nqaId1234");
         cnsr.setOutInterface("1234outInterfaceforcnsr");
-        cnsr.setPriority("priorityfirst");
+        cnsr.setPriority(10l);
         cnsr.setVpnId("vpnid1234");
         cnsr.setVpnName("vpnName");
         List<ControllerNbiStaticRoute> list = new ArrayList<>();
@@ -256,14 +248,13 @@ public class StaticRouteConvertTest {
 
         ControllerNbiStaticRoute cnsr1 = new ControllerNbiStaticRoute();
 
-        cnsr1.setId("");
+        cnsr1.setUuid("");
         cnsr1.setNextHop("1234nextHop");
 
         ControllerNbiStaticRoute cnsr = new ControllerNbiStaticRoute();
 
-        cnsr.setId("123id");
+        cnsr.setUuid("123id");
         cnsr.setIp("ip1234");
-        cnsr.setBfdName("bfdName");
         cnsr.setDescription("description");
         cnsr.setDhcp(false);
         cnsr.setIpv6Address("ipv6addressforcnsr");
@@ -271,7 +262,7 @@ public class StaticRouteConvertTest {
         cnsr.setNextHop("1234nextHop");
         cnsr.setNqaId("nqaId1234");
         cnsr.setOutInterface("1234outInterfaceforcnsr");
-        cnsr.setPriority("priorityfirst");
+        cnsr.setPriority(10l);
         cnsr.setVpnId("vpnid1234");
         cnsr.setVpnName("vpnName");
         List<ControllerNbiStaticRoute> list = new ArrayList<>();
@@ -285,15 +276,14 @@ public class StaticRouteConvertTest {
 
         ControllerNbiStaticRoute cnsr1 = new ControllerNbiStaticRoute();
 
-        cnsr1.setId("");
+        cnsr1.setUuid("");
 
         cnsr1.setOutInterface("1234outInterfaceforcnsr");
 
         ControllerNbiStaticRoute cnsr = new ControllerNbiStaticRoute();
 
-        cnsr.setId("123id");
+        cnsr.setUuid("123id");
         cnsr.setIp("ip1234");
-        cnsr.setBfdName("bfdName");
         cnsr.setDescription("description");
         cnsr.setDhcp(false);
         cnsr.setIpv6Address("ipv6addressforcnsr");
@@ -301,7 +291,7 @@ public class StaticRouteConvertTest {
         cnsr.setNextHop("1234nextHop");
         cnsr.setNqaId("nqaId1234");
         cnsr.setOutInterface("1234outInterfaceforcnsr");
-        cnsr.setPriority("priorityfirst");
+        cnsr.setPriority(10l);
         cnsr.setVpnId("vpnid1234");
         cnsr.setVpnName("vpnName");
         List<ControllerNbiStaticRoute> list = new ArrayList<>();
@@ -315,15 +305,14 @@ public class StaticRouteConvertTest {
 
         ControllerNbiStaticRoute cnsr1 = new ControllerNbiStaticRoute();
 
-        cnsr1.setId("");
+        cnsr1.setUuid("");
 
         cnsr1.setIpv6Address("ipv6addressforcnsr");
 
         ControllerNbiStaticRoute cnsr = new ControllerNbiStaticRoute();
 
-        cnsr.setId("123id");
+        cnsr.setUuid("123id");
         cnsr.setIp("ip1234");
-        cnsr.setBfdName("bfdName");
         cnsr.setDescription("description");
         cnsr.setDhcp(false);
         cnsr.setIpv6Address("ipv6addressforcnsr");
@@ -331,7 +320,7 @@ public class StaticRouteConvertTest {
         cnsr.setNextHop("1234nextHop");
         cnsr.setNqaId("nqaId1234");
         cnsr.setOutInterface("1234outInterfaceforcnsr");
-        cnsr.setPriority("priorityfirst");
+        cnsr.setPriority(10l);
         cnsr.setVpnId("vpnid1234");
         cnsr.setVpnName("vpnName");
         List<ControllerNbiStaticRoute> list = new ArrayList<>();
@@ -360,11 +349,17 @@ public class StaticRouteConvertTest {
         snsr.setNqa("nqa");
         snsr.setOperationStatus("operationStatusissuccess");
         snsr.setOutInterface("1234outInterface");
-        snsr.setPriority("priorityisfirst");
+        snsr.setPriority("60");
         snsr.setRunningStatus("runningStatusissuccess");
         snsr.setTenantId("tenantId1234");
         snsr.setUpdatetime((long)123456789);
         snsr.setUuid("uuid1234");
+
+        Ip ip = new Ip();
+        ip.setTypeV4(true);
+        ip.setIpMask("24");
+        snsr.setDestIpData(ip);
+        snsr.setNextHopData(ip);
         List<SbiNeStaticRoute> list = new ArrayList<>();
         list.add(snsr);
 
@@ -375,7 +370,7 @@ public class StaticRouteConvertTest {
     public void testConvert2Route_1() {
 
         ControllerNbiStaticRoute cnsr = new ControllerNbiStaticRoute();
-        cnsr.setId(null);
+        cnsr.setUuid(null);
 
         SbiNeStaticRoute snsr = new SbiNeStaticRoute();
 
@@ -398,6 +393,12 @@ public class StaticRouteConvertTest {
         snsr.setTenantId("tenantId1234");
         snsr.setUpdatetime((long)123456789);
         snsr.setUuid("uuid1234");
+
+        Ip ip = new Ip();
+        ip.setTypeV4(true);
+        ip.setIpMask("24");
+        snsr.setDestIpData(ip);
+        snsr.setNextHopData(ip);
         List<SbiNeStaticRoute> list = new ArrayList<>();
         list.add(snsr);
 
@@ -409,7 +410,7 @@ public class StaticRouteConvertTest {
 
         ControllerNbiStaticRoute cnsr = new ControllerNbiStaticRoute();
 
-        cnsr.setId("12k-45khuih-0548jh");
+        cnsr.setUuid("12k-45khuih-0548jh");
         cnsr.setVpnId("1234id");
         List<ControllerNbiStaticRoute> list1 = new ArrayList<>();
         list1.add(cnsr);
@@ -437,6 +438,11 @@ public class StaticRouteConvertTest {
         snsr.setOutInterface("1234outInterface");
         snsr.setRunningStatus("runningStatusissuccess");
         snsr.setTenantId("tenantId1234");
+        Ip ip = new Ip();
+        ip.setTypeV4(true);
+        ip.setIpMask("24");
+        snsr.setDestIpData(ip);
+        snsr.setNextHopData(ip);
         snsr.setUpdatetime((long)123456789);
         snsr.setUuid("uuid1234");
         List<SbiNeStaticRoute> list = new ArrayList<>();

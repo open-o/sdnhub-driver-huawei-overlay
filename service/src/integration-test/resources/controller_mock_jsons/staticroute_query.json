@@ -12,7 +12,7 @@
     "json" : {
          "errcode": "0",
          "errmsg": "",
-         "data": [
+         "data":
              {
                  "id": "c3ebcbc532e3439499a9a15e52d49526",
                   "ip": "192.168.1.1",
@@ -28,7 +28,7 @@
                   "bfdName": null,
                   "nqaId": "d8f13fdb21b14c4f9dd574bd83961bef"
              }
-        ]
+
       }
   }
 }

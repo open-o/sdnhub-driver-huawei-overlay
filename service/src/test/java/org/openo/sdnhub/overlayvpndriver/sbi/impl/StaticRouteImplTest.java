@@ -50,7 +50,7 @@ public class StaticRouteImplTest {
             public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
 
                 ControllerNbiStaticRoute nbiStaticRoute = new ControllerNbiStaticRoute();
-                nbiStaticRoute.setId("123");
+                nbiStaticRoute.setUuid("123");
                 nbiStaticRoute.setNextHop("123");
                 nbiStaticRoute.setDhcp(true);
                 OverlayVpnDriverResponse<ControllerNbiStaticRoute> response = new OverlayVpnDriverResponse<>();
@@ -82,7 +82,7 @@ public class StaticRouteImplTest {
             public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
 
                 ControllerNbiStaticRoute nbiStaticRoute = new ControllerNbiStaticRoute();
-                nbiStaticRoute.setId("123");
+                nbiStaticRoute.setUuid("123");
                 nbiStaticRoute.setNextHop("123");
                 nbiStaticRoute.setDhcp(true);
                 OverlayVpnDriverResponse<ControllerNbiStaticRoute> response = new OverlayVpnDriverResponse<>();
@@ -98,7 +98,7 @@ public class StaticRouteImplTest {
         StaticRouteImpl impl = new StaticRouteImpl();
         List<ControllerNbiStaticRoute> list = new ArrayList<>();
         ControllerNbiStaticRoute route = new ControllerNbiStaticRoute();
-        route.setId("123");
+        route.setUuid("123");
         list.add(route);
         String ctrlUuid = "123";
         String deviceId = "111";
@@ -123,7 +123,7 @@ public class StaticRouteImplTest {
                 List<ControllerNbiStaticRoute> list = new ArrayList<ControllerNbiStaticRoute>();
 
                 ControllerNbiStaticRoute route = new ControllerNbiStaticRoute();
-                route.setId("123");
+                route.setUuid("123");
                 list.add(route);
                 response.setData(null);
                 response.setErrcode("01");

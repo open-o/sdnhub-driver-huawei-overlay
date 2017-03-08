@@ -31,7 +31,8 @@ import org.openo.sdnhub.overlayvpndriver.controller.model.ControllerNbiStaticRou
 import org.openo.sdnhub.overlayvpndriver.http.OverlayVpnDriverProxy;
 import org.openo.sdnhub.overlayvpndriver.result.OverlayVpnDriverResponse;
 import org.openo.sdnhub.overlayvpndriver.sbi.impl.StaticRouteImpl;
-import org.openo.sdno.overlayvpn.model.v2.route.SbiNeStaticRoute;
+import org.openo.sdnhub.overlayvpndriver.service.model.Ip;
+import org.openo.sdnhub.overlayvpndriver.service.model.SbiNeStaticRoute;
 import org.openo.sdno.overlayvpn.result.ResultRsp;
 import org.openo.sdno.overlayvpn.util.check.ValidationUtil;
 import org.openo.sdno.testframework.util.file.JsonUtil;
@@ -93,7 +94,7 @@ public class StaticRouteROAResourceTest {
             public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
 
                 ControllerNbiStaticRoute nbiStaticRoute = new ControllerNbiStaticRoute();
-                nbiStaticRoute.setId("123");
+                nbiStaticRoute.setUuid("123");
                 nbiStaticRoute.setNextHop("123");
                 nbiStaticRoute.setDhcp(true);
                 OverlayVpnDriverResponse<ControllerNbiStaticRoute> response = new OverlayVpnDriverResponse<>();
@@ -300,6 +301,12 @@ public class StaticRouteROAResourceTest {
         route.setNextHop("123");
         route.setOutInterface("123");
         route.setDeviceId("111");
+        Ip ip = new Ip();
+        ip.setTypeV4(true);
+        ip.setIpMask("24");
+        route.setDestIpData(ip);
+        route.setNextHopData(ip);
+        route.setExternalId("123");
         List<SbiNeStaticRoute> routes = new ArrayList<>();
         routes.add(route);
         ResultRsp<SbiNeStaticRoute> result = roa.createRoute("123", routes);
@@ -348,6 +355,12 @@ public class StaticRouteROAResourceTest {
         route.setNextHop("123");
         route.setOutInterface("123");
         route.setDeviceId("111");
+        Ip ip = new Ip();
+        ip.setTypeV4(true);
+        ip.setIpMask("24");
+        route.setDestIpData(ip);
+        route.setNextHopData(ip);
+        route.setExternalId("123");
         List<SbiNeStaticRoute> routes = new ArrayList<>();
         routes.add(route);
         ResultRsp<SbiNeStaticRoute> result = roa.createRoute("123", routes);
@@ -605,6 +618,11 @@ public class StaticRouteROAResourceTest {
         route.setNextHop("123");
         route.setOutInterface("123");
         route.setDeviceId("111");
+        Ip ip = new Ip();
+        ip.setTypeV4(true);
+        ip.setIpMask("24");
+        route.setDestIpData(ip);
+        route.setNextHopData(ip);
         route.setExternalId("123");
         List<SbiNeStaticRoute> routes = new ArrayList<>();
         routes.add(route);
@@ -663,6 +681,11 @@ public class StaticRouteROAResourceTest {
         route.setNextHop("123");
         route.setOutInterface("123");
         route.setDeviceId("111");
+        Ip ip = new Ip();
+        ip.setTypeV4(true);
+        ip.setIpMask("24");
+        route.setDestIpData(ip);
+        route.setNextHopData(ip);
         route.setExternalId("123");
         List<SbiNeStaticRoute> routes = new ArrayList<>();
         routes.add(route);

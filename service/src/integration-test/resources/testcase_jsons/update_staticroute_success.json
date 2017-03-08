@@ -1,6 +1,6 @@
 {
     "request": {
-        "uri": "/openoapi/sbi-route/v1/batch-update-static-routes",
+        "uri": "http://localhost:8080/openoapi/sbi-route/v1/batch-update-static-routes",
         "method": "put",
         "headers": {
             "Content-Type": "application/json;charset=UTF-8",
@@ -28,7 +28,29 @@
             "id": "81244ad0-b4ea-41ed-969e-d5588b32fd5f",
             "actionState": "Normal",
             "createTime": 0,
-            "updateTime": 0
+            "updateTime": 0,
+            "destIpData": {
+        "ipv4": "1.2.3.4",
+        "ipv6": "232323424",
+        "ipMask": "2",
+        "prefixLength": "23",
+        "neId": "neId",
+        "deviceId": "deviceId",
+        "routeId": "routeId",
+        "typeV4": true,
+        "id": "122112121"
+    },
+    "nextHopData": {
+        "ipv4": "1.2.3.4",
+        "ipv6": "232323424",
+        "ipMask": "2",
+        "prefixLength": "23",
+        "neId": "neId",
+        "deviceId": "deviceId",
+        "routeId": "routeId",
+        "typeV4": true,
+        "id": "12121212"
+    }
             }
         ]
     },

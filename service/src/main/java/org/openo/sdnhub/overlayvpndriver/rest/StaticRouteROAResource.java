@@ -21,10 +21,10 @@ import org.openo.baseservice.remoteservice.exception.ServiceException;
 import org.openo.sdnhub.overlayvpndriver.common.util.RequestHeaderUtil;
 import org.openo.sdnhub.overlayvpndriver.controller.model.ControllerNbiStaticRoute;
 import org.openo.sdnhub.overlayvpndriver.sbi.impl.StaticRouteImpl;
+import org.openo.sdnhub.overlayvpndriver.service.model.SbiNeStaticRoute;
 import org.openo.sdnhub.overlayvpndriver.translator.StaticRouteConvert;
 import org.openo.sdno.exception.ParameterServiceException;
 import org.openo.sdno.overlayvpn.errorcode.ErrorCode;
-import org.openo.sdno.overlayvpn.model.v2.route.SbiNeStaticRoute;
 import org.openo.sdno.overlayvpn.result.FailData;
 import org.openo.sdno.overlayvpn.result.ResultRsp;
 import org.openo.sdno.overlayvpn.util.check.UuidUtil;
@@ -252,7 +252,7 @@ public class StaticRouteROAResource {
                 // Else populate failedData.
                 for(SbiNeStaticRoute route : staticRouteList) {
                     for(ControllerNbiStaticRoute cNbiStaticRoute : entry.getValue()) {
-                        if(route.getExternalId().equals(cNbiStaticRoute.getId())) {
+                        if(route.getExternalId().equals(cNbiStaticRoute.getUuid())) {
                             successData.add(route);
                         }
                     }
@@ -260,7 +260,7 @@ public class StaticRouteROAResource {
             } else {
                 for(SbiNeStaticRoute route : staticRouteList) {
                     for(ControllerNbiStaticRoute cNbiStaticRoute : entry.getValue()) {
-                        if(route.getExternalId().equals(cNbiStaticRoute.getId())) {
+                        if(route.getExternalId().equals(cNbiStaticRoute.getUuid())) {
                             FailData<SbiNeStaticRoute> failData = new FailData<>();
                             failData.setData(route);
                         }

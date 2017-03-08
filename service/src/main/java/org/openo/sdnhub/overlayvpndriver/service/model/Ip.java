@@ -19,10 +19,12 @@ package org.openo.sdnhub.overlayvpndriver.service.model;
 import java.util.Objects;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.openo.sdnhub.overlayvpndriver.controller.model.LoopBackPort;
 import org.openo.sdno.overlayvpn.inventory.sdk.model.annotation.NONInvField;
 import org.openo.sdno.overlayvpn.model.v2.uuid.UuidModel;
 import org.openo.sdno.overlayvpn.verify.annotation.AInt;
 import org.openo.sdno.overlayvpn.verify.annotation.AUuid;
+import org.openo.sdno.util.ip.IpUtils;
 
 /**
  * <br/>
@@ -55,11 +57,35 @@ public class Ip extends UuidModel {
     private String routeId;
 
     @JsonIgnore
+    @AUuid
+    private String vxlanTunnelId;
+
+    @JsonIgnore
     @NONInvField
     private boolean isTypeV4;
 
     public Ip() {
         //Non-parameter constructor
+    }
+
+    public Ip(String deviceId, LoopBackPort loopBackPort){
+        super();
+        this.deviceId = deviceId;
+        this.setUuid(loopBackPort.getId());
+        this.ipv4 = loopBackPort.getIpv4Address();
+        this.ipMask = loopBackPort.getIpv4Mask();
+        this.ipv6 = loopBackPort.getIpv6Address();
+        this.prefixLength = loopBackPort.getPrefixLength();
+    }
+
+    public Ip(String deviceId, AcDevicePort tempPort){
+        super();
+        this.deviceId = deviceId;
+        this.setUuid(tempPort.getId());
+        this.ipv4 = tempPort.getIpAddr();
+        this.ipMask = String.valueOf(IpUtils.maskToPrefix(tempPort.getMask()));
+        this.ipv6 = tempPort.getIpv6Addr();
+        this.prefixLength = tempPort.getPrefixLength();
     }
 
     public Ip(String ipv4, String ipMask) {
@@ -124,11 +150,23 @@ public class Ip extends UuidModel {
         this.routeId = routeId;
     }
 
-    public boolean getIsTypeV4() {
+    public boolean isTypeV4() {
         return isTypeV4;
     }
 
     public void setIsTypeV4(boolean isTypeV4) {
+        this.isTypeV4 = isTypeV4;
+    }
+
+    public String getVxlanTunnelId() {
+        return vxlanTunnelId;
+    }
+
+    public void setVxlanTunnelId(String vxlanTunnelId) {
+        this.vxlanTunnelId = vxlanTunnelId;
+    }
+
+    public void setTypeV4(boolean isTypeV4) {
         this.isTypeV4 = isTypeV4;
     }
 
@@ -193,6 +231,16 @@ public class Ip extends UuidModel {
         }
 
         return true;
+    }
+
+    public void copyBasicData(Ip data){
+        this.neId = data.getNeId();
+        this.deviceId = data.getDeviceId();
+        this.ipv4 = data.getIpv4();
+        this.ipMask = data.getIpMask();
+        this.ipv6 = data.getIpv6();
+        this.prefixLength = data.getPrefixLength();
+        this.vxlanTunnelId = data.getVxlanTunnelId();
     }
 
     @Override

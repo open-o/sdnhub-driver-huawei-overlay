@@ -48,10 +48,10 @@ public class SbiNeIpSec extends SbiIpSecNetModel {
     @JsonIgnore
     private String destIfName;
 
-    @AIp(require = true)
+    @AString(require = true)
     private String sourceAddress;
 
-    @AIp(require = true)
+    @AString(require = true)
     private String peerAddress;
 
     @NONInvField

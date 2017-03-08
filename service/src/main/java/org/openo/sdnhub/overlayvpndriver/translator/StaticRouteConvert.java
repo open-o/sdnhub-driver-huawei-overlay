@@ -21,7 +21,8 @@ import org.apache.commons.collections.MapUtils;
 import org.openo.sdnhub.overlayvpndriver.common.util.CheckIpV6Util;
 import org.openo.sdnhub.overlayvpndriver.common.util.IpAddressUtil;
 import org.openo.sdnhub.overlayvpndriver.controller.model.ControllerNbiStaticRoute;
-import org.openo.sdno.overlayvpn.model.v2.route.SbiNeStaticRoute;
+import org.openo.sdnhub.overlayvpndriver.service.model.Ip;
+import org.openo.sdnhub.overlayvpndriver.service.model.SbiNeStaticRoute;
 import org.openo.sdno.overlayvpn.result.FailData;
 import org.openo.sdno.overlayvpn.result.ResultRsp;
 import org.openo.sdno.util.ip.IpUtils;
@@ -109,7 +110,7 @@ public class StaticRouteConvert {
                                                                ControllerNbiStaticRoute tempCreateStaticRoute) {
 
         for(ControllerNbiStaticRoute existing : existingAllRoutingList) {
-            if(existing.getId().equals(tempCreateStaticRoute.getId())) {
+            if(existing.getUuid().equals(tempCreateStaticRoute.getUuid())) {
                 continue;
             }
 
@@ -177,32 +178,34 @@ public class StaticRouteConvert {
         Map<String, List<ControllerNbiStaticRoute>> neId2Tunnels =
                 new ConcurrentHashMap<>();
 
-        for(SbiNeStaticRoute neStaticRoute : neStaticRoutes) {
-            String destIp = neStaticRoute.getDestIp();
-            String nextHopData = neStaticRoute.getNextHop();
+        for(SbiNeStaticRoute neStaticRoute : neStaticRoutes){
+            Ip destIpData = neStaticRoute.getDestIpData();
+            Ip nextHopData = neStaticRoute.getNextHopData();
 
             ControllerNbiStaticRoute staticRoute = new ControllerNbiStaticRoute();
 
-            staticRoute.setIp(destIp);
-            staticRoute.setOutInterface(neStaticRoute.getOutInterface());
-            staticRoute.setDhcp(Boolean.valueOf(neStaticRoute.getEnableDhcp()));
-            staticRoute.setPriority(neStaticRoute.getPriority());
-            staticRoute.setId(neStaticRoute.getUuid());
-
-            if(null != nextHopData) {
-                staticRoute.setNextHop(nextHopData);
+            if(destIpData.isTypeV4()){
+                staticRoute = new ControllerNbiStaticRoute(destIpData.getIpv4(),
+                        destIpData.getIpMask(),null,neStaticRoute.getOutInterface(),
+                        neStaticRoute.getEnableDhcp());
+                if(null != nextHopData){
+                    staticRoute.setNextHop(nextHopData.getIpv4());
+                }
+            } else {
+                staticRoute = new ControllerNbiStaticRoute(destIpData.getIpv6(),
+                        Integer.valueOf(destIpData.getPrefixLength()), null,neStaticRoute.getOutInterface(),
+                        neStaticRoute.getEnableDhcp());
+                if(null != nextHopData){
+                    staticRoute.setNextHop(nextHopData.getIpv6());
+                }
+            }
+            staticRoute.setUuid(neStaticRoute.getExternalId());
+            if(StringUtils.hasLength(neStaticRoute.getPriority())){
+                staticRoute.setPriority(Long.valueOf(neStaticRoute.getPriority()));
             }
 
-            if(!createOrUpdate) {
-                staticRoute.setId(neStaticRoute.getExternalId());
-            }
-
-            if(StringUtils.hasLength(neStaticRoute.getPriority())) {
-                staticRoute.setPriority(neStaticRoute.getPriority());
-            }
-
+            staticRoute.setNbiRouteId(neStaticRoute.getUuid());
             staticRoute.setNqaId(neStaticRoute.getNqa());
-            staticRoute.setOutInterface(neStaticRoute.getOutInterface());
             groupByNe(neId2Tunnels, neStaticRoute, staticRoute);
         }
         return neId2Tunnels;
@@ -227,7 +230,7 @@ public class StaticRouteConvert {
 
         for(ControllerNbiStaticRoute tempRoute : dataList)
         {
-            if(!StringUtils.hasLength(tempRoute.getId()))
+            if(!StringUtils.hasLength(tempRoute.getUuid()))
             {
                 LOGGER.warn("do not get static router id, outInfer = " + tempRoute.getOutInterface());
                 continue;
@@ -235,7 +238,7 @@ public class StaticRouteConvert {
 
             for(SbiNeStaticRoute tempNeRouter : neRouteList)
             {
-                if(tempRoute.getId().equals(tempNeRouter.getExternalId()))
+                if(tempRoute.getUuid().equals(tempNeRouter.getExternalId()))
                 {
                     successedDatas.add(tempNeRouter);
                 }
@@ -261,7 +264,7 @@ public class StaticRouteConvert {
     {
         for(SbiNeStaticRoute nbiRoute : nbiRoutes)
         {
-            if(nbiRoute.getUuid().equals(sbiStaticRoute.getId()))
+            if(nbiRoute.getUuid().equals(sbiStaticRoute.getUuid()))
             {
                 return nbiRoute;
             }

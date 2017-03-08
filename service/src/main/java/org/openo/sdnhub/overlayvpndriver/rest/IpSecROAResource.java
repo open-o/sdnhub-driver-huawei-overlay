@@ -168,7 +168,6 @@ public class IpSecROAResource {
             throw new ParameterServiceException(REQ_BODY_NULL_OR_EMPTY);
         }
 
-        ValidationUtil.validateModel(ipsecList);
         CheckStrUtil.checkUuidStr(deviceId);
 
         List<String> externalIds = new ArrayList<>(CollectionUtils.collect(ipsecList, new Transformer() {
@@ -214,7 +213,6 @@ public class IpSecROAResource {
             LOGGER.error(REQ_BODY_NULL_OR_EMPTY);
             throw new ParameterServiceException(REQ_BODY_NULL_OR_EMPTY);
         }
-        ValidationUtil.validateModel(ipSecNeConnectionList);
 
         ResultRsp<SbiNeIpSec> totalResult = new ResultRsp<>(ErrorCode.OVERLAYVPN_SUCCESS);
         for(SbiNeIpSec neIpSec : ipSecNeConnectionList) {

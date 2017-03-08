@@ -16,21 +16,21 @@
 
 package org.openo.sdnhub.overlayvpndriver.controller.model;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.openo.sdnhub.overlayvpndriver.service.model.UuidModel;
+import org.openo.sdno.util.ip.IpUtils;
+
 /**
  * Model class from ControllerNbiStaticRoute<br/>
  *
  * @author
  * @version SDNHUB 0.5 02-Feb-2017
  */
-public class ControllerNbiStaticRoute {
-
-    private String id;
-
-    private String bfdName;
+public class ControllerNbiStaticRoute extends UuidModel{
 
     private String description;
 
-    private String priority;
+    private Long priority;
 
     private String vpnName;
 
@@ -50,20 +50,34 @@ public class ControllerNbiStaticRoute {
 
     private String ipv6Address;
 
-    public String getId() {
-        return id;
+    private Integer prefixLength;
+
+    @JsonIgnore
+    private String nbiRouteId;
+
+
+    public ControllerNbiStaticRoute(String ip, String mask, String nextHop, String outInterface,
+            String enableDhcp) {
+        super();
+        this.ip = ip;
+        this.mask = IpUtils.prefixToMask(Integer.valueOf(mask));
+        this.nextHop = nextHop;
+        this.outInterface = outInterface;
+        this.setDhcp("true".equalsIgnoreCase(enableDhcp));
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public ControllerNbiStaticRoute(String ipv6, int prefixLength, String nextHop, String outInterface,
+            String enableDhcp) {
+        super();
+        this.ipv6Address = ipv6;
+        this.prefixLength = prefixLength;
+        this.nextHop = nextHop;
+        this.outInterface = outInterface;
+        this.setDhcp("true".equalsIgnoreCase(enableDhcp));
     }
 
-    public String getBfdName() {
-        return bfdName;
-    }
-
-    public void setBfdName(String bfdName) {
-        this.bfdName = bfdName;
+    public ControllerNbiStaticRoute() {
+        super();
     }
 
     public String getDescription() {
@@ -74,11 +88,11 @@ public class ControllerNbiStaticRoute {
         this.description = description;
     }
 
-    public String getPriority() {
+    public Long getPriority() {
         return priority;
     }
 
-    public void setPriority(String priority) {
+    public void setPriority(Long priority) {
         this.priority = priority;
     }
 
@@ -154,9 +168,25 @@ public class ControllerNbiStaticRoute {
         this.ipv6Address = ipv6address;
     }
 
+    public String getNbiRouteId() {
+        return nbiRouteId;
+    }
+
+    public void setNbiRouteId(String nbiRouteId) {
+        this.nbiRouteId = nbiRouteId;
+    }
+
+    public Integer getPrefixLength() {
+        return prefixLength;
+    }
+
+    public void setPrefixLength(Integer prefixLength) {
+        this.prefixLength = prefixLength;
+    }
+
     @Override
     public String toString() {
-        return "ClassPojo [id = " + id + ", bfdName = " + bfdName + ", description = " + description + ", priority = "
+        return "ClassPojo [id = " + this.getUuid() + ", description = " + description + ", priority = "
                 + priority + ", vpnName = " + vpnName + ", outInterface = " + outInterface + ", nextHop = " + nextHop
                 + ", dhcp = " + dhcp + ", vpnId = " + vpnId + ", mask = " + mask + ", nqaId = " + nqaId + ", ip = " + ip
                 + "]";
