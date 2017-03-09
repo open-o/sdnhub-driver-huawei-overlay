@@ -16,9 +16,10 @@
 
 package org.openo.sdnhub.overlayvpndriver.http;
 
+import java.io.IOException;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
@@ -33,8 +34,6 @@ import org.openo.sdno.util.http.HTTPReturnMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
-
-import java.io.IOException;
 
 /**
  * Proxy class for AC Branch Controller, providing restful and web socket
@@ -57,9 +56,11 @@ public class OverlayVpnDriverProxy {
 
     private static final String JSON_ACCEPT="Accept";
 
+    private static final String LOG_SEND_GET_MSG="@sendGetMsg";
     private static final String LOG_SEND_POST_MSG="@sendpostmsg";
     private static final String LOG_SEND_DELETE_MSG="@senddeletemsg";
     private static final String LOG_SEND_PUT_MSG="@sendputmsg";
+    private static final String LOG_BODY_LITERAL=":Body :>";
 
     private OverlayVpnDriverProxy() {
         this.initHttpClient();
@@ -114,7 +115,7 @@ public class OverlayVpnDriverProxy {
                 // Do Nothing, This is for fixing sonar issue
             }
 
-            LOGGER.debug("@sendGetMsg" + finalurl);
+            LOGGER.debug(LOG_SEND_GET_MSG + finalurl);
             HttpResponse response = httpClient.execute(httpget);
 
             return httpContentType(response);
@@ -136,6 +137,9 @@ public class OverlayVpnDriverProxy {
                 httpReturnMessage.setBody(EntityUtils.toString(response.getEntity()));
             }
             httpReturnMessage.setStatus(response.getStatusLine().getStatusCode());
+
+            LOGGER.debug("Status : " + httpReturnMessage.getStatus());
+            LOGGER.debug("Response Body : " + httpReturnMessage.getBody());
             return httpReturnMessage;
 
         }catch(IOException e){
@@ -169,9 +173,8 @@ public class OverlayVpnDriverProxy {
                 httppost.setEntity(reqEntity);
             }
 
-            LOGGER.debug(LOG_SEND_POST_MSG + finalurl);
+            LOGGER.debug(LOG_SEND_POST_MSG + finalurl + LOG_BODY_LITERAL + body);
             HttpResponse response = httpClient.execute(httppost);
-            LOGGER.debug(LOG_SEND_POST_MSG + finalurl + response);
 
             return httpContentType(response);
         } catch(IOException e) {
@@ -207,9 +210,8 @@ public class OverlayVpnDriverProxy {
                 httpput.setEntity(reqEntity);
             }
 
-            LOGGER.debug(LOG_SEND_PUT_MSG + finalurl);
+            LOGGER.debug(LOG_SEND_PUT_MSG + finalurl+ LOG_BODY_LITERAL + body);
             HttpResponse response = httpClient.execute(httpput);
-            LOGGER.debug(LOG_SEND_PUT_MSG + finalurl + response);
 
             return httpContentType(response);
         } catch(IOException e) {
@@ -243,9 +245,8 @@ public class OverlayVpnDriverProxy {
                 httpdelete.setEntity(reqEntity);
             }
 
-            LOGGER.debug(LOG_SEND_DELETE_MSG + finalurl);
+            LOGGER.debug(LOG_SEND_DELETE_MSG + finalurl+ LOG_BODY_LITERAL + body);
             HttpResponse response = httpClient.execute(httpdelete);
-            LOGGER.debug(LOG_SEND_DELETE_MSG + finalurl + response);
 
             return httpContentType(response);
         } catch(IOException e) {
