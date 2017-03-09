@@ -40,7 +40,7 @@ public class AdapterDeviceCreateBasicInfo extends AbstUuidModel {
     /**
      * ESN
      */
-    @AString(require = true, min = 20, max = 20)
+    @AString(require = true, min = 20, max = 32)
     private String esn;
 
     /**
