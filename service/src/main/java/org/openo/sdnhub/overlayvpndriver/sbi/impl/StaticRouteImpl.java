@@ -377,7 +377,7 @@ public class StaticRouteImpl {
             throw new ParameterServiceException("both ipv4 and ipv6 are not null");
         }
 
-        if(StringUtils.hasLength(ipv4StringBUilder.toString()) && (!StringUtils.hasLength(destIp.getIpv6()) ||
+        if(StringUtils.hasLength(ipv6StringBUilder.toString()) && (!StringUtils.hasLength(destIp.getIpv6()) ||
                 !StringUtils.hasLength(destIp.getPrefixLength()))){
             throw new ParameterServiceException("parameter error for ipv6");
         }

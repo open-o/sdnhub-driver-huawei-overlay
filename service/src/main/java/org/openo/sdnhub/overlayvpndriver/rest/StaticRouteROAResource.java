@@ -96,7 +96,7 @@ public class StaticRouteROAResource {
         for (SbiNeStaticRoute sbiNeStaticRoute : checkOkRouteList) {
             ResultRsp<List<ControllerNbiStaticRoute>> resultRsp =
                     staticRouteService.queryRouteByDevice(ctrlUuid, sbiNeStaticRoute.getDeviceId(),
-                                                          sbiNeStaticRoute.getDestIp(),
+                                                          null,
                                                           sbiNeStaticRoute.getExternalId());
 
             if (resultRsp.isValid()) {

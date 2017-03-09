@@ -148,7 +148,7 @@ public class StaticRouteConvert {
             String destMaskInACc) {
         int destIpMaskForCreate = -1;
         if(StringUtils.hasLength(destMaskForCreate)) {
-            destIpMaskForCreate = Integer.valueOf(destMaskForCreate);
+            destIpMaskForCreate = Integer.valueOf(IpUtils.maskToPrefix(destMaskForCreate));
         }
         int destIpMaskInDb = IpUtils.maskToPrefix(destMaskInACc);
 
