@@ -167,10 +167,6 @@ public class VxlanConvert {
 
         for(SbiNeVxlanInstance tempVxlan : vxLanInstanceList) {
             ValidationUtil.validateModel(tempVxlan);
-            if(CollectionUtils.isEmpty(tempVxlan.getVxlanInterfaceList())) {
-                LOGGER.error("createVxlan failed, vxlanInterfaceList is null");
-                SvcExcptUtil.throwBadRequestException("createVxlan failed, vxlanInterfaceList is null");
-            }
 
             if(CollectionUtils.isEmpty(tempVxlan.getVxlanTunnelList())) {
                 LOGGER.error("createVxlan failed, vxlanTunnelList is null");
