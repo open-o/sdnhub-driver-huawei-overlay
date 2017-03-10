@@ -295,6 +295,7 @@ public class StaticRouteImpl {
                 route.setNextHopData(JsonUtil.fromJson(route.getNextHop(),Ip.class));
             }
         } catch (IllegalArgumentException e){
+            LOGGER.error("null destIp", e);
             throw new ParameterServiceException("null destIp.");
         }
 
