@@ -16,23 +16,16 @@
 
 package org.openo.sdnhub.overlayvpndriver.http;
 
-import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
 import org.openo.sdnhub.overlayvpndriver.common.util.ESRutil;
-import org.openo.sdno.overlayvpn.errorcode.ErrorCode;
+import org.openo.sdno.exception.HttpCode;
 import org.openo.sdno.util.http.HTTPReturnMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 /**
@@ -40,7 +33,7 @@ import org.springframework.util.StringUtils;
  * interface. <br>
  *
  * @author
- * @version SDNHUB Driver 0.5 Jul 21, 2016
+ * @version SDNHUB Driver 0.5 Jun 10, 2017
  */
 public class OverlayVpnDriverProxy {
 
@@ -48,22 +41,13 @@ public class OverlayVpnDriverProxy {
 
     private static volatile OverlayVpnDriverProxy uniqueInstance = null;
 
-    private HttpClient httpClient;
+    private static final String SSO_LOGIN = "/sso/login";
 
-    private static final String JSON_APPLICATION_TYPE="application/json";
+    private static final String SSO_REDIRECT = "ssoRedirect";
 
-    private static final String JSON_CONTENT_TYPE="Content-Type";
-
-    private static final String JSON_ACCEPT="Accept";
-
-    private static final String LOG_SEND_GET_MSG="@sendGetMsg";
-    private static final String LOG_SEND_POST_MSG="@sendpostmsg";
-    private static final String LOG_SEND_DELETE_MSG="@senddeletemsg";
-    private static final String LOG_SEND_PUT_MSG="@sendputmsg";
-    private static final String LOG_BODY_LITERAL=":Body :>";
+    private static final String SSO_LOGOUT = "sso/logout";
 
     private OverlayVpnDriverProxy() {
-        this.initHttpClient();
     }
 
     /**
@@ -77,16 +61,6 @@ public class OverlayVpnDriverProxy {
             uniqueInstance = new OverlayVpnDriverProxy();
         }
         return uniqueInstance;
-    }
-
-    private String getControllerUrl(String url, String ctrlUuid) throws ServiceException {
-        return ESRutil.getControllerUrl(ctrlUuid) + url;
-    }
-
-    public void initHttpClient() {
-        OverlayDriverHttpClient client = new OverlayDriverHttpClient();
-        client.login();
-        httpClient = client.getHttpClient();
     }
 
     /**
@@ -103,49 +77,22 @@ public class OverlayVpnDriverProxy {
      * @since SDNHUB Driver 0.5
      */
     public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
-        try {
-
-            String finalurl = getControllerUrl(url, ctrlUuid);
-
-            HttpGet httpget = new HttpGet(finalurl);
-            httpget.addHeader(JSON_CONTENT_TYPE, JSON_APPLICATION_TYPE);
-            httpget.addHeader(JSON_ACCEPT, JSON_APPLICATION_TYPE);
-
-            if(body!=null) {
-                // Do Nothing, This is for fixing sonar issue
-            }
-
-            LOGGER.debug(LOG_SEND_GET_MSG + finalurl);
-            HttpResponse response = httpClient.execute(httpget);
-
-            return httpContentType(response);
-        } catch(IOException e) {
-
-            throw new ServiceException(ErrorCode.ADAPTER_CONNECTOR_RESPONSE_FAIL, e);
+        OverlayVpnDriverSsoProxy acSSOLogin = createACSSOProxy(ctrlUuid);
+        if(null == acSSOLogin) {
+            return new HTTPReturnMessage();
         }
 
-    }
-
-    private static HTTPReturnMessage httpContentType(HttpResponse response) throws ServiceException{
-
-        try{
-            HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
-            ContentType contentType = ContentType.get(response.getEntity());
-            if((contentType == null) || (null == contentType.getCharset())) {
-                httpReturnMessage.setBody(EntityUtils.toString(response.getEntity(), HTTP.UTF_8));
+        HTTPReturnMessage get = acSSOLogin.get(url);
+        if(isNeedRelogin(get)) {
+            LOGGER.info("Not Login, try to login.");
+            if(acSSOLogin.login(SSO_LOGIN)) {
+                get = acSSOLogin.get(url);
             } else {
-                httpReturnMessage.setBody(EntityUtils.toString(response.getEntity()));
+                get.setStatus(HttpCode.ERR_FAILED);
             }
-            httpReturnMessage.setStatus(response.getStatusLine().getStatusCode());
-
-            LOGGER.debug("Status : " + httpReturnMessage.getStatus());
-            LOGGER.debug("Response Body : " + httpReturnMessage.getBody());
-            return httpReturnMessage;
-
-        }catch(IOException e){
-            throw new ServiceException(ErrorCode.ADAPTER_CONNECTOR_RESPONSE_FAIL, e);
         }
 
+        return get;
     }
 
     /**
@@ -162,26 +109,21 @@ public class OverlayVpnDriverProxy {
      * @since SDNHUB Driver 0.5
      */
     public HTTPReturnMessage sendPostMsg(String url, String body, String ctrlUuid) throws ServiceException {
-        try {
-            String finalurl = getControllerUrl(url, ctrlUuid);
-
-            HttpPost httppost = new HttpPost(finalurl);
-            httppost.addHeader(JSON_CONTENT_TYPE, JSON_APPLICATION_TYPE);
-            httppost.addHeader(JSON_ACCEPT, JSON_APPLICATION_TYPE);
-            if(StringUtils.hasLength(body)) {
-                StringEntity reqEntity = new StringEntity(body);
-                httppost.setEntity(reqEntity);
-            }
-
-            LOGGER.debug(LOG_SEND_POST_MSG + finalurl + LOG_BODY_LITERAL + body);
-            HttpResponse response = httpClient.execute(httppost);
-
-            return httpContentType(response);
-        } catch(IOException e) {
-
-            throw new ServiceException(ErrorCode.ADAPTER_CONNECTOR_RESPONSE_FAIL, e);
+        OverlayVpnDriverSsoProxy acSSOLogin = createACSSOProxy(ctrlUuid);
+        if(null == acSSOLogin) {
+            return new HTTPReturnMessage();
         }
 
+        HTTPReturnMessage post = acSSOLogin.post(url, body);
+        if(isNeedRelogin(post)) {
+            LOGGER.info("Not Login, try to login.");
+            if(acSSOLogin.login(SSO_LOGIN)) {
+                post = acSSOLogin.post(url, body);
+            } else {
+                post.setStatus(HttpCode.ERR_FAILED);
+            }
+        }
+        return post;
     }
 
     /**
@@ -198,26 +140,22 @@ public class OverlayVpnDriverProxy {
      * @since SDNHUB Driver 0.5
      */
     public HTTPReturnMessage sendPutMsg(String url, String body, String ctrlUuid) throws ServiceException {
-        try {
-            String finalurl = getControllerUrl(url, ctrlUuid);
-
-            HttpPut httpput = new HttpPut(finalurl);
-            httpput.addHeader(JSON_CONTENT_TYPE, JSON_APPLICATION_TYPE);
-            httpput.addHeader(JSON_ACCEPT, JSON_APPLICATION_TYPE);
-
-            if(StringUtils.hasLength(body)) {
-                StringEntity reqEntity = new StringEntity(body);
-                httpput.setEntity(reqEntity);
-            }
-
-            LOGGER.debug(LOG_SEND_PUT_MSG + finalurl+ LOG_BODY_LITERAL + body);
-            HttpResponse response = httpClient.execute(httpput);
-
-            return httpContentType(response);
-        } catch(IOException e) {
-
-            throw new ServiceException(ErrorCode.ADAPTER_CONNECTOR_RESPONSE_FAIL, e);
+        OverlayVpnDriverSsoProxy acSSOLogin = createACSSOProxy(ctrlUuid);
+        if(null == acSSOLogin) {
+            return new HTTPReturnMessage();
         }
+
+        HTTPReturnMessage put = acSSOLogin.put(url, body);
+        if(isNeedRelogin(put)) {
+            LOGGER.info("Not Login, try to login.");
+            if(acSSOLogin.login(SSO_LOGIN)) {
+                put = acSSOLogin.put(url, body);
+            } else {
+                put.setStatus(HttpCode.ERR_FAILED);
+            }
+        }
+
+        return put;
     }
 
     /**
@@ -234,24 +172,99 @@ public class OverlayVpnDriverProxy {
      * @since SDNHUB Driver 0.5
      */
     public HTTPReturnMessage sendDeleteMsg(String url, String body, String ctrlUuid) throws ServiceException {
-        try {
-            String finalurl = getControllerUrl(url, ctrlUuid);
+        OverlayVpnDriverSsoProxy acSSOLogin = createACSSOProxy(ctrlUuid);
+        if(null == acSSOLogin) {
+            return new HTTPReturnMessage();
+        }
 
-            HttpDeleteWithBody httpdelete = new HttpDeleteWithBody(finalurl);
-            httpdelete.addHeader(JSON_CONTENT_TYPE, JSON_APPLICATION_TYPE);
-            httpdelete.addHeader(JSON_ACCEPT, JSON_APPLICATION_TYPE);
-            if(StringUtils.hasLength(body)) {
-                StringEntity reqEntity = new StringEntity(body);
-                httpdelete.setEntity(reqEntity);
+        HTTPReturnMessage delete = acSSOLogin.delete(url, body);
+        if(isNeedRelogin(delete)) {
+            LOGGER.info("Not Login, try to login.");
+            if(acSSOLogin.login(SSO_LOGIN)) {
+                delete = acSSOLogin.delete(url, body);
+            } else {
+                delete.setStatus(HttpCode.ERR_FAILED);
+            }
+        }
+
+        return delete;
+    }
+
+    /*
+     * private OverlayVpnDriverSsoProxy createACSSOProxy(String ctlrUuid) {
+     * OverlayVpnDriverSsoProxy ssoProxy = null;
+     * try {
+     * SdnControllerDao controllerDao = new SdnControllerDao();
+     * SdnController sdnController = controllerDao.querySdnControllerById(ctlrUuid);
+     * URL url = new URL(sdnController.getUrl());
+     * ssoProxy = OverlayVpnDriverSsoProxy.getInstance(url.getHost(), String.valueOf(url.getPort()),
+     * sdnController.getUserName(), sdnController.getPassword());
+     * } catch(ServiceException | MalformedURLException e) {
+     * LOGGER.error("create OverlayVpnDriverSsoProxy faied", e);
+     * }
+     * return ssoProxy;
+     * }
+     */
+
+    private OverlayVpnDriverSsoProxy createACSSOProxy(String ctlrUuid) {
+
+        OverlayVpnDriverSsoProxy acSSOLogin = null;
+        try {
+            Map<String, Object> controllerMap = ESRutil.getControllerDetails(ctlrUuid);
+
+            if(CollectionUtils.isEmpty(controllerMap)) {
+                return null;
             }
 
-            LOGGER.debug(LOG_SEND_DELETE_MSG + finalurl+ LOG_BODY_LITERAL + body);
-            HttpResponse response = httpClient.execute(httpdelete);
+            String url = (String)controllerMap.get("url");
 
-            return httpContentType(response);
-        } catch(IOException e) {
+            String controllerIp = readIpPortMapFromUrl(url).get("ip");
+            String controllerPort = readIpPortMapFromUrl(url).get("port");
+            if(!StringUtils.hasLength(controllerIp)) {
+                return null;
+            }
 
-            throw new ServiceException(ErrorCode.ADAPTER_CONNECTOR_RESPONSE_FAIL, e);
+            String userName = controllerMap.get("userName").toString();
+            String pwd = controllerMap.get("password").toString();
+
+            acSSOLogin = OverlayVpnDriverSsoProxy.getInstance(controllerIp, controllerPort, userName, pwd);
+
+        } catch(ServiceException e) {
+            LOGGER.error("controller comm parameters are not exist, uuid: " + ctlrUuid);
         }
+
+        return acSSOLogin;
+    }
+
+    private boolean isNeedRelogin(HTTPReturnMessage httpRspMsg) {
+        return isRedirectResponse(httpRspMsg) || isLogoutResponse(httpRspMsg);
+    }
+
+    private boolean isLogoutResponse(HTTPReturnMessage httpRspMsg) {
+        return (null != httpRspMsg.getBody()) && (httpRspMsg.getBody().indexOf(SSO_LOGOUT) > 0);
+    }
+
+    private boolean isRedirectResponse(HTTPReturnMessage httpRspMsg) {
+        return (null != httpRspMsg.getBody()) && (httpRspMsg.getBody().indexOf(SSO_REDIRECT) > 0);
+    }
+
+    private Map<String, String> readIpPortMapFromUrl(String url) {
+
+        Map<String, String> urlSplitMap = new HashMap<>();
+        if(StringUtils.hasLength(url)) {
+            String[] urlSplit = url.split("//");
+            String httpType = urlSplit[0];
+            String ip = null;
+            String port = null;
+            if(urlSplit.length > 1) {
+                String[] ipPort = urlSplit[1].split(":");
+                ip = ipPort[0];
+                port = (ipPort.length > 1) ? ipPort[1] : null;
+            }
+            urlSplitMap.put("ip", ip);
+            urlSplitMap.put("port", port);
+            urlSplitMap.put("httpType", httpType);
+        }
+        return urlSplitMap;
     }
 }

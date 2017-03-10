@@ -40,7 +40,7 @@ public class ESRutil {
     }
 
     /**
-     * Queries ESR for controller details and returns contoller's properties as map.
+     * Queries ESR for controller details and returns contoller's url.
      * <br/>
      *
      * @param ctrlUuid
@@ -55,5 +55,22 @@ public class ESRutil {
         Map<String, Object> responseMap = JsonUtil.fromJson(response.getResponseContent(), Map.class);
 
         return (String)responseMap.get("url");
+    }
+
+    /**
+     * Queries ESR for controller details and returns contoller's properties as map.
+     * <br/>
+     *
+     * @param ctrlUuid
+     * @return
+     * @throws ServiceException
+     * @since SDNHUB Driver 0.5
+     */
+    public static Map<String, Object> getControllerDetails(String ctrlUuid) throws ServiceException {
+        String esrurl = URL + ctrlUuid;
+        final RestfulParametes restfulParametes = new RestfulParametes();
+        RestfulResponse response = RestfulProxy.get(esrurl, restfulParametes);
+        Map<String, Object> responseMap = JsonUtil.fromJson(response.getResponseContent(), Map.class);
+        return responseMap;
     }
 }
