@@ -312,6 +312,9 @@ public class SbiNeIpSec extends SbiIpSecNetModel {
 
     @Override
     public boolean equals(Object obj) {
+
+        boolean equals = super.equals(obj);
+
         if (null == obj) {
             return false;
         }
@@ -338,7 +341,7 @@ public class SbiNeIpSec extends SbiIpSecNetModel {
             return false;
         }
 
-        return checkOther(other);
+        return checkOther(other) && equals;
     }
 
     private boolean checkOther(SbiNeIpSec other) {

@@ -30,4 +30,52 @@ public class IpSecConnectionTypeTest {
         assertEquals(responce, false);
     }
 
+    @Test
+    public void testValidateNameSame() {
+
+        boolean responce = IpSecConnectionType.validateName("work");
+
+        assertEquals(responce, true);
+    }
+
+    @Test
+    public void testGetName() {
+
+        String str = "";
+        IpSecConnectionType[] values = IpSecConnectionType.values();
+        for (IpSecConnectionType ist : values) {
+            if (ist.getName().equals("work")) {
+                str = ist.getName();
+            }
+        }
+        assertEquals(str, "work");
+    }
+
+    @Test
+    public void testGetNameadd() {
+
+        String str = "";
+        IpSecConnectionType[] values = IpSecConnectionType.values();
+        for (IpSecConnectionType ist : values) {
+            if (ist.getName().equals("project")) {
+                str = ist.getName();
+            }
+        }
+        assertEquals(str, "project");
+    }
+
+    @Test
+    public void testGetNameDefault() {
+
+        String str = "";
+        IpSecConnectionType[] values = IpSecConnectionType.values();
+        for (IpSecConnectionType ist : values) {
+            if (ist.getName().equals("")) {
+                str = ist.getName();
+            }
+        }
+        assertEquals(str, "");
+    }
+
+
 }

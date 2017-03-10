@@ -18,12 +18,8 @@ package org.openo.sdnhub.overlayvpndriver.sbi.impl;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
+import mockit.Mock;
+import mockit.MockUp;
 
 import org.junit.Test;
 import org.openo.baseservice.remoteservice.exception.ServiceException;
@@ -40,20 +36,20 @@ import org.openo.sdnhub.overlayvpndriver.result.OverlayVpnDriverResponse;
 import org.openo.sdnhub.overlayvpndriver.service.model.Ip;
 import org.openo.sdnhub.overlayvpndriver.service.model.SbiNeIpSec;
 import org.openo.sdno.framework.container.util.JsonUtil;
-import org.openo.sdno.overlayvpn.errorcode.ErrorCodeInfo;
 import org.openo.sdno.overlayvpn.result.ResultRsp;
 import org.openo.sdno.util.http.HTTPReturnMessage;
 
-import mockit.Mock;
-import mockit.MockUp;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class IpsecImplTest {
 
     @Test
     public void testIpsecUpdate() throws ServiceException {
         new MockUp<OverlayVpnDriverProxy>() {
-
-            private RuleList[] ruleList;
 
             @Mock
             public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
@@ -174,7 +170,7 @@ public class IpsecImplTest {
         IpsecImpl.update("CtrlId", "DeviceId", spec, rsp);
     }
 
-    @Test(expected = ServiceException.class)
+    @Test
     public void testDeleteIpSec() throws ServiceException {
         new MockUp<OverlayVpnDriverProxy>() {
 
@@ -246,18 +242,764 @@ public class IpsecImplTest {
                 httpReturnMessage.setBody(retBody);
                 return httpReturnMessage;
             }
+
+            @Mock
+            public HTTPReturnMessage sendPutMsg(String url, String body, String ctrlUuid) throws ServiceException {
+
+                HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
+                httpReturnMessage.setStatus(200);
+
+                OverlayVpnDriverResponse<List<IpsecConnList>> response = new OverlayVpnDriverResponse<>();
+                List<IpsecConnList> list = new ArrayList<>();
+                IpsecConnList ipList = new IpsecConnList();
+                ipList.setName("name");
+                list.add(ipList);
+                response.setData(list);
+                response.setErrcode("0");
+                String retBody = JsonUtil.toJson(response);
+                httpReturnMessage.setBody(retBody);
+                return httpReturnMessage;
+            }
         };
 
-        IpsecImpl impl = new IpsecImpl();
-        List<SbiNeIpSec> list = new ArrayList<>();
         SbiNeIpSec sbi = new SbiNeIpSec();
         sbi.setActiveStatus("123");
         sbi.setDeviceId("123");
         sbi.setExternalIpSecId("123");
         sbi.setExternalId("456");
+        List<SbiNeIpSec> list = new ArrayList<>();
         list.add(sbi);
+        IpsecImpl impl = new IpsecImpl();
         impl.batchDeleteIpsecConn("Ctrl", list);
     }
+
+    @Test
+    public void testDeleteIpSecSuccess() throws ServiceException {
+        new MockUp<OverlayVpnDriverProxy>() {
+
+            @Mock
+            public HTTPReturnMessage sendDeleteMsg(String url, String body, String ctrlUuid) throws ServiceException {
+
+                HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
+                httpReturnMessage.setStatus(200);
+
+                ACDelResponse obj = new ACDelResponse();
+                obj.setErrocode("0");
+                String retBody = JsonUtil.toJson(obj);
+                httpReturnMessage.setBody(retBody);
+                return httpReturnMessage;
+            }
+
+            @Mock
+            public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
+
+                HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
+                httpReturnMessage.setStatus(200);
+                IpsecConnList element = new IpsecConnList();
+                element.setUuid("123");
+                element.setInterfaceName("interfaceName");
+                Ike ike = new Ike();
+                ike.setAuthAlgorithm("authAlgorithm");
+                ike.setEncryptionAlgorithm("encryptionAlgorithm");
+                ike.setLocalAddress("10.12.13.6");
+                LocalId localId = new LocalId();
+                localId.setType("local type");
+                localId.setValue("value");
+                ike.setLocalId(localId);
+                ike.setPeerAddress("10.12.13.45");
+                PeerId peerId = new PeerId();
+                ike.setPeerId(peerId);
+                peerId.setType("peer Type");
+                peerId.setValue("value");
+                ike.setPreSharedKey("preSharedKey");
+                ike.setVersion("v1");
+
+                IpsecConnection ipsecConn = new IpsecConnection();
+                ipsecConn.setIke(ike);
+                IpSec ipsec = new IpSec();
+                ipsec.setEspAuthAlgorithm("espAuthAlgorithm");
+                ipsec.setEspEncryptionAlgorithm("espEncryptionAlgorithm");
+                // ipsecConn.setIpsec(ipsec);
+                ipsecConn.setNqaId("123");
+                ipsecConn.setNqaState("nqaState");
+                ipsecConn.setQosPreClassify("qosPreClassify");
+                ipsecConn.setSeqNumber(456);
+
+                // ipsecConn.setRuleList(ruleList);
+                // ipsecConn.setSeqNumber("SeqNo");
+                ipsecConn.setType("type");
+
+                List<IpsecConnection> ipsecConnection = new ArrayList<>();
+                ipsecConnection.add(ipsecConn);
+                element.setIpsecConnection(ipsecConnection);
+                element.setName("name");
+
+                List<IpsecConnList> data = new ArrayList<>();
+                data.add(0, element);
+
+                OverlayVpnDriverResponse<List<IpsecConnList>> response =
+                        new OverlayVpnDriverResponse<List<IpsecConnList>>();
+                response.setData(data);
+                response.setErrcode("0");
+                String retBody = JsonUtil.toJson(response);
+                httpReturnMessage.setBody(retBody);
+                return httpReturnMessage;
+            }
+
+            @Mock
+            public HTTPReturnMessage sendPutMsg(String url, String body, String ctrlUuid) throws ServiceException {
+
+                HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
+                httpReturnMessage.setStatus(200);
+
+                OverlayVpnDriverResponse<List<IpsecConnList>> response = new OverlayVpnDriverResponse<>();
+                List<IpsecConnList> list = new ArrayList<>();
+                IpsecConnList ipList = new IpsecConnList();
+                ipList.setName("name");
+                list.add(ipList);
+                response.setData(list);
+                response.setErrcode("01");
+                String retBody = JsonUtil.toJson(response);
+                httpReturnMessage.setBody(retBody);
+                return httpReturnMessage;
+            }
+        };
+
+        SbiNeIpSec sbi = new SbiNeIpSec();
+        sbi.setActiveStatus("123");
+        sbi.setDeviceId("123");
+        sbi.setExternalIpSecId("123");
+        sbi.setExternalId("456");
+        List<SbiNeIpSec> list = new ArrayList<>();
+        list.add(sbi);
+        IpsecImpl impl = new IpsecImpl();
+        ResultRsp<SbiNeIpSec> rsp = impl.batchDeleteIpsecConn("Ctrl", list);
+        assertEquals("overlayvpn.operation.success", rsp.getErrorCode());
+    }
+
+    @Test
+    public void testDeleteIpSecHttpSuccess() throws ServiceException {
+        new MockUp<OverlayVpnDriverProxy>() {
+
+            @Mock
+            public HTTPReturnMessage sendDeleteMsg(String url, String body, String ctrlUuid) throws ServiceException {
+
+                HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
+                httpReturnMessage.setStatus(200);
+
+                ACDelResponse obj = new ACDelResponse();
+                obj.setErrocode("0");
+                String retBody = JsonUtil.toJson(obj);
+                httpReturnMessage.setBody(retBody);
+                return httpReturnMessage;
+            }
+
+            @Mock
+            public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
+
+                HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
+                httpReturnMessage.setStatus(200);
+                IpsecConnList element = new IpsecConnList();
+                element.setUuid("123");
+                element.setInterfaceName("interfaceName");
+                Ike ike = new Ike();
+                ike.setAuthAlgorithm("authAlgorithm");
+                ike.setEncryptionAlgorithm("encryptionAlgorithm");
+                ike.setLocalAddress("10.12.13.6");
+                LocalId localId = new LocalId();
+                localId.setType("local type");
+                localId.setValue("value");
+                ike.setLocalId(localId);
+                ike.setPeerAddress("10.12.13.45");
+                PeerId peerId = new PeerId();
+                ike.setPeerId(peerId);
+                peerId.setType("peer Type");
+                peerId.setValue("value");
+                ike.setPreSharedKey("preSharedKey");
+                ike.setVersion("v1");
+
+                IpsecConnection ipsecConn = new IpsecConnection();
+                ipsecConn.setIke(ike);
+                IpSec ipsec = new IpSec();
+                ipsec.setEspAuthAlgorithm("espAuthAlgorithm");
+                ipsec.setEspEncryptionAlgorithm("espEncryptionAlgorithm");
+                // ipsecConn.setIpsec(ipsec);
+                ipsecConn.setNqaId("123");
+                ipsecConn.setNqaState("nqaState");
+                ipsecConn.setQosPreClassify("qosPreClassify");
+                ipsecConn.setSeqNumber(456);
+
+                // ipsecConn.setRuleList(ruleList);
+                // ipsecConn.setSeqNumber("SeqNo");
+                ipsecConn.setType("type");
+
+                List<IpsecConnection> ipsecConnection = new ArrayList<>();
+                ipsecConnection.add(ipsecConn);
+                element.setIpsecConnection(ipsecConnection);
+                element.setName("name");
+
+                List<IpsecConnList> data = new ArrayList<>();
+                data.add(0, element);
+
+                OverlayVpnDriverResponse<List<IpsecConnList>> response =
+                        new OverlayVpnDriverResponse<List<IpsecConnList>>();
+                response.setData(data);
+                response.setErrcode("0");
+                String retBody = JsonUtil.toJson(response);
+                httpReturnMessage.setBody(retBody);
+                return httpReturnMessage;
+            }
+
+            @Mock
+            public HTTPReturnMessage sendPutMsg(String url, String body, String ctrlUuid) throws ServiceException {
+
+                HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
+                httpReturnMessage.setStatus(300);
+
+                OverlayVpnDriverResponse<List<IpsecConnList>> response = new OverlayVpnDriverResponse<>();
+                List<IpsecConnList> list = new ArrayList<>();
+                IpsecConnList ipList = new IpsecConnList();
+                ipList.setName("name");
+                list.add(ipList);
+                response.setData(list);
+                response.setErrcode("0");
+                String retBody = JsonUtil.toJson(response);
+                httpReturnMessage.setBody(retBody);
+                return httpReturnMessage;
+            }
+        };
+
+        SbiNeIpSec sbi = new SbiNeIpSec();
+        sbi.setActiveStatus("123");
+        sbi.setDeviceId("123");
+        sbi.setExternalIpSecId("123");
+        sbi.setExternalId("456");
+        List<SbiNeIpSec> list = new ArrayList<>();
+        list.add(sbi);
+        IpsecImpl impl = new IpsecImpl();
+        ResultRsp<SbiNeIpSec> rsp = impl.batchDeleteIpsecConn("Ctrl", list);
+        assertEquals("overlayvpn.operation.success", rsp.getErrorCode());
+    }
+
+    @Test
+    public void testDeleteIpSecHttpSuccessFail() throws ServiceException {
+        new MockUp<OverlayVpnDriverProxy>() {
+
+            @Mock
+            public HTTPReturnMessage sendDeleteMsg(String url, String body, String ctrlUuid) throws ServiceException {
+
+                HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
+                httpReturnMessage.setStatus(200);
+
+                ACDelResponse obj = new ACDelResponse();
+                obj.setErrocode("0");
+                String retBody = JsonUtil.toJson(obj);
+                httpReturnMessage.setBody(retBody);
+                return httpReturnMessage;
+            }
+
+            @Mock
+            public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
+
+                HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
+                httpReturnMessage.setStatus(200);
+                IpsecConnList element = new IpsecConnList();
+                element.setUuid("123");
+                element.setInterfaceName("interfaceName");
+                Ike ike = new Ike();
+                ike.setAuthAlgorithm("authAlgorithm");
+                ike.setEncryptionAlgorithm("encryptionAlgorithm");
+                ike.setLocalAddress("10.12.13.6");
+                LocalId localId = new LocalId();
+                localId.setType("local type");
+                localId.setValue("value");
+                ike.setLocalId(localId);
+                ike.setPeerAddress("10.12.13.45");
+                PeerId peerId = new PeerId();
+                ike.setPeerId(peerId);
+                peerId.setType("peer Type");
+                peerId.setValue("value");
+                ike.setPreSharedKey("preSharedKey");
+                ike.setVersion("v1");
+
+                IpsecConnection ipsecConn = new IpsecConnection();
+                ipsecConn.setIke(ike);
+                IpSec ipsec = new IpSec();
+                ipsec.setEspAuthAlgorithm("espAuthAlgorithm");
+                ipsec.setEspEncryptionAlgorithm("espEncryptionAlgorithm");
+                // ipsecConn.setIpsec(ipsec);
+                ipsecConn.setNqaId("123");
+                ipsecConn.setNqaState("nqaState");
+                ipsecConn.setQosPreClassify("qosPreClassify");
+                ipsecConn.setSeqNumber(456);
+
+                // ipsecConn.setRuleList(ruleList);
+                // ipsecConn.setSeqNumber("SeqNo");
+                ipsecConn.setType("type");
+
+                List<IpsecConnection> ipsecConnection = new ArrayList<>();
+                ipsecConnection.add(ipsecConn);
+                element.setIpsecConnection(ipsecConnection);
+                element.setName("name");
+
+                List<IpsecConnList> data = new ArrayList<>();
+                data.add(0, element);
+
+                OverlayVpnDriverResponse<List<IpsecConnList>> response =
+                        new OverlayVpnDriverResponse<List<IpsecConnList>>();
+                response.setData(data);
+                response.setErrcode("0");
+                String retBody = JsonUtil.toJson(response);
+                httpReturnMessage.setBody(retBody);
+                return httpReturnMessage;
+            }
+
+            @Mock
+            public HTTPReturnMessage sendPutMsg(String url, String body, String ctrlUuid) throws ServiceException {
+
+                HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
+                httpReturnMessage.setStatus(200);
+
+                OverlayVpnDriverResponse<List<IpsecConnList>> response = new OverlayVpnDriverResponse<>();
+                List<IpsecConnList> list = new ArrayList<>();
+                IpsecConnList ipList = new IpsecConnList();
+                ipList.setName("name");
+                list.add(ipList);
+                response.setData(list);
+                response.setErrcode("0");
+                String retBody = JsonUtil.toJson(response);
+                httpReturnMessage.setBody(retBody);
+                return httpReturnMessage;
+            }
+        };
+
+        SbiNeIpSec sbi = new SbiNeIpSec();
+        sbi.setActiveStatus("123");
+        sbi.setDeviceId("123");
+        sbi.setExternalIpSecId("12345");
+        sbi.setExternalId("456");
+        List<SbiNeIpSec> list = new ArrayList<>();
+        list.add(sbi);
+        IpsecImpl impl = new IpsecImpl();
+        ResultRsp<SbiNeIpSec> rsp = impl.batchDeleteIpsecConn("Ctrl", list);
+        assertEquals("overlayvpn.operation.success", rsp.getErrorCode());
+    }
+
+    @Test
+    public void testDeleteIpSecHttpExternalIdFail() throws ServiceException {
+        new MockUp<OverlayVpnDriverProxy>() {
+
+            @Mock
+            public HTTPReturnMessage sendDeleteMsg(String url, String body, String ctrlUuid) throws ServiceException {
+
+                HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
+                httpReturnMessage.setStatus(200);
+
+                ACDelResponse obj = new ACDelResponse();
+                obj.setErrocode("0");
+                String retBody = JsonUtil.toJson(obj);
+                httpReturnMessage.setBody(retBody);
+                return httpReturnMessage;
+            }
+
+            @Mock
+            public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
+
+                HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
+                httpReturnMessage.setStatus(200);
+                IpsecConnList element = new IpsecConnList();
+                element.setUuid("123");
+                element.setInterfaceName("interfaceName");
+                Ike ike = new Ike();
+                ike.setAuthAlgorithm("authAlgorithm");
+                ike.setEncryptionAlgorithm("encryptionAlgorithm");
+                ike.setLocalAddress("10.12.13.6");
+                LocalId localId = new LocalId();
+                localId.setType("local type");
+                localId.setValue("value");
+                ike.setLocalId(localId);
+                ike.setPeerAddress("10.12.13.45");
+                PeerId peerId = new PeerId();
+                ike.setPeerId(peerId);
+                peerId.setType("peer Type");
+                peerId.setValue("value");
+                ike.setPreSharedKey("preSharedKey");
+                ike.setVersion("v1");
+
+                IpsecConnection ipsecConn = new IpsecConnection();
+                ipsecConn.setIke(ike);
+                IpSec ipsec = new IpSec();
+                ipsec.setEspAuthAlgorithm("espAuthAlgorithm");
+                ipsec.setEspEncryptionAlgorithm("espEncryptionAlgorithm");
+                // ipsecConn.setIpsec(ipsec);
+                ipsecConn.setNqaId("123");
+                ipsecConn.setNqaState("nqaState");
+                ipsecConn.setQosPreClassify("qosPreClassify");
+                ipsecConn.setSeqNumber(456);
+
+                // ipsecConn.setRuleList(ruleList);
+                // ipsecConn.setSeqNumber("SeqNo");
+                ipsecConn.setType("type");
+
+                List<IpsecConnection> ipsecConnection = new ArrayList<>();
+                ipsecConnection.add(ipsecConn);
+                element.setIpsecConnection(ipsecConnection);
+                element.setName("name");
+
+                List<IpsecConnList> data = new ArrayList<>();
+                data.add(0, element);
+
+                OverlayVpnDriverResponse<List<IpsecConnList>> response =
+                        new OverlayVpnDriverResponse<List<IpsecConnList>>();
+                response.setData(data);
+                response.setErrcode("0");
+                String retBody = JsonUtil.toJson(response);
+                httpReturnMessage.setBody(retBody);
+                return httpReturnMessage;
+            }
+
+            @Mock
+            public HTTPReturnMessage sendPutMsg(String url, String body, String ctrlUuid) throws ServiceException {
+
+                HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
+                httpReturnMessage.setStatus(200);
+
+                OverlayVpnDriverResponse<List<IpsecConnList>> response = new OverlayVpnDriverResponse<>();
+                List<IpsecConnList> list = new ArrayList<>();
+                IpsecConnList ipList = new IpsecConnList();
+                ipList.setName("name");
+                list.add(ipList);
+                response.setData(list);
+                response.setErrcode("0");
+                String retBody = JsonUtil.toJson(response);
+                httpReturnMessage.setBody(retBody);
+                return httpReturnMessage;
+            }
+        };
+
+        SbiNeIpSec sbi = new SbiNeIpSec();
+        sbi.setActiveStatus("123");
+        sbi.setDeviceId("123");
+        sbi.setExternalIpSecId("123");
+        sbi.setExternalId("456789");
+        List<SbiNeIpSec> list = new ArrayList<>();
+        list.add(sbi);
+        IpsecImpl impl = new IpsecImpl();
+        ResultRsp<SbiNeIpSec> rsp = impl.batchDeleteIpsecConn("Ctrl", list);
+        assertEquals("overlayvpn.operation.success", rsp.getErrorCode());
+    }
+
+    @Test
+    public void testDeleteIpSecBodyNull() throws ServiceException {
+        new MockUp<OverlayVpnDriverProxy>() {
+
+            @Mock
+            public HTTPReturnMessage sendDeleteMsg(String url, String body, String ctrlUuid) throws ServiceException {
+
+                HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
+                httpReturnMessage.setStatus(200);
+
+                ACDelResponse obj = new ACDelResponse();
+                obj.setErrocode("0");
+                String retBody = JsonUtil.toJson(obj);
+                httpReturnMessage.setBody(retBody);
+                return httpReturnMessage;
+            }
+
+            @Mock
+            public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
+
+                HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
+                httpReturnMessage.setStatus(200);
+                IpsecConnList element = new IpsecConnList();
+                element.setUuid("123");
+                element.setInterfaceName("interfaceName");
+                Ike ike = new Ike();
+                ike.setAuthAlgorithm("authAlgorithm");
+                ike.setEncryptionAlgorithm("encryptionAlgorithm");
+                ike.setLocalAddress("10.12.13.6");
+                LocalId localId = new LocalId();
+                localId.setType("local type");
+                localId.setValue("value");
+                ike.setLocalId(localId);
+                ike.setPeerAddress("10.12.13.45");
+                PeerId peerId = new PeerId();
+                ike.setPeerId(peerId);
+                peerId.setType("peer Type");
+                peerId.setValue("value");
+                ike.setPreSharedKey("preSharedKey");
+                ike.setVersion("v1");
+
+                IpsecConnection ipsecConn = new IpsecConnection();
+                ipsecConn.setIke(ike);
+                IpSec ipsec = new IpSec();
+                ipsec.setEspAuthAlgorithm("espAuthAlgorithm");
+                ipsec.setEspEncryptionAlgorithm("espEncryptionAlgorithm");
+                // ipsecConn.setIpsec(ipsec);
+                ipsecConn.setNqaId("123");
+                ipsecConn.setNqaState("nqaState");
+                ipsecConn.setQosPreClassify("qosPreClassify");
+                ipsecConn.setSeqNumber(456);
+
+                // ipsecConn.setRuleList(ruleList);
+                // ipsecConn.setSeqNumber("SeqNo");
+                ipsecConn.setType("type");
+
+                List<IpsecConnection> ipsecConnection = new ArrayList<>();
+                ipsecConnection.add(ipsecConn);
+                element.setIpsecConnection(ipsecConnection);
+                element.setName("name");
+
+                List<IpsecConnList> data = new ArrayList<>();
+                data.add(0, element);
+
+                OverlayVpnDriverResponse<List<IpsecConnList>> response =
+                        new OverlayVpnDriverResponse<List<IpsecConnList>>();
+                response.setData(data);
+                response.setErrcode("0");
+                String retBody = JsonUtil.toJson(response);
+                httpReturnMessage.setBody(retBody);
+                return httpReturnMessage;
+            }
+
+            @Mock
+            public HTTPReturnMessage sendPutMsg(String url, String body, String ctrlUuid) throws ServiceException {
+
+                HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
+                httpReturnMessage.setStatus(200);
+
+                OverlayVpnDriverResponse<List<IpsecConnList>> response = new OverlayVpnDriverResponse<>();
+                List<IpsecConnList> list = new ArrayList<>();
+                IpsecConnList ipList = new IpsecConnList();
+                ipList.setName("name");
+                list.add(ipList);
+                response.setData(list);
+                response.setErrcode("0");
+                httpReturnMessage.setBody(null);
+                return httpReturnMessage;
+            }
+        };
+
+        SbiNeIpSec sbi = new SbiNeIpSec();
+        sbi.setActiveStatus("123");
+        sbi.setDeviceId("123");
+        sbi.setExternalIpSecId("123");
+        sbi.setExternalId("456");
+        List<SbiNeIpSec> list = new ArrayList<>();
+        list.add(sbi);
+        IpsecImpl impl = new IpsecImpl();
+        ResultRsp<SbiNeIpSec> rsp = impl.batchDeleteIpsecConn("Ctrl", list);
+        assertEquals("overlayvpn.operation.success", rsp.getErrorCode());
+    }
+
+    @Test
+    public void testDeleteIpSecIpSecEmpty() throws ServiceException {
+        new MockUp<OverlayVpnDriverProxy>() {
+
+            @Mock
+            public HTTPReturnMessage sendDeleteMsg(String url, String body, String ctrlUuid) throws ServiceException {
+
+                HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
+                httpReturnMessage.setStatus(200);
+
+                ACDelResponse obj = new ACDelResponse();
+                obj.setErrocode("0");
+                String retBody = JsonUtil.toJson(obj);
+                httpReturnMessage.setBody(retBody);
+                return httpReturnMessage;
+            }
+
+            @Mock
+            public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
+
+                HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
+                httpReturnMessage.setStatus(200);
+                IpsecConnList element = new IpsecConnList();
+                element.setUuid("123");
+                element.setInterfaceName("interfaceName");
+                Ike ike = new Ike();
+                ike.setAuthAlgorithm("authAlgorithm");
+                ike.setEncryptionAlgorithm("encryptionAlgorithm");
+                ike.setLocalAddress("10.12.13.6");
+                LocalId localId = new LocalId();
+                localId.setType("local type");
+                localId.setValue("value");
+                ike.setLocalId(localId);
+                ike.setPeerAddress("10.12.13.45");
+                PeerId peerId = new PeerId();
+                ike.setPeerId(peerId);
+                peerId.setType("peer Type");
+                peerId.setValue("value");
+                ike.setPreSharedKey("preSharedKey");
+                ike.setVersion("v1");
+
+                IpsecConnection ipsecConn = new IpsecConnection();
+                ipsecConn.setIke(ike);
+                IpSec ipsec = new IpSec();
+                ipsec.setEspAuthAlgorithm("espAuthAlgorithm");
+                ipsec.setEspEncryptionAlgorithm("espEncryptionAlgorithm");
+                // ipsecConn.setIpsec(ipsec);
+                ipsecConn.setNqaId("123");
+                ipsecConn.setNqaState("nqaState");
+                ipsecConn.setQosPreClassify("qosPreClassify");
+                ipsecConn.setSeqNumber(456);
+
+                // ipsecConn.setRuleList(ruleList);
+                // ipsecConn.setSeqNumber("SeqNo");
+                ipsecConn.setType("type");
+
+                List<IpsecConnection> ipsecConnection = new ArrayList<>();
+                //ipsecConnection.add(ipsecConn);
+                element.setIpsecConnection(ipsecConnection);
+                element.setName("name");
+
+                List<IpsecConnList> data = new ArrayList<>();
+                data.add(0, element);
+
+                OverlayVpnDriverResponse<List<IpsecConnList>> response =
+                        new OverlayVpnDriverResponse<List<IpsecConnList>>();
+                response.setData(data);
+                response.setErrcode("0");
+                String retBody = JsonUtil.toJson(response);
+                httpReturnMessage.setBody(retBody);
+                return httpReturnMessage;
+            }
+
+            @Mock
+            public HTTPReturnMessage sendPutMsg(String url, String body, String ctrlUuid) throws ServiceException {
+
+                HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
+                httpReturnMessage.setStatus(200);
+
+                OverlayVpnDriverResponse<List<IpsecConnList>> response = new OverlayVpnDriverResponse<>();
+                List<IpsecConnList> list = new ArrayList<>();
+                IpsecConnList ipList = new IpsecConnList();
+                ipList.setName("name");
+                list.add(ipList);
+                response.setData(list);
+                response.setErrcode("0");
+                String retBody = JsonUtil.toJson(response);
+                httpReturnMessage.setBody(retBody);
+                return httpReturnMessage;
+            }
+        };
+
+        SbiNeIpSec sbi = new SbiNeIpSec();
+        sbi.setActiveStatus("123");
+        sbi.setDeviceId("123");
+        sbi.setExternalIpSecId("123");
+        sbi.setExternalId("456");
+        List<SbiNeIpSec> list = new ArrayList<>();
+        list.add(sbi);
+        IpsecImpl impl = new IpsecImpl();
+        ResultRsp<SbiNeIpSec> rsp = impl.batchDeleteIpsecConn("Ctrl", list);
+        assertEquals("overlayvpn.operation.success", rsp.getErrorCode());
+    }
+
+    @Test
+    public void testDeleteIpSecTimeOut() throws ServiceException {
+        new MockUp<OverlayVpnDriverProxy>() {
+
+            @Mock
+            public HTTPReturnMessage sendDeleteMsg(String url, String body, String ctrlUuid) throws ServiceException {
+
+                HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
+                httpReturnMessage.setStatus(200);
+
+                ACDelResponse obj = new ACDelResponse();
+                obj.setErrocode("0");
+                String retBody = JsonUtil.toJson(obj);
+                httpReturnMessage.setBody(retBody);
+                return httpReturnMessage;
+            }
+
+            @Mock
+            public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
+
+                HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
+                httpReturnMessage.setStatus(200);
+                IpsecConnList element = new IpsecConnList();
+                element.setUuid("123");
+                element.setInterfaceName("interfaceName");
+                Ike ike = new Ike();
+                ike.setAuthAlgorithm("authAlgorithm");
+                ike.setEncryptionAlgorithm("encryptionAlgorithm");
+                ike.setLocalAddress("10.12.13.6");
+                LocalId localId = new LocalId();
+                localId.setType("local type");
+                localId.setValue("value");
+                ike.setLocalId(localId);
+                ike.setPeerAddress("10.12.13.45");
+                PeerId peerId = new PeerId();
+                ike.setPeerId(peerId);
+                peerId.setType("peer Type");
+                peerId.setValue("value");
+                ike.setPreSharedKey("preSharedKey");
+                ike.setVersion("v1");
+
+                IpsecConnection ipsecConn = new IpsecConnection();
+                ipsecConn.setIke(ike);
+                IpSec ipsec = new IpSec();
+                ipsec.setEspAuthAlgorithm("espAuthAlgorithm");
+                ipsec.setEspEncryptionAlgorithm("espEncryptionAlgorithm");
+                // ipsecConn.setIpsec(ipsec);
+                ipsecConn.setNqaId("123");
+                ipsecConn.setNqaState("nqaState");
+                ipsecConn.setQosPreClassify("qosPreClassify");
+                ipsecConn.setSeqNumber(456);
+
+                // ipsecConn.setRuleList(ruleList);
+                // ipsecConn.setSeqNumber("SeqNo");
+                ipsecConn.setType("type");
+
+                List<IpsecConnection> ipsecConnection = new ArrayList<>();
+                ipsecConnection.add(ipsecConn);
+                element.setIpsecConnection(ipsecConnection);
+                element.setName("name");
+
+                List<IpsecConnList> data = new ArrayList<>();
+                data.add(0, element);
+
+                OverlayVpnDriverResponse<List<IpsecConnList>> response =
+                        new OverlayVpnDriverResponse<List<IpsecConnList>>();
+                response.setData(data);
+                response.setErrcode("0");
+                String retBody = JsonUtil.toJson(response);
+                httpReturnMessage.setBody(retBody);
+                return httpReturnMessage;
+            }
+
+            @Mock
+            public HTTPReturnMessage sendPutMsg(String url, String body, String ctrlUuid) throws ServiceException {
+
+                HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
+                httpReturnMessage.setStatus(200);
+
+                OverlayVpnDriverResponse<List<IpsecConnList>> response = new OverlayVpnDriverResponse<>();
+                List<IpsecConnList> list = new ArrayList<>();
+                IpsecConnList ipList = new IpsecConnList();
+                ipList.setName("name");
+                list.add(ipList);
+                response.setData(list);
+                response.setErrcode("0");
+                httpReturnMessage.setBody(null);
+                httpReturnMessage.setStatus(408);
+                return httpReturnMessage;
+            }
+        };
+
+        SbiNeIpSec sbi = new SbiNeIpSec();
+        sbi.setActiveStatus("123");
+        sbi.setDeviceId("123");
+        sbi.setExternalIpSecId("123");
+        sbi.setExternalId("456");
+        List<SbiNeIpSec> list = new ArrayList<>();
+        list.add(sbi);
+        IpsecImpl impl = new IpsecImpl();
+        ResultRsp<SbiNeIpSec> rsp = impl.batchDeleteIpsecConn("Ctrl", list);
+        assertEquals("overlayvpn.operation.success", rsp.getErrorCode());
+    }
+
 
     @Test
     public void configIpsec() throws ServiceException {
@@ -376,8 +1118,6 @@ public class IpsecImplTest {
             }
         };
 
-        IpsecImpl impl = new IpsecImpl();
-        List<IpsecConnList> list = new ArrayList<>();
         IpsecConnList conn = new IpsecConnList();
         conn.setUuid("123");
         List<IpsecConnection> ipsecConnectionList = new LinkedList<>();
@@ -385,7 +1125,9 @@ public class IpsecImplTest {
         ipSecConnection.setDeviceId("DeviceId");
         ipsecConnectionList.add(ipSecConnection);
         conn.setIpsecConnection(ipsecConnectionList);
+        List<IpsecConnList> list = new ArrayList<>();
         list.add(conn);
+        IpsecImpl impl = new IpsecImpl();
         ResultRsp<List<IpsecConnList>> res = impl.configIpsec("Ctrl", "DeviceId", list);
         assertEquals("overlayvpn.operation.success", res.getErrorCode());
     }
@@ -404,8 +1146,6 @@ public class IpsecImplTest {
     @Test
     public void backWriteId() throws ServiceException {
 
-        IpsecImpl impl = new IpsecImpl();
-
         List<SbiNeIpSec> list = new ArrayList<>();
         SbiNeIpSec sbi = new SbiNeIpSec();
         sbi.setDeviceId("123");
@@ -415,13 +1155,12 @@ public class IpsecImplTest {
         IpsecConnList conn = new IpsecConnList();
         connList.add(conn);
 
+        IpsecImpl impl = new IpsecImpl();
         impl.backWriteId(list, connList, "123");
     }
 
     @Test
     public void backWriteIdFalse() throws ServiceException {
-
-        IpsecImpl impl = new IpsecImpl();
 
         List<SbiNeIpSec> list = new ArrayList<>();
         SbiNeIpSec sbi = new SbiNeIpSec();
@@ -432,6 +1171,7 @@ public class IpsecImplTest {
         IpsecConnList conn = new IpsecConnList();
         connList.add(conn);
 
+        IpsecImpl impl = new IpsecImpl();
         impl.backWriteId(list, connList, "123");
     }
 
@@ -441,11 +1181,15 @@ public class IpsecImplTest {
         IpsecImpl.queryIpsecByDevice(null, "DeviceId", "name");
     }
 
-    @Test(expected = NullPointerException.class)
-    public void createNQA() throws ServiceException {
+    @Test(expected = ServiceException.class)
+    public void queryIpsecByDeviceNull() throws ServiceException {
 
-        Map<String, List<SbiNeIpSec>> map = new HashMap<>();
-        List<SbiNeIpSec> list = new ArrayList<>();
+        IpsecImpl.queryIpsecByDevice("ctrl",null, "name");
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void createNaA() throws ServiceException {
+
         SbiNeIpSec sbi = new SbiNeIpSec();
 
         Ip ip = new Ip();
@@ -456,7 +1200,9 @@ public class IpsecImplTest {
         sbi.setDeviceId("123");
         sbi.setProtectionPolicy("nqa");
         sbi.setLocalNeRole("localcpe");
+        List<SbiNeIpSec> list = new ArrayList<>();
         list.add(sbi);
+        Map<String, List<SbiNeIpSec>> map = new HashMap<>();
         map.put("key", list);
 
         IpsecImpl impl = new IpsecImpl();
@@ -637,6 +1383,28 @@ public class IpsecImplTest {
             }
         };
         IpsecImpl.queryIpsecByDevice("Ctrl", "Deviceid", "name");
+    }
+
+    @Test
+    public void deleteNqaConfigForIpSec() throws ServiceException {
+
+        new MockUp<OverlayVpnDriverProxy>() {
+
+            @Mock
+            public HTTPReturnMessage sendDeleteMsg(String url, String body, String ctrlUuid) throws ServiceException {
+
+                HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
+                httpReturnMessage.setStatus(200);
+                ACDelResponse obj = new ACDelResponse();
+                obj.setErrocode("0");
+                String retBody = JsonUtil.toJson(obj);
+                httpReturnMessage.setBody(retBody);
+                return httpReturnMessage;
+            }
+        };
+        IpsecImpl impl = new IpsecImpl();
+        ResultRsp<String> rsp = impl.deleteNqaConfigForIpSec("ctrl", "delete", "json");
+        assertEquals("overlayvpn.operation.success", rsp.getErrorCode());
     }
 
 }

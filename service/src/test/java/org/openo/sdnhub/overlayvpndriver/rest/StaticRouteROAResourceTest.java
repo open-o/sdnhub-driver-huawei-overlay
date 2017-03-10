@@ -46,6 +46,7 @@ import java.util.List;
 public class StaticRouteROAResourceTest {
 
     StaticRouteROAResource roa = new StaticRouteROAResource();
+    SbiNeStaticRoute route = new SbiNeStaticRoute();
 
     String queryResJson = "{\"errcode\": \"0\",\"errmsg\":" + " \"\",\"data\": " + "[{\"id\":"
             + "\"8206aae22e294b19b08032e1c38b244f\",\"ip\":\"119.131.141.12\","
@@ -75,6 +76,22 @@ public class StaticRouteROAResourceTest {
         f1.setAccessible(true);
         f1.set(cc, service);
         roa = (StaticRouteROAResource)cc;
+
+        route.setUuid("123");
+        route.setEnableDhcp("true");
+        Ip ip = new Ip();
+        ip.setIpv4("10.20.10.30");
+        ip.setIpMask("24");
+        route.setDestIp(JsonUtil.toJson(ip));
+        route.setNextHop(JsonUtil.toJson(ip));
+        route.setOutInterface("123");
+        route.setDeviceId("111");
+
+        ip.setTypeV4(true);
+        ip.setIpMask("24");
+        route.setDestIpData(ip);
+        route.setNextHopData(ip);
+        route.setExternalId("8206aae22e294b19b08032e1c38b244f");
     }
 
     @Test
@@ -107,27 +124,12 @@ public class StaticRouteROAResourceTest {
             }
         };
 
-        SbiNeStaticRoute route = new SbiNeStaticRoute();
-        route.setUuid("123");
-        route.setEnableDhcp("true");
-        route.setDestIp("10.20.10.30");
-        route.setNextHop("123");
-        route.setOutInterface("123");
-        route.setDeviceId("111");
-
-        Ip ip = new Ip();
-        ip.setTypeV4(true);
-        ip.setIpMask("24");
-        route.setDestIpData(ip);
-        route.setNextHopData(ip);
-        route.setExternalId("123");
-
         List<SbiNeStaticRoute> routes = new ArrayList<>();
         routes.add(route);
         ResultRsp<SbiNeStaticRoute> result = roa.queryRoutes("123", routes);
 
         assertEquals(200, result.getHttpCode());
-        assertEquals(0, result.getSuccessed().size());
+        assertEquals("8206aae22e294b19b08032e1c38b244f", result.getSuccessed().get(0).getExternalId());
 
     }
 
@@ -148,8 +150,8 @@ public class StaticRouteROAResourceTest {
 
     }
 
-    @Test(expected = Exception.class)
-    public void testQueryRoutesEmptyController() throws ServiceException, HttpException {
+    @Test
+    public void testQueryRoutesFailData() throws ServiceException, HttpException {
 
         new MockUp<ValidationUtil>() {
 
@@ -165,31 +167,24 @@ public class StaticRouteROAResourceTest {
             public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
 
                 HTTPReturnMessage msg = new HTTPReturnMessage();
-                msg.setBody("");
-                msg.setStatus(200);
+                msg.setBody(queryResJson);
+                msg.setStatus(500);
                 return msg;
             }
         };
 
-        SbiNeStaticRoute route = new SbiNeStaticRoute();
-        route.setUuid("123");
-        route.setEnableDhcp("true");
-        route.setDestIp("10.20.10.30");
-        route.setNextHop("123");
-        route.setOutInterface("123");
-        route.setDeviceId("111");
         List<SbiNeStaticRoute> routes = new ArrayList<>();
         routes.add(route);
         routes.add(route);
         ResultRsp<SbiNeStaticRoute> result = roa.queryRoutes("123", routes);
 
-        assertEquals(200, result.getHttpCode());
-        assertEquals("4.5.6.6", result.getData().getNextHop());
+        assertEquals("overlayvpn.operation.failed", result.getErrorCode());
+        assertEquals("8206aae22e294b19b08032e1c38b244f", result.getFail().get(0).getData().getExternalId());
 
     }
 
     @Test
-    public void testQueryRoutesInvalidresponse() throws ServiceException, HttpException {
+    public void testQueryRoutesInvalidResponse() throws ServiceException, HttpException {
 
         new MockUp<ValidationUtil>() {
 
@@ -223,43 +218,6 @@ public class StaticRouteROAResourceTest {
         routes.add(route);
         ResultRsp<SbiNeStaticRoute> result = roa.queryRoutes("123", routes);
         assertEquals("overlayvpn.operation.failed", result.getErrorCode());
-    }
-
-    @Test
-    public void testQueryRoutesInvalidresponsefromcontroller() throws ServiceException, HttpException {
-
-        new MockUp<ValidationUtil>() {
-
-            @Mock
-            public void validateModel(Object obj) throws ServiceException {
-
-            }
-        };
-
-        new MockUp<OverlayVpnDriverProxy>() {
-
-            @Mock
-            public HTTPReturnMessage sendGetMsg(String url, String body, String ctrlUuid) throws ServiceException {
-
-                HTTPReturnMessage msg = new HTTPReturnMessage();
-                msg.setBody("invalid");
-                msg.setStatus(200);
-                return msg;
-            }
-        };
-
-        SbiNeStaticRoute route = new SbiNeStaticRoute();
-        route.setUuid("123");
-        route.setEnableDhcp("true");
-        route.setDestIp("10.20.10.30");
-        route.setNextHop("123");
-        route.setOutInterface("123");
-        route.setDeviceId("111");
-        List<SbiNeStaticRoute> routes = new ArrayList<>();
-        routes.add(route);
-        routes.add(route);
-        ResultRsp<SbiNeStaticRoute> result = roa.queryRoutes("123", routes);
-        assertEquals(200, result.getHttpCode());
     }
 
     @Test(expected = ServiceException.class)
@@ -305,20 +263,24 @@ public class StaticRouteROAResourceTest {
         SbiNeStaticRoute route = new SbiNeStaticRoute();
         route.setUuid("123");
         route.setEnableDhcp("true");
-        route.setDestIp("10.20.10.30");
-        route.setNextHop("123");
+        Ip ip = new Ip();
+        ip.setIpv4("10.20.10.30");
+        ip.setIpMask("24");
+        route.setDestIp(JsonUtil.toJson(ip));
+        route.setNextHop(JsonUtil.toJson(ip));
         route.setOutInterface("123");
         route.setDeviceId("111");
-        Ip ip = new Ip();
         ip.setTypeV4(true);
         ip.setIpMask("24");
         route.setDestIpData(ip);
         route.setNextHopData(ip);
-        route.setExternalId("123");
+        route.setExternalId("8206aae22e294b19b08032e1c38b244f");
         List<SbiNeStaticRoute> routes = new ArrayList<>();
         routes.add(route);
         ResultRsp<SbiNeStaticRoute> result = roa.createRoute("123", routes);
+
         assertEquals(200, result.getHttpCode());
+        assertEquals("8206aae22e294b19b08032e1c38b244f", result.getSuccessed().get(0).getExternalId());
     }
 
     @Test
@@ -376,7 +338,7 @@ public class StaticRouteROAResourceTest {
     }
 
     @Test
-    public void testCreateRoutesInvalidjsonbody() throws ServiceException, HttpException {
+    public void testCreateRoutesFailedData() throws ServiceException, HttpException {
 
         new MockUp<ValidationUtil>() {
 
@@ -404,23 +366,18 @@ public class StaticRouteROAResourceTest {
             public HTTPReturnMessage sendPutMsg(String url, String body, String ctrlUuid) throws ServiceException {
 
                 HTTPReturnMessage msg = new HTTPReturnMessage();
-                msg.setBody("invalid");
-                msg.setStatus(200);
+                msg.setBody(queryResJson);
+                msg.setStatus(500);
                 return msg;
             }
         };
 
-        SbiNeStaticRoute route = new SbiNeStaticRoute();
-        route.setUuid("123");
-        route.setEnableDhcp("true");
-        route.setDestIp("10.20.10.30");
-        route.setNextHop("123");
-        route.setOutInterface("123");
-        route.setDeviceId("111");
+        route.setUuid("8206aae22e294b19b08032e1c38b244f");
         List<SbiNeStaticRoute> routes = new ArrayList<>();
         routes.add(route);
         ResultRsp<SbiNeStaticRoute> result = roa.createRoute("123", routes);
         assertEquals(200, result.getHttpCode());
+        assertEquals("8206aae22e294b19b08032e1c38b244f", result.getFail().get(0).getData().getExternalId());
     }
 
     @Test(expected = ServiceException.class)
@@ -487,19 +444,7 @@ public class StaticRouteROAResourceTest {
             }
         };
 
-        List<String> routes = new ArrayList<>();
-        routes.add("1");
         List<SbiNeStaticRoute> routeList = new ArrayList<SbiNeStaticRoute>();
-        SbiNeStaticRoute route = new SbiNeStaticRoute();
-        route.setUuid("12345");
-
-        Ip ip = new Ip();
-        ip.setTypeV4(true);
-        ip.setIpMask("24");
-        route.setDestIpData(ip);
-        route.setNextHopData(ip);
-        route.setExternalId("123");
-
         routeList.add(route);
         ResultRsp<String> result = roa.deleteRoute("123", "111", routeList);
         assertEquals(200, result.getHttpCode());
@@ -528,9 +473,6 @@ public class StaticRouteROAResourceTest {
             }
         };
 
-        List<String> routes = new ArrayList<>();
-        routes.add("1");
-        List<SbiNeStaticRoute> routeList = new ArrayList<SbiNeStaticRoute>();
         SbiNeStaticRoute route = new SbiNeStaticRoute();
         route.setUuid("12345");
 
@@ -540,7 +482,7 @@ public class StaticRouteROAResourceTest {
         route.setDestIpData(ip);
         route.setNextHopData(ip);
         route.setExternalId("123");
-
+        List<SbiNeStaticRoute> routeList = new ArrayList<SbiNeStaticRoute>();
         routeList.add(route);
         ResultRsp<String> result = roa.deleteRoute("123", "111", routeList);
         assertEquals("overlayvpn.operation.failed", result.getErrorCode());
@@ -569,8 +511,6 @@ public class StaticRouteROAResourceTest {
             }
         };
 
-        List<String> routes = new ArrayList<>();
-        routes.add("1");
         List<SbiNeStaticRoute> routeList = new ArrayList<SbiNeStaticRoute>();
         SbiNeStaticRoute route = new SbiNeStaticRoute();
         route.setUuid("12345");
@@ -636,26 +576,12 @@ public class StaticRouteROAResourceTest {
             }
         };
 
-        SbiNeStaticRoute route = new SbiNeStaticRoute();
-        route.setUuid("123");
-        route.setEnableDhcp("true");
-        route.setDestIp("10.20.10.30");
-        route.setNextHop("123");
-        route.setOutInterface("123");
-        route.setDeviceId("111");
-        Ip ip = new Ip();
-        ip.setTypeV4(true);
-        ip.setIpMask("24");
-        route.setDestIpData(ip);
-        route.setNextHopData(ip);
-        route.setExternalId("123");
-
         List<SbiNeStaticRoute> routes = new ArrayList<>();
         routes.add(route);
         ResultRsp<SbiNeStaticRoute> result = roa.updateRoute("123", routes);
 
         assertEquals(200, result.getHttpCode());
-        assertEquals(0, result.getSuccessed().size());
+        assertEquals("111", result.getSuccessed().get(0).getDeviceId());
 
     }
 
@@ -719,4 +645,32 @@ public class StaticRouteROAResourceTest {
         assertEquals("overlayvpn.operation.failed", result.getErrorCode());
     }
 
+    @Test
+    public void testUpdateRoutesFailedData() throws ServiceException, HttpException {
+
+        new MockUp<ValidationUtil>() {
+
+            @Mock
+            public void validateModel(Object obj) throws ServiceException {
+
+            }
+        };
+
+        new MockUp<OverlayVpnDriverProxy>() {
+
+            @Mock
+            public HTTPReturnMessage sendPutMsg(String url, String body, String ctrlUuid) throws ServiceException {
+
+                HTTPReturnMessage msg = new HTTPReturnMessage();
+                msg.setBody(queryResJson);
+                msg.setStatus(500);
+                return msg;
+            }
+        };
+
+        List<SbiNeStaticRoute> routes = new ArrayList<>();
+        routes.add(route);
+        ResultRsp<SbiNeStaticRoute> result = roa.updateRoute("123", routes);
+        assertEquals(200, result.getHttpCode());
+    }
 }
