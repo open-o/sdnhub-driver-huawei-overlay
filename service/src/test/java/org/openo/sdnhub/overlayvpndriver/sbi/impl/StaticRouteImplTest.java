@@ -37,8 +37,8 @@ public class StaticRouteImplTest {
 
     String queryResJson =
             "{\"errcode\":\"0\",\"errmsg\":null,\"pageIndex\":0,\"pageSize\":0,\"totalRecords\":0,"
-            + "\"data\":{\"ipv4\":\"192.168.1.2\",\"ipv6\":\"\",\"ipMask\":\"\","
-            + "\"prefixLength\":\"\",\"id\":\"\"},\"success\":[],\"fail\":[],\"sucess\":true}";
+                    + "\"data\":{\"ipv4\":\"192.168.1.2\",\"ipv6\":\"\",\"ipMask\":\"\","
+                    + "\"prefixLength\":\"\",\"id\":\"\"},\"success\":[],\"fail\":[],\"sucess\":true}";
 
     @Test
     public void queryRouteByDevice() throws ServiceException {
@@ -73,7 +73,7 @@ public class StaticRouteImplTest {
 
     }
 
-    @Test(expected = ServiceException.class)
+    @Test
     public void configStaticRoute() throws ServiceException {
 
         new MockUp<OverlayVpnDriverProxy>() {
@@ -102,7 +102,9 @@ public class StaticRouteImplTest {
         list.add(route);
         String ctrlUuid = "123";
         String deviceId = "111";
-        impl.configStaticRoute(ctrlUuid, deviceId, list, true);
+        ResultRsp<List<ControllerNbiStaticRoute>> response = impl.configStaticRoute(ctrlUuid, deviceId, list, true);
+        assertTrue("overlay.vpn.apater.router.response.fail".equals(response.getErrorCode()));
+
     }
 
     @Test(expected = ServiceException.class)

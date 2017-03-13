@@ -197,7 +197,7 @@ public class PolicyRouteImplTest {
                 ConfigCommonResult configCommonResult = new ConfigCommonResult();
                 configCommonResultList.add(configCommonResult);
                 acDelResponse.setSuccess(configCommonResultList);
-                acDelResponse.setErrocode("0");
+                acDelResponse.setErrcode("0");
                 acDelResponse.setErrmsg("ExternalId1111");
                 msg.setBody(JsonUtil.toJson(acDelResponse));
 

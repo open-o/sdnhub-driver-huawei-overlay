@@ -32,7 +32,7 @@ import org.openo.sdnhub.overlayvpndriver.common.consts.DriverErrorCode;
  */
 public class ACDelResponse {
 
-    private String errocode;
+    private String errcode;
 
     private String errmsg;
 
@@ -40,12 +40,12 @@ public class ACDelResponse {
 
     private List<DataDto> fail;
 
-    public String getErrocode() {
-        return errocode;
+    public String getErrcode() {
+        return errcode;
     }
 
-    public void setErrocode(String errocode) {
-        this.errocode = errocode;
+    public void setErrcode(String errcode) {
+        this.errcode = errcode;
     }
 
     public String getErrmsg() {
@@ -73,7 +73,7 @@ public class ACDelResponse {
     }
 
     public boolean isSucess() {
-        return DriverErrorCode.SUCCESS.equalsIgnoreCase(errocode);
+        return DriverErrorCode.SUCCESS.equalsIgnoreCase(errcode);
     }
 
     public String getAllErrmsg() {

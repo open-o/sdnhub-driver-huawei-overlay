@@ -105,7 +105,7 @@ public class NqaConfigUtilTest {
         ACDelResponse acresponse = new ACDelResponse();
         HTTPReturnMessage msg = new HTTPReturnMessage();
         acresponse.setErrmsg("ERROR");
-        acresponse.setErrocode("01");
+        acresponse.setErrcode("01");
         msg.setBody(JsonUtil.toJson(acresponse));
         msg.setStatus(200);
 
@@ -121,7 +121,7 @@ public class NqaConfigUtilTest {
         ACDelResponse acresponse = new ACDelResponse();
         HTTPReturnMessage msg = new HTTPReturnMessage();
         acresponse.setErrmsg("ERROR");
-        acresponse.setErrocode("0");
+        acresponse.setErrcode("0");
         msg.setBody(JsonUtil.toJson(acresponse));
         msg.setStatus(200);
 
@@ -137,7 +137,7 @@ public class NqaConfigUtilTest {
         ACDelResponse acresponse = new ACDelResponse();
         HTTPReturnMessage msg = new HTTPReturnMessage();
         acresponse.setErrmsg("ERROR");
-        acresponse.setErrocode("0");
+        acresponse.setErrcode("0");
         msg.setBody(JsonUtil.toJson(acresponse));
         msg.setStatus(500);
 
@@ -153,7 +153,7 @@ public class NqaConfigUtilTest {
         ACDelResponse acresponse = new ACDelResponse();
         HTTPReturnMessage msg = new HTTPReturnMessage();
         acresponse.setErrmsg("ERROR");
-        acresponse.setErrocode("0");
+        acresponse.setErrcode("0");
         msg.setStatus(200);
 
         String actionDesc = "actionDesc";

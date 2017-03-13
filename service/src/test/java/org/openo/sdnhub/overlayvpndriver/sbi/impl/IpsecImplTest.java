@@ -181,7 +181,7 @@ public class IpsecImplTest {
                 httpReturnMessage.setStatus(200);
 
                 ACDelResponse obj = new ACDelResponse();
-                obj.setErrocode("0");
+                obj.setErrcode("0");
                 String retBody = JsonUtil.toJson(obj);
                 httpReturnMessage.setBody(retBody);
                 return httpReturnMessage;
@@ -284,7 +284,7 @@ public class IpsecImplTest {
                 httpReturnMessage.setStatus(200);
 
                 ACDelResponse obj = new ACDelResponse();
-                obj.setErrocode("0");
+                obj.setErrcode("0");
                 String retBody = JsonUtil.toJson(obj);
                 httpReturnMessage.setBody(retBody);
                 return httpReturnMessage;
@@ -388,7 +388,7 @@ public class IpsecImplTest {
                 httpReturnMessage.setStatus(200);
 
                 ACDelResponse obj = new ACDelResponse();
-                obj.setErrocode("0");
+                obj.setErrcode("0");
                 String retBody = JsonUtil.toJson(obj);
                 httpReturnMessage.setBody(retBody);
                 return httpReturnMessage;
@@ -492,7 +492,7 @@ public class IpsecImplTest {
                 httpReturnMessage.setStatus(200);
 
                 ACDelResponse obj = new ACDelResponse();
-                obj.setErrocode("0");
+                obj.setErrcode("0");
                 String retBody = JsonUtil.toJson(obj);
                 httpReturnMessage.setBody(retBody);
                 return httpReturnMessage;
@@ -596,7 +596,7 @@ public class IpsecImplTest {
                 httpReturnMessage.setStatus(200);
 
                 ACDelResponse obj = new ACDelResponse();
-                obj.setErrocode("0");
+                obj.setErrcode("0");
                 String retBody = JsonUtil.toJson(obj);
                 httpReturnMessage.setBody(retBody);
                 return httpReturnMessage;
@@ -700,7 +700,7 @@ public class IpsecImplTest {
                 httpReturnMessage.setStatus(200);
 
                 ACDelResponse obj = new ACDelResponse();
-                obj.setErrocode("0");
+                obj.setErrcode("0");
                 String retBody = JsonUtil.toJson(obj);
                 httpReturnMessage.setBody(retBody);
                 return httpReturnMessage;
@@ -803,7 +803,7 @@ public class IpsecImplTest {
                 httpReturnMessage.setStatus(200);
 
                 ACDelResponse obj = new ACDelResponse();
-                obj.setErrocode("0");
+                obj.setErrcode("0");
                 String retBody = JsonUtil.toJson(obj);
                 httpReturnMessage.setBody(retBody);
                 return httpReturnMessage;
@@ -907,7 +907,7 @@ public class IpsecImplTest {
                 httpReturnMessage.setStatus(200);
 
                 ACDelResponse obj = new ACDelResponse();
-                obj.setErrocode("0");
+                obj.setErrcode("0");
                 String retBody = JsonUtil.toJson(obj);
                 httpReturnMessage.setBody(retBody);
                 return httpReturnMessage;
@@ -1396,7 +1396,7 @@ public class IpsecImplTest {
                 HTTPReturnMessage httpReturnMessage = new HTTPReturnMessage();
                 httpReturnMessage.setStatus(200);
                 ACDelResponse obj = new ACDelResponse();
-                obj.setErrocode("0");
+                obj.setErrcode("0");
                 String retBody = JsonUtil.toJson(obj);
                 httpReturnMessage.setBody(retBody);
                 return httpReturnMessage;
