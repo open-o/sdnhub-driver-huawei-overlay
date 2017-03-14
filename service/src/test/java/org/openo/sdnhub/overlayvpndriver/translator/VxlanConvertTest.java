@@ -18,6 +18,10 @@ package org.openo.sdnhub.overlayvpndriver.translator;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import mockit.Mock;
 import mockit.MockUp;
@@ -31,10 +35,6 @@ import org.openo.sdnhub.overlayvpndriver.service.model.SbiNeVxlanInterface;
 import org.openo.sdnhub.overlayvpndriver.service.model.SbiNeVxlanTunnel;
 import org.openo.sdno.overlayvpn.util.check.ValidationUtil;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 public class VxlanConvertTest {
 
@@ -219,7 +219,7 @@ public class VxlanConvertTest {
         assertEquals("1.2.2.3", convertVxlanInsToNetVxlanDeviceModel.get("546757").get(0).getLocalAddress());
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void testCheckInputCreateVxlan_EmptyInterfaceList() throws ServiceException {
 
         new MockUp<ValidationUtil>() {
@@ -240,7 +240,8 @@ public class VxlanConvertTest {
         vxLanInstance.getKeepAlive();
         vxLanInstance.getVni();
 
-        VxlanConvert.checkInputCreateVxlan(list);
+        List<SbiNeVxlanInstance> response = VxlanConvert.checkInputCreateVxlan(list);
+        assertEquals("1", response.get(0).getVni());
     }
 
     @Test(expected = Exception.class)

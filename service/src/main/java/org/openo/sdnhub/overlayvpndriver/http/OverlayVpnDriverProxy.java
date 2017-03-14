@@ -230,7 +230,8 @@ public class OverlayVpnDriverProxy {
             acSSOLogin = OverlayVpnDriverSsoProxy.getInstance(controllerIp, controllerPort, userName, pwd);
 
         } catch(ServiceException e) {
-            LOGGER.error("controller comm parameters are not exist, uuid: " + ctlrUuid);
+            LOGGER.error("controller comm parameters are not exist, uuid: " + ctlrUuid
+                    + "\n exception : " + e);
         }
 
         return acSSOLogin;
@@ -241,11 +242,11 @@ public class OverlayVpnDriverProxy {
     }
 
     private boolean isLogoutResponse(HTTPReturnMessage httpRspMsg) {
-        return (null != httpRspMsg.getBody()) && (httpRspMsg.getBody().indexOf(SSO_LOGOUT) > 0);
+        return (null != httpRspMsg.getBody()) && (httpRspMsg.getBody().contains(SSO_LOGOUT));
     }
 
     private boolean isRedirectResponse(HTTPReturnMessage httpRspMsg) {
-        return (null != httpRspMsg.getBody()) && (httpRspMsg.getBody().indexOf(SSO_REDIRECT) > 0);
+        return (null != httpRspMsg.getBody()) && (httpRspMsg.getBody().contains(SSO_REDIRECT));
     }
 
     private Map<String, String> readIpPortMapFromUrl(String url) {

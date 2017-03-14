@@ -20,6 +20,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 import mockit.Mock;
 import mockit.MockUp;
 
@@ -37,11 +43,6 @@ import org.openo.sdno.framework.container.util.JsonUtil;
 import org.openo.sdno.overlayvpn.result.ResultRsp;
 import org.openo.sdno.util.http.HTTPReturnMessage;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 public class VxLanSvcImplTest {
 
@@ -348,6 +349,37 @@ public class VxLanSvcImplTest {
                         new OverlayVpnDriverResponse<List<VxLanDeviceModel>>();
                 response.setData(vxLanDeviceModelList);
                 response.setErrcode("0");
+                msg.setBody(JsonUtil.toJson(response));
+                return msg;
+            }
+        };
+
+        String str = new String("abc");
+        str.isEmpty();
+        List<String> idList = new LinkedList<>();
+        idList.add(str);
+        ResultRsp<ACDelResponse> response = VxLanSvcImpl.deleteVxlanByDevice("12543", "24656", idList);
+        assertTrue("overlayvpn.operation.success".equals(response.getErrorCode()));
+    }
+
+    @Test
+    public void testDeleteVxlanByDeviceFailure() throws ServiceException {
+
+        new MockUp<OverlayVpnDriverProxy>() {
+
+            @Mock
+            public HTTPReturnMessage sendDeleteMsg(String url, String body, String ctrlUuid) throws ServiceException {
+
+                HTTPReturnMessage msg = new HTTPReturnMessage();
+                msg.setStatus(200);
+                List<VxLanDeviceModel> vxLanDeviceModelList = new ArrayList<VxLanDeviceModel>();
+                VxLanDeviceModel vxLanDeviceModel = new VxLanDeviceModel();
+                vxLanDeviceModel.setUuid("uuid");
+                vxLanDeviceModelList.add(vxLanDeviceModel);
+                OverlayVpnDriverResponse<List<VxLanDeviceModel>> response =
+                        new OverlayVpnDriverResponse<List<VxLanDeviceModel>>();
+                response.setData(vxLanDeviceModelList);
+                response.setErrcode("invalid");
                 msg.setBody(JsonUtil.toJson(response));
                 return msg;
             }
@@ -890,6 +922,7 @@ public class VxLanSvcImplTest {
 
         VxLanSvcImpl.mergeDelVxlanDeviceModel(vldm, vldm2);
     }
+
     @Test
     public void testMergeVxlanDeviceModels() {
 
