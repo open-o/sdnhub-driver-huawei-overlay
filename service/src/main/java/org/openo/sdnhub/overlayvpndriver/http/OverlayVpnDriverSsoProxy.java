@@ -34,7 +34,6 @@ import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
 import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -48,6 +47,7 @@ import org.apache.http.conn.ssl.AllowAllHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.X509HostnameVerifier;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.client.LaxRedirectStrategy;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
@@ -81,7 +81,7 @@ public class OverlayVpnDriverSsoProxy {
 
     private static final int FAILED = -1;
 
-    private HttpClient httpClient;
+    private CloseableHttpClient httpClient;
 
     private String acIp;
 
@@ -420,5 +420,20 @@ public class OverlayVpnDriverSsoProxy {
     @Override
     public String toString() {
         return "OverlayVpnDriverSsoProxy [acIp=" + acIp + ", acPort=" + acPort + ", acLoginName=" + acLoginName + "]";
+    }
+
+    /**
+     * Logs out and closes the session established in controller
+     *
+     * @since SDNO 0.5
+     */
+    public void closeHttpClient() {
+        if(this.httpClient != null) {
+            try {
+                this.httpClient.close();
+            } catch(IOException e) {
+                LOGGER.error("I/O exception closing httpclient", e);
+            }
+        }
     }
 }

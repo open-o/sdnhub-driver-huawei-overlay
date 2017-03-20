@@ -82,14 +82,19 @@ public class OverlayVpnDriverProxy {
             return new HTTPReturnMessage();
         }
 
-        HTTPReturnMessage get = acSSOLogin.get(url);
-        if(isNeedRelogin(get)) {
-            LOGGER.info("Not Login, try to login.");
-            if(acSSOLogin.login(SSO_LOGIN)) {
-                get = acSSOLogin.get(url);
-            } else {
-                get.setStatus(HttpCode.ERR_FAILED);
+        HTTPReturnMessage get = null;
+        try {
+            get = acSSOLogin.get(url);
+            if(isNeedRelogin(get)) {
+                LOGGER.info("Not Login, try to login.");
+                if(acSSOLogin.login(SSO_LOGIN)) {
+                    get = acSSOLogin.get(url);
+                } else {
+                    get.setStatus(HttpCode.ERR_FAILED);
+                }
             }
+        } finally {
+            acSSOLogin.closeHttpClient();
         }
 
         return get;
@@ -114,14 +119,19 @@ public class OverlayVpnDriverProxy {
             return new HTTPReturnMessage();
         }
 
-        HTTPReturnMessage post = acSSOLogin.post(url, body);
-        if(isNeedRelogin(post)) {
-            LOGGER.info("Not Login, try to login.");
-            if(acSSOLogin.login(SSO_LOGIN)) {
-                post = acSSOLogin.post(url, body);
-            } else {
-                post.setStatus(HttpCode.ERR_FAILED);
+        HTTPReturnMessage post = null;
+        try {
+            post = acSSOLogin.post(url, body);
+            if(isNeedRelogin(post)) {
+                LOGGER.info("Not Login, try to login.");
+                if(acSSOLogin.login(SSO_LOGIN)) {
+                    post = acSSOLogin.post(url, body);
+                } else {
+                    post.setStatus(HttpCode.ERR_FAILED);
+                }
             }
+        } finally {
+            acSSOLogin.closeHttpClient();
         }
         return post;
     }
@@ -145,14 +155,19 @@ public class OverlayVpnDriverProxy {
             return new HTTPReturnMessage();
         }
 
-        HTTPReturnMessage put = acSSOLogin.put(url, body);
-        if(isNeedRelogin(put)) {
-            LOGGER.info("Not Login, try to login.");
-            if(acSSOLogin.login(SSO_LOGIN)) {
-                put = acSSOLogin.put(url, body);
-            } else {
-                put.setStatus(HttpCode.ERR_FAILED);
+        HTTPReturnMessage put = null;
+        try {
+            put = acSSOLogin.put(url, body);
+            if(isNeedRelogin(put)) {
+                LOGGER.info("Not Login, try to login.");
+                if(acSSOLogin.login(SSO_LOGIN)) {
+                    put = acSSOLogin.put(url, body);
+                } else {
+                    put.setStatus(HttpCode.ERR_FAILED);
+                }
             }
+        } finally {
+            acSSOLogin.closeHttpClient();
         }
 
         return put;
@@ -177,18 +192,24 @@ public class OverlayVpnDriverProxy {
             return new HTTPReturnMessage();
         }
 
-        HTTPReturnMessage delete = acSSOLogin.delete(url, body);
-        if(isNeedRelogin(delete)) {
-            LOGGER.info("Not Login, try to login.");
-            if(acSSOLogin.login(SSO_LOGIN)) {
-                delete = acSSOLogin.delete(url, body);
-            } else {
-                delete.setStatus(HttpCode.ERR_FAILED);
+        HTTPReturnMessage delete = null;
+        try {
+            delete = acSSOLogin.delete(url, body);
+            if(isNeedRelogin(delete)) {
+                LOGGER.info("Not Login, try to login.");
+                if(acSSOLogin.login(SSO_LOGIN)) {
+                    delete = acSSOLogin.delete(url, body);
+                } else {
+                    delete.setStatus(HttpCode.ERR_FAILED);
+                }
             }
+        } finally {
+            acSSOLogin.closeHttpClient();
         }
-
         return delete;
     }
+
+
 
     /*
      * private OverlayVpnDriverSsoProxy createACSSOProxy(String ctlrUuid) {
