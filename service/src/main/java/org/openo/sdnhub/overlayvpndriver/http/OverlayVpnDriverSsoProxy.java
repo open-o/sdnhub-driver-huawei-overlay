@@ -91,9 +91,6 @@ public class OverlayVpnDriverSsoProxy {
 
     private String acLoginPassword = null;
 
-    private static Map<String, OverlayVpnDriverSsoProxy> instanceCache =
-            new HashMap<String, OverlayVpnDriverSsoProxy>();
-
     private OverlayVpnDriverSsoProxy(final String acIp, final String acPort, final String acLoginName,
             String acLoginPassword) {
         this.acIp = acIp;
@@ -144,17 +141,7 @@ public class OverlayVpnDriverSsoProxy {
      */
     public static OverlayVpnDriverSsoProxy getInstance(final String acIp, final String acPort, final String acLoginName,
             String acLoginPassword) {
-        synchronized(instanceCache) {
-            String acSsoProxyUniqueId = acIp + acPort + acLoginName + acLoginPassword;
-            if(instanceCache.get(acSsoProxyUniqueId) != null) {
-                return instanceCache.get(acSsoProxyUniqueId);
-            } else {
-                OverlayVpnDriverSsoProxy proxy =
-                        new OverlayVpnDriverSsoProxy(acIp, acPort, acLoginName, acLoginPassword);
-                instanceCache.put(acSsoProxyUniqueId, proxy);
-                return proxy;
-            }
-        }
+        return new OverlayVpnDriverSsoProxy(acIp, acPort, acLoginName, acLoginPassword);
     }
 
     /**
