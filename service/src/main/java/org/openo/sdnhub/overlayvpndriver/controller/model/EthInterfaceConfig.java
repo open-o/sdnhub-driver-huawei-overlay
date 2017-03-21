@@ -36,12 +36,12 @@ public class EthInterfaceConfig {
     @AString(require = true)
     private String name;
 
-    private boolean enable;
+    private boolean enable = true;
 
     private boolean autoNegotiationEnable;
 
     @AString(require = true, scope = "'1','2'")
-    private String ifAttr;
+    private String ifAttr = "2";
 
     private Integer defaultVlan;
 
@@ -50,13 +50,13 @@ public class EthInterfaceConfig {
     private String description;
 
     @AString(require = true, scope = "'auto','half','full'")
-    private String duplex;
+    private String duplex = "full";
 
     @AString(require = true, scope = "'0','1','2'")
-    private String nacType;
+    private String nacType = "0";
 
     @AString(require = true, scope = "'auto','10','100','1000'")
-    private String speed;
+    private String speed = "1000";
 
     public String getId() {
         return id;
