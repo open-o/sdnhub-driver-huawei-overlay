@@ -39,9 +39,11 @@ public class ACNetwork {
     @AString(require = true, min = 1, max = 128)
     private String use;
 
-    private int vni;
+    @JsonProperty(value = "vni")
+    private Integer vni;
 
-    private long vlanId;
+    @JsonProperty(value= "vlanId")
+    private Long vlanId;
 
     @AString(require = false, min = 1, max = 128)
     private String ipAddress;
@@ -159,19 +161,19 @@ public class ACNetwork {
         this.use = use;
     }
 
-    public long getVlanId() {
+    public Long getVlanId() {
         return vlanId;
     }
 
-    public void setVlanId(long vlanId) {
+    public void setVlanId(Long vlanId) {
         this.vlanId = vlanId;
     }
 
-    public int getVni() {
+    public Integer getVni() {
         return vni;
     }
 
-    public void setVni(int vni) {
+    public void setVni(Integer vni) {
         this.vni = vni;
     }
 
