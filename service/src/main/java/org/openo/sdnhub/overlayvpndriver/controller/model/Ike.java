@@ -42,6 +42,21 @@ public class Ike {
 
     private String version;
 
+    private String dh;
+
+    public Ike() {
+        super();
+    }
+
+    public Ike(String authAlgorithm, String encryptionAlgorithm, String version, String peerAddress,
+            String preSharedKey) {
+        super();
+        this.setAuthAlgorithm(authAlgorithm);
+        this.setEncryptionAlgorithm(encryptionAlgorithm);
+        this.setVersion(version);
+        this.setPreSharedKey(preSharedKey);
+    }
+
     public String getPreSharedKey() {
         return preSharedKey;
     }
@@ -104,6 +119,15 @@ public class Ike {
 
     public void setVersion(String version) {
         this.version = version;
+    }
+
+    public String getDh() {
+        return dh;
+    }
+
+
+    public void setDh(String dh) {
+        this.dh = dh;
     }
 
     @Override

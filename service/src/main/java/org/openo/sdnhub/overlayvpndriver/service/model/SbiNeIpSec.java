@@ -18,6 +18,7 @@ package org.openo.sdnhub.overlayvpndriver.service.model;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.openo.sdno.framework.container.util.JsonUtil;
 import org.openo.sdno.overlayvpn.inventory.sdk.model.annotation.MOResType;
 import org.openo.sdno.overlayvpn.inventory.sdk.model.annotation.NONInvField;
 import org.openo.sdno.overlayvpn.verify.annotation.AIp;
@@ -27,13 +28,12 @@ import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 /**
- *
  * SBI NE IPsec class.<br>
  * <p>
  * </p>
  *
  * @author
- * @version     NFVO 0.5  Mar 2, 2017
+ * @version     SDNHUB 0.5  Mar 2, 2017
  */
 @MOResType(infoModelName = "ipsec_sbi_neipsec")
 public class SbiNeIpSec extends SbiIpSecNetModel {
@@ -406,6 +406,11 @@ public class SbiNeIpSec extends SbiIpSecNetModel {
         }
 
         return true;
+    }
+
+    public String buildSourceIp() {
+        Ip ip = JsonUtil.fromJson(sourceAddress, Ip.class);
+        return ip.getIpv4();
     }
 
     @Override

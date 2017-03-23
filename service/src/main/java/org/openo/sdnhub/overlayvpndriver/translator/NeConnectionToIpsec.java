@@ -223,24 +223,24 @@ public class NeConnectionToIpsec {
             LOGGER.error("decode psk failed :" + e);
         }
 
-        Ike ike = new Ike();
+        Ike ike = new Ike(ipSecaNeConnection.getIkePolicy().getAuthAlgorithm(),ipSecaNeConnection.getIkePolicy().getEncryptionAlgorithm(),
+        null, null, String.valueOf(psk));
 
         EncryptionUtil.clear(psk);
 
         if(StringUtils.isNotEmpty(ipSecaNeConnection.getIkePolicy().getIkeVersion())) {
             ike.setVersion(ipSecaNeConnection.getIkePolicy().getIkeVersion());
-        } else {
-            ike.setVersion(IKEVersion.V2.getName());
         }
 
-        if(ipSecaNeConnection.getIkePolicy().getAuthAlgorithm() != null) {
-            ike.setAuthAlgorithm(ipSecaNeConnection.getIkePolicy().getAuthAlgorithm());
+        if("false".equals(ipSecaNeConnection.getIsTemplateType())){
+            ike.setLocalAddress(ipSecaNeConnection.buildSourceIp());
+            Ip ip = JsonUtil.fromJson(ipSecaNeConnection.getPeerAddress(), Ip.class);
+            ike.setPeerAddress(ip.getIpv4());
         }
 
-        if(ipSecaNeConnection.getIkePolicy().getEncryptionAlgorithm() != null) {
-            ike.setAuthAlgorithm(ipSecaNeConnection.getIkePolicy().getEncryptionAlgorithm());
+        if(StringUtils.isNotEmpty(ipSecaNeConnection.getIkePolicy().getPfs())){
+            ike.setDh(ipSecaNeConnection.getIkePolicy().getPfs().toLowerCase());
         }
-
         return ike;
     }
 
