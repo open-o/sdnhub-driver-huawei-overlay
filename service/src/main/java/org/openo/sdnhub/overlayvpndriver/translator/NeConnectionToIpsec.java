@@ -265,7 +265,7 @@ public class NeConnectionToIpsec {
         {
             for(Ip peerLanIp : peerLanIps)
             {
-                RuleList rule = buildRule(ipSecNeConnection);
+                RuleList rule = new RuleList("permit");
                 rule.setSrcIp(sourceLanIp.getIpv4());
                 rule.setDesIp(peerLanIp.getIpv4());
 

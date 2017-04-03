@@ -40,6 +40,11 @@ public class RuleList {
         super();
     }
 
+    public RuleList(String policy) {
+        super();
+        this.setPolicy(policy);
+    }
+
     public RuleList(String policy, String srcIp, String srcNetMask, String desIp, String desNetMask) {
         super();
         this.setPolicy(policy);
