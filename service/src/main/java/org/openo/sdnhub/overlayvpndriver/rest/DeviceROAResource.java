@@ -36,6 +36,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import org.codehaus.jackson.type.TypeReference;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -162,7 +164,7 @@ public class DeviceROAResource {
     @Path("/devices")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ResultRsp<String> deleteDevices(@QueryParam(CommonConst.DEVICE_IDS_PATH_PARAM) List<String> deviceIds,
+    public ResultRsp<String> deleteDevices(@QueryParam(CommonConst.DEVICE_IDS_PATH_PARAM) String deviceIds,
                                            @HeaderParam(CommonConst.CTRL_HEADER_PARAM) String ctrlUuidParam)
             throws ServiceException {
 
@@ -173,13 +175,17 @@ public class DeviceROAResource {
             throw new ParameterServiceException(INVALID_CONTROLLER_UUID);
         }
 
-        if(CollectionUtils.isEmpty(deviceIds)) {
+        List<String> deviceIdList = JsonUtil.fromJson(deviceIds, new TypeReference<List<String>>()
+        {
+        });
+
+        if(CollectionUtils.isEmpty(deviceIdList)) {
             LOGGER.error("delete device , invalid deviceID.");
             SvcExcptUtil.throwBadRequestException("delete device , invalid deviceID.");
         }
 
-        LOGGER.debug("deviceIds:{}", deviceIds);
-        return deviceService.deleteDevice(ctrlUuid, deviceIds);
+        LOGGER.debug("deviceIdList:" + deviceIdList);
+        return deviceService.deleteDevice(ctrlUuid, deviceIdList);
     }
 
     /**

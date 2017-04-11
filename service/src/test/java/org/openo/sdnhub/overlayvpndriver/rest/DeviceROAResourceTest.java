@@ -353,8 +353,7 @@ public class DeviceROAResourceTest {
                 return msg;
             }
         };
-        List<String> idList = new ArrayList<>();
-        idList.add("12345");
+        String idList = "[123]";
         ResultRsp<String> resp = resource.deleteDevices(idList, CTRL_UUID);
         assertTrue("overlayvpn.operation.success".equals(resp.getErrorCode()));
     }
@@ -381,8 +380,8 @@ public class DeviceROAResourceTest {
                 return msg;
             }
         };
-        List<String> idList = new ArrayList<>();
-        idList.add("12345");
+
+        String idList = "[\"12345\", \"321\"]";
         ResultRsp<String> resp = resource.deleteDevices(idList, CTRL_UUID);
         assertEquals("overlayvpn.operation.fail", resp.getErrorCode());
     }
