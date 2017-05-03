@@ -16,10 +16,10 @@
 
 package org.openo.sdnhub.overlayvpndriver.controller.model;
 
+import java.util.List;
+
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
-
-import java.util.List;
 
 /**
  * IP-security connection information.<br>
@@ -45,7 +45,7 @@ public class IpsecConnection {
 
     private String routeInject;
 
-    @JsonProperty(value ="ipsec")
+    @JsonProperty(value = "ipsec")
     private IpSec ipSec;
 
     private Ike ike;
@@ -55,6 +55,8 @@ public class IpsecConnection {
     private String nqaState;
 
     private String qosPreClassify;
+
+    private String pfs;
 
     /**
      * Initialization with default values.
@@ -66,8 +68,7 @@ public class IpsecConnection {
     /**
      * Initialization with device-id.
      */
-    public IpsecConnection(String deviceId)
-    {
+    public IpsecConnection(String deviceId) {
         super();
         this.setDeviceId(deviceId);
     }
@@ -75,144 +76,126 @@ public class IpsecConnection {
     /**
      * @return Returns the ip-sec id.
      */
-    public String getIpsecId()
-    {
+    public String getIpsecId() {
         return ipsecId;
     }
 
     /**
      * @param ipsecId ip-sec id.
      */
-    public void setIpsecId(String ipsecId)
-    {
+    public void setIpsecId(String ipsecId) {
         this.ipsecId = ipsecId;
     }
 
     /**
      * @return Returns the device id.
      */
-    public String getDeviceId()
-    {
+    public String getDeviceId() {
         return deviceId;
     }
 
     /**
      * @param deviceId device id.
      */
-    public void setDeviceId(String deviceId)
-    {
+    public void setDeviceId(String deviceId) {
         this.deviceId = deviceId;
     }
 
     /**
      * @return Returns the sequence number.
      */
-    public int getSeqNumber()
-    {
+    public int getSeqNumber() {
         return seqNumber;
     }
 
     /**
      * @param seqNumber sequence number.
      */
-    public void setSeqNumber(int seqNumber)
-    {
+    public void setSeqNumber(int seqNumber) {
         this.seqNumber = seqNumber;
     }
 
     /**
      * @return Returns the delete mode.
      */
-    public boolean isDeleteMode()
-    {
+    public boolean isDeleteMode() {
         return deleteMode;
     }
 
     /**
      * @param deleteMode delete mode.
      */
-    public void setDeleteMode(boolean deleteMode)
-    {
+    public void setDeleteMode(boolean deleteMode) {
         this.deleteMode = deleteMode;
     }
 
     /**
      * @return Returns the type of mode.
      */
-    public String getType()
-    {
+    public String getType() {
         return type;
     }
 
     /**
      * @param type type of mode.
      */
-    public void setType(String type)
-    {
+    public void setType(String type) {
         this.type = type;
     }
 
     /**
      * @return Returns the rule list.
      */
-    public List<RuleList> getRuleList()
-    {
+    public List<RuleList> getRuleList() {
         return ruleList;
     }
 
     /**
      * @param ruleList rule list.
      */
-    public void setRuleList(List<RuleList> ruleList)
-    {
+    public void setRuleList(List<RuleList> ruleList) {
         this.ruleList = ruleList;
     }
 
     /**
      * @return Returns the route injection.
      */
-    public String getRouteInject()
-    {
+    public String getRouteInject() {
         return routeInject;
     }
 
     /**
      * @param routeInject route injection.
      */
-    public void setRouteInject(String routeInject)
-    {
+    public void setRouteInject(String routeInject) {
         this.routeInject = routeInject;
     }
 
     /**
      * @return Returns the ip-sec.
      */
-    public IpSec getIpSec()
-    {
+    public IpSec getIpSec() {
         return ipSec;
     }
 
     /**
      * @param ipSec ip-sec.
      */
-    public void setIpSec(IpSec ipSec)
-    {
+    public void setIpSec(IpSec ipSec) {
         this.ipSec = ipSec;
     }
 
     /**
      * @return Returns Ike consultation.
      */
-    public Ike getIke()
-    {
+    public Ike getIke() {
         return ike;
     }
 
     /**
      * @param ike Ike consultation.
      */
-    public void setIke(Ike ike)
-    {
+    public void setIke(Ike ike) {
         this.ike = ike;
     }
 
@@ -258,11 +241,19 @@ public class IpsecConnection {
         this.qosPreClassify = qosPreClassify;
     }
 
+    public String getPfs() {
+        return pfs;
+    }
+
+    public void setPfs(String pfs) {
+        this.pfs = pfs;
+    }
+
     @Override
     public String toString() {
-        return "ClassPojo [ipsecId = " + ipsecId + ", device-id = " + deviceId + ",nqaState = " + nqaState +
-                ", ipsec = " + ipSec + ", ruleList = " + ruleList + ", route inject = " + routeInject +
-                ", ike = " + ike + ", type = " + type + ", nqaId = " + nqaId + ", seqNumber = " + seqNumber +
-                ", delete mode = " + deleteMode + ", qosPreClassify = " + qosPreClassify + "]";
+        return "ClassPojo [ipsecId = " + ipsecId + ", device-id = " + deviceId + ",nqaState = " + nqaState
+                + ", ipsec = " + ipSec + ", ruleList = " + ruleList + ", route inject = " + routeInject + ", ike = "
+                + ike + ", type = " + type + ", nqaId = " + nqaId + ", seqNumber = " + seqNumber + ", delete mode = "
+                + deleteMode + ", qosPreClassify = " + qosPreClassify + "]";
     }
 }

@@ -26,17 +26,16 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.type.TypeReference;
-import org.openo.sdnhub.overlayvpndriver.common.consts.IKEVersion;
 import org.openo.sdnhub.overlayvpndriver.controller.model.Ike;
 import org.openo.sdnhub.overlayvpndriver.controller.model.IpSec;
 import org.openo.sdnhub.overlayvpndriver.controller.model.IpsecConnList;
 import org.openo.sdnhub.overlayvpndriver.controller.model.IpsecConnection;
 import org.openo.sdnhub.overlayvpndriver.controller.model.LocalId;
 import org.openo.sdnhub.overlayvpndriver.controller.model.RuleList;
+import org.openo.sdnhub.overlayvpndriver.service.model.Ip;
 import org.openo.sdnhub.overlayvpndriver.service.model.IpSecConnectionType;
 import org.openo.sdnhub.overlayvpndriver.service.model.NeRoleType;
 import org.openo.sdnhub.overlayvpndriver.service.model.SbiNeIpSec;
-import org.openo.sdnhub.overlayvpndriver.service.model.Ip;
 import org.openo.sdno.framework.container.util.JsonUtil;
 import org.openo.sdno.ssl.EncryptionUtil;
 import org.openo.sdno.util.ip.IpUtils;
@@ -59,8 +58,6 @@ public class NeConnectionToIpsec {
 
     private static final String FALSE = "false";
 
-    private static final int CONST_MASK_32 = 32;
-
     private NeConnectionToIpsec() {
     }
 
@@ -82,6 +79,7 @@ public class NeConnectionToIpsec {
             List<SbiNeIpSec> ipSecNeConnectionList = entry.getValue();
             List<SbiNeIpSec> workIpSecConnections =
                     new ArrayList<>(CollectionUtils.select(ipSecNeConnectionList, new Predicate() {
+
                         @Override
                         public boolean evaluate(Object arg0) {
                             return ((SbiNeIpSec)arg0).getWorkType().equals(IpSecConnectionType.WORK.getName());
@@ -110,8 +108,7 @@ public class NeConnectionToIpsec {
     }
 
     private static IpsecConnList convertWorkIpsecModel(List<SbiNeIpSec> workIpSecConnections) {
-        if(CollectionUtils.isEmpty(workIpSecConnections))
-        {
+        if(CollectionUtils.isEmpty(workIpSecConnections)) {
             return new IpsecConnList();
         }
 
@@ -121,43 +118,37 @@ public class NeConnectionToIpsec {
         ipsecModel.setUuid(workIpSecConnections.get(0).getExternalIpSecId());
         ipsecModel.setName(ipsecModel.getUuid().substring(0, 8));
 
-        List<IpsecConnection> connList= new ArrayList<>();
+        List<IpsecConnection> connList = new ArrayList<>();
 
-        for (SbiNeIpSec ipSecNeConnection : workIpSecConnections)
-        {
+        for(SbiNeIpSec ipSecNeConnection : workIpSecConnections) {
             IpsecConnection ipsecConnection = new IpsecConnection(ipSecNeConnection.getNeId());
 
             ipsecConnection.setSeqNumber(Integer.valueOf(ipSecNeConnection.getExternalId()));
             Ike ike = buildIke(ipSecNeConnection, ipSecNeConnection.getPeerAddress());
 
-
             IpSec ipSec = buildIpsec(ipSecNeConnection);
-            if(FALSE.equals(ipSecNeConnection.getIsTemplateType()))
-            {
+            if(FALSE.equals(ipSecNeConnection.getIsTemplateType())) {
                 ipsecConnection.setType(FALSE);
                 ipsecConnection.setRuleList(buildRuleList(ipSecNeConnection));
-            }
-            else
-            {
+            } else {
                 ipsecConnection.setType(TRUE);
             }
 
             ipsecConnection.setIke(ike);
             ipsecConnection.setIpSec(ipSec);
 
-            if((!StringUtils.isEmpty(ipSecNeConnection.getNqa())) && NeRoleType.LOCALCPE.getName()
-                    .equals(ipSecNeConnection.getLocalNeRole()))
-            {
+            if((!StringUtils.isEmpty(ipSecNeConnection.getNqa()))
+                    && NeRoleType.LOCALCPE.getName().equals(ipSecNeConnection.getLocalNeRole())) {
                 ipsecConnection.setNqaId(ipSecNeConnection.getNqa());
                 ipsecConnection.setNqaState("up");
             }
 
             ipsecConnection.setQosPreClassify(ipSecNeConnection.getQosPreClassify());
+            ipsecConnection.setPfs(convertPfs(ipSecNeConnection));
 
             connList.add(ipsecConnection);
 
-            if(TRUE.equals(ipSecNeConnection.getIsTemplateType()))
-            {
+            if(TRUE.equals(ipSecNeConnection.getIsTemplateType())) {
                 break;
             }
         }
@@ -173,46 +164,49 @@ public class NeConnectionToIpsec {
         ipsecModel.setUuid(projectIpSecConnections.get(0).getExternalIpSecId());
         ipsecModel.setName(ipsecModel.getUuid().substring(0, 8));
 
-        List<IpsecConnection> connList= new ArrayList<>();
+        List<IpsecConnection> connList = new ArrayList<>();
 
-        for (SbiNeIpSec ipSecNeConnection : projectIpSecConnections)
-        {
+        for(SbiNeIpSec ipSecNeConnection : projectIpSecConnections) {
             IpsecConnection ipsecConnection = new IpsecConnection(ipSecNeConnection.getNeId());
             ipsecConnection.setSeqNumber(Integer.valueOf(ipSecNeConnection.getExternalId()));
 
             Ike ike = buildIke(ipSecNeConnection, ipSecNeConnection.getPeerAddress());
 
-            LocalId localIdInfo = new LocalId("fqdn",ipSecNeConnection.getTenantName());
+            LocalId localIdInfo = new LocalId("fqdn", ipSecNeConnection.getTenantName());
             ike.setLocalId(localIdInfo);
 
             IpSec ipSec = buildIpsec(ipSecNeConnection);
 
-            if(FALSE.equals(ipSecNeConnection.getIsTemplateType()))
-            {
+            if(FALSE.equals(ipSecNeConnection.getIsTemplateType())) {
                 ipsecConnection.setType(FALSE);
                 ipsecConnection.setRuleList(buildRuleList(ipSecNeConnection));
-            }
-            else
-            {
+            } else {
                 ipsecConnection.setType(TRUE);
             }
 
             ipsecConnection.setIpSec(ipSec);
             ipsecConnection.setIke(ike);
 
-            if((!StringUtils.isEmpty(ipSecNeConnection.getNqa())) && NeRoleType.LOCALCPE.getName()
-                    .equals(ipSecNeConnection.getLocalNeRole()))
-            {
+            if((!StringUtils.isEmpty(ipSecNeConnection.getNqa()))
+                    && NeRoleType.LOCALCPE.getName().equals(ipSecNeConnection.getLocalNeRole())) {
                 ipsecConnection.setNqaId(ipSecNeConnection.getNqa());
                 ipsecConnection.setNqaState("down");
             }
 
             ipsecConnection.setQosPreClassify(ipSecNeConnection.getQosPreClassify());
+            ipsecConnection.setPfs(convertPfs(ipSecNeConnection));
+
             connList.add(ipsecConnection);
         }
 
         ipsecModel.setIpsecConnection(connList);
         return ipsecModel;
+    }
+
+    private static String convertPfs(SbiNeIpSec ipSecNeConnection) {
+        StringBuffer pfs = new StringBuffer();
+        pfs.append("dh-").append(ipSecNeConnection.getIpSecPolicy().getPfs().toLowerCase());
+        return pfs.toString();
     }
 
     private static Ike buildIke(final SbiNeIpSec ipSecaNeConnection, String peerIp) {
@@ -223,8 +217,8 @@ public class NeConnectionToIpsec {
             LOGGER.error("decode psk failed :" + e);
         }
 
-        Ike ike = new Ike(ipSecaNeConnection.getIkePolicy().getAuthAlgorithm(),ipSecaNeConnection.getIkePolicy().getEncryptionAlgorithm(),
-        null, null, String.valueOf(psk));
+        Ike ike = new Ike(ipSecaNeConnection.getIkePolicy().getAuthAlgorithm(),
+                ipSecaNeConnection.getIkePolicy().getEncryptionAlgorithm(), null, null, String.valueOf(psk));
 
         EncryptionUtil.clear(psk);
 
@@ -232,13 +226,13 @@ public class NeConnectionToIpsec {
             ike.setVersion(ipSecaNeConnection.getIkePolicy().getIkeVersion());
         }
 
-        if("false".equals(ipSecaNeConnection.getIsTemplateType())){
+        if("false".equals(ipSecaNeConnection.getIsTemplateType())) {
             ike.setLocalAddress(ipSecaNeConnection.buildSourceIp());
             Ip ip = JsonUtil.fromJson(ipSecaNeConnection.getPeerAddress(), Ip.class);
             ike.setPeerAddress(ip.getIpv4());
         }
 
-        if(StringUtils.isNotEmpty(ipSecaNeConnection.getIkePolicy().getPfs())){
+        if(StringUtils.isNotEmpty(ipSecaNeConnection.getIkePolicy().getPfs())) {
             ike.setDh(ipSecaNeConnection.getIkePolicy().getPfs().toLowerCase());
         }
         return ike;
@@ -248,23 +242,24 @@ public class NeConnectionToIpsec {
         IpSec ipsec = new IpSec();
 
         if(ipSecaNeConnection.getIpSecPolicy() != null
-            && ipSecaNeConnection.getIpSecPolicy().getAuthAlgorithm() != null) {
+                && ipSecaNeConnection.getIpSecPolicy().getAuthAlgorithm() != null) {
             ipsec.setEspAuthAlgorithm(ipSecaNeConnection.getIpSecPolicy().getAuthAlgorithm());
+        }
+        if(ipSecaNeConnection.getIpSecPolicy() != null) {
+            ipsec.setEspEncryptionAlgorithm(ipSecaNeConnection.getIpSecPolicy().getEncryptionAlgorithm());
         }
         return ipsec;
     }
 
-    private static List<RuleList> buildRuleList(final SbiNeIpSec ipSecNeConnection)
-    {
+    private static List<RuleList> buildRuleList(final SbiNeIpSec ipSecNeConnection) {
         List<RuleList> ruleList = new ArrayList<>();
 
-        List<Ip> sourceLanIps = JsonUtil.fromJson(ipSecNeConnection.getSourceLanCidrs(), new TypeReference<List<Ip>>(){});
-        List<Ip> peerLanIps = JsonUtil.fromJson(ipSecNeConnection.getPeerLanCidrs(), new TypeReference<List<Ip>>(){});
+        List<Ip> sourceLanIps =
+                JsonUtil.fromJson(ipSecNeConnection.getSourceLanCidrs(), new TypeReference<List<Ip>>() {});
+        List<Ip> peerLanIps = JsonUtil.fromJson(ipSecNeConnection.getPeerLanCidrs(), new TypeReference<List<Ip>>() {});
 
-        for(Ip sourceLanIp : sourceLanIps)
-        {
-            for(Ip peerLanIp : peerLanIps)
-            {
+        for(Ip sourceLanIp : sourceLanIps) {
+            for(Ip peerLanIp : peerLanIps) {
                 RuleList rule = new RuleList("permit");
                 rule.setSrcIp(sourceLanIp.getIpv4());
                 rule.setDesIp(peerLanIp.getIpv4());
@@ -277,16 +272,5 @@ public class NeConnectionToIpsec {
         }
 
         return ruleList;
-    }
-
-    private static RuleList buildRule(final SbiNeIpSec ipSecNeConnection)
-    {
-        String srcIp = ipSecNeConnection.getSourceAddress();
-        String srcIpMask = IpUtils.prefixToMask(CONST_MASK_32);
-
-        String destIp = ipSecNeConnection.getPeerAddress();
-        String destIpMask = IpUtils.prefixToMask(CONST_MASK_32);
-
-        return new RuleList("permit", srcIp, srcIpMask, destIp, destIpMask);
     }
 }
